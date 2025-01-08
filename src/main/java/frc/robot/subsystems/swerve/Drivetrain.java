@@ -5,6 +5,7 @@
 package frc.robot.subsystems.swerve;
 
 import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,13 +15,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants.*;
 import frc.robot.utilities.FieldRelativeAccel;
 import frc.robot.utilities.FieldRelativeSpeed;
-import org.littletonrobotics.junction.Logger;
 
 /** Implements a swerve Drivetrain Subsystem for the Robot */
 public class Drivetrain extends SubsystemBase {
@@ -83,7 +82,7 @@ public class Drivetrain extends SubsystemBase {
           DriveConstants.kBackRightTuningVals);
 
   // Creates an ahrs gyro (NavX) on the MXP port of the RoboRIO
-  private static AHRS ahrs = new AHRS(SPI.Port.kMXP);
+  private static AHRS ahrs = new AHRS(NavXComType.kMXP_SPI);
 
   // Creates Odometry object to store the pose of the robot
   private final SwerveDriveOdometry m_odometry =
@@ -164,6 +163,7 @@ public class Drivetrain extends SubsystemBase {
     // Calls get pose function which sends the Pose information to the
     getPose();
   }
+
   /**
    * Sets the swerve ModuleStates.
    *

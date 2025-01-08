@@ -11,6 +11,7 @@ public class TestNulls {
     try {
       Robot robot = new Robot();
       robot.robotInit();
+      robot.close();
     } catch (Exception e) {
       System.out.println(e.getStackTrace());
       fail("Didn't Build");

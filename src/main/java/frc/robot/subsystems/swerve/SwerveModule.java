@@ -7,13 +7,12 @@ package frc.robot.subsystems.swerve;
 // import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.revrobotics.CANEncoder;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -59,22 +58,21 @@ public class SwerveModule {
 
   // Creates a PIDController for the control of the anglular position of the
   // swerve module
-  private final PIDController m_turningPIDController = new PIDController(
-      ModuleConstants.kTurnPID[0], ModuleConstants.kTurnPID[1], ModuleConstants.kTurnPID[2]);
+  private final PIDController m_turningPIDController =
+      new PIDController(
+          ModuleConstants.kTurnPID[0], ModuleConstants.kTurnPID[1], ModuleConstants.kTurnPID[2]);
 
   private double angularOffset;
 
   /**
-   * Constructs a SwerveModule with a drive motor, turning motor, and turning
-   * encoder.
+   * Constructs a SwerveModule with a drive motor, turning motor, and turning encoder.
    *
-   * @param driveMotorChannel     CAN ID for the drive motor.
-   * @param turningMotorChannel   CAN ID for the turning motor.
+   * @param driveMotorChannel CAN ID for the drive motor.
+   * @param turningMotorChannel CAN ID for the turning motor.
    * @param turningEncoderChannel analog input for turning absolute encoder
-   * @param angularOffset         module specific offset for the absolute encoder
-   * @param tuningVals            double array containing tuning values for
-   *                              translation in the following format
-   *                              {StaticGain, FeedForward, Prop Gain, ModuleID}
+   * @param angularOffset module specific offset for the absolute encoder
+   * @param tuningVals double array containing tuning values for translation in the following format
+   *     {StaticGain, FeedForward, Prop Gain, ModuleID}
    */
   public SwerveModule(
       int driveMotorChannel,
@@ -84,14 +82,19 @@ public class SwerveModule {
       double[] tuningVals) {
 
     // with the input driveMotorChannel
-    m_driveMotor = SparkFactory.createSparkMax(
-        driveMotorChannel, false); // Define the drive motor as the SparkMAX
+    m_driveMotor =
+        SparkFactory.createSparkMax(
+            driveMotorChannel, false); // Define the drive motor as the SparkMAX
 
-    m_driveConfig = new SparkMaxConfig()
-        .smartCurrentLimit(ModuleConstants.kDriveCurrentLimit) // Set current limit for the drive motor
-        .voltageCompensation(DriveConstants.kVoltCompensation); // Enable voltage compensation so
+    m_driveConfig =
+        new SparkMaxConfig()
+            .smartCurrentLimit(
+                ModuleConstants.kDriveCurrentLimit) // Set current limit for the drive motor
+            .voltageCompensation(
+                DriveConstants.kVoltCompensation); // Enable voltage compensation so
 
-    m_driveConfig.encoder
+    m_driveConfig
+        .encoder
         .positionConversionFactor(ModuleConstants.kPositionFactor)
         // Set velocity conversion factor so
         // that encoder and PID control is in
@@ -99,27 +102,25 @@ public class SwerveModule {
         .velocityConversionFactor(ModuleConstants.kVelocityFactor);
 
     m_driveMotor.configure(
-        m_driveConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+        m_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     // feedforward and gains scale with bus
     // voltage
     // Motor direction is not inverted
     m_driveEncoder = m_driveMotor.getEncoder(); // Obtain the driveEncoder from the drive SparkMAX
 
-    m_turningMotor = SparkFactory.createSparkMax(turningMotorChannel, false); // Define the drive motor as the
+    m_turningMotor =
+        SparkFactory.createSparkMax(turningMotorChannel, false); // Define the drive motor as the
     // SparkMAX with the input
     // driveMotorChannel
 
-    m_turningConfig = new SparkMaxConfig()
-        .smartCurrentLimit(ModuleConstants.kTurnCurrentLimit)
-        .voltageCompensation(DriveConstants.kVoltCompensation);
+    m_turningConfig =
+        new SparkMaxConfig()
+            .smartCurrentLimit(ModuleConstants.kTurnCurrentLimit)
+            .voltageCompensation(DriveConstants.kVoltCompensation);
 
     m_turningMotor.configure(
-        m_turningConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+        m_turningConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     // Creates the analog potentiometer for the tracking of the swerve module
     // position converted to the range of 0-2*PI in radians offset by the tuned
@@ -164,9 +165,11 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getTurnEncoder()));
+    SwerveModuleState state =
+        SwerveModuleState.optimize(desiredState, new Rotation2d(getTurnEncoder()));
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
+    final double driveOutput =
+        m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
     // Calculates the desired feedForward motor % from the current desired velocity
     // and the static and feedforward gains
     final double driveFF = driveFeedForward.calculate(state.speedMetersPerSecond);
@@ -175,7 +178,8 @@ public class SwerveModule {
     final double finalDriveOutput = driveOutput + driveFF;
     m_driveMotor.set(finalDriveOutput);
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = m_turningPIDController.calculate(getTurnEncoder(), state.angle.getRadians());
+    final double turnOutput =
+        m_turningPIDController.calculate(getTurnEncoder(), state.angle.getRadians());
     // Set the turning motor to this output value
     m_turningMotor.set(-turnOutput);
   }
@@ -186,8 +190,7 @@ public class SwerveModule {
   }
 
   /**
-   * Obtains the negative of the turning absolute encoder value as this encoder
-   * reads opposite of
+   * Obtains the negative of the turning absolute encoder value as this encoder reads opposite of
    * the module rotation on 2910 MK2 swerve.
    *
    * @return the modified absolute encoder value.
@@ -200,27 +203,18 @@ public class SwerveModule {
     m_driveConfig.idleMode(IdleMode.kBrake);
     m_turningConfig.idleMode(IdleMode.kBrake);
     m_driveMotor.configure(
-        m_driveConfig,
-        ResetMode.kNoResetSafeParameters,
-        PersistMode.kPersistParameters);
+        m_driveConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     m_turningMotor.configure(
-        m_turningConfig,
-        ResetMode.kNoResetSafeParameters,
-        PersistMode.kPersistParameters);
-
+        m_turningConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void coastModeModule() {
     m_driveConfig.idleMode(IdleMode.kCoast);
     m_turningConfig.idleMode(IdleMode.kCoast);
     m_driveMotor.configure(
-        m_driveConfig,
-        ResetMode.kNoResetSafeParameters,
-        PersistMode.kPersistParameters);
+        m_driveConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     m_turningMotor.configure(
-        m_turningConfig,
-        ResetMode.kNoResetSafeParameters,
-        PersistMode.kPersistParameters);
+        m_turningConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public SwerveModulePosition getPosition() {

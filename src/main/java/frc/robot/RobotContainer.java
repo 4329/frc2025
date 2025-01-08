@@ -1,10 +1,6 @@
 package frc.robot;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.utilities.CommandLoginator;
+import java.util.HashMap;
+import java.util.Map;
 
 /* (including subsystems, commands, and button mappings) should be declared here
  */
@@ -74,8 +72,7 @@ public class RobotContainer {
   //   // .withWidget(BuiltInWidgets.kCameraStream);
   // }
 
-  private void configureAutoBuilder() {
-  }
+  private void configureAutoBuilder() {}
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -95,8 +92,7 @@ public class RobotContainer {
   // SwerveAutoBuilder swerveAutoBuilder;
   Map<Command, PathPlannerAuto> autoName = new HashMap<>();
 
-  private void configureAutoChooser(Drivetrain drivetrain) {
-  }
+  private void configureAutoChooser(Drivetrain drivetrain) {}
 
   public void robotInit() {
     // new AutoZero(elevatorSubsystem, armAngleSubsystem).schedule();
@@ -124,9 +120,7 @@ public class RobotContainer {
     return m_chooser.getSelected();
   }
 
-  public void configureTestMode() {
-
-  }
+  public void configureTestMode() {}
 
   public String getAutoName(Command command) {
     return autoName.containsKey(command) ? autoName.get(command).getName() : "Nothing?????/?///?";

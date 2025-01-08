@@ -17,7 +17,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Constants;
 import frc.robot.Constants.*;
+import frc.robot.subsystems.swerve.module.SwerveModule;
+import frc.robot.subsystems.swerve.module.SwerveModuleImpl;
+import frc.robot.subsystems.swerve.module.SwerveModuleSim;
+import frc.robot.subsystems.swerve.module.SwerveModule;
 import frc.robot.utilities.FieldRelativeAccel;
 import frc.robot.utilities.FieldRelativeSpeed;
 
@@ -25,6 +30,11 @@ import frc.robot.utilities.FieldRelativeSpeed;
 public class Drivetrain extends SubsystemBase {
 
   public boolean isLocked;
+
+  private final SwerveModule m_frontLeft;
+  private final SwerveModule m_frontRight;
+  private final SwerveModule m_backLeft;
+  private final SwerveModule m_backRight;
 
   // Create the PIDController for the Keep Angle PID
   private final PIDController m_keepAnglePID =
@@ -43,51 +53,11 @@ public class Drivetrain extends SubsystemBase {
       new Timer(); // Creates timer used in the perform keep angle function
   // Creates a swerveModule object for the front left swerve module feeding in
   // parameters from the constants file
-  private final SwerveModule m_frontLeft =
-      new SwerveModule(
-          DriveConstants.kFrontLeftDriveMotorPort,
-          DriveConstants.kFrontLeftTurningMotorPort,
-          DriveConstants.kFrontLeftTurningEncoderPort,
-          DriveConstants.kFrontLeftOffset,
-          DriveConstants.kFrontLeftTuningVals);
-
-  // Creates a swerveModule object for the front right swerve module feeding in
-  // parameters from the constants file
-  private final SwerveModule m_frontRight =
-      new SwerveModule(
-          DriveConstants.kFrontRightDriveMotorPort,
-          DriveConstants.kFrontRightTurningMotorPort,
-          DriveConstants.kFrontRightTurningEncoderPort,
-          DriveConstants.kFrontRightOffset,
-          DriveConstants.kFrontRightTuningVals);
-
-  // Creates a swerveModule object for the back left swerve module feeding in
-  // parameters from the constants file
-  private final SwerveModule m_backLeft =
-      new SwerveModule(
-          DriveConstants.kBackLeftDriveMotorPort,
-          DriveConstants.kBackLeftTurningMotorPort,
-          DriveConstants.kBackLeftTurningEncoderPort,
-          DriveConstants.kBackLeftOffset,
-          DriveConstants.kBackLeftTuningVals);
-
-  // Creates a swerveModule object for the back right swerve module feeding in
-  // parameters from the constants file
-  private final SwerveModule m_backRight =
-      new SwerveModule(
-          DriveConstants.kBackRightDriveMotorPort,
-          DriveConstants.kBackRightTurningMotorPort,
-          DriveConstants.kBackRightTurningEncoderPort,
-          DriveConstants.kBackRightOffset,
-          DriveConstants.kBackRightTuningVals);
-
   // Creates an ahrs gyro (NavX) on the MXP port of the RoboRIO
   private static AHRS ahrs = new AHRS(NavXComType.kMXP_SPI);
 
   // Creates Odometry object to store the pose of the robot
-  private final SwerveDriveOdometry m_odometry =
-      new SwerveDriveOdometry(
-          DriveConstants.kDriveKinematics, ahrs.getRotation2d(), getModulePositions());
+  private final SwerveDriveOdometry m_odometry;
 
   private SlewRateLimiter slewX = new SlewRateLimiter(6.5);
   private SlewRateLimiter slewY = new SlewRateLimiter(6.5);
@@ -110,6 +80,74 @@ public class Drivetrain extends SubsystemBase {
     pitchOffset = ahrs.getPitch();
     rollOffset = ahrs.getRoll();
     ahrs.setAngleAdjustment(-180);
+
+    System.out.println(Constants.robotMode);
+    switch (Constants.robotMode) {
+      case REAL:
+        m_frontLeft = new SwerveModuleImpl(
+            DriveConstants.kFrontLeftDriveMotorPort,
+            DriveConstants.kFrontLeftTurningMotorPort,
+            DriveConstants.kFrontLeftTurningEncoderPort,
+            DriveConstants.kFrontLeftOffset,
+            DriveConstants.kFrontLeftTuningVals);
+
+        m_frontRight = new SwerveModuleImpl(
+            DriveConstants.kFrontRightDriveMotorPort,
+            DriveConstants.kFrontRightTurningMotorPort,
+            DriveConstants.kFrontRightTurningEncoderPort,
+            DriveConstants.kFrontRightOffset,
+            DriveConstants.kFrontRightTuningVals);
+
+        m_backLeft = new SwerveModuleImpl(
+            DriveConstants.kBackLeftDriveMotorPort,
+            DriveConstants.kBackLeftTurningMotorPort,
+            DriveConstants.kBackLeftTurningEncoderPort,
+            DriveConstants.kBackLeftOffset,
+            DriveConstants.kBackLeftTuningVals);
+
+        m_backRight = new SwerveModuleImpl(
+            DriveConstants.kBackRightDriveMotorPort,
+            DriveConstants.kBackRightTurningMotorPort,
+            DriveConstants.kBackRightTurningEncoderPort,
+            DriveConstants.kBackRightOffset,
+            DriveConstants.kBackRightTuningVals);
+        break;
+      
+      case SIM:
+        m_frontLeft = new SwerveModuleSim(
+            DriveConstants.kFrontLeftDriveMotorPort,
+            DriveConstants.kFrontLeftTurningMotorPort,
+            DriveConstants.kFrontLeftTurningEncoderPort,
+            DriveConstants.kFrontLeftTuningVals);
+
+        m_frontRight = new SwerveModuleSim(
+            DriveConstants.kFrontRightDriveMotorPort,
+            DriveConstants.kFrontRightTurningMotorPort,
+            DriveConstants.kFrontRightTurningEncoderPort,
+            DriveConstants.kFrontRightTuningVals);
+
+        m_backLeft = new SwerveModuleSim(
+            DriveConstants.kBackLeftDriveMotorPort,
+            DriveConstants.kBackLeftTurningMotorPort,
+            DriveConstants.kBackLeftTurningEncoderPort,
+            DriveConstants.kBackLeftTuningVals);
+
+        m_backRight = new SwerveModuleSim(
+            DriveConstants.kBackRightDriveMotorPort,
+            DriveConstants.kBackRightTurningMotorPort,
+            DriveConstants.kBackRightTurningEncoderPort,
+            DriveConstants.kBackRightTuningVals);
+        break;
+      default:
+        m_frontLeft = null;
+        m_frontRight = null;
+        m_backLeft = null;
+        m_backRight = null;
+        break;
+    }
+
+    m_odometry = new SwerveDriveOdometry(
+        DriveConstants.kDriveKinematics, ahrs.getRotation2d(), getModulePositions());
   }
 
   /**

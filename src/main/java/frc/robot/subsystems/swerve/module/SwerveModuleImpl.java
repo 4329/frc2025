@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.swerve;
+package frc.robot.subsystems.swerve.module;
 
 // import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.revrobotics.CANEncoder;
@@ -19,11 +19,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.simulation.REVPHSim;
+import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.utilities.SparkFactory;
 
 /** Implements a swerve module for the Robot */
-public class SwerveModule {
+public class SwerveModuleImpl implements SwerveModule {
 
   // Our swerve modules use NEOs for both translation and rotation motors
   private final SparkMax m_driveMotor;
@@ -74,7 +76,7 @@ public class SwerveModule {
    * @param tuningVals double array containing tuning values for translation in the following format
    *     {StaticGain, FeedForward, Prop Gain, ModuleID}
    */
-  public SwerveModule(
+  public SwerveModuleImpl(
       int driveMotorChannel,
       int turningMotorChannel,
       int turningEncoderChannel,
@@ -149,10 +151,12 @@ public class SwerveModule {
    *
    * @return The current state of the module.
    */
+  @Override
   public SwerveModuleState getState() {
     return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(getTurnEncoder()));
   }
 
+  @Override
   public SwerveModuleState getStateNoOffset() {
     return new SwerveModuleState(
         m_driveEncoder.getVelocity(), new Rotation2d(getTurnEncoder() - angularOffset));
@@ -163,6 +167,7 @@ public class SwerveModule {
    *
    * @param desiredState Desired state with speed and angle.
    */
+  @Override
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state =
@@ -184,6 +189,7 @@ public class SwerveModule {
     m_turningMotor.set(-turnOutput);
   }
 
+  @Override
   public void stop() {
     m_driveMotor.set(0.0);
     m_turningMotor.set(0.0);
@@ -195,10 +201,12 @@ public class SwerveModule {
    *
    * @return the modified absolute encoder value.
    */
+  @Override
   public double getTurnEncoder() {
     return 1.0 * m_turningEncoder.get();
   }
 
+  @Override
   public void brakeModeModule() {
     m_driveConfig.idleMode(IdleMode.kBrake);
     m_turningConfig.idleMode(IdleMode.kBrake);
@@ -208,6 +216,7 @@ public class SwerveModule {
         m_turningConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
+  @Override
   public void coastModeModule() {
     m_driveConfig.idleMode(IdleMode.kCoast);
     m_turningConfig.idleMode(IdleMode.kCoast);
@@ -217,6 +226,7 @@ public class SwerveModule {
         m_turningConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
+  @Override
   public SwerveModulePosition getPosition() {
 
     return new SwerveModulePosition(m_driveEncoder.getPosition(), new Rotation2d(getTurnEncoder()));

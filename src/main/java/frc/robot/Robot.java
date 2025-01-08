@@ -16,7 +16,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -143,21 +142,20 @@ public class Robot extends LoggedRobot {
   String lastName = "";
   @Override
   public void disabledPeriodic() {
-    String name = m_robotContainer.getAutoName(m_robotContainer.getAuto());
+    // String name = m_robotContainer.getAutoName(m_robotContainer.getAuto());
 
-    if (name != lastName && !name.equals("Nothing?????/?///?")) {
-      Trajectory accumulator = new Trajectory();
-      List<PathPlannerPath> paths = PathPlannerAuto.getPathGroupFromAutoFile(name);
-      for (int i = 0; i < paths.size(); i++) {
-        accumulator =
-            accumulator.concatenate(
-                pathTrajToTragTraj(
-                    paths.get(i).getTrajectory(new ChassisSpeeds(), new Rotation2d())));
-      }
-      field.getObject("traj").setTrajectory(accumulator);
-      SmartDashboard.putData(field);
-    }
-    lastName = name;
+    // if (name != lastName && !name.equals("Nothing?????/?///?")) {
+    //   Trajectory accumulator = new Trajectory();
+    //   List<PathPlannerPath> paths = PathPlannerAuto.getPathGroupFromAutoFile(name);
+    //   for (int i = 0; i < paths.size(); i++) {
+    //     accumulator =
+    //         accumulator.concatenate(
+    //                 paths.get(i).getWaypoints().get(0));
+    //   }
+    //   field.getObject("traj").setTrajectory(accumulator);
+    //   SmartDashboard.putData(field);
+    // }
+    // lastName = name;
   }
 
   @Override
@@ -170,20 +168,6 @@ public class Robot extends LoggedRobot {
       m_autonomousCommand.schedule();
     }
     m_robotContainer.autonomousInit();
-  }
-
-  private Trajectory pathTrajToTragTraj(PathPlannerTrajectory pathPlannerTrajectory) {
-    return new Trajectory(
-        pathPlannerTrajectory.getStates().stream()
-            .map(
-                (state) ->
-                    new Trajectory.State(
-                        state.timeSeconds,
-                        state.velocityMps,
-                        state.accelerationMpsSq,
-                        new Pose2d(state.positionMeters, state.targetHolonomicRotation),
-                        state.curvatureRadPerMeter))
-            .toList());
   }
 
   @Override

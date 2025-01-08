@@ -1,7 +1,7 @@
 package frc.robot.utilities;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.model.CommandLogEntry;
+import frc.robot.Model.CommandLogEntry;
 
 public class CommandLoginator {
   private CommandLogEntry commandLogEntry;

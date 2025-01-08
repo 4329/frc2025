@@ -1,8 +1,26 @@
 package frc.robot.utilities;
 
-import com.pathplanner.lib.util.PIDConstants;
-
 public class Config {
+
+  public static class PIDConstants {
+    public PIDConstants(double p) {
+      this(p, 0, 0);
+    }
+
+    public PIDConstants(double p, double i) {
+      this(p, i, 0);
+    }
+
+    public PIDConstants(double p, double i, double d) {
+      this.p = p;
+      this.i = i;
+      this.d = d;
+    }
+
+    public double p;
+    public double i;
+    public double d;
+  }
 
   private int frontLeftDriveMotorPort = 3;
   private int frontRightDriveMotorPort = 1;

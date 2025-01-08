@@ -1,15 +1,17 @@
 package frc.robot.utilities;
 
-import com.revrobotics.CANSparkBase.ExternalFollower;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkBase.SoftLimitDirection;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SoftLimitConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class SparkFactory {
 
   /**
-   * The default method to be used when creating a new CANSparkMax, which gives it basic settings
+   * The default method to be used when creating a new SparkMax, which gives it basic settings
    * for ease of use.
    *
    * <p>MAKE SURE TO BURN FLASH!!!
@@ -18,28 +20,28 @@ public class SparkFactory {
    * @param flipSparkMax
    * @return a new CAN object
    */
-  public static CANSparkMax createCANSparkMax(int id, Boolean flipSparkMax) {
+  public static SparkMax createSparkMax(int id, Boolean flipSparkMax) {
 
     // something to the effect of we experimented with burn flash and reset to
     // factory defaults, and it caused the drive motors to go bonkers
-    CANSparkMax canToMake = new CANSparkMax(id, MotorType.kBrushless);
-    canToMake.enableSoftLimit(SoftLimitDirection.kForward, false);
-    canToMake.enableSoftLimit(SoftLimitDirection.kReverse, false);
-    canToMake.setIdleMode(IdleMode.kBrake);
-    canToMake.follow(ExternalFollower.kFollowerDisabled, 0);
-    canToMake.setInverted(flipSparkMax);
-    if (canToMake.isFollower()) {
+    SparkMax canToMake = new SparkMax(id, MotorType.kBrushless);
+    SparkMaxConfig config = new SparkMaxConfig();
+    config
+      .apply(
+        new SoftLimitConfig()
+          .forwardSoftLimitEnabled(false)
+          .reverseSoftLimitEnabled(false))
+      .idleMode(IdleMode.kBrake)
+      .disableFollowerMode()
+      .inverted(false);
 
-      System.out.println(
-          "CAN ID"
-              + id
-              + " is following somebody WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-    }
+    canToMake.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
     return canToMake;
   }
 
   /**
-   * The default method to be used when creating a new CANSparkMax, which gives it basic settings
+   * The default method to be used when creating a new SparkMax, which gives it basic settings
    * for ease of use.
    *
    * <p>MAKE SURE TO BURN FLASH!!!
@@ -47,8 +49,8 @@ public class SparkFactory {
    * @param id
    * @return a new CAN object
    */
-  public static CANSparkMax createCANSparkMax(int id) {
+  public static SparkMax createSparkMax(int id) {
 
-    return createCANSparkMax(id, false);
+    return createSparkMax(id, false);
   }
 }

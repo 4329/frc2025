@@ -1,0 +1,104 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.3367851351087334,
+        "y": 2.48
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.530235829702429,
+        "y": 1.0458959379457238
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.309724311756318,
+        "y": 0.7696215392430785
+      },
+      "prevControl": {
+        "x": 8.11041206697798,
+        "y": 0.7669543068082288
+      },
+      "nextControl": {
+        "x": 8.541326373528538,
+        "y": 0.7727208798371495
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.3367851351087334,
+        "y": 2.48
+      },
+      "prevControl": {
+        "x": 7.540102772513238,
+        "y": 1.0458959379457238
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.95,
+      "rotationDegrees": 160.5590492143829,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.75,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.3,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeRev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 136.19,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "2NoteFar",
+  "previewStartingState": {
+    "rotation": 136.19,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

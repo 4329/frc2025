@@ -1,0 +1,109 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.7941032805142547,
+        "y": 5.62
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.71471835251363,
+        "y": 4.351321779566637
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.497196225161682,
+        "y": 4.055313495242375
+      },
+      "prevControl": {
+        "x": 4.2050761024598975,
+        "y": 4.183583751782887
+      },
+      "nextControl": {
+        "x": 8.99697309544619,
+        "y": 4.040377634751114
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.573591762568142,
+        "y": 5.120943318809715
+      },
+      "prevControl": {
+        "x": 6.642210976729647,
+        "y": 3.690236611242454
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.1,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeRev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.25,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeRev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 165.32360686255,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "3NoteMid",
+  "previewStartingState": {
+    "rotation": 164.35,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

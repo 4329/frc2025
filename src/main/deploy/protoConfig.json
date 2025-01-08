@@ -1,0 +1,29 @@
+{
+    "frontLeftDriveMotorPort": 3,
+    "frontRightDriveMotorPort": 1,
+    "backLeftDriveMotorPort": 5,
+    "backRightDriveMotorPort": 7,
+
+    "frontLeftTurningMotorPort": 4,
+    "frontRightTurningMotorPort": 2,
+    "backLeftTurningMotorPort": 6,
+    "backRightTurningMotorPort": 8,
+
+    "frontLeftTurningEncoderPort": 2, 
+    "frontRightTurningEncoderPort":1,
+    "backLeftTurningEncoderPort": 3, 
+    "backRightTurningEncoderPort": 0,
+
+    "frontLeftOffset": 4.4195,
+    "frontRightOffset": 4.7455,
+    "backLeftOffset": 5.94559,
+    "backRightOffset": 4.0478,
+    
+    "extraShuffleBoardToggle": true,
+    "limelighturl": "http://10.43.29.11:5800",
+    "usesPhotonVision": false,
+    "rollDirection": -1,
+
+    "shooterkS": 0.52273,
+    "shooterkV": 0.12816
+}

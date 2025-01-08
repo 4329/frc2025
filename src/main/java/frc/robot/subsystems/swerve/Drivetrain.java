@@ -22,7 +22,6 @@ import frc.robot.Constants.*;
 import frc.robot.subsystems.swerve.module.SwerveModule;
 import frc.robot.subsystems.swerve.module.SwerveModuleImpl;
 import frc.robot.subsystems.swerve.module.SwerveModuleSim;
-import frc.robot.subsystems.swerve.module.SwerveModule;
 import frc.robot.utilities.FieldRelativeAccel;
 import frc.robot.utilities.FieldRelativeSpeed;
 
@@ -84,59 +83,67 @@ public class Drivetrain extends SubsystemBase {
     System.out.println(Constants.robotMode);
     switch (Constants.robotMode) {
       case REAL:
-        m_frontLeft = new SwerveModuleImpl(
-            DriveConstants.kFrontLeftDriveMotorPort,
-            DriveConstants.kFrontLeftTurningMotorPort,
-            DriveConstants.kFrontLeftTurningEncoderPort,
-            DriveConstants.kFrontLeftOffset,
-            DriveConstants.kFrontLeftTuningVals);
+        m_frontLeft =
+            new SwerveModuleImpl(
+                DriveConstants.kFrontLeftDriveMotorPort,
+                DriveConstants.kFrontLeftTurningMotorPort,
+                DriveConstants.kFrontLeftTurningEncoderPort,
+                DriveConstants.kFrontLeftOffset,
+                DriveConstants.kFrontLeftTuningVals);
 
-        m_frontRight = new SwerveModuleImpl(
-            DriveConstants.kFrontRightDriveMotorPort,
-            DriveConstants.kFrontRightTurningMotorPort,
-            DriveConstants.kFrontRightTurningEncoderPort,
-            DriveConstants.kFrontRightOffset,
-            DriveConstants.kFrontRightTuningVals);
+        m_frontRight =
+            new SwerveModuleImpl(
+                DriveConstants.kFrontRightDriveMotorPort,
+                DriveConstants.kFrontRightTurningMotorPort,
+                DriveConstants.kFrontRightTurningEncoderPort,
+                DriveConstants.kFrontRightOffset,
+                DriveConstants.kFrontRightTuningVals);
 
-        m_backLeft = new SwerveModuleImpl(
-            DriveConstants.kBackLeftDriveMotorPort,
-            DriveConstants.kBackLeftTurningMotorPort,
-            DriveConstants.kBackLeftTurningEncoderPort,
-            DriveConstants.kBackLeftOffset,
-            DriveConstants.kBackLeftTuningVals);
+        m_backLeft =
+            new SwerveModuleImpl(
+                DriveConstants.kBackLeftDriveMotorPort,
+                DriveConstants.kBackLeftTurningMotorPort,
+                DriveConstants.kBackLeftTurningEncoderPort,
+                DriveConstants.kBackLeftOffset,
+                DriveConstants.kBackLeftTuningVals);
 
-        m_backRight = new SwerveModuleImpl(
-            DriveConstants.kBackRightDriveMotorPort,
-            DriveConstants.kBackRightTurningMotorPort,
-            DriveConstants.kBackRightTurningEncoderPort,
-            DriveConstants.kBackRightOffset,
-            DriveConstants.kBackRightTuningVals);
+        m_backRight =
+            new SwerveModuleImpl(
+                DriveConstants.kBackRightDriveMotorPort,
+                DriveConstants.kBackRightTurningMotorPort,
+                DriveConstants.kBackRightTurningEncoderPort,
+                DriveConstants.kBackRightOffset,
+                DriveConstants.kBackRightTuningVals);
         break;
-      
+
       case SIM:
-        m_frontLeft = new SwerveModuleSim(
-            DriveConstants.kFrontLeftDriveMotorPort,
-            DriveConstants.kFrontLeftTurningMotorPort,
-            DriveConstants.kFrontLeftTurningEncoderPort,
-            DriveConstants.kFrontLeftTuningVals);
+        m_frontLeft =
+            new SwerveModuleSim(
+                DriveConstants.kFrontLeftDriveMotorPort,
+                DriveConstants.kFrontLeftTurningMotorPort,
+                DriveConstants.kFrontLeftTurningEncoderPort,
+                DriveConstants.kFrontLeftTuningVals);
 
-        m_frontRight = new SwerveModuleSim(
-            DriveConstants.kFrontRightDriveMotorPort,
-            DriveConstants.kFrontRightTurningMotorPort,
-            DriveConstants.kFrontRightTurningEncoderPort,
-            DriveConstants.kFrontRightTuningVals);
+        m_frontRight =
+            new SwerveModuleSim(
+                DriveConstants.kFrontRightDriveMotorPort,
+                DriveConstants.kFrontRightTurningMotorPort,
+                DriveConstants.kFrontRightTurningEncoderPort,
+                DriveConstants.kFrontRightTuningVals);
 
-        m_backLeft = new SwerveModuleSim(
-            DriveConstants.kBackLeftDriveMotorPort,
-            DriveConstants.kBackLeftTurningMotorPort,
-            DriveConstants.kBackLeftTurningEncoderPort,
-            DriveConstants.kBackLeftTuningVals);
+        m_backLeft =
+            new SwerveModuleSim(
+                DriveConstants.kBackLeftDriveMotorPort,
+                DriveConstants.kBackLeftTurningMotorPort,
+                DriveConstants.kBackLeftTurningEncoderPort,
+                DriveConstants.kBackLeftTuningVals);
 
-        m_backRight = new SwerveModuleSim(
-            DriveConstants.kBackRightDriveMotorPort,
-            DriveConstants.kBackRightTurningMotorPort,
-            DriveConstants.kBackRightTurningEncoderPort,
-            DriveConstants.kBackRightTuningVals);
+        m_backRight =
+            new SwerveModuleSim(
+                DriveConstants.kBackRightDriveMotorPort,
+                DriveConstants.kBackRightTurningMotorPort,
+                DriveConstants.kBackRightTurningEncoderPort,
+                DriveConstants.kBackRightTuningVals);
         break;
       default:
         m_frontLeft = null;
@@ -146,8 +153,9 @@ public class Drivetrain extends SubsystemBase {
         break;
     }
 
-    m_odometry = new SwerveDriveOdometry(
-        DriveConstants.kDriveKinematics, ahrs.getRotation2d(), getModulePositions());
+    m_odometry =
+        new SwerveDriveOdometry(
+            DriveConstants.kDriveKinematics, ahrs.getRotation2d(), getModulePositions());
   }
 
   /**

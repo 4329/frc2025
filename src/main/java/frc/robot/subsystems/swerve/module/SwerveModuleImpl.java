@@ -19,8 +19,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.simulation.REVPHSim;
-import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.utilities.SparkFactory;
 

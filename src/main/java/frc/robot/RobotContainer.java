@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.swerve.Drivetrain;
+import frc.robot.commands.DriveByController;
+import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
+import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.CommandLoginator;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +40,9 @@ public class RobotContainer {
     operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
     driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
     pitController = new CommandXboxController(OIConstants.kPitControllerPort);
-    // commands for auto
-    // Command Instantiations
+    
+    m_robotDrive.setDefaultCommand(new DriveByController(drivetrain, driverController));
+
     new CommandLoginator();
 
     m_chooser = new SendableChooser<>();

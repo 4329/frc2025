@@ -128,7 +128,9 @@ public final class Constants {
   public static final class ModuleConstants {
     // Units of %power/s, ie 4.0 means it takes 0.25s to reach 100% power from 0%
     public static final double kTranslationRampRate = 4.0;
-    private static final double kTranslationGearRatio = 6.75;
+    public static final double kTranslationGearRatio = 6.75;
+
+    public static final double kTurningGearRatio = 21.428571428571428571428571428571;
 
     private static final double kWheelDiameter = 0.09845; // Wheel Diameter in meters
 

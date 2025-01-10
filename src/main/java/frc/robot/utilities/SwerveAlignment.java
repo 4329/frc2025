@@ -3,7 +3,7 @@ package frc.robot.utilities;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.swerve.Drivetrain;
+import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 
 public class SwerveAlignment {
   private Drivetrain m_dDrivetrain;

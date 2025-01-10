@@ -2,10 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.swerve;
+package frc.robot.subsystems.swerve.drivetrain;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
+
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -20,13 +23,15 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.swerve.module.SwerveModule;
+import frc.robot.subsystems.swerve.module.SwerveModuleFactory;
 import frc.robot.subsystems.swerve.module.SwerveModuleImpl;
 import frc.robot.subsystems.swerve.module.SwerveModuleSim;
 import frc.robot.utilities.FieldRelativeAccel;
 import frc.robot.utilities.FieldRelativeSpeed;
+import frc.robot.Constants.DriveConstants;
 
-/** Implements a swerve Drivetrain Subsystem for the Robot */
-public class Drivetrain extends SubsystemBase {
+/** Implements a swerve DrivetrainImpl Subsystem for the Robot */
+public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
   public boolean isLocked;
 
@@ -42,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
           DriveConstants.kKeepAnglePID[1],
           DriveConstants.kKeepAnglePID[2]);
 
-  private double keepAngle = 0.0; // Double to store the current target keepAngle in radians
+  protected double keepAngle = 0.0; // Double to store the current target keepAngle in radians
   private double timeSinceRot = 0.0; // Double to store the time since last rotation command
   private double lastRotTime = 0.0; // Double to store the time of the last rotation command
   private double timeSinceDrive = 0.0; // Double to store the time since last translation command
@@ -56,7 +61,7 @@ public class Drivetrain extends SubsystemBase {
   private static AHRS ahrs = new AHRS(NavXComType.kMXP_SPI);
 
   // Creates Odometry object to store the pose of the robot
-  private final SwerveDriveOdometry m_odometry;
+  protected final SwerveDriveOdometry m_odometry;
 
   private SlewRateLimiter slewX = new SlewRateLimiter(6.5);
   private SlewRateLimiter slewY = new SlewRateLimiter(6.5);
@@ -69,8 +74,8 @@ public class Drivetrain extends SubsystemBase {
   double pitchOffset;
   double rollOffset;
 
-  /** Constructs a Drivetrain and resets the Gyro and Keep Angle parameters */
-  public Drivetrain() {
+  /** Constructs a DrivetrainImpl and resets the Gyro and Keep Angle parameters */
+  public DrivetrainImpl() {
     keepAngleTimer.reset();
     keepAngleTimer.start();
     m_keepAnglePID.enableContinuousInput(-Math.PI, Math.PI);
@@ -80,78 +85,33 @@ public class Drivetrain extends SubsystemBase {
     rollOffset = ahrs.getRoll();
     ahrs.setAngleAdjustment(-180);
 
-    System.out.println(Constants.robotMode);
-    switch (Constants.robotMode) {
-      case REAL:
-        m_frontLeft =
-            new SwerveModuleImpl(
-                DriveConstants.kFrontLeftDriveMotorPort,
-                DriveConstants.kFrontLeftTurningMotorPort,
-                DriveConstants.kFrontLeftTurningEncoderPort,
-                DriveConstants.kFrontLeftOffset,
-                DriveConstants.kFrontLeftTuningVals);
+    m_frontLeft = SwerveModuleFactory.makeSwerve(
+        DriveConstants.kFrontLeftDriveMotorPort,
+        DriveConstants.kFrontLeftTurningMotorPort,
+        DriveConstants.kFrontLeftTurningEncoderPort,
+        DriveConstants.kFrontLeftOffset,
+        DriveConstants.kFrontLeftTuningVals);
 
-        m_frontRight =
-            new SwerveModuleImpl(
-                DriveConstants.kFrontRightDriveMotorPort,
-                DriveConstants.kFrontRightTurningMotorPort,
-                DriveConstants.kFrontRightTurningEncoderPort,
-                DriveConstants.kFrontRightOffset,
-                DriveConstants.kFrontRightTuningVals);
+    m_frontRight = SwerveModuleFactory.makeSwerve(
+        DriveConstants.kFrontRightDriveMotorPort,
+        DriveConstants.kFrontRightTurningMotorPort,
+        DriveConstants.kFrontRightTurningEncoderPort,
+        DriveConstants.kFrontRightOffset,
+        DriveConstants.kFrontRightTuningVals);
 
-        m_backLeft =
-            new SwerveModuleImpl(
-                DriveConstants.kBackLeftDriveMotorPort,
-                DriveConstants.kBackLeftTurningMotorPort,
-                DriveConstants.kBackLeftTurningEncoderPort,
-                DriveConstants.kBackLeftOffset,
-                DriveConstants.kBackLeftTuningVals);
+    m_backLeft = SwerveModuleFactory.makeSwerve(
+        DriveConstants.kBackLeftDriveMotorPort,
+        DriveConstants.kBackLeftTurningMotorPort,
+        DriveConstants.kBackLeftTurningEncoderPort,
+        DriveConstants.kBackLeftOffset,
+        DriveConstants.kBackLeftTuningVals);
 
-        m_backRight =
-            new SwerveModuleImpl(
-                DriveConstants.kBackRightDriveMotorPort,
-                DriveConstants.kBackRightTurningMotorPort,
-                DriveConstants.kBackRightTurningEncoderPort,
-                DriveConstants.kBackRightOffset,
-                DriveConstants.kBackRightTuningVals);
-        break;
-
-      case SIM:
-        m_frontLeft =
-            new SwerveModuleSim(
-                DriveConstants.kFrontLeftDriveMotorPort,
-                DriveConstants.kFrontLeftTurningMotorPort,
-                DriveConstants.kFrontLeftTurningEncoderPort,
-                DriveConstants.kFrontLeftTuningVals);
-
-        m_frontRight =
-            new SwerveModuleSim(
-                DriveConstants.kFrontRightDriveMotorPort,
-                DriveConstants.kFrontRightTurningMotorPort,
-                DriveConstants.kFrontRightTurningEncoderPort,
-                DriveConstants.kFrontRightTuningVals);
-
-        m_backLeft =
-            new SwerveModuleSim(
-                DriveConstants.kBackLeftDriveMotorPort,
-                DriveConstants.kBackLeftTurningMotorPort,
-                DriveConstants.kBackLeftTurningEncoderPort,
-                DriveConstants.kBackLeftTuningVals);
-
-        m_backRight =
-            new SwerveModuleSim(
-                DriveConstants.kBackRightDriveMotorPort,
-                DriveConstants.kBackRightTurningMotorPort,
-                DriveConstants.kBackRightTurningEncoderPort,
-                DriveConstants.kBackRightTuningVals);
-        break;
-      default:
-        m_frontLeft = null;
-        m_frontRight = null;
-        m_backLeft = null;
-        m_backRight = null;
-        break;
-    }
+    m_backRight = SwerveModuleFactory.makeSwerve(
+        DriveConstants.kBackRightDriveMotorPort,
+        DriveConstants.kBackRightTurningMotorPort,
+        DriveConstants.kBackRightTurningEncoderPort,
+        DriveConstants.kBackRightOffset,
+        DriveConstants.kBackRightTuningVals);
 
     m_odometry =
         new SwerveDriveOdometry(
@@ -166,6 +126,7 @@ public class Drivetrain extends SubsystemBase {
    * @param rot Angular rate of the robot.
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
+  @Override
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     rot =
@@ -210,11 +171,19 @@ public class Drivetrain extends SubsystemBase {
     getPose();
   }
 
+  @Override
+  public void simulationPeriodic() {
+    int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+    SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+    angle.set(angle.get() + DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates()).omegaRadiansPerSecond * 0.02);
+  }
+
   /**
    * Sets the swerve ModuleStates.
    *
    * @param desiredStates The desired SwerveModule states.
    */
+  @Override
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -224,10 +193,12 @@ public class Drivetrain extends SubsystemBase {
     m_backRight.setDesiredState(desiredStates[3]);
   }
 
+  @Override
   public void setModuleStates(ChassisSpeeds chassisSpeeds) {
     setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds));
   }
 
+  @Override
   public void stop() {
     m_frontLeft.stop();
     m_frontRight.stop();
@@ -239,6 +210,7 @@ public class Drivetrain extends SubsystemBase {
    * Updates odometry for the swerve drivetrain. This should be called once per loop to minimize
    * error.
    */
+  @Override
   public void updateOdometry() {
 
     m_odometry.update(ahrs.getRotation2d(), getModulePositions());
@@ -249,16 +221,19 @@ public class Drivetrain extends SubsystemBase {
    *
    * @return Rotation2d object containing Gyro angle
    */
+  @Override
   public Rotation2d getGyro() {
 
     return ahrs.getRotation2d();
   }
 
+  @Override
   public FieldRelativeSpeed getRelativeSpeed() {
 
     return m_fieldRelVel;
   }
 
+  @Override
   public FieldRelativeAccel getRelativeAccel() {
 
     return m_fieldRelAccel;
@@ -266,10 +241,12 @@ public class Drivetrain extends SubsystemBase {
 
   Pose2d set;
 
+  @Override
   public void setNesss(Pose2d set) {
     this.set = set;
   }
 
+  @Override
   public Pose2d jgetNesss() {
     return set;
   }
@@ -277,6 +254,7 @@ public class Drivetrain extends SubsystemBase {
   /**
    * @return Pose2d object containing the X and Y position and the heading of the robot.
    */
+  @Override
   public Pose2d getPose() {
     Pose2d initialPose = m_odometry.getPoseMeters();
     // System.out.println("______________________________________________________________________________");
@@ -291,6 +269,7 @@ public class Drivetrain extends SubsystemBase {
    *
    * @param pose in which to set the odometry and gyro.
    */
+  @Override
   public void resetOdometry(Pose2d pose) {
     ahrs.reset();
     ahrs.setAngleAdjustment(-pose.getRotation().getDegrees());
@@ -298,6 +277,7 @@ public class Drivetrain extends SubsystemBase {
     m_odometry.resetPosition(ahrs.getRotation2d(), getModulePositions(), pose);
   }
 
+  @Override
   public void setPose(Pose2d pose) {
     m_odometry.resetPosition(ahrs.getRotation2d().times(-1.0), getModulePositions(), pose);
     keepAngle = getGyro().getRadians();
@@ -309,6 +289,7 @@ public class Drivetrain extends SubsystemBase {
    *
    * @return ChassisSpeeds object containing robot X, Y, and Angular velocity
    */
+  @Override
   public ChassisSpeeds getChassisSpeed() {
     // System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     return DriveConstants.kDriveKinematics.toChassisSpeeds(
@@ -370,22 +351,27 @@ public class Drivetrain extends SubsystemBase {
     return output;
   }
 
+  @Override
   public double getFrontLeftAngle() {
     return m_frontLeft.getTurnEncoder();
   }
 
+  @Override
   public double getFrontRightAngle() {
     return m_frontRight.getTurnEncoder();
   }
 
+  @Override
   public double getBackLeftAngle() {
     return m_backLeft.getTurnEncoder();
   }
 
+  @Override
   public double getBackRightAngle() {
     return m_backRight.getTurnEncoder();
   }
 
+  @Override
   public void brakeMode() {
     m_frontLeft.brakeModeModule();
     m_frontRight.brakeModeModule();
@@ -393,6 +379,7 @@ public class Drivetrain extends SubsystemBase {
     m_backRight.brakeModeModule();
   }
 
+  @Override
   public void coastMode() {
     m_frontLeft.coastModeModule();
     m_frontRight.coastModeModule();
@@ -400,6 +387,7 @@ public class Drivetrain extends SubsystemBase {
     m_backRight.coastModeModule();
   }
 
+  @Override
   public void lock() {
 
     SwerveModuleState[] steve = {
@@ -413,11 +401,13 @@ public class Drivetrain extends SubsystemBase {
     isLocked = true;
   }
 
+  @Override
   public void unlock() {
 
     isLocked = false;
   }
 
+  @Override
   public SwerveModulePosition[] getModulePositions() {
 
     return new SwerveModulePosition[] {
@@ -428,22 +418,26 @@ public class Drivetrain extends SubsystemBase {
     };
   }
 
+  @Override
   public SwerveModuleState[] getModuleStates() {
     return new SwerveModuleState[] {
       m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState()
     };
   }
 
+  @Override
   public double getRoll() {
 
     return ahrs.getRoll();
   }
 
+  @Override
   public double getOffsetRoll() {
 
     return ahrs.getRoll() - rollOffset;
   }
 
+  @Override
   public double getYaw() {
 
     return ahrs.getYaw();

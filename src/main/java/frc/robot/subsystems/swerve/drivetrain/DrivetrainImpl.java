@@ -7,6 +7,7 @@ package frc.robot.subsystems.swerve.drivetrain;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
+import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.controller.PIDController;
@@ -173,9 +174,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
   @Override
   public void simulationPeriodic() {
-    int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
-    SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
-    angle.set(angle.get() + DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates()).omegaRadiansPerSecond * 0.02);
+    ahrs.setAngleAdjustment(ahrs.getAngle() + (DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates()).omegaRadiansPerSecond * 180 / Math.PI) * 0.02);
   }
 
   /**

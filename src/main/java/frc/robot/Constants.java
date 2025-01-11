@@ -132,6 +132,9 @@ public final class Constants {
 
     public static final double kTurningGearRatio = 21.428571428571428571428571428571;
 
+    public static final double kTurningPositionFactor = 1.0 / kTurningGearRatio * 2.0 * Math.PI;
+    public static final double kTurningVelocityFactor = 1.0 / kTurningGearRatio / 60 * 2.0 * Math.PI;
+
     private static final double kWheelDiameter = 0.09845; // Wheel Diameter in meters
 
     public static final double kVelocityFactor =

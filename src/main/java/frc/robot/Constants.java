@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -130,7 +132,7 @@ public final class Constants {
     public static final double kTranslationRampRate = 4.0;
     private static final double kTranslationGearRatio = 6.75;
 
-    private static final double kWheelDiameter = 0.09845; // Wheel Diameter in meters
+    public static final double kWheelDiameter = 0.09845; // Wheel Diameter in meters
 
     public static final double kVelocityFactor =
         (1.0 / kTranslationGearRatio / 60.0) * kWheelDiameter * Math.PI;
@@ -183,6 +185,9 @@ public final class Constants {
         new TrapezoidProfile.Constraints(
             kMaxAngularSpeed,
             kMaxAngularAccel); // Creates a trapezoidal motion for the auto rotational commands
+
+    public static final PIDConstants translation = new PIDConstants(1);
+    public static final PIDConstants rotation = new PIDConstants(1);
   }
 
   public static final class CANIDConstants {

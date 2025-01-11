@@ -7,22 +7,38 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.Mode;
+import frc.robot.Constants.ModuleConstants;
 import frc.robot.subsystems.swerve.Drivetrain;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.SwerveAlignment;
 import java.io.File;
+import java.util.List;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPoint;
+import com.pathplanner.lib.path.Waypoint;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
@@ -133,21 +149,41 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledPeriodic() {
-    // String name = m_robotContainer.getAutoName(m_robotContainer.getAuto());
+     String name = m_robotContainer.getAutoName(m_robotContainer.getAuto());
 
-    // if (name != lastName && !name.equals("Nothing?????/?///?")) {
-    //   Trajectory accumulator = new Trajectory();
-    //   List<PathPlannerPath> paths = PathPlannerAuto.getPathGroupFromAutoFile(name);
-    //   for (int i = 0; i < paths.size(); i++) {
-    //     accumulator =
-    //         accumulator.concatenate(
-    //                 paths.get(i).getWaypoints().get(0));
-    //   }
-    //   field.getObject("traj").setTrajectory(accumulator);
-    //   SmartDashboard.putData(field);
-    // }
-    // lastName = name;
-  }
+     if (name != lastName && !name.equals("Nothing?????/?///?")) {
+       Trajectory accumulator = new Trajectory();
+       List<PathPlannerPath> paths;
+       RobotConfig conf;
+       try {
+         paths = PathPlannerAuto.getPathGroupFromAutoFile(name);
+         conf = RobotConfig.fromGUISettings();
+       } catch (Exception e) {
+         throw new RuntimeException(e);
+       }
+
+       for (int i = 0; i < paths.size(); i++) {
+         PathPlannerTrajectory help = paths.get(i).generateTrajectory(new ChassisSpeeds(), new Rotation2d(), conf);
+         accumulator = accumulator.concatenate(pathTrajtoTragTraj(help));
+       }
+       field.getObject("traj").setTrajectory(accumulator);
+       SmartDashboard.putData(field);
+     }
+     lastName = name;
+   }
+
+   private Trajectory pathTrajtoTragTraj(PathPlannerTrajectory pathPoints) {
+     return new Trajectory(
+         pathPoints.getStates().stream()
+             .map(
+                 (state) -> new Trajectory.State(
+                     state.timeSeconds,
+                     state.linearVelocity,
+                     0,
+                     state.pose,
+                     state.heading.getRadians()))
+             .toList());
+   }
 
   @Override
   public void autonomousInit() {

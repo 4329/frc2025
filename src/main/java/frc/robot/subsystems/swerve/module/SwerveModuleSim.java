@@ -204,14 +204,12 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
   public void simulationPeriodic() {
     m_driveSim.setInput(m_driveMotor.getAppliedOutput() * RoboRioSim.getVInVoltage());
     m_driveSim.update(.02);
-
     m_driveMotor.iterate(m_driveSim.getAngularVelocityRPM() * ModuleConstants.kVelocityFactor, RoboRioSim.getVInVoltage(), 0.02);
-    //RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(m_driveSim.getCurrentDrawAmps()));
 
     m_turningSim.setInput(m_turningMotor.getAppliedOutput() * RoboRioSim.getVInVoltage());
     m_turningSim.update(.02);
-
     m_turningMotor.iterate(m_turningSim.getAngularVelocityRPM() * ModuleConstants.kTurningVelocityFactor, RoboRioSim.getVInVoltage(), 0.02);
-    //RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(m_turningSim.getCurrentDrawAmps()));
+
+    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(m_driveSim.getCurrentDrawAmps(), m_turningSim.getCurrentDrawAmps()));
   }
 }

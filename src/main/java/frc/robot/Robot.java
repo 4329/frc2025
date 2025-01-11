@@ -13,7 +13,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.Mode;
-import frc.robot.subsystems.swerve.Drivetrain;
+import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
+import frc.robot.subsystems.swerve.drivetrain.DrivetrainFactory;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.SwerveAlignment;
 import java.io.File;
@@ -100,7 +101,7 @@ public class Robot extends LoggedRobot {
     // and put our
     // autonomous chooser on the dashboard.
 
-    drivetrain = new Drivetrain();
+    drivetrain = DrivetrainFactory.makeDrivetrain();
     drivetrain.resetOdometry(new Pose2d());
 
     m_robotContainer = new RobotContainer(drivetrain);

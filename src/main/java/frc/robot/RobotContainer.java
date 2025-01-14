@@ -4,7 +4,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,17 +12,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.CommandLoginator;
-import frc.robot.utilities.HoorayConfig;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,11 +95,13 @@ public class RobotContainer {
         m_robotDrive::getPose,
         m_robotDrive::resetOdometry,
         m_robotDrive::getChassisSpeed,
-        (speeds, feedForwards) -> m_robotDrive.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond,
-            speeds.omegaRadiansPerSecond, false),
-        new PPHolonomicDriveController(
-            AutoConstants.translation,
-            AutoConstants.rotation),
+        (speeds, feedForwards) ->
+            m_robotDrive.drive(
+                speeds.vxMetersPerSecond,
+                speeds.vyMetersPerSecond,
+                speeds.omegaRadiansPerSecond,
+                false),
+        new PPHolonomicDriveController(AutoConstants.translation, AutoConstants.rotation),
         conf,
         () -> {
           var alliance = DriverStation.getAlliance();
@@ -146,14 +143,12 @@ public class RobotContainer {
 
         String name = pathFile.getName().replace(".auto", "");
         PathPlannerAuto pathCommand = new PathPlannerAuto(name);
-        Command autoCommand = new SequentialCommandGroup(
-            pathCommand,
-            new InstantCommand(m_robotDrive::stop));
+        Command autoCommand =
+            new SequentialCommandGroup(pathCommand, new InstantCommand(m_robotDrive::stop));
         m_chooser.addOption(name, autoCommand);
 
         autoName.put(autoCommand, pathCommand);
       }
-
     }
 
     Shuffleboard.getTab("RobotData").add("SelectAuto", m_chooser).withSize(4, 2).withPosition(0, 0);

@@ -6,10 +6,6 @@ package frc.robot.subsystems.swerve.drivetrain;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
-
-import edu.wpi.first.hal.SimDevice;
-import edu.wpi.first.hal.SimDouble;
-import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,15 +17,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.Constants;
 import frc.robot.Constants.*;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.swerve.module.SwerveModule;
 import frc.robot.subsystems.swerve.module.SwerveModuleFactory;
-import frc.robot.subsystems.swerve.module.SwerveModuleImpl;
-import frc.robot.subsystems.swerve.module.SwerveModuleSim;
 import frc.robot.utilities.FieldRelativeAccel;
 import frc.robot.utilities.FieldRelativeSpeed;
-import frc.robot.Constants.DriveConstants;
 
 /** Implements a swerve DrivetrainImpl Subsystem for the Robot */
 public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
@@ -86,33 +79,37 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
     rollOffset = ahrs.getRoll();
     ahrs.setAngleAdjustment(-180);
 
-    m_frontLeft = SwerveModuleFactory.makeSwerve(
-        DriveConstants.kFrontLeftDriveMotorPort,
-        DriveConstants.kFrontLeftTurningMotorPort,
-        DriveConstants.kFrontLeftTurningEncoderPort,
-        DriveConstants.kFrontLeftOffset,
-        DriveConstants.kFrontLeftTuningVals);
+    m_frontLeft =
+        SwerveModuleFactory.makeSwerve(
+            DriveConstants.kFrontLeftDriveMotorPort,
+            DriveConstants.kFrontLeftTurningMotorPort,
+            DriveConstants.kFrontLeftTurningEncoderPort,
+            DriveConstants.kFrontLeftOffset,
+            DriveConstants.kFrontLeftTuningVals);
 
-    m_frontRight = SwerveModuleFactory.makeSwerve(
-        DriveConstants.kFrontRightDriveMotorPort,
-        DriveConstants.kFrontRightTurningMotorPort,
-        DriveConstants.kFrontRightTurningEncoderPort,
-        DriveConstants.kFrontRightOffset,
-        DriveConstants.kFrontRightTuningVals);
+    m_frontRight =
+        SwerveModuleFactory.makeSwerve(
+            DriveConstants.kFrontRightDriveMotorPort,
+            DriveConstants.kFrontRightTurningMotorPort,
+            DriveConstants.kFrontRightTurningEncoderPort,
+            DriveConstants.kFrontRightOffset,
+            DriveConstants.kFrontRightTuningVals);
 
-    m_backLeft = SwerveModuleFactory.makeSwerve(
-        DriveConstants.kBackLeftDriveMotorPort,
-        DriveConstants.kBackLeftTurningMotorPort,
-        DriveConstants.kBackLeftTurningEncoderPort,
-        DriveConstants.kBackLeftOffset,
-        DriveConstants.kBackLeftTuningVals);
+    m_backLeft =
+        SwerveModuleFactory.makeSwerve(
+            DriveConstants.kBackLeftDriveMotorPort,
+            DriveConstants.kBackLeftTurningMotorPort,
+            DriveConstants.kBackLeftTurningEncoderPort,
+            DriveConstants.kBackLeftOffset,
+            DriveConstants.kBackLeftTuningVals);
 
-    m_backRight = SwerveModuleFactory.makeSwerve(
-        DriveConstants.kBackRightDriveMotorPort,
-        DriveConstants.kBackRightTurningMotorPort,
-        DriveConstants.kBackRightTurningEncoderPort,
-        DriveConstants.kBackRightOffset,
-        DriveConstants.kBackRightTuningVals);
+    m_backRight =
+        SwerveModuleFactory.makeSwerve(
+            DriveConstants.kBackRightDriveMotorPort,
+            DriveConstants.kBackRightTurningMotorPort,
+            DriveConstants.kBackRightTurningEncoderPort,
+            DriveConstants.kBackRightOffset,
+            DriveConstants.kBackRightTuningVals);
 
     m_odometry =
         new SwerveDriveOdometry(
@@ -174,7 +171,13 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
   @Override
   public void simulationPeriodic() {
-    ahrs.setAngleAdjustment(ahrs.getAngle() + (DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates()).omegaRadiansPerSecond * 180 / Math.PI) * 0.02);
+    ahrs.setAngleAdjustment(
+        ahrs.getAngle()
+            + (DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates())
+                        .omegaRadiansPerSecond
+                    * 180
+                    / Math.PI)
+                * 0.02);
   }
 
   /**

@@ -5,24 +5,18 @@ import com.revrobotics.sim.SparkRelativeEncoderSim;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
-import edu.wpi.first.math.Num;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.wpilibj.simulation.AnalogEncoderSim;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -56,7 +50,6 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
   // via the "tuningCals" array
   private SimpleMotorFeedforward driveFeedForward;
 
-
   public SwerveModuleSim(
       int driveMotorChannel,
       int turningMotorChannel,
@@ -87,7 +80,8 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
         m_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     DCMotor driveGearbox = DCMotor.getNEO(1);
-    m_driveSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(driveGearbox, 0.05, 1), driveGearbox);
+    m_driveSim =
+        new DCMotorSim(LinearSystemId.createDCMotorSystem(driveGearbox, 0.05, 1), driveGearbox);
     m_driveMotor = new SparkMaxSim(m_driveMotorSpark, driveGearbox);
 
     m_driveEncoder = m_driveMotor.getRelativeEncoderSim();
@@ -102,8 +96,9 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
         new SparkMaxConfig()
             .smartCurrentLimit(ModuleConstants.kTurnCurrentLimit)
             .voltageCompensation(DriveConstants.kVoltCompensation);
-    
-    m_turningConfig.encoder
+
+    m_turningConfig
+        .encoder
         .positionConversionFactor(ModuleConstants.kTurningPositionFactor)
         .velocityConversionFactor(ModuleConstants.kTurningVelocityFactor);
 
@@ -112,7 +107,9 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
 
     DCMotor turningGearbox = DCMotor.getNEO(1);
     m_turningMotor = new SparkMaxSim(m_turningMotorSpark, turningGearbox);
-    m_turningSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(turningGearbox, .0001, 1), turningGearbox);
+    m_turningSim =
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(turningGearbox, .0001, 1), turningGearbox);
 
     // Creates the analog potentiometer for the tracking of the swerve module
     // position converted to the range of 0-2*PI in radians offset by the tuned
@@ -129,8 +126,9 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous so the PID will command the shortest path.
-    m_turningPIDController = new PIDController(
-          ModuleConstants.kTurnPID[0], ModuleConstants.kTurnPID[1], ModuleConstants.kTurnPID[2]);
+    m_turningPIDController =
+        new PIDController(
+            ModuleConstants.kTurnPID[0], ModuleConstants.kTurnPID[1], ModuleConstants.kTurnPID[2]);
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
@@ -147,19 +145,23 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
   @Override
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getTurnEncoder()));
+    SwerveModuleState state =
+        SwerveModuleState.optimize(desiredState, new Rotation2d(getTurnEncoder()));
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
+    final double driveOutput =
+        m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
     // Calculates the desired feedForward motor % from the current desired velocity
     // and the static and feedforward gains
     final double driveFF = driveFeedForward.calculate(state.speedMetersPerSecond);
     // Set the drive motor to the sum of the feedforward calculation and PID
     // calculation
-    final double finalDriveOutput = MathUtils.clamp(-1, 1,  driveOutput + driveFF);
+    final double finalDriveOutput = MathUtils.clamp(-1, 1, driveOutput + driveFF);
 
     m_driveMotor.setAppliedOutput(finalDriveOutput);
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = MathUtils.clamp(-1, 1, m_turningPIDController.calculate(getTurnEncoder(), state.angle.getRadians()));
+    final double turnOutput =
+        MathUtils.clamp(
+            -1, 1, m_turningPIDController.calculate(getTurnEncoder(), state.angle.getRadians()));
     // Set the turning motor to this output value
     m_turningMotor.setAppliedOutput(turnOutput);
   }
@@ -204,12 +206,20 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
   public void simulationPeriodic() {
     m_driveSim.setInput(m_driveMotor.getAppliedOutput() * RoboRioSim.getVInVoltage());
     m_driveSim.update(.02);
-    m_driveMotor.iterate(m_driveSim.getAngularVelocityRPM() * ModuleConstants.kVelocityFactor, RoboRioSim.getVInVoltage(), 0.02);
+    m_driveMotor.iterate(
+        m_driveSim.getAngularVelocityRPM() * ModuleConstants.kVelocityFactor,
+        RoboRioSim.getVInVoltage(),
+        0.02);
 
     m_turningSim.setInput(m_turningMotor.getAppliedOutput() * RoboRioSim.getVInVoltage());
     m_turningSim.update(.02);
-    m_turningMotor.iterate(m_turningSim.getAngularVelocityRPM() * ModuleConstants.kTurningVelocityFactor, RoboRioSim.getVInVoltage(), 0.02);
+    m_turningMotor.iterate(
+        m_turningSim.getAngularVelocityRPM() * ModuleConstants.kTurningVelocityFactor,
+        RoboRioSim.getVInVoltage(),
+        0.02);
 
-    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(m_driveSim.getCurrentDrawAmps(), m_turningSim.getCurrentDrawAmps()));
+    RoboRioSim.setVInVoltage(
+        BatterySim.calculateDefaultBatteryLoadedVoltage(
+            m_driveSim.getCurrentDrawAmps(), m_turningSim.getCurrentDrawAmps()));
   }
 }

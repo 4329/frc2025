@@ -353,7 +353,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
       // until 0.75s after drive
       // command stops to combat
       // decel drift
-      // TODO understand this and make not negative (- = stupid)
+      //TODO understand this and make not negative (- = stupid)
       output =
           -m_keepAnglePID.calculate(
               getGyro().getRadians(), keepAngle); // Set output command to the result of the

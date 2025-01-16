@@ -58,11 +58,7 @@ deploy {
 
 task cleanPathPlanner(type: Exec) {
 
-    commandLine "git-bash", './cleanPathPlanner.sh'
-}
-
-task cleanCode(type: Exec) {
-    commandLine "git-bash", './cleanCode.sh'
+    commandLine "bash", './cleanPathPlanner.sh'
 }
 
 def deployArtifact = deploy.targets.roborio.artifacts.frcJava

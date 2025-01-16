@@ -80,7 +80,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
     pitchOffset = ahrs.getPitch();
     rollOffset = ahrs.getRoll();
-    ahrs.setAngleAdjustment(-180);
+    ahrs.setAngleAdjustment(-90);
 
     m_frontLeft =
         SwerveModuleFactory.makeSwerve(
@@ -353,8 +353,9 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
       // until 0.75s after drive
       // command stops to combat
       // decel drift
+      //TODO understand this and make not negative (- = stupid)
       output =
-          m_keepAnglePID.calculate(
+          -m_keepAnglePID.calculate(
               getGyro().getRadians(), keepAngle); // Set output command to the result of the
       // Keep Angle PID
     }

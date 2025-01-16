@@ -18,7 +18,6 @@ public class CommandConsumingLogger implements Consumer<Command> {
   @Override
   public void accept(Command command) {
     commandLogEntry.set(command.getName(), message);
-    System.out.println("COMMAND: " + command.getName() + " " + message);
     Logger.processInputs("Command", commandLogEntry);
   }
 }

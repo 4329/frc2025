@@ -46,7 +46,6 @@ public class RobotContainer {
   // The driver's controllers
   private final CommandXboxController driverController;
   private final CommandXboxController operatorController;
-  private final CommandXboxController pitController;
 
 
   /**
@@ -60,7 +59,6 @@ public class RobotContainer {
 
     operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
     driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-    pitController = new CommandXboxController(OIConstants.kPitControllerPort);
 
     m_robotDrive.setDefaultCommand(new DriveByController(drivetrain, driverController));
 
@@ -71,10 +69,11 @@ public class RobotContainer {
 
     new CommandLoginator();
 
-    m_chooser = new SendableChooser<>();
-    // initializeCamera();
+    
     configureButtonBindings();
     configureAutoBuilder();
+
+    m_chooser = new SendableChooser<>();
     configureAutoChooser(drivetrain);
   }
 

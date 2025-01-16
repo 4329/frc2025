@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class CheckLimelightCommand extends Command {
+public class CheckLilihCommand extends Command {
 
   private URL limelihURL;
   private boolean connected = true;
@@ -16,7 +16,7 @@ public class CheckLimelightCommand extends Command {
     return connected;
   }
 
-  public CheckLimelightCommand() {
+  public CheckLilihCommand() {
     try {
       limelihURL = new URL("http://10.43.29.11:5807/results");
     } catch (IOException ioException) {

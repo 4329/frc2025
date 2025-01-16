@@ -64,7 +64,7 @@ public class RobotContainer {
 
     m_robotDrive.setDefaultCommand(new DriveByController(drivetrain, driverController));
 
-    lilihSubsystem = new LilihSubsystem(null, null);
+    lilihSubsystem = new LilihSubsystem();
     poseEstimationSubsystem = new PoseEstimationSubsystem(drivetrain, lilihSubsystem);
 
     loggingSubsystem = new LoggingSubsystem(poseEstimationSubsystem);

@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Model.LimlihLog;
-import frc.robot.commands.visionCommands.CheckLimelightCommand;
+import frc.robot.commands.visionCommands.CheckLilihCommand;
 import frc.robot.subsystems.LightSubsystem.LEDPattern;
 import frc.robot.utilities.AprilTagUtil;
 import frc.robot.utilities.LimelightHelpers;
@@ -19,30 +19,22 @@ import org.littletonrobotics.junction.Logger;
 
 public class LilihSubsystem extends SubsystemBase {
 
-  // GenericEntry
-  // george=Shuffleboard.getTab("ikfsdal").add("george",0).getEntry();
   double[] hrm;
-  String limelightHelpNetworkTableName = "limelight-limlih";
+  String limelightHelpNetworkTableName = "limelight-lilih";
   LimelightTarget_Fiducial[] limelightResults;
   private GenericEntry zGE;
   private GenericEntry sight;
   private GenericEntry sighttwo;
-  private Boolean elevator;
-
-  private boolean lastSight;
 
   private Timer timer;
-  private CheckLimelightCommand checkLimelightCommand;
-  private LightSubsystem lightSubsystem;
+  private CheckLilihCommand checkLimelightCommand;
 
   private LimlihLog limlihLog;
 
-  public LilihSubsystem(
-      CheckLimelightCommand checkLimelightCommand, LightSubsystem lightSubsystem) {
+  public LilihSubsystem() {
     timer = new Timer();
     timer.start();
-    this.checkLimelightCommand = checkLimelightCommand;
-    this.lightSubsystem = lightSubsystem;
+    this.checkLimelightCommand = new CheckLilihCommand();
 
     zGE = Shuffleboard.getTab("shoot").add("zPose", 0).getEntry();
     sight =
@@ -183,21 +175,6 @@ public class LilihSubsystem extends SubsystemBase {
     }
   }
 
-  //     private Boolean elevatorYes() {
-
-  //     if (getTargetPoseInRobotSpace(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker()).getZ()
-  // = null) {
-  //       return false;
-  //     } else if
-  // (getTargetPoseInRobotSpace(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker()).getZ() < 1.6)
-  // {
-  //       return true;
-  //     }
-  // else{
-  //       return false;
-  //     }
-  //   }
-
   @Override
   public void periodic() {
     if (checkLimelightCommand.isConnected()) {
@@ -216,15 +193,6 @@ public class LilihSubsystem extends SubsystemBase {
 
     boolean tv = getTargetVisible(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker());
     sight.setBoolean(tv);
-    if (LEDPattern.ORANGE.equals(lightSubsystem.getLEDPattern())
-        || LEDPattern.MAGENTA.equals(lightSubsystem.getLEDPattern())) {
-      if (tv) {
-        lightSubsystem.setLEDPattern(LEDPattern.MAGENTA);
-      } else if (tv != lastSight) {
-        lightSubsystem.setLEDPattern(LEDPattern.ORANGE);
-      }
-    }
-    lastSight = tv;
 
     sighttwo.setBoolean(elevatorYes());
 

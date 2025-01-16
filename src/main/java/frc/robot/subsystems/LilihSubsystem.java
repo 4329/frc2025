@@ -17,7 +17,7 @@ import frc.robot.utilities.MathUtils;
 import java.util.Map;
 import org.littletonrobotics.junction.Logger;
 
-public class LimlihSubsystem extends SubsystemBase implements VisionSubsystem {
+public class LilihSubsystem extends SubsystemBase {
 
   // GenericEntry
   // george=Shuffleboard.getTab("ikfsdal").add("george",0).getEntry();
@@ -37,7 +37,7 @@ public class LimlihSubsystem extends SubsystemBase implements VisionSubsystem {
 
   private LimlihLog limlihLog;
 
-  public LimlihSubsystem(
+  public LilihSubsystem(
       CheckLimelightCommand checkLimelightCommand, LightSubsystem lightSubsystem) {
     timer = new Timer();
     timer.start();
@@ -172,7 +172,7 @@ public class LimlihSubsystem extends SubsystemBase implements VisionSubsystem {
     return null;
   }
 
-  private Boolean elevatorYes() {
+  private boolean elevatorYes() {
 
     if (getTargetVisible(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker())
         && getTargetPoseInRobotSpace(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker()).getZ()
@@ -240,12 +240,10 @@ public class LimlihSubsystem extends SubsystemBase implements VisionSubsystem {
     }
   }
 
-  @Override
   public double getTargetX(int id) {
     return getFiducial(id).tx;
   }
 
-  @Override
   public double faceTag(int id) {
 
     Pose2d initialPose = getTargetSpacePose(id).toPose2d();
@@ -255,4 +253,5 @@ public class LimlihSubsystem extends SubsystemBase implements VisionSubsystem {
         "Rot", new Pose2d(robotPose.getX() + 8, robotPose.getY() + 4, new Rotation2d(rotation)));
     return rotation;
   }
+
 }

@@ -2,18 +2,18 @@ package frc.robot.commands.visionCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.LilihSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 
 public class LimDriveSetCommand extends Command {
 
-  private VisionSubsystem limlihSubsystem;
+  private LilihSubsystem limlihSubsystem;
   private Drivetrain drivetrain;
   private PoseEstimationSubsystem poseEstimationSubsystem;
 
   public LimDriveSetCommand(
-      VisionSubsystem limlihSubsystem,
+      LilihSubsystem limlihSubsystem,
       Drivetrain drivetrain,
       PoseEstimationSubsystem poseEstimationSubsystem) {
 

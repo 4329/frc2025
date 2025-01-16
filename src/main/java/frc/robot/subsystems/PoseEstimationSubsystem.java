@@ -21,7 +21,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
   PoseEstimationLogAutoLogged poseEstimationLogAutoLogged;
 
   private final Drivetrain drivetrain;
-  private final VisionSubsystem visionSubsystem;
+  private final LilihSubsystem lilihSubsystem;
   private SwerveDrivePoseEstimator estimator;
   private final double pathPlannerFieldWidth = 8.21;
   private final double pathPlannerFieldLength = 16.54;
@@ -35,8 +35,8 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
   private Pose2d initialPose;
 
   public PoseEstimationSubsystem(
-      Drivetrain drivetrain, VisionSubsystem visionSubsystem) {
-    this.visionSubsystem = visionSubsystem;
+      Drivetrain drivetrain, LilihSubsystem lilihSubsystem) {
+    this.lilihSubsystem = lilihSubsystem;
     this.drivetrain = drivetrain;
 
     poseEstimationLogAutoLogged = new PoseEstimationLogAutoLogged();
@@ -94,7 +94,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
   public LoggableInputs log() {
     poseEstimationLogAutoLogged.combined = transformFieldToAdvantageKit(getPose());
     poseEstimationLogAutoLogged.limOnly =
-        transformFieldToAdvantageKit(visionSubsystem.getRobotPose());
+        transformFieldToAdvantageKit(lilihSubsystem.getRobotPose());
     poseEstimationLogAutoLogged.driveOnly = transformFieldToAdvantageKit(drivetrain.getPose());
     poseEstimationLogAutoLogged.pathPlannerPosy = pathPlannerPose;
     Logger.recordOutput("zero", new Pose2d());

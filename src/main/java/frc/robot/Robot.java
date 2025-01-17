@@ -94,6 +94,7 @@ public class Robot extends LoggedRobot {
     // the "Understanding Data Flow" page
     // DataLogManager.start();
     // Logger.registerURCL(URCL.startExternal());
+    Logger.recordMetadata("mode", Constants.robotMode.toString());
     Logger.start();
 
     HoorayConfig.gimmeConfig();
@@ -121,6 +122,7 @@ public class Robot extends LoggedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    // CanandEventLoop.getInstance().run();
   }
 
   @Override

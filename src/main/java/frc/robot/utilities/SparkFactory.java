@@ -21,6 +21,21 @@ public class SparkFactory {
    * @return a new CAN object
    */
   public static SparkMax createSparkMax(int id, Boolean flipSparkMax) {
+    return createSparkMax(id, flipSparkMax, false);
+  }
+
+  /**
+   * The default method to be used when creating a new SparkMax, which gives it basic settings for
+   * ease of use.
+   *
+   * <p>MAKE SURE TO BURN FLASH!!!
+   *
+   * @param id
+   * @param flipSparkMax
+   * @param resetted
+   * @return a new CAN object
+   */
+  public static SparkMax createSparkMax(int id, Boolean flipSparkMax, boolean resetted) {
 
     // something to the effect of we experimented with burn flash and reset to
     // factory defaults, and it caused the drive motors to go bonkers
@@ -32,7 +47,10 @@ public class SparkFactory {
         .disableFollowerMode()
         .inverted(false);
 
-    canToMake.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    canToMake.configure(
+        config,
+        resetted ? ResetMode.kResetSafeParameters : ResetMode.kNoResetSafeParameters,
+        PersistMode.kPersistParameters);
 
     return canToMake;
   }

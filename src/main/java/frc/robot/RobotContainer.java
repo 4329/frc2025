@@ -16,9 +16,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
+import frc.robot.commands.differentialArmCommands.SetArmPositionCommand;
 import frc.robot.commands.driveCommands.CenterOnTargetCommand;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.differentialArmSubsystem.DifferentialArmFactory;
+import frc.robot.subsystems.differentialArmSubsystem.DifferentialArmSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.CommandLoginator;
@@ -36,6 +39,7 @@ public class RobotContainer {
   private final PoseEstimationSubsystem poseEstimationSubsystem;
   private final LilihSubsystem lilihSubsystem;
   private final LoggingSubsystem loggingSubsystem;
+  private final DifferentialArmSubsystem differentialArmSubsystem;
 
   private final DriveByController driveByController;
 
@@ -62,8 +66,9 @@ public class RobotContainer {
 
     lilihSubsystem = new LilihSubsystem();
     poseEstimationSubsystem = new PoseEstimationSubsystem(drivetrain, lilihSubsystem);
+    differentialArmSubsystem = DifferentialArmFactory.createDifferentialArmSubsystem();
 
-    loggingSubsystem = new LoggingSubsystem(poseEstimationSubsystem);
+    loggingSubsystem = new LoggingSubsystem(poseEstimationSubsystem, differentialArmSubsystem);
 
     new CommandLoginator();
 
@@ -113,11 +118,13 @@ public class RobotContainer {
     driverController.rightStick().onTrue(new UnInstantCommand(() -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
     driverController.start().onTrue(new UnInstantCommand(driveByController::changeFieldOrient));
     driverController.a().onTrue(new CenterOnTargetCommand(lilihSubsystem, m_robotDrive, 7));
+    driverController.b().onTrue(new SetArmPositionCommand(differentialArmSubsystem, 3, 3));
   }
 
   // spotless:on
 
   // jonathan was here today 2/3/2023
+  // benjamin e. was here today 1/18/2025
   /* Pulls autos and configures the chooser */
   // SwerveAutoBuilder swerveAutoBuilder;
   Map<Command, PathPlannerAuto> autoName = new HashMap<>();
@@ -132,8 +139,7 @@ public class RobotContainer {
 
         String name = pathFile.getName().replace(".auto", "");
         PathPlannerAuto pathCommand = new PathPlannerAuto(name);
-        Command autoCommand =
-            new SequentialCommandGroup(pathCommand, new InstantCommand(drivetrain::stop));
+        Command autoCommand = new SequentialCommandGroup(pathCommand, new InstantCommand(drivetrain::stop));
         m_chooser.addOption(name, autoCommand);
 
         autoName.put(autoCommand, pathCommand);
@@ -158,9 +164,11 @@ public class RobotContainer {
     // autoZero.schedule();
   }
 
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   /**
    * @return Selected Auto
@@ -169,7 +177,8 @@ public class RobotContainer {
     return m_chooser.getSelected();
   }
 
-  public void configureTestMode() {}
+  public void configureTestMode() {
+  }
 
   public String getAutoName(Command command) {
     return autoName.containsKey(command) ? autoName.get(command).getName() : "Nothing?????/?///?";

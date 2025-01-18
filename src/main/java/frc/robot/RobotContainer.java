@@ -59,9 +59,6 @@ public class RobotContainer {
 
     new CommandLoginator();
 
-    configureButtonBindings();
-    configureAutoBuilder();
-
     m_chooser = new SendableChooser<>();
     // initializeCamera();
     configureButtonBindings();

@@ -21,7 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.swerve.module.encoderNonsense.CanandEncoderNonsense;
 import frc.robot.subsystems.swerve.module.encoderNonsense.EncoderNonsense;
-import frc.robot.subsystems.swerve.module.encoderNonsense.WhateverTheOtherEncoderNonsenseWasCalled;
+import frc.robot.subsystems.swerve.module.encoderNonsense.ThriftyEncoder;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.SparkFactory;
 
@@ -133,7 +133,7 @@ public class SwerveModuleImpl implements SwerveModule {
         switch (HoorayConfig.gimmeConfig().getEncoderType()) {
           case REDUX -> new CanandEncoderNonsense(
               m_turningConfig, m_turningMotor.getAbsoluteEncoder());
-          case THRIFTY -> new WhateverTheOtherEncoderNonsenseWasCalled(turningEncoderChannel);
+          case THRIFTY -> new ThriftyEncoder(turningEncoderChannel);
         };
 
     m_turningMotor.configure(

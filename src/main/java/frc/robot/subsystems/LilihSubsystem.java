@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Model.LimlihLog;
 import frc.robot.commands.visionCommands.CheckLilihCommand;
-import frc.robot.subsystems.LightSubsystem.LEDPattern;
 import frc.robot.utilities.AprilTagUtil;
 import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.LimelightHelpers.LimelightTarget_Fiducial;
@@ -221,5 +220,4 @@ public class LilihSubsystem extends SubsystemBase {
         "Rot", new Pose2d(robotPose.getX() + 8, robotPose.getY() + 4, new Rotation2d(rotation)));
     return rotation;
   }
-
 }

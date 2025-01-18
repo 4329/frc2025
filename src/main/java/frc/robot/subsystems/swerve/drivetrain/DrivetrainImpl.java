@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.swerve.drivetrain;
 
-import com.pathplanner.lib.util.DriveFeedforwards;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.controller.PIDController;
@@ -354,7 +353,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
       // until 0.75s after drive
       // command stops to combat
       // decel drift
-      //TODO understand this and make not negative (- = stupid)
+      // TODO understand this and make not negative (- = stupid)
       output =
           -m_keepAnglePID.calculate(
               getGyro().getRadians(), keepAngle); // Set output command to the result of the

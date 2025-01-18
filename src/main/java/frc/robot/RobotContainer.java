@@ -4,7 +4,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -24,7 +23,6 @@ import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.CommandLoginator;
 import frc.robot.utilities.UnInstantCommand;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +70,7 @@ public class RobotContainer {
     // initializeCamera();
     configureButtonBindings();
     configureAutoBuilder();
-    
+
     m_chooser = new SendableChooser<>();
     configureAutoChooser(drivetrain);
   }

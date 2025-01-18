@@ -5,15 +5,13 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Model.PoseEstimationLogAutoLogged;
+import frc.robot.model.PoseEstimationLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
-
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -35,8 +33,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
   private Pose2d initialPose;
 
-  public PoseEstimationSubsystem(
-      Drivetrain drivetrain, LilihSubsystem lilihSubsystem) {
+  public PoseEstimationSubsystem(Drivetrain drivetrain, LilihSubsystem lilihSubsystem) {
     this.lilihSubsystem = lilihSubsystem;
     this.drivetrain = drivetrain;
 
@@ -100,9 +97,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     poseEstimationLogAutoLogged.driveOnly = transformFieldToAdvantageKit(drivetrain.getPose());
     poseEstimationLogAutoLogged.pathPlannerPosy = pathPlannerPose;
     Logger.recordOutput("zero", new Pose2d());
-    Logger.recordOutput(
-        "zeroes",
-        new Pose3d[] { });
+    Logger.recordOutput("zeroes", new Pose3d[] {});
     return poseEstimationLogAutoLogged;
   }
 

@@ -1,7 +1,7 @@
 package frc.robot.commands.differentialArmCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.differentialArmSubsystem.DifferentialArmSubsystem;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 
 public class SetArmPositionCommand extends Command {
     DifferentialArmSubsystem jupiter;

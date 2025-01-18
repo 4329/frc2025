@@ -1,4 +1,4 @@
-package frc.robot.subsystems.differentialArmSubsystem;
+package frc.robot.subsystems.differentialArm;
 
 import frc.robot.Constants;
 

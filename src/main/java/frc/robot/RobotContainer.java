@@ -23,8 +23,8 @@ import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.differentialArmSubsystem.DifferentialArmFactory;
-import frc.robot.subsystems.differentialArmSubsystem.DifferentialArmSubsystem;
+import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.CommandLoginator;
@@ -123,10 +123,12 @@ public class RobotContainer {
   // spotless:off
 
   private void configureButtonBindings() {
-    driverController.rightStick().onTrue(new UnInstantCommand(() -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
     driverController.start().onTrue(new UnInstantCommand(driveByController::changeFieldOrient));
+
     driverController.a().onTrue(new CenterOnTargetCommand(lilihSubsystem, m_robotDrive, 7));
     driverController.b().onTrue(new SetArmPositionCommand(differentialArmSubsystem, 3, 3));
+
+    driverController.rightStick().onTrue(new UnInstantCommand(() -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
   }
 
   // spotless:on

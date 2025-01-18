@@ -1,4 +1,4 @@
-package frc.robot.subsystems.differentialArmSubsystem;
+package frc.robot.subsystems.differentialArm;
 
 import java.util.Map;
 
@@ -30,7 +30,7 @@ public class DifferentialArmSim extends DifferentialArmImpl {
     private final DCMotorSim motorSim2;
 
     public DifferentialArmSim() {
-        DCMotor gearbox = DCMotor.getNEO(1);
+        DCMotor gearbox = DCMotor.getNeo550(1);
         sparkSim1 = new SparkSim(motor1, gearbox);
         sparkSim2 = new SparkSim(motor2, gearbox);
 

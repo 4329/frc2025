@@ -1,4 +1,4 @@
-package frc.robot.Model;
+package frc.robot.model;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import org.littletonrobotics.junction.AutoLog;

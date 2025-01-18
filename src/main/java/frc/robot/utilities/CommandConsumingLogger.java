@@ -1,7 +1,8 @@
 package frc.robot.utilities;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Model.CommandLogEntry;
+import frc.robot.model.CommandLogEntry;
+
 import java.util.function.Consumer;
 import org.littletonrobotics.junction.Logger;
 

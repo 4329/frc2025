@@ -6,7 +6,7 @@ import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class LimlihLog implements LoggableInputs, Cloneable {
+public class LilihLog implements LoggableInputs, Cloneable {
 
   public class Fiducial {
     public boolean tV;
@@ -26,7 +26,7 @@ public class LimlihLog implements LoggableInputs, Cloneable {
   public boolean limlihConnected;
   private final int numTags = 16;
 
-  public LimlihLog() {
+  public LilihLog() {
     tags = new Fiducial[numTags];
     for (int i = 0; i < tags.length; i++) {
       tags[i] = new Fiducial(false, 0, 0, new Pose3d());
@@ -60,8 +60,8 @@ public class LimlihLog implements LoggableInputs, Cloneable {
     }
   }
 
-  public LimlihLog clone() {
-    LimlihLog copy = new LimlihLog();
+  public LilihLog clone() {
+    LilihLog copy = new LilihLog();
     copy.tags = tags.clone();
     copy.limlihConnected = this.limlihConnected;
     return copy;

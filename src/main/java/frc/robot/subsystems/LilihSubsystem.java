@@ -7,7 +7,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Model.LimlihLog;
+import frc.robot.Model.LilihLog;
 import frc.robot.commands.visionCommands.CheckLilihCommand;
 import frc.robot.utilities.AprilTagUtil;
 import frc.robot.utilities.LimelightHelpers;
@@ -20,7 +20,10 @@ public class LilihSubsystem extends SubsystemBase {
 
   double[] hrm;
   String limelightHelpNetworkTableName = "limelight-lilih";
+
   LimelightTarget_Fiducial[] limelightResults;
+  LilihSocket lilihSocket;
+
   private GenericEntry zGE;
   private GenericEntry sight;
   private GenericEntry sighttwo;
@@ -28,7 +31,7 @@ public class LilihSubsystem extends SubsystemBase {
   private Timer timer;
   private CheckLilihCommand checkLimelightCommand;
 
-  private LimlihLog limlihLog;
+  private LilihLog lilihLog;
 
   public LilihSubsystem() {
     timer = new Timer();
@@ -52,7 +55,8 @@ public class LilihSubsystem extends SubsystemBase {
             .withProperties(Map.of("Color when true", "#00FFFF", "Color when false", "#000000"))
             .getEntry();
 
-    limlihLog = new LimlihLog();
+    lilihLog = new LilihLog();
+    lilihSocket = new LilihSocket();
   }
 
   public boolean CameraConnected() {
@@ -63,6 +67,7 @@ public class LilihSubsystem extends SubsystemBase {
     if (limelightResults == null) {
       return false;
     }
+
     for (LimelightTarget_Fiducial LIMGHT : limelightResults) {
       if (LIMGHT.fiducialID == id) {
         return true;
@@ -135,23 +140,22 @@ public class LilihSubsystem extends SubsystemBase {
   }
 
   private void updateInputs() {
-
     for (int i = 0; i < 16; i++) {
-      limlihLog.tags[i].tV = getTargetVisible(i);
-      if (limlihLog.tags[i].tV) {
+      lilihLog.tags[i].tV = getTargetVisible(i);
+      if (lilihLog.tags[i].tV) {
         LimelightTarget_Fiducial fiducial = getFiducial(i);
-        limlihLog.tags[i].tX = fiducial.tx;
-        limlihLog.tags[i].tY = fiducial.ty;
-        limlihLog.tags[i].relativePose = getTargetPoseInRobotSpace(i);
+        lilihLog.tags[i].tX = fiducial.tx;
+        lilihLog.tags[i].tY = fiducial.ty;
+        lilihLog.tags[i].relativePose = getTargetPoseInRobotSpace(i);
       } else {
-        limlihLog.tags[i].tX = 0;
-        limlihLog.tags[i].tY = 0;
-        limlihLog.tags[i].relativePose = new Pose3d();
+        lilihLog.tags[i].tX = 0;
+        lilihLog.tags[i].tY = 0;
+        lilihLog.tags[i].relativePose = new Pose3d();
       }
     }
-    limlihLog.limlihConnected = CameraConnected();
+    lilihLog.limlihConnected = CameraConnected();
 
-    Logger.processInputs("Limlihsubsystem", limlihLog);
+    Logger.processInputs("Lilihsubsystem", lilihLog);
   }
 
   public LimelightTarget_Fiducial limelightTarget_Fiducial(int id) {
@@ -177,10 +181,7 @@ public class LilihSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (checkLimelightCommand.isConnected()) {
-      limelightResults =
-          LimelightHelpers.getLatestResults(limelightHelpNetworkTableName)
-              .targetingResults
-              .targets_Fiducials;
+      limelightResults = lilihSocket.getResults().targets_Fiducials;
       Pose3d pose3d =
           getTargetPoseInRobotSpace(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker());
       if (pose3d != null) {

@@ -36,6 +36,8 @@ public class RobotContainer {
   private final LilihSubsystem lilihSubsystem;
   private final LoggingSubsystem loggingSubsystem;
 
+  private final DriveByController driveByController;
+
   final SendableChooser<Command> m_chooser;
 
   // The driver's controllers
@@ -54,7 +56,8 @@ public class RobotContainer {
     operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
     driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
 
-    m_robotDrive.setDefaultCommand(new DriveByController(drivetrain, driverController));
+    driveByController = new DriveByController(drivetrain, driverController);
+    m_robotDrive.setDefaultCommand(driveByController);
 
     lilihSubsystem = new LilihSubsystem();
     poseEstimationSubsystem = new PoseEstimationSubsystem(drivetrain, lilihSubsystem);
@@ -69,30 +72,6 @@ public class RobotContainer {
     m_chooser = new SendableChooser<>();
     configureAutoChooser(drivetrain);
   }
-
-  // /** Creates and establishes camera streams for the shuffleboard ~Ben */
-  // HttpCamera limelight;
-
-  // private void initializeCamera() {
-
-  //   // CameraServer.startAutomaticCapture();
-  //   // // System.out.println(CameraServer.getVideo());
-  //   // VideoSource[] enumerateSources = VideoSource.enumerateSources();
-  //   // System.out.println(enumerateSources[0].getName());
-  //   // if (enumerateSources.length > 0 &&
-  //   // enumerateSources[0].getName().contains("USB")) {
-  //   // Shuffleboard.getTab("RobotData").add("Camera",
-  //   // enumerateSources[0]).withPosition(5, 0).withSize(3, 3)
-  //   // .withWidget(BuiltInWidgets.kCameraStream);
-  //   // }
-
-  //   limelight = new HttpCamera("Limelight", HoorayConfig.gimmeConfig().getLimelighturl());
-  //   System.out.println(HoorayConfig.gimmeConfig().getLimelighturl());
-  //   CameraServer.startAutomaticCapture(limelight);
-  //   // Shuffleboard.getTab("RobotData").add("Limelight Camera",
-  //   // limelight).withPosition(2, 0).withSize(2, 2)
-  //   // .withWidget(BuiltInWidgets.kCameraStream);
-  // }
 
   private void configureAutoBuilder() {
     RobotConfig config = null;
@@ -130,6 +109,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     driverController.rightStick().onTrue(new UnInstantCommand(() -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
+    driverController.start().onTrue(new UnInstantCommand(driveByController::changeFieldOrient));
   }
 
   // spotless:on

@@ -19,11 +19,8 @@ public class AlgeeWheelSubsystem extends SubsystemBase {
         motor2.configure(new SparkMaxConfig().follow(motor1), ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    public void george(double speed){
+    public void run(double speed){
         motor1.set(speed);
     }
     
-    public void james(){
-        motor1.set(0);
-    }
 }

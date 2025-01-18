@@ -18,6 +18,9 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.differentialArmCommands.SetArmPositionCommand;
 import frc.robot.commands.driveCommands.CenterOnTargetCommand;
+import frc.robot.subsystems.AlgeePivotSubsystem;
+import frc.robot.subsystems.AlgeeWheelSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArmSubsystem.DifferentialArmFactory;
@@ -40,6 +43,9 @@ public class RobotContainer {
   private final LilihSubsystem lilihSubsystem;
   private final LoggingSubsystem loggingSubsystem;
   private final DifferentialArmSubsystem differentialArmSubsystem;
+  private final AlgeePivotSubsystem algeePivotSubsystem;
+  private final AlgeeWheelSubsystem algeeWheelSubsystem;
+  private final ElevatorSubsystem elevatorSubsystem;
 
   private final DriveByController driveByController;
 
@@ -67,12 +73,14 @@ public class RobotContainer {
     lilihSubsystem = new LilihSubsystem();
     poseEstimationSubsystem = new PoseEstimationSubsystem(drivetrain, lilihSubsystem);
     differentialArmSubsystem = DifferentialArmFactory.createDifferentialArmSubsystem();
+    algeePivotSubsystem = new AlgeePivotSubsystem();
+    algeeWheelSubsystem = new AlgeeWheelSubsystem();
+    elevatorSubsystem = new ElevatorSubsystem();
 
     loggingSubsystem = new LoggingSubsystem(poseEstimationSubsystem, differentialArmSubsystem);
 
     new CommandLoginator();
 
-    // initializeCamera();
     configureButtonBindings();
     configureAutoBuilder();
 

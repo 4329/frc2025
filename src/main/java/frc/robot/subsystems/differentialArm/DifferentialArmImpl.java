@@ -18,7 +18,11 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.utilities.SparkFactory;
 
 public class DifferentialArmImpl extends SubsystemBase implements DifferentialArmSubsystem, LoggedSubsystem {
-    private final double MAX_SPEED = 1;
+    private final double PITCH_SPEED = 1;
+    private final double ROLL_SPEED = 1;
+
+    private final double MAX_POWER = 1;
+
     private final DifferentialArmLogAutoLogged differentialArmLogAutoLogged;
 
     SparkMax motor1;
@@ -40,12 +44,17 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         encoder1 = motor1.getEncoder();
         encoder2 = motor2.getEncoder();
 
-        pitchPID = new PIDController(0.20, 0, 0);
+        pitchPID = new PIDController(0.01, 0, 0);
         pitchPID.setSetpoint(0);
         rollPID = new PIDController(0.01, 0, 0);
         rollPID.setSetpoint(0);
 
         differentialArmLogAutoLogged = new DifferentialArmLogAutoLogged();
+    }
+
+    @Override
+    public void setPitchTarget(DifferentialArmPitch pitchTarget) {
+        this.pitchTarget = pitchTarget.rotation;
     }
 
     @Override
@@ -59,6 +68,16 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     }
 
     @Override
+    public void runPitch(double sign) {
+        pitchTarget += PITCH_SPEED * sign;
+    }
+
+    @Override
+    public void runRoll(double sign) {
+        rollTarget += ROLL_SPEED * sign;
+    }
+
+    @Override
     public double getPitch() {
         return (encoder1.getPosition() + encoder2.getPosition()) / 2;
     }
@@ -68,16 +87,16 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         return encoder1.getPosition() - encoder2.getPosition();
     }
 
-    private Map.Entry<Double, Double> normalizeSpeeds(double speed1, double speed2) {
-        if (speed1 > MAX_SPEED) {
-            speed1 /= speed1;
-            speed2 /= speed1;
-        } else if (speed2 > MAX_SPEED) {
-            speed1 /= speed2;
-            speed2 /= speed2;
+    private Map.Entry<Double, Double> normalizePowers(double power1, double power2) {
+        if (power1 > MAX_POWER) {
+            power1 /= power1;
+            power2 /= power1;
+        } else if (power2 > MAX_POWER) {
+            power1 /= power2;
+            power2 /= power2;
         }
 
-        return Map.entry(speed1, speed2);
+        return Map.entry(power1, power2);
     }
 
     @Override
@@ -95,13 +114,13 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         double pitchCalc = pitchPID.calculate(getPitch(), pitchTarget);
         double rollCalc = rollPID.calculate(getRoll(), rollTarget);
 
-        double speed1 = pitchCalc + rollCalc;
-        double speed2 = pitchCalc - rollCalc;
+        double power1 = pitchCalc + rollCalc;
+        double power2 = pitchCalc - rollCalc;
 
-        Map.Entry<Double, Double> speeds = normalizeSpeeds(speed1, speed2);
+        Map.Entry<Double, Double> powers = normalizePowers(power1, power2);
 
-        motor1.set(speeds.getKey());
-        motor2.set(speeds.getValue());
+        motor1.set(powers.getKey());
+        motor2.set(powers.getValue());
     }
 
     @Override

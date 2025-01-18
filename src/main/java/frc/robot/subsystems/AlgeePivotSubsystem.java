@@ -32,6 +32,10 @@ public class AlgeePivotSubsystem extends SubsystemBase {
     public void setSetpoint(double setpoint) {
         sparkClosedLoopController.setReference(setpoint, ControlType.kMAXMotionPositionControl);
     }
+
+    public void run(double speed) {
+        setSetpoint(motor.getEncoder().getPosition() + speed);
+    }
 }
 
 

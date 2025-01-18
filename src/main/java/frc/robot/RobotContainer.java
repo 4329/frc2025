@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
+import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.differentialArmCommands.SetArmPositionCommand;
 import frc.robot.commands.driveCommands.CenterOnTargetCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
@@ -29,6 +31,8 @@ import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.CommandLoginator;
 import frc.robot.utilities.UnInstantCommand;
+import us.hebi.quickbuf.UninitializedMessageException;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -125,10 +129,30 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driverController.start().onTrue(new UnInstantCommand(driveByController::changeFieldOrient));
 
-    driverController.a().onTrue(new CenterOnTargetCommand(lilihSubsystem, m_robotDrive, 7));
-    driverController.b().onTrue(new SetArmPositionCommand(differentialArmSubsystem, 3, 3));
+    driverController.leftTrigger(0.01).whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> elevatorSubsystem.runElevator(-driverController.getLeftTriggerAxis()))));
+    driverController.rightTrigger(0.01).whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> elevatorSubsystem.runElevator(driverController.getRightTriggerAxis()))));
 
-    driverController.rightStick().onTrue(new UnInstantCommand(() -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
+    driverController.leftBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> algeePivotSubsystem.run(-1))));
+    driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> algeePivotSubsystem.run(1))));
+
+    driverController.y().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> differentialArmSubsystem.runPitch(1))));
+    driverController.x().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> differentialArmSubsystem.runRoll(1))));
+    driverController.b().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> differentialArmSubsystem.runRoll(-1))));
+    driverController.a().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> differentialArmSubsystem.runPitch(-1))));
+
+    driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
+    driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
+
+    driverController.rightStick().onTrue(new UnInstantCommand(
+      () -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
   }
 
   // spotless:on

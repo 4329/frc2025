@@ -12,6 +12,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.SparkFactory;
 
 public class ElevatorSubsystem extends SubsystemBase {
+    private final double ELEVATOR_SPEED = 1;
+
+    public enum ElevatorPosition {
+        LOW(0), MIDDLE(50), HIGH(100);
+
+        double pos;
+        ElevatorPosition(double pos) {
+            this.pos = pos;
+        }
+    }
+
     SparkMax motor1;
     SparkMax motor2;
 
@@ -34,8 +45,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         controller = motor1.getClosedLoopController();
     }
 
-    public void setSetpoint(double setpoint) {
-        controller.setReference(setpoint, ControlType.kMAXMotionPositionControl);
+    public void setSetpoint(ElevatorPosition setpoint) {
+        controller.setReference(setpoint.pos, ControlType.kMAXMotionPositionControl);
+    }
+
+    public void runElevator(double speed) {
+        controller.setReference(motor1.getEncoder().getPosition() + speed, ControlType.kMAXMotionPositionControl);
     }
     
 }

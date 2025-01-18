@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
-import frc.robot.commands.differentialArmCommands.SetArmPositionCommand;
-import frc.robot.commands.driveCommands.CenterOnTargetCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -31,8 +29,6 @@ import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.CommandLoginator;
 import frc.robot.utilities.UnInstantCommand;
-import us.hebi.quickbuf.UninitializedMessageException;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -173,7 +169,8 @@ public class RobotContainer {
 
         String name = pathFile.getName().replace(".auto", "");
         PathPlannerAuto pathCommand = new PathPlannerAuto(name);
-        Command autoCommand = new SequentialCommandGroup(pathCommand, new InstantCommand(drivetrain::stop));
+        Command autoCommand =
+            new SequentialCommandGroup(pathCommand, new InstantCommand(drivetrain::stop));
         m_chooser.addOption(name, autoCommand);
 
         autoName.put(autoCommand, pathCommand);
@@ -198,11 +195,9 @@ public class RobotContainer {
     // autoZero.schedule();
   }
 
-  public void autonomousPeriodic() {
-  }
+  public void autonomousPeriodic() {}
 
-  public void teleopPeriodic() {
-  }
+  public void teleopPeriodic() {}
 
   /**
    * @return Selected Auto
@@ -211,8 +206,7 @@ public class RobotContainer {
     return m_chooser.getSelected();
   }
 
-  public void configureTestMode() {
-  }
+  public void configureTestMode() {}
 
   public String getAutoName(Command command) {
     return autoName.containsKey(command) ? autoName.get(command).getName() : "Nothing?????/?///?";

@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -189,6 +190,9 @@ public final class Constants {
         new TrapezoidProfile.Constraints(
             kMaxAngularSpeed,
             kMaxAngularAccel); // Creates a trapezoidal motion for the auto rotational commands
+
+    public static PIDConstants translationPID = new PIDConstants(0, 0, 0);
+    public static PIDConstants rotationPID = new PIDConstants(0, 0, 0);
   }
 
   public static final class CANIDConstants {

@@ -359,18 +359,6 @@ public class LimelightHelpers {
     }
   }
 
-  public static class LimelightResults {
-    @JsonProperty("Results")
-    public Results targetingResults;
-
-    public String error;
-
-    public LimelightResults() {
-      targetingResults = new Results();
-      error = "";
-    }
-  }
-
   public static class RawFiducial {
     public int id;
     public double txnc;
@@ -915,28 +903,18 @@ public class LimelightHelpers {
   }
 
   /** Parses Limelight's JSON results dump into a LimelightResults Object */
-  public static LimelightResults getLatestResults(String limelightName) {
+  public static Results getLatestResults(String limelightName) {
 
-    long start = System.nanoTime();
-    LimelightHelpers.LimelightResults results = new LimelightHelpers.LimelightResults();
+    LimelightHelpers.Results results = new Results();
     if (mapper == null) {
       mapper =
           new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     try {
-
       String thing = getJSONDump(limelightName);
-      results = mapper.readValue(thing, LimelightResults.class);
+      results = mapper.readValue(thing, Results.class);
     } catch (JsonProcessingException e) {
-      results.error = "lljson error: " + e.getMessage();
-    }
-
-    long end = System.nanoTime();
-    double millis = (end - start) * .000001;
-    results.targetingResults.latency_jsonParse = millis;
-    if (profileJSON) {
-      System.out.printf("lljson: %.2f\r\n", millis);
     }
 
     return results;

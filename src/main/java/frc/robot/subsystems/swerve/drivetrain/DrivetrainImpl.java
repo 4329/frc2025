@@ -171,7 +171,6 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
     // Calls get pose function which sends the Pose information to the
     getPose();
 
-    log.pose = getPose();
     log.states = getModuleStates();
 
     Logger.processInputs("Drivetrain", log);

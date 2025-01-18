@@ -6,6 +6,6 @@ import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
 public class DrivetrainLog {
-    public Pose2d pose;
-    public SwerveModuleState[] states;
+  public Pose2d pose;
+  public SwerveModuleState[] states;
 }

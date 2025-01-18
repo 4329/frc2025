@@ -2,174 +2,174 @@ package frc.robot.utilities;
 
 public class Config {
 
-    public static class PIDConstants {
-        public PIDConstants(double p) {
-            this(p, 0, 0);
-        }
-
-        public PIDConstants(double p, double i) {
-            this(p, i, 0);
-        }
-
-        public PIDConstants(double p, double i, double d) {
-            this.p = p;
-            this.i = i;
-            this.d = d;
-        }
-
-        public double p;
-        public double i;
-        public double d;
+  public static class PIDConstants {
+    public PIDConstants(double p) {
+      this(p, 0, 0);
     }
 
-    private int frontLeftDriveMotorPort = 3;
-    private int frontRightDriveMotorPort = 1;
-    private int backLeftDriveMotorPort = 5;
-    private int backRightDriveMotorPort = 7;
-
-    // Rotation Motor IDs -DO NOT CHANGE-
-    private int frontLeftTurningMotorPort = 4;
-    private int frontRightTurningMotorPort = 2;
-    private int backLeftTurningMotorPort = 6;
-    private int backRightTurningMotorPort = 8;
-
-    // Encoder IDs -DO NOT CHANGE-
-    private int frontLeftTurningEncoderPort = 1;
-    private int frontRightTurningEncoderPort = 0;
-    private int backLeftTurningEncoderPort = 2;
-    private int backRightTurningEncoderPort = 3;
-
-    // Motor Offsets in Radians
-    private double frontLeftOffset = 2.25;
-    private double frontRightOffset = -0.65;
-    private double backLeftOffset = -0.039;
-    private double backRightOffset = 1.03;
-
-    private boolean extraShuffleBoardToggle = true;
-
-    private int rollDirection = 1;
-
-    private String limelighturl = "http://10.43.29.11:5800";
-
-    private boolean usesPhotonVision = false;
-
-    private double shooterkS = 0;
-    private double shooterkV = 0;
-
-    private double kPTranslation = 0;
-    private double kDTranslation = 0;
-
-    private double kPTheta = 0;
-
-    public boolean getUsesPhotonVision() {
-        return usesPhotonVision;
+    public PIDConstants(double p, double i) {
+      this(p, i, 0);
     }
 
-    public void setUsesPhotonVision(boolean usesPhotonVision) {
-        this.usesPhotonVision = usesPhotonVision;
+    public PIDConstants(double p, double i, double d) {
+      this.p = p;
+      this.i = i;
+      this.d = d;
     }
 
-    public void setkPTranslation(double kPTranslation) {
-        this.kPTranslation = kPTranslation;
-    }
+    public double p;
+    public double i;
+    public double d;
+  }
 
-    public void setkDTranslation(double kDTranslation) {
-        this.kDTranslation = kDTranslation;
-    }
+  private int frontLeftDriveMotorPort = 3;
+  private int frontRightDriveMotorPort = 1;
+  private int backLeftDriveMotorPort = 5;
+  private int backRightDriveMotorPort = 7;
 
-    public void setkPTheta(double kPTheta) {
-        this.kPTheta = kPTheta;
-    }
+  // Rotation Motor IDs -DO NOT CHANGE-
+  private int frontLeftTurningMotorPort = 4;
+  private int frontRightTurningMotorPort = 2;
+  private int backLeftTurningMotorPort = 6;
+  private int backRightTurningMotorPort = 8;
 
-    public PIDConstants getkTranslationController() {
-        return new PIDConstants(kPTranslation, kDTranslation);
-    }
+  // Encoder IDs -DO NOT CHANGE-
+  private int frontLeftTurningEncoderPort = 1;
+  private int frontRightTurningEncoderPort = 0;
+  private int backLeftTurningEncoderPort = 2;
+  private int backRightTurningEncoderPort = 3;
 
-    public PIDConstants getkThetaController() {
-        return new PIDConstants(kPTheta);
-    }
+  // Motor Offsets in Radians
+  private double frontLeftOffset = 2.25;
+  private double frontRightOffset = -0.65;
+  private double backLeftOffset = -0.039;
+  private double backRightOffset = 1.03;
 
-    public double getShooterkV() {
-        return shooterkV;
-    }
+  private boolean extraShuffleBoardToggle = true;
 
-    public double getShooterkS() {
-        return shooterkS;
-    }
+  private int rollDirection = 1;
 
-    public String getLimelighturl() {
-        return limelighturl;
-    }
+  private String limelighturl = "http://10.43.29.11:5800";
 
-    public int getFrontLeftDriveMotorPort() {
-        return frontLeftDriveMotorPort;
-    }
+  private boolean usesPhotonVision = false;
 
-    public int getFrontRightDriveMotorPort() {
-        return frontRightDriveMotorPort;
-    }
+  private double shooterkS = 0;
+  private double shooterkV = 0;
 
-    public int getBackLeftDriveMotorPort() {
-        return backLeftDriveMotorPort;
-    }
+  private double kPTranslation = 0;
+  private double kDTranslation = 0;
 
-    public int getBackRightDriveMotorPort() {
-        return backRightDriveMotorPort;
-    }
+  private double kPTheta = 0;
 
-    public int getFrontLeftTurningMotorPort() {
-        return frontLeftTurningMotorPort;
-    }
+  public boolean getUsesPhotonVision() {
+    return usesPhotonVision;
+  }
 
-    public int getFrontRightTurningMotorPort() {
-        return frontRightTurningMotorPort;
-    }
+  public void setUsesPhotonVision(boolean usesPhotonVision) {
+    this.usesPhotonVision = usesPhotonVision;
+  }
 
-    public int getBackLeftTurningMotorPort() {
-        return backLeftTurningMotorPort;
-    }
+  public void setkPTranslation(double kPTranslation) {
+    this.kPTranslation = kPTranslation;
+  }
 
-    public int getBackRightTurningMotorPort() {
-        return backRightTurningMotorPort;
-    }
+  public void setkDTranslation(double kDTranslation) {
+    this.kDTranslation = kDTranslation;
+  }
 
-    public int getFrontLeftTurningEncoderPort() {
-        return frontLeftTurningEncoderPort;
-    }
+  public void setkPTheta(double kPTheta) {
+    this.kPTheta = kPTheta;
+  }
 
-    public int getFrontRightTurningEncoderPort() {
-        return frontRightTurningEncoderPort;
-    }
+  public PIDConstants getkTranslationController() {
+    return new PIDConstants(kPTranslation, kDTranslation);
+  }
 
-    public int getBackLeftTurningEncoderPort() {
-        return backLeftTurningEncoderPort;
-    }
+  public PIDConstants getkThetaController() {
+    return new PIDConstants(kPTheta);
+  }
 
-    public int getBackRightTurningEncoderPort() {
-        return backRightTurningEncoderPort;
-    }
+  public double getShooterkV() {
+    return shooterkV;
+  }
 
-    public double getFrontLeftOffset() {
-        return frontLeftOffset;
-    }
+  public double getShooterkS() {
+    return shooterkS;
+  }
 
-    public double getFrontRightOffset() {
-        return frontRightOffset;
-    }
+  public String getLimelighturl() {
+    return limelighturl;
+  }
 
-    public double getBackLeftOffset() {
-        return backLeftOffset;
-    }
+  public int getFrontLeftDriveMotorPort() {
+    return frontLeftDriveMotorPort;
+  }
 
-    public double getBackRightOffset() {
-        return backRightOffset;
-    }
+  public int getFrontRightDriveMotorPort() {
+    return frontRightDriveMotorPort;
+  }
 
-    public boolean isExtraShuffleBoardToggle() {
-        return extraShuffleBoardToggle;
-    }
+  public int getBackLeftDriveMotorPort() {
+    return backLeftDriveMotorPort;
+  }
 
-    public int getRollDirection() {
-        return rollDirection;
-    }
+  public int getBackRightDriveMotorPort() {
+    return backRightDriveMotorPort;
+  }
+
+  public int getFrontLeftTurningMotorPort() {
+    return frontLeftTurningMotorPort;
+  }
+
+  public int getFrontRightTurningMotorPort() {
+    return frontRightTurningMotorPort;
+  }
+
+  public int getBackLeftTurningMotorPort() {
+    return backLeftTurningMotorPort;
+  }
+
+  public int getBackRightTurningMotorPort() {
+    return backRightTurningMotorPort;
+  }
+
+  public int getFrontLeftTurningEncoderPort() {
+    return frontLeftTurningEncoderPort;
+  }
+
+  public int getFrontRightTurningEncoderPort() {
+    return frontRightTurningEncoderPort;
+  }
+
+  public int getBackLeftTurningEncoderPort() {
+    return backLeftTurningEncoderPort;
+  }
+
+  public int getBackRightTurningEncoderPort() {
+    return backRightTurningEncoderPort;
+  }
+
+  public double getFrontLeftOffset() {
+    return frontLeftOffset;
+  }
+
+  public double getFrontRightOffset() {
+    return frontRightOffset;
+  }
+
+  public double getBackLeftOffset() {
+    return backLeftOffset;
+  }
+
+  public double getBackRightOffset() {
+    return backRightOffset;
+  }
+
+  public boolean isExtraShuffleBoardToggle() {
+    return extraShuffleBoardToggle;
+  }
+
+  public int getRollDirection() {
+    return rollDirection;
+  }
 }

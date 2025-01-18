@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
+import frc.robot.commands.driveCommands.CenterOnTargetCommand;
 import frc.robot.subsystems.LilihSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
@@ -110,6 +111,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driverController.rightStick().onTrue(new UnInstantCommand(() -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
     driverController.start().onTrue(new UnInstantCommand(driveByController::changeFieldOrient));
+    driverController.a().onTrue(new CenterOnTargetCommand(lilihSubsystem, m_robotDrive, 7));
   }
 
   // spotless:on

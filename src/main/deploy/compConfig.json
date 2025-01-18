@@ -30,5 +30,7 @@
     "kPTranslation": 2.0,
     "kDTranslation": 0.00005,
 
-    "kPTheta": 1.25
+    "kPTheta": 1.25,
+
+    "encoderType": "REDUX"
 }

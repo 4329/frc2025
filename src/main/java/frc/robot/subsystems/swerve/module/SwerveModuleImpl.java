@@ -7,7 +7,6 @@ package frc.robot.subsystems.swerve.module;
 // import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.revrobotics.CANEncoder;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
@@ -20,6 +19,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.*;
+import frc.robot.subsystems.swerve.module.encoderNonsense.EncoderNonsense;
+import frc.robot.subsystems.swerve.module.encoderNonsense.ReduxEncoder;
+import frc.robot.subsystems.swerve.module.encoderNonsense.ThriftyEncoder;
+import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.SparkFactory;
 
 /** Implements a swerve module for the Robot */
@@ -35,7 +38,7 @@ public class SwerveModuleImpl implements SwerveModule {
   // Create a Potentiometer to store the output of the absolute encoder that
   // tracks the angular position of the swerve module
   // private final AnalogPotentiometer m_turningEncoder;
-  private final SparkAbsoluteEncoder m_turningEncoder;
+  private final EncoderNonsense m_turningEncoder;
 
   private final SparkBaseConfig m_driveConfig;
   private final SparkBaseConfig m_turningConfig;
@@ -121,17 +124,19 @@ public class SwerveModuleImpl implements SwerveModule {
             .smartCurrentLimit(ModuleConstants.kTurnCurrentLimit)
             .voltageCompensation(DriveConstants.kVoltCompensation);
 
-    m_turningConfig.encoder.positionConversionFactor(2 * Math.PI);
-
-    m_turningMotor.configure(
-        m_turningConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-
     // Creates the analog potentiometer for the tracking of the swerve module
     // position converted to the range of 0-2*PI in radians offset by the tuned
     // module offset
     // m_turningEncoder = new AnalogPotentiometer(turningEncoderChannel, 2.0 * Math.PI,
     // angularOffset);
-    m_turningEncoder = m_turningMotor.getAbsoluteEncoder();
+    m_turningEncoder =
+        switch (HoorayConfig.gimmeConfig().getEncoderType()) {
+          case REDUX -> new ReduxEncoder(m_turningConfig, m_turningMotor.getAbsoluteEncoder());
+          case THRIFTY -> new ThriftyEncoder(turningEncoderChannel);
+        };
+
+    m_turningMotor.configure(
+        m_turningConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
     this.angularOffset = angularOffset;
 
@@ -208,8 +213,7 @@ public class SwerveModuleImpl implements SwerveModule {
    */
   @Override
   public double getTurnEncoder() {
-    // return 1.0 * m_turningEncoder.get();
-    return -m_turningEncoder.getPosition();
+    return m_turningEncoder.get();
   }
 
   @Override

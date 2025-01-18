@@ -67,7 +67,6 @@ public class LilihSubsystem extends SubsystemBase {
     if (limelightResults == null) {
       return false;
     }
-
     for (LimelightTarget_Fiducial LIMGHT : limelightResults) {
       if (LIMGHT.fiducialID == id) {
         return true;

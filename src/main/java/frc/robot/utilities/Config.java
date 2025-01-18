@@ -61,6 +61,8 @@ public class Config {
 
   private double kPTheta = 0;
 
+  private EncoderType encoderType = EncoderType.REDUX;
+
   public boolean getUsesPhotonVision() {
     return usesPhotonVision;
   }
@@ -171,5 +173,13 @@ public class Config {
 
   public int getRollDirection() {
     return rollDirection;
+  }
+
+  public EncoderType getEncoderType() {
+    return encoderType;
+  }
+
+  public void setEncoderType(EncoderType encoderType) {
+    this.encoderType = encoderType;
   }
 }

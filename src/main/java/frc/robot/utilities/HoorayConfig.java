@@ -47,6 +47,7 @@ public class HoorayConfig {
 
   private static File findConfig() {
 
+    System.out.println("Ssadfuashdfhnausdufhihuh");
     if (new File("/home/lvuser/proto").exists()) {
 
       configEntry.setString("Proto");
@@ -56,7 +57,6 @@ public class HoorayConfig {
       configEntry.setString("Dev");
       return new File("/home/lvuser/deploy/devConfig.json");
     } else {
-
       configEntry.setString("Comp");
       return new File("/home/lvuser/deploy/compConfig.json");
     }

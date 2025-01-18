@@ -71,6 +71,11 @@ public class RobotContainer {
     configureAutoBuilder();
 
     m_chooser = new SendableChooser<>();
+    // initializeCamera();
+    configureButtonBindings();
+    configureAutoBuilder();
+
+    m_chooser = new SendableChooser<>();
     configureAutoChooser(drivetrain);
   }
 

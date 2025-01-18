@@ -2,7 +2,7 @@
 //  * ChatClientEndpoint.java
 //  * http://programmingforliving.com
 //  */
-package frc.robot.subsystems;
+package frc.robot.subsystems.lilih;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;

@@ -19,8 +19,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.*;
-import frc.robot.subsystems.swerve.module.encoderNonsense.ReduxEncoder;
 import frc.robot.subsystems.swerve.module.encoderNonsense.EncoderNonsense;
+import frc.robot.subsystems.swerve.module.encoderNonsense.ReduxEncoder;
 import frc.robot.subsystems.swerve.module.encoderNonsense.ThriftyEncoder;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.SparkFactory;
@@ -131,8 +131,7 @@ public class SwerveModuleImpl implements SwerveModule {
     // angularOffset);
     m_turningEncoder =
         switch (HoorayConfig.gimmeConfig().getEncoderType()) {
-          case REDUX -> new ReduxEncoder(
-              m_turningConfig, m_turningMotor.getAbsoluteEncoder());
+          case REDUX -> new ReduxEncoder(m_turningConfig, m_turningMotor.getAbsoluteEncoder());
           case THRIFTY -> new ThriftyEncoder(turningEncoderChannel);
         };
 

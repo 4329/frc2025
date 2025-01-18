@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public abstract class ReInitCommand extends Command {
 
-  @Override
-  public void schedule() {
-    if (this.isScheduled()) {
-      initialize();
-    } else CommandScheduler.getInstance().schedule(this);
-  }
+    @Override
+    public void schedule() {
+        if (this.isScheduled()) {
+            initialize();
+        } else CommandScheduler.getInstance().schedule(this);
+    }
 }

@@ -31,82 +31,82 @@ import java.util.Map;
  */
 public class RobotContainer {
 
-  // The robot's subsystems
-  private final Drivetrain m_robotDrive;
-  private final PoseEstimationSubsystem poseEstimationSubsystem;
-  private final LilihSubsystem lilihSubsystem;
-  private final LoggingSubsystem loggingSubsystem;
+    // The robot's subsystems
+    private final Drivetrain m_robotDrive;
+    private final PoseEstimationSubsystem poseEstimationSubsystem;
+    private final LilihSubsystem lilihSubsystem;
+    private final LoggingSubsystem loggingSubsystem;
 
-  private final DriveByController driveByController;
+    private final DriveByController driveByController;
 
-  final SendableChooser<Command> m_chooser;
+    final SendableChooser<Command> m_chooser;
 
-  // The driver's controllers
-  private final CommandXboxController driverController;
-  private final CommandXboxController operatorController;
+    // The driver's controllers
+    private final CommandXboxController driverController;
+    private final CommandXboxController operatorController;
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   *
-   * @param drivetrain
-   * @param lightSubsystem
-   */
-  public RobotContainer(Drivetrain drivetrain) {
-    m_robotDrive = drivetrain;
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     *
+     * @param drivetrain
+     * @param lightSubsystem
+     */
+    public RobotContainer(Drivetrain drivetrain) {
+        m_robotDrive = drivetrain;
 
-    operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
-    driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+        operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+        driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
 
-    driveByController = new DriveByController(drivetrain, driverController);
-    m_robotDrive.setDefaultCommand(driveByController);
+        driveByController = new DriveByController(drivetrain, driverController);
+        m_robotDrive.setDefaultCommand(driveByController);
 
-    lilihSubsystem = new LilihSubsystem();
-    poseEstimationSubsystem = new PoseEstimationSubsystem(drivetrain, lilihSubsystem);
+        lilihSubsystem = new LilihSubsystem();
+        poseEstimationSubsystem = new PoseEstimationSubsystem(drivetrain, lilihSubsystem);
 
-    loggingSubsystem = new LoggingSubsystem(poseEstimationSubsystem);
+        loggingSubsystem = new LoggingSubsystem(poseEstimationSubsystem);
 
-    new CommandLoginator();
+        new CommandLoginator();
 
-    configureButtonBindings();
-    configureAutoBuilder();
+        configureButtonBindings();
+        configureAutoBuilder();
 
-    m_chooser = new SendableChooser<>();
-    configureAutoChooser(drivetrain);
-  }
-
-  private void configureAutoBuilder() {
-    RobotConfig config = null;
-    try {
-      config = RobotConfig.fromGUISettings();
-    } catch (Exception e) {
-      e.printStackTrace();
+        m_chooser = new SendableChooser<>();
+        configureAutoChooser(drivetrain);
     }
 
-    AutoBuilder.configure(
-        poseEstimationSubsystem::getPathPlannerStuff,
-        poseEstimationSubsystem::setInitialPose,
-        m_robotDrive::getChassisSpeed,
-        (speeds, feedForwards) -> m_robotDrive.setModuleStates(speeds),
-        new PPHolonomicDriveController(
-            Constants.AutoConstants.translationPID, Constants.AutoConstants.rotationPID),
-        config,
-        () -> {
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          throw new RuntimeException();
-        },
-        m_robotDrive);
-  }
+    private void configureAutoBuilder() {
+        RobotConfig config = null;
+        try {
+            config = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
-   * {@link JoystickButton}.
-   */
-  // spotless:off
+        AutoBuilder.configure(
+                poseEstimationSubsystem::getPathPlannerStuff,
+                poseEstimationSubsystem::setInitialPose,
+                m_robotDrive::getChassisSpeed,
+                (speeds, feedForwards) -> m_robotDrive.setModuleStates(speeds),
+                new PPHolonomicDriveController(
+                        Constants.AutoConstants.translationPID, Constants.AutoConstants.rotationPID),
+                config,
+                () -> {
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    throw new RuntimeException();
+                },
+                m_robotDrive);
+    }
+
+    /**
+     * Use this method to define your button->command mappings. Buttons can be created by
+     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
+     * {@link JoystickButton}.
+     */
+    // spotless:off
 
   private void configureButtonBindings() {
     driverController.rightStick().onTrue(new UnInstantCommand(() -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
@@ -116,65 +116,65 @@ public class RobotContainer {
 
   // spotless:on
 
-  // jonathan was here today 2/3/2023
-  /* Pulls autos and configures the chooser */
-  // SwerveAutoBuilder swerveAutoBuilder;
-  Map<Command, PathPlannerAuto> autoName = new HashMap<>();
+    // jonathan was here today 2/3/2023
+    /* Pulls autos and configures the chooser */
+    // SwerveAutoBuilder swerveAutoBuilder;
+    Map<Command, PathPlannerAuto> autoName = new HashMap<>();
 
-  private void configureAutoChooser(Drivetrain drivetrain) {
-    File pathPlannerDirectory = new File(Filesystem.getDeployDirectory(), "pathplanner");
-    pathPlannerDirectory = new File(pathPlannerDirectory, "autos");
+    private void configureAutoChooser(Drivetrain drivetrain) {
+        File pathPlannerDirectory = new File(Filesystem.getDeployDirectory(), "pathplanner");
+        pathPlannerDirectory = new File(pathPlannerDirectory, "autos");
 
-    for (File pathFile : pathPlannerDirectory.listFiles()) {
+        for (File pathFile : pathPlannerDirectory.listFiles()) {
 
-      if (pathFile.isFile() && pathFile.getName().endsWith(".auto")) {
+            if (pathFile.isFile() && pathFile.getName().endsWith(".auto")) {
 
-        String name = pathFile.getName().replace(".auto", "");
-        PathPlannerAuto pathCommand = new PathPlannerAuto(name);
-        Command autoCommand =
-            new SequentialCommandGroup(pathCommand, new InstantCommand(drivetrain::stop));
-        m_chooser.addOption(name, autoCommand);
+                String name = pathFile.getName().replace(".auto", "");
+                PathPlannerAuto pathCommand = new PathPlannerAuto(name);
+                Command autoCommand =
+                        new SequentialCommandGroup(pathCommand, new InstantCommand(drivetrain::stop));
+                m_chooser.addOption(name, autoCommand);
 
-        autoName.put(autoCommand, pathCommand);
-      }
+                autoName.put(autoCommand, pathCommand);
+            }
+        }
+
+        Shuffleboard.getTab("RobotData").add("SelectAuto", m_chooser).withSize(4, 2).withPosition(0, 0);
     }
 
-    Shuffleboard.getTab("RobotData").add("SelectAuto", m_chooser).withSize(4, 2).withPosition(0, 0);
-  }
+    public void robotInit() {
+        // new AutoZero(elevatorSubsystem, armAngleSubsystem).schedule();
+        // limDriveSetCommand.schedule();
+    }
 
-  public void robotInit() {
-    // new AutoZero(elevatorSubsystem, armAngleSubsystem).schedule();
-    // limDriveSetCommand.schedule();
-  }
+    public void autonomousInit() {
 
-  public void autonomousInit() {
+        // limDriveSetCommand.schedule();
+    }
 
-    // limDriveSetCommand.schedule();
-  }
+    public void teleopInit() {
+        // limDriveSetCommand.schedule();
+        // autoZero.schedule();
+    }
 
-  public void teleopInit() {
-    // limDriveSetCommand.schedule();
-    // autoZero.schedule();
-  }
+    public void autonomousPeriodic() {}
 
-  public void autonomousPeriodic() {}
+    public void teleopPeriodic() {}
 
-  public void teleopPeriodic() {}
+    /**
+     * @return Selected Auto
+     */
+    public Command getAuto() {
+        return m_chooser.getSelected();
+    }
 
-  /**
-   * @return Selected Auto
-   */
-  public Command getAuto() {
-    return m_chooser.getSelected();
-  }
+    public void configureTestMode() {}
 
-  public void configureTestMode() {}
+    public String getAutoName(Command command) {
+        return autoName.containsKey(command) ? autoName.get(command).getName() : "Nothing?????/?///?";
+    }
 
-  public String getAutoName(Command command) {
-    return autoName.containsKey(command) ? autoName.get(command).getName() : "Nothing?????/?///?";
-  }
-
-  public Map<Command, PathPlannerAuto> yes() {
-    return autoName;
-  }
+    public Map<Command, PathPlannerAuto> yes() {
+        return autoName;
+    }
 }

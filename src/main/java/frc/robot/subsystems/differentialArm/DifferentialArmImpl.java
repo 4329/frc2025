@@ -84,7 +84,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     @Override
     public double getRoll() {
-        return encoder1.getPosition() - encoder2.getPosition();
+        return (encoder1.getPosition() - encoder2.getPosition()) / 2;
     }
 
     private Map.Entry<Double, Double> normalizePowers(double power1, double power2) {

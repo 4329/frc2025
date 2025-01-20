@@ -23,19 +23,18 @@ public class SparkFactory {
     // something to the effect of we experimented with burn flash and reset to
     // factory defaults, and it caused the drive motors to go bonkers
     SparkMax canToMake = new SparkMax(id, MotorType.kBrushless);
-    //SparkMaxConfig config = new SparkMaxConfig();
-    //config
-    //    .apply(new SoftLimitConfig().forwardSoftLimitEnabled(false).reverseSoftLimitEnabled(false))
-    //    .idleMode(IdleMode.kBrake)
-    //    .disableFollowerMode()
-    //    .inverted(false);
+    SparkMaxConfig config = new SparkMaxConfig();
+    config
+        .apply(new SoftLimitConfig().forwardSoftLimitEnabled(false).reverseSoftLimitEnabled(false))
+        .idleMode(IdleMode.kBrake)
+        .disableFollowerMode()
+        .inverted(false);
 
-    //canToMake.configure(
-    //    config,
-    //    resetted ? ResetMode.kResetSafeParameters : ResetMode.kNoResetSafeParameters,
-    //    PersistMode.kPersistParameters);
+    canToMake.configure(
+        config,
+        resetted ? ResetMode.kResetSafeParameters : ResetMode.kNoResetSafeParameters,
+        PersistMode.kPersistParameters);
 
     return canToMake;
   }
-
 }

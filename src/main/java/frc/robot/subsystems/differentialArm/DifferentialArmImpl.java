@@ -83,9 +83,11 @@ public class DifferentialArmImpl extends SubsystemBase
 
   private Map.Entry<Double, Double> normalizePowers(double power1, double power2) {
     if (power1 > MAX_POWER) {
-      power1 /= power1;
       power2 /= power1;
-    } else if (power2 > MAX_POWER) {
+      power1 /= power1;
+    } 
+
+    if (power2 > MAX_POWER) {
       power1 /= power2;
       power2 /= power2;
     }

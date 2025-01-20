@@ -95,13 +95,14 @@ public class Robot extends LoggedRobot {
     // DataLogManager.start();
     // Logger.registerURCL(URCL.startExternal());
     Logger.recordMetadata("mode", Constants.robotMode.toString());
+
+    Logger.recordMetadata("encoderType", HoorayConfig.gimmeConfig().getEncoderType().toString());
     Logger.start();
 
     HoorayConfig.gimmeConfig();
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-
     drivetrain = DrivetrainFactory.makeDrivetrain();
     drivetrain.resetOdometry(new Pose2d());
 

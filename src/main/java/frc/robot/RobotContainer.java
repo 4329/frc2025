@@ -11,15 +11,22 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
-import frc.robot.commands.driveCommands.CenterOnTargetCommand;
-import frc.robot.subsystems.LilihSubsystem;
+import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
+import frc.robot.subsystems.AlgeePivotSubsystem;
+import frc.robot.subsystems.AlgeeWheelSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
+import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.CommandLoginator;
 import frc.robot.utilities.UnInstantCommand;
@@ -36,6 +43,10 @@ public class RobotContainer {
   private final PoseEstimationSubsystem poseEstimationSubsystem;
   private final LilihSubsystem lilihSubsystem;
   private final LoggingSubsystem loggingSubsystem;
+  private final DifferentialArmSubsystem differentialArmSubsystem;
+  private final AlgeePivotSubsystem algeePivotSubsystem;
+  private final AlgeeWheelSubsystem algeeWheelSubsystem;
+  private final ElevatorSubsystem elevatorSubsystem;
 
   private final DriveByController driveByController;
 
@@ -62,8 +73,12 @@ public class RobotContainer {
 
     lilihSubsystem = new LilihSubsystem();
     poseEstimationSubsystem = new PoseEstimationSubsystem(drivetrain, lilihSubsystem);
+    differentialArmSubsystem = DifferentialArmFactory.createDifferentialArmSubsystem();
+    algeePivotSubsystem = new AlgeePivotSubsystem();
+    algeeWheelSubsystem = new AlgeeWheelSubsystem();
+    elevatorSubsystem = new ElevatorSubsystem();
 
-    loggingSubsystem = new LoggingSubsystem(poseEstimationSubsystem);
+    loggingSubsystem = new LoggingSubsystem(poseEstimationSubsystem, differentialArmSubsystem);
 
     new CommandLoginator();
 
@@ -109,14 +124,42 @@ public class RobotContainer {
   // spotless:off
 
   private void configureButtonBindings() {
-    driverController.rightStick().onTrue(new UnInstantCommand(() -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
     driverController.start().onTrue(new UnInstantCommand(driveByController::changeFieldOrient));
-    driverController.a().onTrue(new CenterOnTargetCommand(lilihSubsystem, m_robotDrive, 7));
+
+    driverController.leftTrigger(0.01).whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> elevatorSubsystem.runElevator(-driverController.getLeftTriggerAxis()))));
+    driverController.rightTrigger(0.01).whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> elevatorSubsystem.runElevator(driverController.getRightTriggerAxis()))));
+
+    driverController.leftBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> algeePivotSubsystem.run(-1))));
+    driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> algeePivotSubsystem.run(1))));
+
+    driverController.y().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> differentialArmSubsystem.runPitch(1))));
+    driverController.x().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> differentialArmSubsystem.runRoll(1))));
+    driverController.b().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> differentialArmSubsystem.runRoll(-1))));
+    driverController.a().whileTrue(new RepeatCommand(new UnInstantCommand(
+      () -> differentialArmSubsystem.runPitch(-1))));
+
+    driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
+    driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
+
+    driverController.rightStick().onTrue(new UnInstantCommand(
+      () -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
+
+
+      driverController.povLeft().onTrue(new UnInstantCommand(() -> differentialArmSubsystem.setPitchTarget(DifferentialArmPitch.NINETY)));
+      driverController.povRight().onTrue(new UnInstantCommand(() -> differentialArmSubsystem.setPitchTarget(DifferentialArmPitch.STORAGE)));
   }
 
   // spotless:on
 
   // jonathan was here today 2/3/2023
+  // benjamin e. was here today 1/18/2025
   /* Pulls autos and configures the chooser */
   // SwerveAutoBuilder swerveAutoBuilder;
   Map<Command, PathPlannerAuto> autoName = new HashMap<>();

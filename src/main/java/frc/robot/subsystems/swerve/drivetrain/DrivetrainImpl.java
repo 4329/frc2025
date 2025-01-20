@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants.*;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Model.DrivetrainLogAutoLogged;
+import frc.robot.model.DrivetrainLogAutoLogged;
 import frc.robot.subsystems.swerve.module.SwerveModule;
 import frc.robot.subsystems.swerve.module.SwerveModuleFactory;
 import frc.robot.utilities.FieldRelativeAccel;

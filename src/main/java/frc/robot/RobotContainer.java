@@ -25,6 +25,7 @@ import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.CommandLoginator;
@@ -149,6 +150,10 @@ public class RobotContainer {
 
     driverController.rightStick().onTrue(new UnInstantCommand(
       () -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
+
+
+      driverController.povLeft().onTrue(new UnInstantCommand(() -> differentialArmSubsystem.setPitchTarget(DifferentialArmPitch.NINETY)));
+      driverController.povRight().onTrue(new UnInstantCommand(() -> differentialArmSubsystem.setPitchTarget(DifferentialArmPitch.STORAGE)));
   }
 
   // spotless:on

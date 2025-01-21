@@ -30,6 +30,8 @@ public class SparkFactory {
         .disableFollowerMode()
         .inverted(false);
 
+    canToMake.getEncoder().setPosition(0);
+
     canToMake.configure(
         config,
         resetted ? ResetMode.kResetSafeParameters : ResetMode.kNoResetSafeParameters,

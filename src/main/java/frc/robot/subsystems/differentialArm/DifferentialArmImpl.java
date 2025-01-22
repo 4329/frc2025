@@ -52,12 +52,6 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
   ProfiledPIDController pitchPID;
   ProfiledPIDController rollPID;
 
-  GenericEntry maxVel1 = Shuffleboard.getTab("a").add("v1", 6).getEntry();
-  GenericEntry maxAc1 = Shuffleboard.getTab("a").add("a1", 8).getEntry();
-
-  GenericEntry maxVel2 = Shuffleboard.getTab("a").add("v2", 6).getEntry();
-  GenericEntry maxAc2 = Shuffleboard.getTab("a").add("a2", 8).getEntry();
-
   public DifferentialArmImpl() {
     motor1 = SparkFactory.createSparkMax(9);
 
@@ -80,7 +74,6 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     pitchPID =
         new ProfiledPIDController(
             sharedP, sharedI, sharedD, new TrapezoidProfile.Constraints(6, 8));
-    Shuffleboard.getTab("A").add("p", pitchPID);
     pitchPID.setIZone(sharedIZone);
     pitchPID.setGoal(0);
 
@@ -90,7 +83,6 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     rollPID.setIZone(sharedIZone);
     rollPID.enableContinuousInput(0, 2 * Math.PI);
     rollPID.setGoal(0);
-    Shuffleboard.getTab("A").add("r", rollPID);
 
     differentialArmLogAutoLogged = new DifferentialArmLogAutoLogged();
   }
@@ -164,11 +156,6 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
   @Override
   public void periodic() {
-    pitchPID.setConstraints(
-        new TrapezoidProfile.Constraints(maxVel1.getDouble(0), maxAc1.getDouble(0)));
-    rollPID.setConstraints(
-        new TrapezoidProfile.Constraints(maxVel2.getDouble(0), maxAc2.getDouble(0)));
-
     double pitchCalc = pitchPID.calculate(getPitch(), pitchTarget);
     double rollCalc = rollPID.calculate(getRoll(), rollTarget);
 

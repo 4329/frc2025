@@ -13,7 +13,7 @@ public class TestNulls {
       robot.robotInit();
       robot.close();
     } catch (Exception e) {
-      System.out.println(e.getStackTrace());
+      e.printStackTrace();
       fail("Didn't Build");
     }
   }

@@ -162,6 +162,7 @@ public class RobotContainer {
   private void configureAutoChooser(Drivetrain drivetrain) {
     File pathPlannerDirectory = new File(Filesystem.getDeployDirectory(), "pathplanner");
     pathPlannerDirectory = new File(pathPlannerDirectory, "autos");
+    if (pathPlannerDirectory.listFiles() == null) return;
 
     for (File pathFile : pathPlannerDirectory.listFiles()) {
 

@@ -6,11 +6,11 @@ then
     exit 1
 fi
 
-git checkout dev
+git checkout main
 for branch in `git branch -vv | grep ': gone]' | awk '{print  $1}'`
 do
     git branch -D $branch 
 done
-git reset --hard origin/dev
+git reset --hard origin/main
 
 printf "\n\U01F4AA\U01F49E\U01F525\U01F332\U01F308\U01F499\U01F49A\U01F49B\U01F49C yayayayay your branches are super now.\n\n"

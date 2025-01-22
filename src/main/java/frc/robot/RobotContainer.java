@@ -150,12 +150,6 @@ public class RobotContainer {
 
     driverController.rightStick().onTrue(new UnInstantCommand(
       () -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
-
-
-      driverController.povLeft().onTrue(new UnInstantCommand(() -> differentialArmSubsystem.setPitchTarget(DifferentialArmPitch.NINETY)));
-      driverController.povRight().onTrue(new UnInstantCommand(() -> differentialArmSubsystem.setPitchTarget(DifferentialArmPitch.STORAGE)));
-      driverController.povUp().onTrue(new UnInstantCommand(() -> differentialArmSubsystem.setRollTarget(Math.PI / 2)));
-      driverController.povDown().onTrue(new UnInstantCommand(() -> differentialArmSubsystem.setRollTarget(0)));
   }
 
   // spotless:on

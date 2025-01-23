@@ -16,9 +16,9 @@ public class CheckLilihCommand extends Command {
     return connected;
   }
 
-  public CheckLilihCommand() {
+  public CheckLilihCommand(int ip) {
     try {
-      limelihURL = new URL("http://10.43.29.11:5807/results");
+      limelihURL = new URL("http://10.43.29." + ip + ":5807/results");
     } catch (IOException ioException) {
 
     }

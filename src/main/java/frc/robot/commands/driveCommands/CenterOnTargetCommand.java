@@ -1,11 +1,11 @@
 package frc.robot.commands.driveCommands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
-import frc.robot.utilities.AprilTagUtil;
 
 public class CenterOnTargetCommand extends Command {
   private final LilihSubsystem lilihSubsystem;
@@ -13,6 +13,7 @@ public class CenterOnTargetCommand extends Command {
   private int targetId;
 
   private final PIDController rotationPID;
+  private final PIDController xPID;
 
   public CenterOnTargetCommand(
       LilihSubsystem lilihSubsystem, Drivetrain m_drivetrain, int targetId) {
@@ -24,22 +25,27 @@ public class CenterOnTargetCommand extends Command {
     rotationPID.setTolerance(1);
     rotationPID.setSetpoint(0);
 
+    xPID = new PIDController(1, 0, 0);
+    xPID.setSetpoint(0);
+    xPID.setTolerance(1);
+    Shuffleboard.getTab("ack").add("oh", xPID);
+
     addRequirements(lilihSubsystem, m_drivetrain);
   }
 
   @Override
   public void initialize() {
     rotationPID.reset();
-    drivetrain.drive(0, 0, 0, true);
-    targetId = AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker();
+    drivetrain.stop();
   }
 
   @Override
   public void execute() {
     double rotationCalc = 0;
-    if (lilihSubsystem.CameraConnected() && lilihSubsystem.getTargetVisible(targetId)) {
+    if (lilihSubsystem.cameraConnected() && lilihSubsystem.getTargetVisible(targetId)) {
 
-      rotationCalc = rotationPID.calculate(lilihSubsystem.getTargetX(targetId));
+      // rotationCalc = rotationPID.calculate(lilihSubsystem.getTargetX(targetId));
+      double xCalc = xPID.calculate(lilihSubsystem.getTargetPoseInRobotSpace(targetId).getX());
 
       if (rotationCalc > Constants.DriveConstants.kMaxAngularSpeed) {
         rotationCalc = Constants.DriveConstants.kMaxAngularSpeed;
@@ -49,7 +55,9 @@ public class CenterOnTargetCommand extends Command {
         rotationCalc = 0;
       }
 
-      drivetrain.drive(0, 0, rotationCalc, true);
+      if (xPID.atSetpoint()) xCalc = 0;
+
+      drivetrain.drive(0, xCalc, rotationCalc, true);
     } else {
       drivetrain.stop();
     }

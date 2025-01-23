@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
+import frc.robot.commands.driveCommands.CenterOnTargetCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -70,7 +71,7 @@ public class RobotContainer {
     driveByController = new DriveByController(drivetrain, driverController);
     m_robotDrive.setDefaultCommand(driveByController);
 
-    lilihSubsystem = new LilihSubsystem();
+    lilihSubsystem = new LilihSubsystem(12, "limelight-threnog");
     poseEstimationSubsystem = new PoseEstimationSubsystem(drivetrain, lilihSubsystem);
     differentialArmSubsystem = DifferentialArmFactory.createDifferentialArmSubsystem();
     algeePivotSubsystem = new AlgeePivotSubsystem();
@@ -135,14 +136,7 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> algeePivotSubsystem.run(1))));
 
-    driverController.y().whileTrue(new RepeatCommand(new UnInstantCommand(
-      () -> differentialArmSubsystem.runPitch(1))));
-    driverController.x().whileTrue(new RepeatCommand(new UnInstantCommand(
-      () -> differentialArmSubsystem.runRoll(1))));
-    driverController.b().whileTrue(new RepeatCommand(new UnInstantCommand(
-      () -> differentialArmSubsystem.runRoll(-1))));
-    driverController.a().whileTrue(new RepeatCommand(new UnInstantCommand(
-      () -> differentialArmSubsystem.runPitch(-1))));
+    driverController.a().whileTrue(new CenterOnTargetCommand(lilihSubsystem, m_robotDrive, 7));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));

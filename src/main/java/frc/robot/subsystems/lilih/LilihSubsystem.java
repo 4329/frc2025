@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LilihLog;
 import frc.robot.utilities.AprilTagUtil;
 import frc.robot.utilities.LimelightHelpers;
+import frc.robot.utilities.LimelightHelpers.LimelightTarget_Detector;
 import frc.robot.utilities.LimelightHelpers.LimelightTarget_Fiducial;
 import frc.robot.utilities.MathUtils;
 import java.util.Map;
@@ -21,6 +22,12 @@ public class LilihSubsystem extends SubsystemBase {
   private final String limelightHelpNetworkTableName;
 
   LimelightTarget_Fiducial[] limelightResults;
+  LimelightTarget_Detector limelightResultsDetector;
+
+  public LimelightTarget_Detector getLimelightResultsDetector() {
+    return limelightResultsDetector;
+  }
+
   LilihSocket lilihSocket;
 
   private GenericEntry zGE;
@@ -182,6 +189,12 @@ public class LilihSubsystem extends SubsystemBase {
   public void periodic() {
     if (checkLimelightCommand.isConnected()) {
       limelightResults = lilihSocket.getResults().targets_Fiducials;
+      if (lilihSocket.getResults().targets_Detector != null
+          && lilihSocket.getResults().targets_Detector.length > 0) {
+        limelightResultsDetector = lilihSocket.getResults().targets_Detector[0];
+      } else {
+        limelightResultsDetector = null;
+      }
       Pose3d pose3d =
           getTargetPoseInRobotSpace(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker());
       if (pose3d != null) {

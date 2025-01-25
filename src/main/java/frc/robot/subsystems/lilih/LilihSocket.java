@@ -18,8 +18,9 @@ public class LilihSocket {
   private WebsocketListener listener;
   private ObjectMapper objectMapper;
   private boolean webSocketConnected;
+  int ip;
 
-  public LilihSocket() {
+  public LilihSocket(int ip) {
     HttpClient httpClient = HttpClient.newHttpClient();
     listener = new WebsocketListener();
     new Thread(
@@ -27,7 +28,7 @@ public class LilihSocket {
               try {
                 httpClient
                     .newWebSocketBuilder()
-                    .buildAsync(URI.create("ws://10.43.29.11:5806"), listener)
+                    .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener)
                     .get();
                 webSocketConnected = true;
               } catch (InterruptedException | ExecutionException e) {

@@ -18,7 +18,7 @@ import org.littletonrobotics.junction.Logger;
 public class LilihSubsystem extends SubsystemBase {
 
   double[] hrm;
-  String limelightHelpNetworkTableName = "limelight-lilih";
+  private final String limelightHelpNetworkTableName;
 
   LimelightTarget_Fiducial[] limelightResults;
   LilihSocket lilihSocket;
@@ -32,10 +32,10 @@ public class LilihSubsystem extends SubsystemBase {
 
   private LilihLog lilihLog;
 
-  public LilihSubsystem() {
+  public LilihSubsystem(int ip, String limelightHelpNetworkTableName) {
     timer = new Timer();
     timer.start();
-    this.checkLimelightCommand = new CheckLilihCommand();
+    this.checkLimelightCommand = new CheckLilihCommand(ip);
 
     zGE = Shuffleboard.getTab("shoot").add("zPose", 0).getEntry();
     sight =
@@ -55,10 +55,12 @@ public class LilihSubsystem extends SubsystemBase {
             .getEntry();
 
     lilihLog = new LilihLog();
-    lilihSocket = new LilihSocket();
+    lilihSocket = new LilihSocket(ip);
+    this.limelightHelpNetworkTableName = limelightHelpNetworkTableName;
+    switchPipeline(1);
   }
 
-  public boolean CameraConnected() {
+  public boolean cameraConnected() {
     return checkLimelightCommand.isConnected();
   }
 
@@ -151,7 +153,7 @@ public class LilihSubsystem extends SubsystemBase {
         lilihLog.tags[i].relativePose = new Pose3d();
       }
     }
-    lilihLog.limlihConnected = CameraConnected();
+    lilihLog.limlihConnected = cameraConnected();
 
     Logger.processInputs("Lilihsubsystem", lilihLog);
   }

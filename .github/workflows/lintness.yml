@@ -25,7 +25,7 @@ jobs:
 
       - run: ./gradlew spotlessCheck
 
-  apply_spotless:
+  apply-spotless:
     needs: [spotless]
     if: ${{ always() && contains(needs.*.result, 'failure') }}
     runs-on: ubuntu-latest

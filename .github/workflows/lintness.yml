@@ -1,6 +1,8 @@
 name: CheckLint
 
-on: [push]
+on: 
+  pull_request:
+    branches: [main]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   spotless:
@@ -22,3 +24,33 @@ jobs:
         run: chmod +x gradlew
 
       - run: ./gradlew spotlessCheck
+
+  apply-spotless:
+    needs: [spotless]
+    if: ${{ always() && contains(needs.*.result, 'failure') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      # Grant execute permission for gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: apply spotless
+        run: ./gradlew spotlessApply
+      
+      - name: commit and push
+        run: |
+          git config user.name spotless
+          git config user.email spotless@github.com
+          git add .
+          git commit -m"spotlessed"
+          git push

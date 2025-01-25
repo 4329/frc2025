@@ -6,22 +6,22 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 
 public class ShuffledPIDController extends PIDController {
 
-    private double output;
+  private double output;
 
-    public ShuffledPIDController(double p, double i, double d) {
-        super(p, i, d);
-    }
+  public ShuffledPIDController(double p, double i, double d) {
+    super(p, i, d);
+  }
 
-    @Override
-    public double calculate(double measurement) {
-        return calculate(measurement, getSetpoint());
-    }
+  @Override
+  public double calculate(double measurement) {
+    return calculate(measurement, getSetpoint());
+  }
 
-    @Override
-    public double calculate(double measurement, double setpoint) {
-        output = super.calculate(measurement, setpoint);
-        return output;
-    }
+  @Override
+  public double calculate(double measurement, double setpoint) {
+    output = super.calculate(measurement, setpoint);
+    return output;
+  }
 
   @Override
   public void initSendable(SendableBuilder builder) {

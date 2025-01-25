@@ -62,9 +62,7 @@ public class CenterOnTargetCommand extends Command {
       if (xPID.atSetpoint()) xCalc = 0;
       if (yPID.atSetpoint()) xCalc = 0;
 
-      Logger.recordOutput("ohmy", yCalc);
-      Logger.recordOutput("ohmy2", lilihSubsystem.getTargetPoseInRobotSpace(targetId).getX());
-      drivetrain.drive(yCalc, 0, 0, true);
+      drivetrain.drive(yCalc, xCalc, rotationCalc, true);
     } else {
       drivetrain.stop();
     }

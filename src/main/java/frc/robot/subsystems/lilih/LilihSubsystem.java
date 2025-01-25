@@ -153,7 +153,7 @@ public class LilihSubsystem extends SubsystemBase {
         LimelightTarget_Fiducial fiducial = getFiducial(i);
         lilihLog.tags[i].tX = fiducial.tx;
         lilihLog.tags[i].tY = fiducial.ty;
-        lilihLog.tags[i].relativePose = getTargetPoseInRobotSpace(i);
+        lilihLog.tags[i].relativePose = MathUtils.pose2DtoPose3D(getTargetPoseInFieldSpace(i));
         if (i == 7) {
           Logger.recordOutput(
               "ackackack1", getTargetPoseInRobotSpace(i).getRotation().getMeasureX());
@@ -191,6 +191,11 @@ public class LilihSubsystem extends SubsystemBase {
     } else {
       return false;
     }
+  }
+
+  public Pose2d getTargetPoseInFieldSpace(int id) {
+    return getRobotFieldPoseByTag(id)
+        .plus(MathUtils.pose2dToTransform2d(getTargetPoseInRobotSpace(id).toPose2d()));
   }
 
   @Override

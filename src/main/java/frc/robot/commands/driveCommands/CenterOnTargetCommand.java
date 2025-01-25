@@ -1,6 +1,8 @@
 package frc.robot.commands.driveCommands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,13 +20,16 @@ public class CenterOnTargetCommand extends Command {
   private final PIDController xPID;
   private final PIDController yPID;
 
+  private Pose2d initOdometry;
+  private Pose2d newOdometry;
+
   public CenterOnTargetCommand(
       LilihSubsystem lilihSubsystem, Drivetrain m_drivetrain, int targetId) {
     this.lilihSubsystem = lilihSubsystem;
     this.drivetrain = m_drivetrain;
     this.targetId = targetId;
 
-    rotationPID = new PIDController(0.033, 0, 0); // 0.75, 0, 0
+    rotationPID = new PIDController(1, 0, 0); // 0.75, 0, 0
     rotationPID.setTolerance(0.01);
     rotationPID.setSetpoint(0);
 
@@ -45,13 +50,30 @@ public class CenterOnTargetCommand extends Command {
 
   @Override
   public void initialize() {
+    if (!lilihSubsystem.cameraConnected() || !lilihSubsystem.getTargetVisible(targetId)) {
+      return;
+    }
+
     rotationPID.reset();
     drivetrain.stop();
+    initOdometry = drivetrain.getPose();
+    newOdometry = lilihSubsystem.getTargetPoseInFieldSpace(targetId);
+    drivetrain.resetOdometry(
+        new Pose2d(
+            newOdometry.getTranslation(),
+            new Rotation2d(
+                lilihSubsystem
+                    .getTargetPoseInRobotSpace(targetId)
+                    .getRotation()
+                    .getMeasureY()
+                    .in(Units.Radians))));
   }
 
   @Override
   public void execute() {
     if (lilihSubsystem.cameraConnected() && lilihSubsystem.getTargetVisible(targetId)) {
+
+      Logger.recordOutput("taginfieldspace", lilihSubsystem.getTargetPoseInFieldSpace(targetId));
 
       double rotationCalc =
           rotationPID.calculate(
@@ -86,11 +108,12 @@ public class CenterOnTargetCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return !lilihSubsystem.cameraConnected() || !lilihSubsystem.getTargetVisible(targetId);
   }
 
   @Override
   public void end(boolean interrupted) {
+    drivetrain.resetOdometry(initOdometry);
     drivetrain.stop();
   }
 }

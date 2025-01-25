@@ -72,7 +72,7 @@ public class RobotContainer {
     driveByController = new DriveByController(drivetrain, driverController);
     m_robotDrive.setDefaultCommand(driveByController);
 
-    lilihSubsystem = new LilihSubsystem(12, "limelight-threnog");
+    lilihSubsystem = new LilihSubsystem(11, "limelight-lilih");
     poseEstimationSubsystem = new PoseEstimationSubsystem(drivetrain, lilihSubsystem);
     differentialArmSubsystem = DifferentialArmFactory.createDifferentialArmSubsystem();
     algeePivotSubsystem = new AlgeePivotSubsystem();

@@ -88,6 +88,10 @@ public class MathUtils {
     return new Pose2d(transform.getX(), transform.getY(), transform.getRotation());
   }
 
+  public static Transform2d pose2dToTransform2d(Pose2d pose) {
+    return new Transform2d(pose.getTranslation(), pose.getRotation());
+  }
+
   public static Transform2d transform3dToTransform2d(Transform3d transform) {
     return new Transform2d(
         transform.getX(), transform.getZ(), transform.getRotation().toRotation2d());

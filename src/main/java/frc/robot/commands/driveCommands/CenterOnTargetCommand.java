@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
-import org.littletonrobotics.junction.Logger;
 
 public class CenterOnTargetCommand extends Command {
   private final LilihSubsystem lilihSubsystem;

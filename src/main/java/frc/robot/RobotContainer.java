@@ -125,7 +125,7 @@ public class RobotContainer {
   // spotless:off
 
   private void configureButtonBindings() {
-    driverController.start().onTrue(new UnInstantCommand(driveByController::changeFieldOrient));
+    // driverController.start().onTrue(new UnInstantCommand(driveByController::changeFieldOrient));
 
     driverController.leftTrigger(0.01).whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> elevatorSubsystem.runElevator(-driverController.getLeftTriggerAxis()))));
@@ -212,5 +212,12 @@ public class RobotContainer {
 
   public Map<Command, PathPlannerAuto> yes() {
     return autoName;
+  }
+
+  public void robotPeriodic() {
+    if (lilihSubsystem.getTargetVisible(7)) {
+      org.littletonrobotics.junction.Logger.recordOutput(
+          "relPose", lilihSubsystem.getTargetPoseInRobotSpace(7));
+    }
   }
 }

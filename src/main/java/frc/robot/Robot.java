@@ -125,6 +125,8 @@ public class Robot extends LoggedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     // CanandEventLoop.getInstance().run();
+
+    m_robotContainer.robotPeriodic();
   }
 
   @Override

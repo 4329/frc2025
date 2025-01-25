@@ -1,10 +1,13 @@
 package frc.robot.commands.driveCommands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
+import org.littletonrobotics.junction.Logger;
 
 public class CenterOnTargetCommand extends Command {
   private final LilihSubsystem lilihSubsystem;
@@ -22,18 +25,22 @@ public class CenterOnTargetCommand extends Command {
     this.targetId = targetId;
 
     rotationPID = new PIDController(0.033, 0, 0); // 0.75, 0, 0
-    rotationPID.setTolerance(1);
+    rotationPID.setTolerance(0.01);
     rotationPID.setSetpoint(0);
 
     xPID = new PIDController(1, 0, 0);
     xPID.setSetpoint(0);
-    xPID.setTolerance(1);
+    xPID.setTolerance(0);
 
     yPID = new PIDController(1, 0, 0);
-    yPID.setSetpoint(-2);
-    yPID.setTolerance(1);
+    yPID.setSetpoint(1.1);
+    yPID.setTolerance(0.1);
 
     addRequirements(lilihSubsystem, m_drivetrain);
+
+    Shuffleboard.getTab("CenterTuning").add("X", xPID);
+    Shuffleboard.getTab("CenterTuning").add("Y", yPID);
+    Shuffleboard.getTab("CenterTuning").add("Rotation", rotationPID);
   }
 
   @Override
@@ -46,9 +53,15 @@ public class CenterOnTargetCommand extends Command {
   public void execute() {
     if (lilihSubsystem.cameraConnected() && lilihSubsystem.getTargetVisible(targetId)) {
 
-      double rotationCalc = rotationPID.calculate(lilihSubsystem.getTargetX(targetId));
+      double rotationCalc =
+          rotationPID.calculate(
+              lilihSubsystem
+                  .getTargetPoseInRobotSpace(targetId)
+                  .getRotation()
+                  .getMeasureY()
+                  .in(Units.Radians));
       double xCalc = xPID.calculate(lilihSubsystem.getTargetPoseInRobotSpace(targetId).getX());
-      double yCalc = yPID.calculate(lilihSubsystem.getTargetPoseInRobotSpace(targetId).getX());
+      double yCalc = -yPID.calculate(lilihSubsystem.getTargetPoseInRobotSpace(targetId).getZ());
 
       if (rotationCalc > Constants.DriveConstants.kMaxAngularSpeed) {
         rotationCalc = Constants.DriveConstants.kMaxAngularSpeed;
@@ -59,7 +72,11 @@ public class CenterOnTargetCommand extends Command {
       }
 
       if (xPID.atSetpoint()) xCalc = 0;
-      if (yPID.atSetpoint()) xCalc = 0;
+      if (yPID.atSetpoint()) yCalc = 0;
+
+      Logger.recordOutput("xCalc", xCalc);
+      Logger.recordOutput("yCalc", yCalc);
+      Logger.recordOutput("rotationCalc", rotationCalc);
 
       drivetrain.drive(yCalc, xCalc, rotationCalc, true);
     } else {

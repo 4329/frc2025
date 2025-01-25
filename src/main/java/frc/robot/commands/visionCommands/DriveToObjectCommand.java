@@ -10,6 +10,7 @@ public class DriveToObjectCommand extends Command {
   Drivetrain drivetrain;
   LilihSubsystem lilihSubsystem;
   PIDController rotationPidController;
+  PIDController drivePidController;
 
   public DriveToObjectCommand(Drivetrain drivetrain, LilihSubsystem lilihSubsystem) {
     this.drivetrain = drivetrain;
@@ -17,11 +18,15 @@ public class DriveToObjectCommand extends Command {
 
     rotationPidController = new PIDController(0.1, 0, 0);
     rotationPidController.setSetpoint(0);
+    drivePidController = new PIDController(0.1, 0, 0);
+    drivePidController.setSetpoint(0);
+
+    addRequirements(drivetrain, lilihSubsystem);
   }
 
   @Override
   public void execute() {
-    if (!lilihSubsystem.cameraConnected() && lilihSubsystem.getLimelightResultsDetector() == null) {
+    if (!lilihSubsystem.cameraConnected() || lilihSubsystem.getLimelightResultsDetector() == null) {
       return;
     }
 

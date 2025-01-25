@@ -64,7 +64,7 @@ public class LilihSubsystem extends SubsystemBase {
     lilihLog = new LilihLog();
     lilihSocket = new LilihSocket(ip);
     this.limelightHelpNetworkTableName = limelightHelpNetworkTableName;
-    switchPipeline(1);
+    switchPipeline(0);
   }
 
   public boolean cameraConnected() {
@@ -154,6 +154,14 @@ public class LilihSubsystem extends SubsystemBase {
         lilihLog.tags[i].tX = fiducial.tx;
         lilihLog.tags[i].tY = fiducial.ty;
         lilihLog.tags[i].relativePose = getTargetPoseInRobotSpace(i);
+        if (i == 7) {
+          Logger.recordOutput(
+              "ackackack1", getTargetPoseInRobotSpace(i).getRotation().getMeasureX());
+          Logger.recordOutput(
+              "ackackack2", getTargetPoseInRobotSpace(i).getRotation().getMeasureY());
+          Logger.recordOutput(
+              "ackackack3", getTargetPoseInRobotSpace(i).getRotation().getMeasureZ());
+        }
       } else {
         lilihLog.tags[i].tX = 0;
         lilihLog.tags[i].tY = 0;

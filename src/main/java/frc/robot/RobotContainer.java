@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -20,7 +21,6 @@ import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
 import frc.robot.commands.driveCommands.CenterOnTargetCommand;
-import frc.robot.commands.visionCommands.DriveToObjectCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -149,8 +149,6 @@ public class RobotContainer {
 
     driverController.rightStick().onTrue(new InstantCommand(
       () -> m_robotDrive.resetOdometry(new Pose2d())));
-
-    driverController.povRight().whileTrue(new DriveToObjectCommand(m_robotDrive, lilihSubsystem));
   }
 
   // spotless:on

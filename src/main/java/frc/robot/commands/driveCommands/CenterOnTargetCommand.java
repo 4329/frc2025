@@ -8,7 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
+<<<<<<< HEAD
 import frc.robot.utilities.BetterPathfindingCommand;
+=======
+import frc.robot.utilities.ShuffledPIDController;
+>>>>>>> 0cfc1eb (SHuffledPID)
 import org.littletonrobotics.junction.Logger;
 
 public class CenterOnTargetCommand extends Command {
@@ -18,10 +22,16 @@ public class CenterOnTargetCommand extends Command {
   Command pathFind;
   Pose2d target;
 
+<<<<<<< HEAD
   private final PathConstraints constraints =
       new PathConstraints(2, 3.0, Math.PI, Math.PI); // The constraints for this path.
 
   private final double zDist = .8;
+=======
+  private final ShuffledPIDController rotationPID;
+  private final ShuffledPIDController xPID;
+  private final ShuffledPIDController yPID;
+>>>>>>> 0cfc1eb (SHuffledPID)
 
   private Pose2d initOdometry;
   private Pose2d newOdometry;

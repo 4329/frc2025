@@ -1,6 +1,5 @@
 package frc.robot.commands.driveCommands;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
@@ -9,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
+import frc.robot.utilities.ShuffledPIDController;
 import org.littletonrobotics.junction.Logger;
 
 public class CenterOnTargetCommand extends Command {
@@ -16,9 +16,9 @@ public class CenterOnTargetCommand extends Command {
   private final Drivetrain drivetrain;
   private int targetId;
 
-  private final PIDController rotationPID;
-  private final PIDController xPID;
-  private final PIDController yPID;
+  private final ShuffledPIDController rotationPID;
+  private final ShuffledPIDController xPID;
+  private final ShuffledPIDController yPID;
 
   private Pose2d initOdometry;
   private Pose2d newOdometry;
@@ -29,15 +29,15 @@ public class CenterOnTargetCommand extends Command {
     this.drivetrain = m_drivetrain;
     this.targetId = targetId;
 
-    rotationPID = new PIDController(1, 0, 0); // 0.75, 0, 0
+    rotationPID = new ShuffledPIDController(1, 0, 0); // 0.75, 0, 0
     rotationPID.setTolerance(0.01);
     rotationPID.setSetpoint(0);
 
-    xPID = new PIDController(1, 0, 0);
+    xPID = new ShuffledPIDController(1, 0, 0);
     xPID.setSetpoint(0);
     xPID.setTolerance(0);
 
-    yPID = new PIDController(1, 0, 0);
+    yPID = new ShuffledPIDController(1, 0, 0);
     yPID.setSetpoint(1.1);
     yPID.setTolerance(0.1);
 

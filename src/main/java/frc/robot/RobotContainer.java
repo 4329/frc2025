@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -19,7 +20,6 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.driveCommands.CenterOnTargetCommand;
-import frc.robot.commands.visionCommands.DriveToObjectCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -142,10 +142,8 @@ public class RobotContainer {
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
 
-    driverController.rightStick().onTrue(new UnInstantCommand(
-      () -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
-
-    driverController.povRight().whileTrue(new DriveToObjectCommand(m_robotDrive, lilihSubsystem));
+    driverController.rightStick().onTrue(new InstantCommand(
+      () -> m_robotDrive.resetOdometry(new Pose2d())));
   }
 
   // spotless:on

@@ -14,7 +14,8 @@ public class ShuffledPIDController extends PIDController {
 
   @Override
   public double calculate(double measurement) {
-    return calculate(measurement, getSetpoint());
+    output = super.calculate(measurement);
+    return output;
   }
 
   @Override

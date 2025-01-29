@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.BetterPathfindingCommand;
 import org.littletonrobotics.junction.Logger;
@@ -29,6 +30,8 @@ public class CenterOnTargetCommand extends Command {
 
   private Pose2d initOdometry;
   private Pose2d newOdometry;
+
+  private final double zTarget = -1;
 
   public CenterOnTargetCommand(
       int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {

@@ -137,7 +137,7 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> algeePivotSubsystem.run(1))));
 
-    driverController.a().whileTrue(new CenterOnTargetCommand(lilihSubsystem, m_robotDrive, 7));
+    driverController.a().whileTrue(new CenterOnTargetCommand(poseEstimationSubsystem, lilihSubsystem, m_robotDrive, 7));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));

@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
 import com.pathplanner.lib.util.PathPlannerLogging;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,15 +31,13 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
   private Field2d field = new Field2d();
   private Pose2d pathPlannerPose = new Pose2d();
 
-  private final double shootDexerZ = 0.484;
-  private final double shootDexerX = -0.115;
-  private final double shooterYawOffset = -0.1;
-
-  private Pose2d initialPose;
+  private AprilTagFieldLayout aprilTagFieldLayout;
 
   public PoseEstimationSubsystem(Drivetrain drivetrain, LilihSubsystem lilihSubsystem) {
     this.lilihSubsystem = lilihSubsystem;
     this.drivetrain = drivetrain;
+
+    aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
     poseEstimationLogAutoLogged = new PoseEstimationLogAutoLogged();
     estimator =
@@ -44,7 +45,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
             Constants.DriveConstants.kDriveKinematics,
             drivetrain.getGyro(),
             drivetrain.getModulePositions(),
-            drivetrain.getPose());
+            new Pose2d());
 
     PathPlannerLogging.setLogCurrentPoseCallback(
         (pose) -> {
@@ -70,7 +71,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
             Constants.DriveConstants.kDriveKinematics,
             drivetrain.getGyro(),
             drivetrain.getModulePositions(),
-            transformPathPlannerToField(initialPose));
+            new Pose2d()); // transformPathPlannerToField(initialPose));
   }
 
   public Pose2d getPose() {
@@ -78,11 +79,16 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     return estimator.getEstimatedPosition();
   }
 
+  public Pose3d getTagPose(int id) {
+    return aprilTagFieldLayout.getTagPose(id).get();
+  }
+
   private void updateEstimation() {
     estimator.update(drivetrain.getGyro(), drivetrain.getModulePositions());
-    // if (lilihSubsystem.seeingAnything()) {
-    //   estimator.addVisionMeasurement(lilihSubsystem.getRobotPose(), Timer.getFPGATimestamp());
-    // }
+
+    if (lilihSubsystem.seeingAnything()) {
+      estimator.addVisionMeasurement(lilihSubsystem.getRobotPose(), Timer.getFPGATimestamp());
+    }
   }
 
   @Override

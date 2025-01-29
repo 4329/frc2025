@@ -6,12 +6,14 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ShuffledPIDController;
 import org.littletonrobotics.junction.Logger;
 
 public class CenterOnTargetCommand extends Command {
+  private final PoseEstimationSubsystem poseEstimationSubsystem;
   private final LilihSubsystem lilihSubsystem;
   private final Drivetrain drivetrain;
   private int targetId;
@@ -23,8 +25,14 @@ public class CenterOnTargetCommand extends Command {
   private Pose2d initOdometry;
   private Pose2d newOdometry;
 
+  private final double zTarget = -1;
+
   public CenterOnTargetCommand(
-      LilihSubsystem lilihSubsystem, Drivetrain m_drivetrain, int targetId) {
+      PoseEstimationSubsystem poseEstimationSubsystem,
+      LilihSubsystem lilihSubsystem,
+      Drivetrain m_drivetrain,
+      int targetId) {
+    this.poseEstimationSubsystem = poseEstimationSubsystem;
     this.lilihSubsystem = lilihSubsystem;
     this.drivetrain = m_drivetrain;
     this.targetId = targetId;
@@ -67,6 +75,11 @@ public class CenterOnTargetCommand extends Command {
                     .getRotation()
                     .getMeasureY()
                     .in(Units.Radians))));
+
+    Pose2d tagPose = poseEstimationSubsystem.getTagPose(targetId).toPose2d();
+    xPID.setSetpoint(tagPose.getX() + zTarget * Math.cos(tagPose.getRotation().getRadians()));
+    yPID.setSetpoint(tagPose.getX() + zTarget * Math.sin(tagPose.getRotation().getRadians()));
+    rotationPID.setSetpoint(-tagPose.getRotation().getRadians());
   }
 
   @Override

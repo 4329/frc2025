@@ -1,5 +1,7 @@
 package frc.robot.subsystems.lilih;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -100,14 +102,17 @@ public class LilihSubsystem extends SubsystemBase {
    * @return Pose
    */
   public Pose2d getRobotPose() {
-    return LimelightHelpers.getBotPose2d(limelightHelpNetworkTableName);
+    return LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightHelpNetworkTableName).pose;
+  }
+
+  public Pose3d getRobotPoseInTargetSpace(int id) {
+    return getFiducial(id).getRobotPose_TargetSpace();
   }
 
   public Pose3d getTargetPoseInRobotSpace(int id) {
 
     LimelightTarget_Fiducial limetarget = getFiducial(id);
     if (limetarget != null) {
-
       return limetarget.getTargetPose_RobotSpace();
     }
     return null;
@@ -153,15 +158,10 @@ public class LilihSubsystem extends SubsystemBase {
         LimelightTarget_Fiducial fiducial = getFiducial(i);
         lilihLog.tags[i].tX = fiducial.tx;
         lilihLog.tags[i].tY = fiducial.ty;
-        lilihLog.tags[i].relativePose = MathUtils.pose2DtoPose3D(getTargetPoseInFieldSpace(i));
-        if (i == 7) {
-          Logger.recordOutput(
-              "ackackack1", getTargetPoseInRobotSpace(i).getRotation().getMeasureX());
-          Logger.recordOutput(
-              "ackackack2", getTargetPoseInRobotSpace(i).getRotation().getMeasureY());
-          Logger.recordOutput(
-              "ackackack3", getTargetPoseInRobotSpace(i).getRotation().getMeasureZ());
-        }
+        lilihLog.tags[i].relativePose = fiducial.getCameraPose_TargetSpace();
+        Logger.recordOutput(
+            "acl/" + i,
+            AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField).getTagPose(i).get());
       } else {
         lilihLog.tags[i].tX = 0;
         lilihLog.tags[i].tY = 0;

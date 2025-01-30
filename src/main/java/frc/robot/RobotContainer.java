@@ -3,7 +3,6 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -91,21 +90,21 @@ public class RobotContainer {
   }
 
   private void configureAutoBuilder() {
-    RobotConfig config = null;
     try {
-      config = RobotConfig.fromGUISettings();
+      Constants.AutoConstants.config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     AutoBuilder.configure(
-        poseEstimationSubsystem::getPathPlannerStuff,
+        poseEstimationSubsystem::getPose,
         poseEstimationSubsystem::setInitialPose,
         m_robotDrive::getChassisSpeed,
-        (speeds, feedForwards) -> m_robotDrive.setModuleStates(speeds),
-        new PPHolonomicDriveController(
-            Constants.AutoConstants.translationPID, Constants.AutoConstants.rotationPID),
-        config,
+        (speeds, feedForwards) -> {
+          m_robotDrive.setModuleStates(speeds);
+        },
+        Constants.AutoConstants.ppHolonomicDriveController,
+        Constants.AutoConstants.config,
         () -> {
           var alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
@@ -137,7 +136,7 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> algeePivotSubsystem.run(1))));
 
-    driverController.a().whileTrue(new CenterOnTargetCommand(poseEstimationSubsystem, lilihSubsystem, m_robotDrive, 7));
+    driverController.a().whileTrue(new CenterOnTargetCommand(7, poseEstimationSubsystem, m_robotDrive));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));

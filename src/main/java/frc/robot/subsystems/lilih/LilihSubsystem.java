@@ -4,7 +4,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -14,6 +13,7 @@ import frc.robot.utilities.AprilTagUtil;
 import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.LimelightHelpers.LimelightTarget_Detector;
 import frc.robot.utilities.LimelightHelpers.LimelightTarget_Fiducial;
+import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 import frc.robot.utilities.MathUtils;
 import java.util.Map;
 import org.littletonrobotics.junction.Logger;
@@ -101,8 +101,8 @@ public class LilihSubsystem extends SubsystemBase {
    *
    * @return Pose
    */
-  public Pose2d getRobotPose() {
-    return LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightHelpNetworkTableName).pose;
+  public PoseEstimate getRobotPose() {
+    return LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightHelpNetworkTableName);
   }
 
   public Pose3d getRobotPoseInTargetSpace(int id) {
@@ -236,15 +236,5 @@ public class LilihSubsystem extends SubsystemBase {
 
   public double getTargetX(int id) {
     return getFiducial(id).tx;
-  }
-
-  public double faceTag(int id) {
-
-    Pose2d initialPose = getTargetSpacePose(id).toPose2d();
-    double rotation = Math.atan2(initialPose.getX(), initialPose.getY());
-    Pose2d robotPose = seeingAnything() ? getRobotPose() : new Pose2d();
-    Logger.recordOutput(
-        "Rot", new Pose2d(robotPose.getX() + 8, robotPose.getY() + 4, new Rotation2d(rotation)));
-    return rotation;
   }
 }

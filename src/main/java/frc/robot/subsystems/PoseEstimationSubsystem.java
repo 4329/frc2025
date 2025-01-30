@@ -7,7 +7,6 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,6 +15,7 @@ import frc.robot.model.PoseEstimationLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
+import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -71,11 +71,10 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
             Constants.DriveConstants.kDriveKinematics,
             drivetrain.getGyro(),
             drivetrain.getModulePositions(),
-            new Pose2d()); // transformPathPlannerToField(initialPose));
+            initialPose);
   }
 
   public Pose2d getPose() {
-    // System.out.println(estimator.getEstimatedPosition());
     return estimator.getEstimatedPosition();
   }
 
@@ -87,7 +86,9 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     estimator.update(drivetrain.getGyro(), drivetrain.getModulePositions());
 
     if (lilihSubsystem.seeingAnything()) {
-      estimator.addVisionMeasurement(lilihSubsystem.getRobotPose(), Timer.getFPGATimestamp());
+      PoseEstimate poseEstimate = lilihSubsystem.getRobotPose();
+      if (poseEstimate.rawFiducials.length > 0 && poseEstimate.rawFiducials[0].ambiguity < .7)
+        estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
     }
   }
 
@@ -98,38 +99,12 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
   @Override
   public LoggableInputs log() {
-    poseEstimationLogAutoLogged.combined = transformFieldToAdvantageKit(getPose());
-    poseEstimationLogAutoLogged.limOnly =
-        transformFieldToAdvantageKit(lilihSubsystem.getRobotPose());
-    poseEstimationLogAutoLogged.driveOnly = transformFieldToAdvantageKit(drivetrain.getPose());
+    poseEstimationLogAutoLogged.combined = getPose();
+    poseEstimationLogAutoLogged.limOnly = lilihSubsystem.getRobotPose().pose;
+    poseEstimationLogAutoLogged.driveOnly = drivetrain.getPose();
     poseEstimationLogAutoLogged.pathPlannerPosy = pathPlannerPose;
     Logger.recordOutput("zero", new Pose2d());
     Logger.recordOutput("zeroes", new Pose3d[] {});
     return poseEstimationLogAutoLogged;
-  }
-
-  private Pose2d transformFieldToAdvantageKit(Pose2d pose) {
-    return new Pose2d(
-        pose.getX() + (pathPlannerFieldWidth / 2),
-        pose.getY() + (pathPlannerFieldLength / 2),
-        pose.getRotation());
-  }
-
-  private Pose2d transformFieldToPathPlanner(Pose2d pose) {
-    return new Pose2d(
-        pose.getX() + (pathPlannerFieldLength / 2),
-        pose.getY() + (pathPlannerFieldWidth / 2),
-        pose.getRotation());
-  }
-
-  private Pose2d transformPathPlannerToField(Pose2d pose) {
-    return new Pose2d(
-        pose.getX() - (pathPlannerFieldLength / 2),
-        pose.getY() - (pathPlannerFieldWidth / 2),
-        pose.getRotation());
-  }
-
-  public Pose2d getPathPlannerStuff() {
-    return transformFieldToPathPlanner(getPose());
   }
 }

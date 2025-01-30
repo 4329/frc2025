@@ -7,12 +7,10 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.BetterPathfindingCommand;
 import org.littletonrobotics.junction.Logger;
@@ -27,11 +25,6 @@ public class CenterOnTargetCommand extends Command {
       new PathConstraints(2, 3.0, Math.PI, Math.PI); // The constraints for this path.
 
   private final double zDist = .8;
-
-  private Pose2d initOdometry;
-  private Pose2d newOdometry;
-
-  private final double zTarget = -1;
 
   public CenterOnTargetCommand(
       int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {

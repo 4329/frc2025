@@ -35,7 +35,7 @@ public class CenterOnTargetCommand extends Command {
             new Transform2d(
                 target.getRotation().getCos() * zDist,
                 target.getRotation().getSin() * zDist,
-                new Rotation2d(Math.PI - target.getRotation().getRadians())));
+                new Rotation2d(target.getRotation().getRadians() + Math.PI)));
 
     Logger.recordOutput("target", target);
   }

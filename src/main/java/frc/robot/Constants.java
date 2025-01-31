@@ -111,7 +111,8 @@ public final class Constants {
     public static final double kMaxAngularSpeed = Math.PI;
     public static final double kMaxAngularAccel = Math.PI;
 
-    public static final double kInnerDeadband = 0.10;
+    public static final double kLowerBound = 0.02;
+    public static final double kInnerDeadband = 0.12;
     public static final double kOuterDeadband = 0.98;
 
     // Minimum allowable rotation command (in radians/s) assuming user input is
@@ -194,11 +195,12 @@ public final class Constants {
             kMaxAngularSpeed,
             kMaxAngularAccel); // Creates a trapezoidal motion for the auto rotational commands
 
-    public static PIDConstants translationPID = new PIDConstants(0.1, 0, 0);
-    public static PIDConstants rotationPID = new PIDConstants(0.1, 0, 0);
+    public static PIDConstants translationPID = new PIDConstants(5, 0, 0);
+    public static PIDConstants rotationPID = new PIDConstants(3, 0, 0.01);
     public static PathFollowingController ppHolonomicDriveController =
         new PPHolonomicDriveController(
             Constants.AutoConstants.translationPID, Constants.AutoConstants.rotationPID);
+
     public static RobotConfig config;
   }
 

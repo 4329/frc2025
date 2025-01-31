@@ -19,9 +19,9 @@ public class CenterOnTargetCommand extends Command {
   Pose2d target;
 
   private final PathConstraints constraints =
-      new PathConstraints(0.3, 3.0, 0.4, Math.PI); // The constraints for this path.
+      new PathConstraints(2, 3.0, Math.PI, Math.PI); // The constraints for this path.
 
-  private final double zDist = 1.2;
+  private final double zDist = .8;
 
   public CenterOnTargetCommand(
       int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {
@@ -58,7 +58,12 @@ public class CenterOnTargetCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation())
+            < 0.1
+        && Math.abs(
+                poseEstimationSubsystem.getPose().getRotation().getRadians()
+                    - target.getRotation().getRadians())
+            < 0.1;
   }
 
   @Override

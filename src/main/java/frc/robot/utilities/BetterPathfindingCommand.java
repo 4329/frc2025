@@ -262,21 +262,12 @@ public class BetterPathfindingCommand extends Command {
       }
     }
 
-    if (currentPose.getTranslation().getDistance(targetPose.getTranslation()) < 0.5) {
-      output.accept(new ChassisSpeeds(), DriveFeedforwards.zeros(robotConfig.numModules));
-      finish = true;
-    } else {
-      Pathfinding.setStartPosition(currentPose.getTranslation());
-      Pathfinding.setGoalPosition(targetPose.getTranslation());
-    }
+    Pathfinding.setStartPosition(currentPose.getTranslation());
+    Pathfinding.setGoalPosition(targetPose.getTranslation());
   }
 
   @Override
   public void execute() {
-    if (finish) {
-      return;
-    }
-
     Pose2d currentPose = poseSupplier.get();
     ChassisSpeeds currentSpeeds = speedsSupplier.get();
 

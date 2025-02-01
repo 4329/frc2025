@@ -25,6 +25,14 @@ public class CenterOnTargetCommand extends Command {
 
   public CenterOnTargetCommand(
       int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {
+    this(targetID, poseEstimationSubsystem, drivetrain, 0);
+  }
+
+  public CenterOnTargetCommand(
+      int targetID,
+      PoseEstimationSubsystem poseEstimationSubsystem,
+      Drivetrain drivetrain,
+      double xOffset) {
     this.targetID = targetID;
     this.poseEstimationSubsystem = poseEstimationSubsystem;
     this.drivetrain = drivetrain;
@@ -33,8 +41,8 @@ public class CenterOnTargetCommand extends Command {
     target =
         target.transformBy(
             new Transform2d(
-                target.getRotation().getCos() * zDist,
-                target.getRotation().getSin() * zDist,
+                target.getRotation().getCos() * zDist + target.getRotation().getSin() * xOffset,
+                target.getRotation().getSin() * zDist + target.getRotation().getCos() * xOffset,
                 new Rotation2d(target.getRotation().getRadians() + Math.PI)));
 
     Logger.recordOutput("target", target);

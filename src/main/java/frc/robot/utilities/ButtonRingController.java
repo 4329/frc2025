@@ -1,0 +1,58 @@
+package frc.robot.utilities;
+
+import org.littletonrobotics.junction.inputs.LoggableInputs;
+
+import edu.wpi.first.hal.FRCNetComm.tResourceType;
+import edu.wpi.first.hal.HAL;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.model.ButtonRingLogAutoLogged;
+import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
+
+public class ButtonRingController extends CommandGenericHID implements LoggedSubsystem {
+    double xOffset;
+    int level;
+    int tagID;
+
+    ButtonRingLogAutoLogged buttonRingLogAutoLogged;
+
+    private final double OFFSET_AMOUNT = 0.5;
+
+    public ButtonRingController(int port) {
+        super(port);
+    
+        new UnInstantCommand(() -> {
+            level = -1;
+            if (getRawAxis(0) == 1) {
+                level = 1;                
+            } else if (getRawAxis(0) == -1) {
+                level = 2;
+            } else if (getRawAxis(1) == 1) {
+                level = 4;
+            } else if (getRawAxis(1) == -1) {
+                level = 3;
+            }
+        }).repeatedly().ignoringDisable(true).schedule();
+
+        for (int i = 1; i <= 12; i++) {
+            final int why = i;
+            button(i).onTrue(new UnInstantCommand(() -> {
+                xOffset = why % 2 == 0 ? -OFFSET_AMOUNT : OFFSET_AMOUNT;
+                tagID = AprilTagUtil.getReef((why % 12) / 2);
+            }));
+        }
+
+        buttonRingLogAutoLogged = new ButtonRingLogAutoLogged();
+    }
+
+    @Override
+    public LoggableInputs log() {
+        buttonRingLogAutoLogged.level = level;
+        buttonRingLogAutoLogged.xOffset = xOffset;
+        buttonRingLogAutoLogged.tagID = tagID;
+        return buttonRingLogAutoLogged;
+    }
+
+}

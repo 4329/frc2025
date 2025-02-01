@@ -20,7 +20,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
   AddressableLED addressableLED;
   AddressableLEDBuffer addressableLEDBuffer;
 
-  private Node current;
+  private Node currentAnimation;
 
   private LightLogAutoLogged lightLogAutoLogged;
 
@@ -36,7 +36,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
     teal.applyTo(addressableLEDBuffer);
     addressableLED.setData(addressableLEDBuffer);
 
-    current = createGraph();
+    currentAnimation = createGraph();
   
     lightLogAutoLogged = new LightLogAutoLogged();
   }
@@ -58,14 +58,14 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
   }
 
   private void resolveGraph() {
-    current.nextNodes().forEach(
+    currentAnimation.nextNodes().forEach(
         x -> {
           if (x.transfer().get()) {
-            current = x;
+            currentAnimation = x;
           }
         });
 
-    current.head().applyTo(addressableLEDBuffer);
+    currentAnimation.head().applyTo(addressableLEDBuffer);
     addressableLED.setData(addressableLEDBuffer);
   }
 
@@ -76,7 +76,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
 
   @Override
   public LoggableInputs log() {
-    lightLogAutoLogged.name = current.name();
+    lightLogAutoLogged.name = currentAnimation.name();
     lightLogAutoLogged.state = State.asString();
 
     return lightLogAutoLogged;

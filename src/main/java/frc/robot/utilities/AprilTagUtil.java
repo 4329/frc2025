@@ -2,18 +2,14 @@ package frc.robot.utilities;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import java.util.Optional;
 
 public class AprilTagUtil {
+  public static final int[] blueTags = new int[] {19, 20, 21, 22, 12, 18};
+  public static final int[] redTags = new int[] {6, 11, 10, 9, 8, 7};
 
-  public static int getAprilTagSpeakerIDAprilTagIDSpeaker() {
-
-    Optional<Alliance> allly = DriverStation.getAlliance();
-
-    if (allly.isPresent() && allly.get().equals(DriverStation.Alliance.Red)) {
-      return 4;
-    } else {
-      return 7;
-    }
+  public static int getReef(int num) {
+    if (Alliance.Red.equals(DriverStation.getAlliance().orElse(null))) return redTags[num];
+    else return blueTags[num];
   }
+
 }

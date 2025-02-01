@@ -182,17 +182,6 @@ public class LilihSubsystem extends SubsystemBase {
     return null;
   }
 
-  private boolean elevatorYes() {
-
-    if (getTargetVisible(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker())
-        && getTargetPoseInRobotSpace(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker()).getZ()
-            < 1.6) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   public Pose2d getTargetPoseInFieldSpace(int id) {
     return getRobotFieldPoseByTag(id)
         .plus(MathUtils.pose2dToTransform2d(getTargetPoseInRobotSpace(id).toPose2d()));
@@ -208,19 +197,7 @@ public class LilihSubsystem extends SubsystemBase {
       } else {
         limelightResultsDetector = null;
       }
-      Pose3d pose3d =
-          getTargetPoseInRobotSpace(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker());
-      if (pose3d != null) {
-
-        elevatorYes();
-        zGE.setDouble(MathUtils.getActualDistanceFromPose(pose3d));
-      }
     }
-
-    boolean tv = getTargetVisible(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker());
-    sight.setBoolean(tv);
-
-    sighttwo.setBoolean(elevatorYes());
 
     updateInputs();
 

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
@@ -28,6 +29,7 @@ import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
+import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CommandLoginator;
 import frc.robot.utilities.UnInstantCommand;
 import java.io.File;
@@ -56,6 +58,8 @@ public class RobotContainer {
   private final CommandXboxController driverController;
   private final CommandXboxController operatorController;
 
+  private final ButtonRingController buttonRingController;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    *
@@ -67,6 +71,7 @@ public class RobotContainer {
 
     operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
     driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+    buttonRingController = new ButtonRingController(1);
 
     driveByController = new DriveByController(drivetrain, driverController);
     m_robotDrive.setDefaultCommand(driveByController);
@@ -78,7 +83,7 @@ public class RobotContainer {
     algeeWheelSubsystem = new AlgeeWheelSubsystem();
     elevatorSubsystem = new ElevatorSubsystem();
 
-    loggingSubsystem = new LoggingSubsystem(poseEstimationSubsystem, differentialArmSubsystem);
+    loggingSubsystem = new LoggingSubsystem(poseEstimationSubsystem, differentialArmSubsystem, buttonRingController);
 
     new CommandLoginator();
 
@@ -136,7 +141,7 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> algeePivotSubsystem.run(1))));
 
-    driverController.a().whileTrue(new CenterOnTargetCommand(7, poseEstimationSubsystem, m_robotDrive, 0.5));
+    driverController.a().whileTrue(new CenterOnTargetCommand(7, poseEstimationSubsystem, m_robotDrive, 0.1651));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));

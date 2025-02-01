@@ -68,7 +68,7 @@ public class RobotContainer {
     m_robotDrive = drivetrain;
 
     driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-    buttonRingController = new ButtonRingController(1);
+    buttonRingController = new ButtonRingController(OIConstants.kOperatorControllerPort);
 
     driveByController = new DriveByController(drivetrain, driverController);
     m_robotDrive.setDefaultCommand(driveByController);

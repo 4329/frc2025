@@ -2,20 +2,20 @@ package frc.robot.subsystems.light;
 
 import java.util.function.Consumer;
 
-class List {
+class YesList {
     ListNode head;
 
     class ListNode {
-        public Node n;
+        public LEDAnimationNode n;
         public ListNode next;
 
-        public ListNode(Node n, ListNode next) {
+        public ListNode(LEDAnimationNode n, ListNode next) {
             this.n = n;
             this.next = next;
         }
     }
 
-    public void add(Node n) {
+    public void add(LEDAnimationNode n) {
         if (head == null) {
             head = new ListNode(n, null);
             return;
@@ -28,7 +28,7 @@ class List {
         current.next = new ListNode(n, null);
     }
 
-    public Node get(int num) {
+    public LEDAnimationNode get(int num) {
         ListNode current = head;
         for (int i = 0; i < num && current != null; i++) {
             current = current.next;
@@ -37,7 +37,7 @@ class List {
         return current.n;
     }
 
-    public void forEach(Consumer<Node> fn) {
+    public void forEach(Consumer<LEDAnimationNode> fn) {
         ListNode current = head;
 
         while (current != null) {

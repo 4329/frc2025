@@ -11,16 +11,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LightLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
   AddressableLED addressableLED;
   AddressableLEDBuffer addressableLEDBuffer;
 
-  private Node currentAnimation;
+  private LEDAnimationNode currentAnimation;
 
   private LightLogAutoLogged lightLogAutoLogged;
 
@@ -41,14 +38,14 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
     lightLogAutoLogged = new LightLogAutoLogged();
   }
 
-  private Node createGraph() {
-    Node head = new Node(LEDPattern.solid(Color.kRed), () -> !State.on, new List(), "head");
-    Node orange =
-        new Node(
+  private LEDAnimationNode createGraph() {
+    LEDAnimationNode head = new LEDAnimationNode(LEDPattern.solid(Color.kRed), () -> !LEDState.on, new YesList(), "head");
+    LEDAnimationNode orange =
+        new LEDAnimationNode(
             LEDPattern.rainbow(255, 128)
                 .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meter.of(1.0 / 120.0)),
-            () -> State.on,
-            new List(),
+            () -> LEDState.on,
+            new YesList(),
             "orange");
 
     head.nextNodes().add(orange);
@@ -77,7 +74,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
   @Override
   public LoggableInputs log() {
     lightLogAutoLogged.name = currentAnimation.name();
-    lightLogAutoLogged.state = State.asString();
+    lightLogAutoLogged.state = LEDState.asString();
 
     return lightLogAutoLogged;
   }

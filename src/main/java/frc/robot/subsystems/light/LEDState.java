@@ -1,6 +1,6 @@
 package frc.robot.subsystems.light;
 
-public class State {
+public class LEDState {
     public static boolean on;
 
     public static String asString() {

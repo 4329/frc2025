@@ -12,7 +12,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
 
   ButtonRingLogAutoLogged buttonRingLogAutoLogged;
 
-  private final double OFFSET_AMOUNT = 0.5;
+  private final double OFFSET_AMOUNT = 0.1651;
 
   public ButtonRingController(int port) {
     super(port);

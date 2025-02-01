@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
-import frc.robot.commands.driveCommands.CenterOnTargetCommand;
+import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -142,7 +142,7 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> algeePivotSubsystem.run(1))));
 
-    driverController.a().whileTrue(new CenterOnTargetCommand(7, poseEstimationSubsystem, m_robotDrive, 0.1651));
+    driverController.a().whileTrue(new CenterByButtonRingCommand(7, poseEstimationSubsystem, m_robotDrive, buttonRingController));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));

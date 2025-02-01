@@ -12,11 +12,10 @@ import frc.robot.utilities.BetterPathfindingCommand;
 import org.littletonrobotics.junction.Logger;
 
 public class CenterOnTargetCommand extends Command {
-  int targetID;
   PoseEstimationSubsystem poseEstimationSubsystem;
   Drivetrain drivetrain;
   Command pathFind;
-  Pose2d target;
+  protected Pose2d target;
 
   private final PathConstraints constraints =
       new PathConstraints(2, 3.0, Math.PI, Math.PI); // The constraints for this path.
@@ -36,11 +35,16 @@ public class CenterOnTargetCommand extends Command {
       PoseEstimationSubsystem poseEstimationSubsystem,
       Drivetrain drivetrain,
       double xOffset) {
-    this.targetID = targetID;
     this.poseEstimationSubsystem = poseEstimationSubsystem;
     this.drivetrain = drivetrain;
 
-    target = poseEstimationSubsystem.getTagPose(targetID).toPose2d();
+    target = placeTarget(targetID, xOffset);
+
+    Logger.recordOutput("target", target);
+  }
+
+  Pose2d placeTarget(int targetID, double xOffset) {
+    Pose2d target = poseEstimationSubsystem.getTagPose(targetID).toPose2d();
     target =
         target.transformBy(
             new Transform2d(
@@ -48,7 +52,7 @@ public class CenterOnTargetCommand extends Command {
                 target.getRotation().getSin() * zDist + target.getRotation().getCos() * xOffset,
                 new Rotation2d(target.getRotation().getRadians() + Math.PI)));
 
-    Logger.recordOutput("target", target);
+    return target;
   }
 
   @Override

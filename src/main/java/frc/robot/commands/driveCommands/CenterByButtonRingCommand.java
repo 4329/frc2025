@@ -8,11 +8,10 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
   ButtonRingController buttonRingController;
 
   public CenterByButtonRingCommand(
-      int targetID,
       PoseEstimationSubsystem poseEstimationSubsystem,
       Drivetrain drivetrain,
       ButtonRingController buttonRingController) {
-    super(targetID, poseEstimationSubsystem, drivetrain, targetID);
+    super(0, poseEstimationSubsystem, drivetrain);
 
     this.buttonRingController = buttonRingController;
   }

@@ -55,7 +55,6 @@ public class RobotContainer {
 
   // The driver's controllers
   private final CommandXboxController driverController;
-  private final CommandXboxController operatorController;
 
   private final ButtonRingController buttonRingController;
 
@@ -68,7 +67,6 @@ public class RobotContainer {
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
 
-    operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
     driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
     buttonRingController = new ButtonRingController(1);
 
@@ -142,7 +140,7 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> algeePivotSubsystem.run(1))));
 
-    driverController.a().whileTrue(new CenterByButtonRingCommand(7, poseEstimationSubsystem, m_robotDrive, buttonRingController));
+    driverController.a().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));

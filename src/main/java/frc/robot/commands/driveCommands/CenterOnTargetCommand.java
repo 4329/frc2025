@@ -22,9 +22,6 @@ public class CenterOnTargetCommand extends Command {
 
   private final double zDist = .8;
 
-  private Pose2d initOdometry;
-  private Pose2d newOdometry;
-
   public CenterOnTargetCommand(
       int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {
     this(targetID, poseEstimationSubsystem, drivetrain, 0);

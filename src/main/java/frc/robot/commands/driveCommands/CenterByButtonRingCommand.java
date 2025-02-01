@@ -1,6 +1,7 @@
 package frc.robot.commands.driveCommands;
 
 import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
 
@@ -20,5 +21,12 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
   public void initialize() {
     target = placeTarget(buttonRingController.getTagID(), buttonRingController.getxOffset());
     super.initialize();
+
+    LEDState.centerRunning = true;
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+      LEDState.centerRunning = false;
   }
 }

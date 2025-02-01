@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LilihLog;
-import frc.robot.utilities.AprilTagUtil;
 import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.LimelightHelpers.LimelightTarget_Detector;
 import frc.robot.utilities.LimelightHelpers.LimelightTarget_Fiducial;
@@ -182,17 +181,6 @@ public class LilihSubsystem extends SubsystemBase {
     return null;
   }
 
-  private boolean elevatorYes() {
-
-    if (getTargetVisible(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker())
-        && getTargetPoseInRobotSpace(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker()).getZ()
-            < 1.6) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   public Pose2d getTargetPoseInFieldSpace(int id) {
     return getRobotFieldPoseByTag(id)
         .plus(MathUtils.pose2dToTransform2d(getTargetPoseInRobotSpace(id).toPose2d()));
@@ -208,19 +196,7 @@ public class LilihSubsystem extends SubsystemBase {
       } else {
         limelightResultsDetector = null;
       }
-      Pose3d pose3d =
-          getTargetPoseInRobotSpace(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker());
-      if (pose3d != null) {
-
-        elevatorYes();
-        zGE.setDouble(MathUtils.getActualDistanceFromPose(pose3d));
-      }
     }
-
-    boolean tv = getTargetVisible(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker());
-    sight.setBoolean(tv);
-
-    sighttwo.setBoolean(elevatorYes());
 
     updateInputs();
 

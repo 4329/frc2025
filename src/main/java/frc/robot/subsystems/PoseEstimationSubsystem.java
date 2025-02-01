@@ -26,8 +26,6 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
   private final Drivetrain drivetrain;
   private final LilihSubsystem lilihSubsystem;
   private SwerveDrivePoseEstimator estimator;
-  private final double pathPlannerFieldWidth = 8.21;
-  private final double pathPlannerFieldLength = 16.54;
   private Field2d field = new Field2d();
   private Pose2d pathPlannerPose = new Pose2d();
 

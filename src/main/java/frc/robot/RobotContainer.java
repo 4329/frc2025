@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
-import frc.robot.commands.driveCommands.CenterOnTargetCommand;
+import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -28,6 +28,7 @@ import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
+import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CommandLoginator;
 import frc.robot.utilities.UnInstantCommand;
 import java.io.File;
@@ -54,7 +55,8 @@ public class RobotContainer {
 
   // The driver's controllers
   private final CommandXboxController driverController;
-  private final CommandXboxController operatorController;
+
+  private final ButtonRingController buttonRingController;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -65,8 +67,8 @@ public class RobotContainer {
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
 
-    operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
     driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+    buttonRingController = new ButtonRingController(OIConstants.kOperatorControllerPort);
 
     driveByController = new DriveByController(drivetrain, driverController);
     m_robotDrive.setDefaultCommand(driveByController);
@@ -78,7 +80,9 @@ public class RobotContainer {
     algeeWheelSubsystem = new AlgeeWheelSubsystem();
     elevatorSubsystem = new ElevatorSubsystem();
 
-    loggingSubsystem = new LoggingSubsystem(poseEstimationSubsystem, differentialArmSubsystem);
+    loggingSubsystem =
+        new LoggingSubsystem(
+            poseEstimationSubsystem, differentialArmSubsystem, buttonRingController);
 
     new CommandLoginator();
 
@@ -136,7 +140,7 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> algeePivotSubsystem.run(1))));
 
-    driverController.a().whileTrue(new CenterOnTargetCommand(7, poseEstimationSubsystem, m_robotDrive, 0.5));
+    driverController.a().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));

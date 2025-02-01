@@ -23,6 +23,7 @@ import frc.robot.commands.driveCommands.CenterOnTargetCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LightSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
@@ -49,6 +50,7 @@ public class RobotContainer {
   private final AlgeePivotSubsystem algeePivotSubsystem;
   private final AlgeeWheelSubsystem algeeWheelSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
+  private final LightSubsystem lightSubsystem;
 
   private final DriveByController driveByController;
 
@@ -80,6 +82,7 @@ public class RobotContainer {
     algeePivotSubsystem = new AlgeePivotSubsystem();
     algeeWheelSubsystem = new AlgeeWheelSubsystem();
     elevatorSubsystem = new ElevatorSubsystem();
+    lightSubsystem = new LightSubsystem();
 
     loggingSubsystem =
         new LoggingSubsystem(
@@ -142,6 +145,7 @@ public class RobotContainer {
       () -> algeePivotSubsystem.run(1))));
 
     driverController.a().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
+    driverController.b().onTrue(new UnInstantCommand(() -> LightSubsystem.State.on = !LightSubsystem.State.on));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));

@@ -11,7 +11,7 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
       PoseEstimationSubsystem poseEstimationSubsystem,
       Drivetrain drivetrain,
       ButtonRingController buttonRingController) {
-    super(0, poseEstimationSubsystem, drivetrain);
+    super(1, poseEstimationSubsystem, drivetrain);
 
     this.buttonRingController = buttonRingController;
   }

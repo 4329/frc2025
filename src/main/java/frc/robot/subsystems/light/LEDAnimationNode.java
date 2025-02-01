@@ -1,8 +1,7 @@
 package frc.robot.subsystems.light;
 
+import edu.wpi.first.wpilibj.LEDPattern;
 import java.util.function.Supplier;
 
-import edu.wpi.first.wpilibj.LEDPattern;
-
 public record LEDAnimationNode(
-        LEDPattern head, Supplier<Boolean> transfer, YesList nextNodes, String name) { }
+    LEDPattern head, Supplier<Boolean> transfer, YesList nextNodes, String name) {}

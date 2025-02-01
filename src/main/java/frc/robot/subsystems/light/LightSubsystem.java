@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LightLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
-
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -34,12 +33,14 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
     addressableLED.setData(addressableLEDBuffer);
 
     currentAnimation = createGraph();
-  
+
     lightLogAutoLogged = new LightLogAutoLogged();
   }
 
   private LEDAnimationNode createGraph() {
-    LEDAnimationNode head = new LEDAnimationNode(LEDPattern.solid(Color.kRed), () -> !LEDState.on, new YesList(), "head");
+    LEDAnimationNode head =
+        new LEDAnimationNode(
+            LEDPattern.solid(Color.kRed), () -> !LEDState.on, new YesList(), "head");
     LEDAnimationNode orange =
         new LEDAnimationNode(
             LEDPattern.rainbow(255, 128)
@@ -55,12 +56,14 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
   }
 
   private void resolveGraph() {
-    currentAnimation.nextNodes().forEach(
-        x -> {
-          if (x.transfer().get()) {
-            currentAnimation = x;
-          }
-        });
+    currentAnimation
+        .nextNodes()
+        .forEach(
+            x -> {
+              if (x.transfer().get()) {
+                currentAnimation = x;
+              }
+            });
 
     currentAnimation.head().applyTo(addressableLEDBuffer);
     addressableLED.setData(addressableLEDBuffer);

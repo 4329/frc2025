@@ -12,9 +12,9 @@ import frc.robot.model.ButtonRingLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 
 public class ButtonRingController extends CommandGenericHID implements LoggedSubsystem {
-    double xOffset;
-    int level;
-    int tagID;
+    private double xOffset;
+    private int level;
+    private int tagID;
 
     ButtonRingLogAutoLogged buttonRingLogAutoLogged;
 
@@ -53,6 +53,18 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
         buttonRingLogAutoLogged.xOffset = xOffset;
         buttonRingLogAutoLogged.tagID = tagID;
         return buttonRingLogAutoLogged;
+    }
+
+    public double getxOffset() {
+        return xOffset;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getTagID() {
+        return tagID;
     }
 
 }

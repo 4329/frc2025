@@ -24,7 +24,7 @@ public class LimDriveSetCommand extends Command {
 
   @Override
   public void initialize() {
-    Pose2d carl = limlihSubsystem.getRobotPose();
+    Pose2d carl = limlihSubsystem.getRobotPose().pose;
 
     if (limlihSubsystem.seeingAnything() && !limlihSubsystem.getRobotPose().equals(new Pose2d()))
       drivetrain.resetOdometry(carl);

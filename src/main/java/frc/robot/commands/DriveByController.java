@@ -71,14 +71,14 @@ public class DriveByController extends Command {
    * fed into the drive command for the swerve drivetrain so the driver can decide to drive in a
    * robot oreinted when they please (not recommended in most instances)
    */
-  public void changeFieldOrient() {
-    if (fieldOrient == true) {
-      fieldOrient = false;
-      if (logStuff) fieldOrientStatus.setBoolean(false);
-    } else {
-      fieldOrient = true;
-      if (logStuff) fieldOrientStatus.setBoolean(true);
-    }
+  public void turnOnFieldOrient() {
+    fieldOrient = true;
+    if (logStuff) fieldOrientStatus.setBoolean(true);
+  }
+
+  public void turnOnRobotOrient() {
+    fieldOrient = false;
+    if (logStuff) fieldOrientStatus.setBoolean(false);
   }
 
   /**

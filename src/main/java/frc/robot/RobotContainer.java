@@ -3,7 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -71,7 +71,7 @@ public class RobotContainer {
     driveByController = new DriveByController(drivetrain, driverController);
     m_robotDrive.setDefaultCommand(driveByController);
 
-    lilihSubsystem = new LilihSubsystem(12, "limelight-threnog");
+    lilihSubsystem = new LilihSubsystem(11, "limelight-lilih");
     poseEstimationSubsystem = new PoseEstimationSubsystem(drivetrain, lilihSubsystem);
     differentialArmSubsystem = DifferentialArmFactory.createDifferentialArmSubsystem();
     algeePivotSubsystem = new AlgeePivotSubsystem();
@@ -90,21 +90,21 @@ public class RobotContainer {
   }
 
   private void configureAutoBuilder() {
-    RobotConfig config = null;
     try {
-      config = RobotConfig.fromGUISettings();
+      Constants.AutoConstants.config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     AutoBuilder.configure(
-        poseEstimationSubsystem::getPathPlannerStuff,
+        poseEstimationSubsystem::getPose,
         poseEstimationSubsystem::setInitialPose,
         m_robotDrive::getChassisSpeed,
-        (speeds, feedForwards) -> m_robotDrive.setModuleStates(speeds),
-        new PPHolonomicDriveController(
-            Constants.AutoConstants.translationPID, Constants.AutoConstants.rotationPID),
-        config,
+        (speeds, feedForwards) -> {
+          m_robotDrive.setModuleStates(speeds);
+        },
+        Constants.AutoConstants.ppHolonomicDriveController,
+        Constants.AutoConstants.config,
         () -> {
           var alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
@@ -124,7 +124,7 @@ public class RobotContainer {
   // spotless:off
 
   private void configureButtonBindings() {
-    driverController.start().onTrue(new UnInstantCommand(driveByController::changeFieldOrient));
+    // driverController.start().onTrue(new UnInstantCommand(driveByController::changeFieldOrient));
 
     driverController.leftTrigger(0.01).whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> elevatorSubsystem.runElevator(-driverController.getLeftTriggerAxis()))));
@@ -136,13 +136,13 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> algeePivotSubsystem.run(1))));
 
-    driverController.a().whileTrue(new CenterOnTargetCommand(lilihSubsystem, m_robotDrive, 7));
+    driverController.a().whileTrue(new CenterOnTargetCommand(7, poseEstimationSubsystem, m_robotDrive, 0.5));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
 
-    driverController.rightStick().onTrue(new UnInstantCommand(
-      () -> m_robotDrive.resetOdometry(m_robotDrive.getPose())));
+    driverController.rightStick().onTrue(new InstantCommand(
+      () -> m_robotDrive.resetOdometry(new Pose2d())));
   }
 
   // spotless:on
@@ -209,5 +209,12 @@ public class RobotContainer {
 
   public Map<Command, PathPlannerAuto> yes() {
     return autoName;
+  }
+
+  public void robotPeriodic() {
+    if (lilihSubsystem.getTargetVisible(7)) {
+      org.littletonrobotics.junction.Logger.recordOutput(
+          "relPose", lilihSubsystem.getTargetPoseInRobotSpace(7));
+    }
   }
 }

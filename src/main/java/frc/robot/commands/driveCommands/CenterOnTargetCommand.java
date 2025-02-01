@@ -1,79 +1,81 @@
 package frc.robot.commands.driveCommands;
 
-import edu.wpi.first.math.controller.PIDController;
+import com.pathplanner.lib.path.PathConstraints;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.lilih.LilihSubsystem;
+import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
+import frc.robot.utilities.BetterPathfindingCommand;
+import org.littletonrobotics.junction.Logger;
 
 public class CenterOnTargetCommand extends Command {
-  private final LilihSubsystem lilihSubsystem;
-  private final Drivetrain drivetrain;
-  private int targetId;
+  int targetID;
+  PoseEstimationSubsystem poseEstimationSubsystem;
+  Drivetrain drivetrain;
+  Command pathFind;
+  Pose2d target;
 
-  private final PIDController rotationPID;
-  private final PIDController xPID;
-  private final PIDController yPID;
+  private final PathConstraints constraints =
+      new PathConstraints(2, 3.0, Math.PI, Math.PI); // The constraints for this path.
+
+  private final double zDist = .8;
 
   public CenterOnTargetCommand(
-      LilihSubsystem lilihSubsystem, Drivetrain m_drivetrain, int targetId) {
-    this.lilihSubsystem = lilihSubsystem;
-    this.drivetrain = m_drivetrain;
-    this.targetId = targetId;
+      int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {
+    this(targetID, poseEstimationSubsystem, drivetrain, 0);
+  }
 
-    rotationPID = new PIDController(0.033, 0, 0); // 0.75, 0, 0
-    rotationPID.setTolerance(1);
-    rotationPID.setSetpoint(0);
+  public CenterOnTargetCommand(
+      int targetID,
+      PoseEstimationSubsystem poseEstimationSubsystem,
+      Drivetrain drivetrain,
+      double xOffset) {
+    this.targetID = targetID;
+    this.poseEstimationSubsystem = poseEstimationSubsystem;
+    this.drivetrain = drivetrain;
 
-    xPID = new PIDController(1, 0, 0);
-    xPID.setSetpoint(0);
-    xPID.setTolerance(1);
+    target = poseEstimationSubsystem.getTagPose(targetID).toPose2d();
+    target =
+        target.transformBy(
+            new Transform2d(
+                target.getRotation().getCos() * zDist + target.getRotation().getSin() * xOffset,
+                target.getRotation().getSin() * zDist + target.getRotation().getCos() * xOffset,
+                new Rotation2d(target.getRotation().getRadians() + Math.PI)));
 
-    yPID = new PIDController(1, 0, 0);
-    yPID.setSetpoint(-2);
-    yPID.setTolerance(1);
-
-    addRequirements(lilihSubsystem, m_drivetrain);
+    Logger.recordOutput("target", target);
   }
 
   @Override
   public void initialize() {
-    rotationPID.reset();
-    drivetrain.stop();
-  }
-
-  @Override
-  public void execute() {
-    if (lilihSubsystem.cameraConnected() && lilihSubsystem.getTargetVisible(targetId)) {
-
-      double rotationCalc = rotationPID.calculate(lilihSubsystem.getTargetX(targetId));
-      double xCalc = xPID.calculate(lilihSubsystem.getTargetPoseInRobotSpace(targetId).getX());
-      double yCalc = yPID.calculate(lilihSubsystem.getTargetPoseInRobotSpace(targetId).getX());
-
-      if (rotationCalc > Constants.DriveConstants.kMaxAngularSpeed) {
-        rotationCalc = Constants.DriveConstants.kMaxAngularSpeed;
-      } else if (rotationCalc < -Constants.DriveConstants.kMaxAngularSpeed) {
-        rotationCalc = -Constants.DriveConstants.kMaxAngularSpeed;
-      } else if (rotationPID.atSetpoint()) {
-        rotationCalc = 0;
-      }
-
-      if (xPID.atSetpoint()) xCalc = 0;
-      if (yPID.atSetpoint()) xCalc = 0;
-
-      drivetrain.drive(yCalc, xCalc, rotationCalc, true);
-    } else {
-      drivetrain.stop();
-    }
+    pathFind =
+        new BetterPathfindingCommand(
+            target,
+            constraints,
+            0,
+            poseEstimationSubsystem::getPose,
+            drivetrain::getChassisSpeed,
+            (chassisSpeeds, a) -> drivetrain.setModuleStates(chassisSpeeds),
+            Constants.AutoConstants.ppHolonomicDriveController,
+            Constants.AutoConstants.config,
+            drivetrain);
+    pathFind.schedule();
   }
 
   @Override
   public boolean isFinished() {
-    return false;
+    return poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation())
+            < 0.1
+        && Math.abs(
+                poseEstimationSubsystem.getPose().getRotation().getRadians()
+                    - target.getRotation().getRadians())
+            < 0.1;
   }
 
   @Override
   public void end(boolean interrupted) {
-    drivetrain.stop();
+    pathFind.cancel();
   }
 }

@@ -1,8 +1,9 @@
 package frc.robot.subsystems.lilih;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -10,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LilihLog;
 import frc.robot.utilities.AprilTagUtil;
 import frc.robot.utilities.LimelightHelpers;
+import frc.robot.utilities.LimelightHelpers.LimelightTarget_Detector;
 import frc.robot.utilities.LimelightHelpers.LimelightTarget_Fiducial;
+import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 import frc.robot.utilities.MathUtils;
 import java.util.Map;
 import org.littletonrobotics.junction.Logger;
@@ -21,6 +24,12 @@ public class LilihSubsystem extends SubsystemBase {
   private final String limelightHelpNetworkTableName;
 
   LimelightTarget_Fiducial[] limelightResults;
+  LimelightTarget_Detector limelightResultsDetector;
+
+  public LimelightTarget_Detector getLimelightResultsDetector() {
+    return limelightResultsDetector;
+  }
+
   LilihSocket lilihSocket;
 
   private GenericEntry zGE;
@@ -57,7 +66,7 @@ public class LilihSubsystem extends SubsystemBase {
     lilihLog = new LilihLog();
     lilihSocket = new LilihSocket(ip);
     this.limelightHelpNetworkTableName = limelightHelpNetworkTableName;
-    switchPipeline(1);
+    switchPipeline(0);
   }
 
   public boolean cameraConnected() {
@@ -92,15 +101,18 @@ public class LilihSubsystem extends SubsystemBase {
    *
    * @return Pose
    */
-  public Pose2d getRobotPose() {
-    return LimelightHelpers.getBotPose2d(limelightHelpNetworkTableName);
+  public PoseEstimate getRobotPose() {
+    return LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightHelpNetworkTableName);
+  }
+
+  public Pose3d getRobotPoseInTargetSpace(int id) {
+    return getFiducial(id).getRobotPose_TargetSpace();
   }
 
   public Pose3d getTargetPoseInRobotSpace(int id) {
 
     LimelightTarget_Fiducial limetarget = getFiducial(id);
     if (limetarget != null) {
-
       return limetarget.getTargetPose_RobotSpace();
     }
     return null;
@@ -146,7 +158,10 @@ public class LilihSubsystem extends SubsystemBase {
         LimelightTarget_Fiducial fiducial = getFiducial(i);
         lilihLog.tags[i].tX = fiducial.tx;
         lilihLog.tags[i].tY = fiducial.ty;
-        lilihLog.tags[i].relativePose = getTargetPoseInRobotSpace(i);
+        lilihLog.tags[i].relativePose = fiducial.getCameraPose_TargetSpace();
+        Logger.recordOutput(
+            "acl/" + i,
+            AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField).getTagPose(i).get());
       } else {
         lilihLog.tags[i].tX = 0;
         lilihLog.tags[i].tY = 0;
@@ -178,10 +193,21 @@ public class LilihSubsystem extends SubsystemBase {
     }
   }
 
+  public Pose2d getTargetPoseInFieldSpace(int id) {
+    return getRobotFieldPoseByTag(id)
+        .plus(MathUtils.pose2dToTransform2d(getTargetPoseInRobotSpace(id).toPose2d()));
+  }
+
   @Override
   public void periodic() {
     if (checkLimelightCommand.isConnected()) {
       limelightResults = lilihSocket.getResults().targets_Fiducials;
+      if (lilihSocket.getResults().targets_Detector != null
+          && lilihSocket.getResults().targets_Detector.length > 0) {
+        limelightResultsDetector = lilihSocket.getResults().targets_Detector[0];
+      } else {
+        limelightResultsDetector = null;
+      }
       Pose3d pose3d =
           getTargetPoseInRobotSpace(AprilTagUtil.getAprilTagSpeakerIDAprilTagIDSpeaker());
       if (pose3d != null) {
@@ -210,15 +236,5 @@ public class LilihSubsystem extends SubsystemBase {
 
   public double getTargetX(int id) {
     return getFiducial(id).tx;
-  }
-
-  public double faceTag(int id) {
-
-    Pose2d initialPose = getTargetSpacePose(id).toPose2d();
-    double rotation = Math.atan2(initialPose.getX(), initialPose.getY());
-    Pose2d robotPose = seeingAnything() ? getRobotPose() : new Pose2d();
-    Logger.recordOutput(
-        "Rot", new Pose2d(robotPose.getX() + 8, robotPose.getY() + 4, new Rotation2d(rotation)));
-    return rotation;
   }
 }

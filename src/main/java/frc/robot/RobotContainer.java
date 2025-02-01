@@ -23,11 +23,12 @@ import frc.robot.commands.driveCommands.CenterOnTargetCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LightSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
+import frc.robot.subsystems.light.LightSubsystem;
+import frc.robot.subsystems.light.State;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
@@ -84,9 +85,11 @@ public class RobotContainer {
     elevatorSubsystem = new ElevatorSubsystem();
     lightSubsystem = new LightSubsystem();
 
-    loggingSubsystem =
-        new LoggingSubsystem(
-            poseEstimationSubsystem, differentialArmSubsystem, buttonRingController);
+    loggingSubsystem = new LoggingSubsystem(
+      poseEstimationSubsystem,
+      differentialArmSubsystem,
+      buttonRingController,
+      lightSubsystem);
 
     new CommandLoginator();
 
@@ -145,7 +148,7 @@ public class RobotContainer {
       () -> algeePivotSubsystem.run(1))));
 
     driverController.a().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
-    driverController.b().onTrue(new UnInstantCommand(() -> LightSubsystem.State.on = !LightSubsystem.State.on));
+    driverController.b().onTrue(new UnInstantCommand(() -> State.on = !State.on));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));

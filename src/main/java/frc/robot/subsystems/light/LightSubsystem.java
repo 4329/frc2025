@@ -43,21 +43,33 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
   }
 
   private LEDAnimationNode createGraph() {
-    LEDAnimationNode head =
+    LEDAnimationNode idle =
         new LEDAnimationNode(
-            new CoutPattern(), () -> !LEDState.on, new YesList(), "head");
-    LEDAnimationNode orange =
-        new LEDAnimationNode(
-            LEDPattern.rainbow(255, 128)
-                .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meter.of(1.0 / 120.0)),
-            () -> LEDState.on,
+            (reader, writer) -> {
+            LEDPattern.rainbow(255, 255)
+                .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meter.of(1.0 / 120.0)).applyTo(reader, writer);
+                writer.setLED((int)(Math.random() * reader.getLength()), Color.kWhite);
+            },
             new YesList(),
-            "orange");
+            "idle");
 
-    head.nextNodes().add(orange);
-    orange.nextNodes().add(head);
+    LEDAnimationNode centering = new LEDAnimationNode(
+        new CoutPattern(),
+        new YesList(),
+        "centering");
 
-    return head;
+    LEDAnimationNode targetVisible = new LEDAnimationNode(
+      new GrowPattern(),
+      new YesList(),
+      "targetVisible");
+
+    idle.nextNodes().add(new LEDAnimationEdge(centering, () -> LEDState.centerRunning));
+    centering.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.centerRunning));
+
+    idle.nextNodes().add(new LEDAnimationEdge(targetVisible, () -> LEDState.targetVisible));
+    targetVisible.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.targetVisible));
+
+    return idle;
   }
 
   private void resolveGraph() {
@@ -66,7 +78,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         .forEach(
             x -> {
               if (x.transfer().get()) {
-                currentAnimation = x;
+                currentAnimation = x.node();
               }
             });
 

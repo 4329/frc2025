@@ -6,16 +6,16 @@ class YesList {
   ListNode head;
 
   class ListNode {
-    public LEDAnimationNode n;
+    public LEDAnimationEdge n;
     public ListNode next;
 
-    public ListNode(LEDAnimationNode n, ListNode next) {
+    public ListNode(LEDAnimationEdge n, ListNode next) {
       this.n = n;
       this.next = next;
     }
   }
 
-  public void add(LEDAnimationNode n) {
+  public void add(LEDAnimationEdge n) {
     if (head == null) {
       head = new ListNode(n, null);
       return;
@@ -28,7 +28,7 @@ class YesList {
     current.next = new ListNode(n, null);
   }
 
-  public LEDAnimationNode get(int num) {
+  public LEDAnimationEdge get(int num) {
     ListNode current = head;
     for (int i = 0; i < num && current != null; i++) {
       current = current.next;
@@ -37,7 +37,7 @@ class YesList {
     return current.n;
   }
 
-  public void forEach(Consumer<LEDAnimationNode> fn) {
+  public void forEach(Consumer<LEDAnimationEdge> fn) {
     ListNode current = head;
 
     while (current != null) {

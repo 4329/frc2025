@@ -10,6 +10,11 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LightLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
+import frc.robot.subsystems.light.ledAnimations.BeamsPattern;
+import frc.robot.subsystems.light.ledAnimations.CoutPattern;
+import frc.robot.subsystems.light.ledAnimations.GrowPattern;
+import frc.robot.subsystems.light.ledAnimations.SinPattern;
+
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -40,7 +45,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
   private LEDAnimationNode createGraph() {
     LEDAnimationNode head =
         new LEDAnimationNode(
-            LEDPattern.solid(Color.kRed), () -> !LEDState.on, new YesList(), "head");
+            new CoutPattern(), () -> !LEDState.on, new YesList(), "head");
     LEDAnimationNode orange =
         new LEDAnimationNode(
             LEDPattern.rainbow(255, 128)

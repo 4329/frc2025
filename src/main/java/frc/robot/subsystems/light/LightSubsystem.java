@@ -15,6 +15,7 @@ import frc.robot.subsystems.light.ledAnimations.CoutPattern;
 import frc.robot.subsystems.light.ledAnimations.GrowPattern;
 import frc.robot.subsystems.light.ledAnimations.SinPattern;
 
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -89,12 +90,13 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
   @Override
   public void periodic() {
     resolveGraph();
+    
+    LEDState.log();
   }
 
   @Override
   public LoggableInputs log() {
     lightLogAutoLogged.name = currentAnimation.name();
-    lightLogAutoLogged.state = LEDState.asString();
 
     return lightLogAutoLogged;
   }

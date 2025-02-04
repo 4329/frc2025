@@ -1,5 +1,7 @@
 package frc.robot.subsystems.light;
 
+import org.littletonrobotics.junction.Logger;
+
 public class LEDState {
   public static boolean on;
 
@@ -8,7 +10,7 @@ public class LEDState {
 
   public static boolean centerRunning;
 
-  public static boolean agleeWheelRunning;
+  public static boolean algeeWheelRunning;
   public static boolean algeeWheelHolding;
 
   public static boolean coralClawHolding;
@@ -17,26 +19,21 @@ public class LEDState {
 
   public static boolean targetVisible;
 
-  public static String asString() {
-    return String.format("""
-        on: %b,
-        reefButton: %d,
-        reefLevel: %d,
-        centerRunning: %b,
-        algeeWheelRunning: %b,
-        algeeWheelHolding: %b,
-        coralClawHolding: %b,
-        climbing: %b,
-        targetVisible: %b,
-        """,
-        on,
-        reefButton,
-        reefLevel,
-        centerRunning,
-        agleeWheelRunning,
-        algeeWheelHolding,
-        coralClawHolding,
-        climbing,
-        targetVisible);
+  public static void log() {
+    Logger.recordOutput("LEDState/on", on);
+
+    Logger.recordOutput("LEDState/reefButton", reefButton);
+    Logger.recordOutput("LEDState/reefLevel", reefLevel);
+
+    Logger.recordOutput("LEDState/centerRunning", centerRunning);
+
+    Logger.recordOutput("LEDState/algeeWheelRunning", algeeWheelRunning);
+    Logger.recordOutput("LEDState/algeeWheelHolding", algeeWheelHolding);
+
+    Logger.recordOutput("LEDState/coralClawHolding", coralClawHolding);
+
+    Logger.recordOutput("LEDState/climbing", climbing);
+
+    Logger.recordOutput("LEDState/targetVisible", targetVisible);
   }
 }

@@ -145,10 +145,10 @@ public class RobotContainer {
     driverController.leftBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> algeePivotSubsystem.run(-1))));
     driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
-      () -> algeePivotSubsystem.run(1))));
 
+      () -> algeePivotSubsystem.run(1))));
     driverController.a().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
-    driverController.b().onTrue(new UnInstantCommand(() -> LEDState.on = !LEDState.on));
+    driverController.b().onTrue(new InstantCommand(() -> driveByController.toggleFieldOrient()));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));

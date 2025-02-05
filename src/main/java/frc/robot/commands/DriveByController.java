@@ -81,6 +81,14 @@ public class DriveByController extends Command {
     if (logStuff) fieldOrientStatus.setBoolean(false);
   }
 
+  public void toggleFieldOrient() {
+    if (fieldOrient == true) {
+      turnOnRobotOrient();
+    } else {
+      turnOnFieldOrient();
+    }
+  }
+
   /**
    * This function takes the user input from the controller analog sticks, applys a deadband and
    * then quadratically transforms the input so that it is easier for the user to drive, this is

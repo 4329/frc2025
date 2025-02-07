@@ -37,17 +37,16 @@ public class CenterOnTargetCommand extends Command {
 
     target = placeTarget(targetID, xOffset);
 
-    Logger.recordOutput("target", target);
   }
-
+  
   Pose2d placeTarget(int targetID, double xOffset) {
     Pose2d target = poseEstimationSubsystem.getTagPose(targetID).toPose2d();
-    target =
-        target.transformBy(
-            new Transform2d(
-                target.getRotation().getCos() * zDist + target.getRotation().getSin() * xOffset,
-                target.getRotation().getSin() * zDist + target.getRotation().getCos() * xOffset,
-                new Rotation2d(target.getRotation().getRadians() + Math.PI)));
+    Logger.recordOutput("target", target);
+    target = new Pose2d(
+                target.getX() + target.getRotation().getCos() * zDist + Math.cos(target.getRotation().getRadians() + Math.PI / 2) * xOffset,
+                target.getY() + target.getRotation().getSin() * zDist + Math.sin(target.getRotation().getRadians() + Math.PI / 2) * xOffset,
+                new Rotation2d(target.getRotation().getRadians() + Math.PI));
+    Logger.recordOutput("posy", target);
 
     return target;
   }

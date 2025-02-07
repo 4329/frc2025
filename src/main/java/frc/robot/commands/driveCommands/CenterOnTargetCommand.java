@@ -1,5 +1,7 @@
 package frc.robot.commands.driveCommands;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -9,7 +11,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.BetterPathfindingCommand;
-import org.littletonrobotics.junction.Logger;
 
 public class CenterOnTargetCommand extends Command {
   PoseEstimationSubsystem poseEstimationSubsystem;

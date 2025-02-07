@@ -3,7 +3,6 @@ package frc.robot.commands.driveCommands;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
@@ -36,16 +35,20 @@ public class CenterOnTargetCommand extends Command {
     this.drivetrain = drivetrain;
 
     target = placeTarget(targetID, xOffset);
-
   }
-  
+
   Pose2d placeTarget(int targetID, double xOffset) {
     Pose2d target = poseEstimationSubsystem.getTagPose(targetID).toPose2d();
     Logger.recordOutput("target", target);
-    target = new Pose2d(
-                target.getX() + target.getRotation().getCos() * zDist + Math.cos(target.getRotation().getRadians() + Math.PI / 2) * xOffset,
-                target.getY() + target.getRotation().getSin() * zDist + Math.sin(target.getRotation().getRadians() + Math.PI / 2) * xOffset,
-                new Rotation2d(target.getRotation().getRadians() + Math.PI));
+    target =
+        new Pose2d(
+            target.getX()
+                + target.getRotation().getCos() * zDist
+                + Math.cos(target.getRotation().getRadians() + Math.PI / 2) * xOffset,
+            target.getY()
+                + target.getRotation().getSin() * zDist
+                + Math.sin(target.getRotation().getRadians() + Math.PI / 2) * xOffset,
+            new Rotation2d(target.getRotation().getRadians() + Math.PI));
     Logger.recordOutput("posy", target);
 
     return target;

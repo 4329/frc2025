@@ -12,15 +12,24 @@ import frc.robot.utilities.WebsocketListener;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.util.concurrent.ExecutionException;
+import org.littletonrobotics.junction.Logger;
 
 public class LilihSocket {
 
   private WebsocketListener listener;
   private ObjectMapper objectMapper;
-  private boolean webSocketConnected;
-  int ip;
+  private int ip;
 
   public LilihSocket(int ip) {
+    this.ip = ip;
+
+    createSocket();
+
+    objectMapper = new ObjectMapper();
+    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  }
+
+  private void createSocket() {
     HttpClient httpClient = HttpClient.newHttpClient();
     listener = new WebsocketListener();
     new Thread(
@@ -30,22 +39,24 @@ public class LilihSocket {
                     .newWebSocketBuilder()
                     .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener)
                     .get();
-                webSocketConnected = true;
               } catch (InterruptedException | ExecutionException e) {
                 System.out.println(e.getMessage());
               }
             })
         .start();
-    objectMapper = new ObjectMapper();
-    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  }
+
+  public boolean isConnected() {
+    return listener.isReceivingMessages();
   }
 
   public LimelightHelpers.Results getResults() {
-    if (!webSocketConnected) return new LimelightHelpers.Results();
+    if (!isConnected()) {
+      return new LimelightHelpers.Results();
+    }
 
     try {
-      String asdfs = listener.getOutput();
-      return objectMapper.readValue(asdfs, LimelightHelpers.Results.class);
+      return objectMapper.readValue(listener.getOutput(), LimelightHelpers.Results.class);
     } catch (JsonProcessingException e) {
       System.err.println("lljson error: " + e.getMessage());
       return new LimelightHelpers.Results();

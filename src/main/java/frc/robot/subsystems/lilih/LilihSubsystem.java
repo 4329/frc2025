@@ -4,17 +4,13 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LilihLog;
 import frc.robot.utilities.LimelightHelpers;
-import frc.robot.utilities.LimelightHelpers.LimelightTarget_Detector;
 import frc.robot.utilities.LimelightHelpers.LimelightTarget_Fiducial;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 import frc.robot.utilities.MathUtils;
-import java.util.Map;
 import org.littletonrobotics.junction.Logger;
 
 public class LilihSubsystem extends SubsystemBase {
@@ -23,44 +19,16 @@ public class LilihSubsystem extends SubsystemBase {
   private final String limelightHelpNetworkTableName;
 
   LimelightTarget_Fiducial[] limelightResults;
-  LimelightTarget_Detector limelightResultsDetector;
-
-  public LimelightTarget_Detector getLimelightResultsDetector() {
-    return limelightResultsDetector;
-  }
 
   LilihSocket lilihSocket;
 
-  private GenericEntry zGE;
-  private GenericEntry sight;
-  private GenericEntry sighttwo;
-
   private Timer timer;
-  private CheckLilihCommand checkLimelightCommand;
 
   private LilihLog lilihLog;
 
   public LilihSubsystem(int ip, String limelightHelpNetworkTableName) {
     timer = new Timer();
     timer.start();
-    this.checkLimelightCommand = new CheckLilihCommand(ip);
-
-    zGE = Shuffleboard.getTab("shoot").add("zPose", 0).getEntry();
-    sight =
-        Shuffleboard.getTab("RobotData")
-            .add("Seeing Speaker", false)
-            .withPosition(4, 0)
-            .withSize(9, 2)
-            .withProperties(Map.of("Color when true", "#0000FF", "Color when false", "#000000"))
-            .getEntry();
-
-    sighttwo =
-        Shuffleboard.getTab("RobotData")
-            .add("Need Elevator?", false)
-            .withPosition(4, 2)
-            .withSize(9, 1)
-            .withProperties(Map.of("Color when true", "#00FFFF", "Color when false", "#000000"))
-            .getEntry();
 
     lilihLog = new LilihLog();
     lilihSocket = new LilihSocket(ip);
@@ -69,7 +37,7 @@ public class LilihSubsystem extends SubsystemBase {
   }
 
   public boolean cameraConnected() {
-    return checkLimelightCommand.isConnected();
+    return lilihSocket.isConnected();
   }
 
   public boolean getTargetVisible(int id) {
@@ -188,26 +156,11 @@ public class LilihSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (checkLimelightCommand.isConnected()) {
+    if (cameraConnected()) {
       limelightResults = lilihSocket.getResults().targets_Fiducials;
-      if (lilihSocket.getResults().targets_Detector != null
-          && lilihSocket.getResults().targets_Detector.length > 0) {
-        limelightResultsDetector = lilihSocket.getResults().targets_Detector[0];
-      } else {
-        limelightResultsDetector = null;
-      }
     }
 
     updateInputs();
-
-    occasionalCheck();
-  }
-
-  private void occasionalCheck() {
-    if (timer.hasElapsed(4) && !checkLimelightCommand.isScheduled()) {
-      checkLimelightCommand.schedule();
-      timer.reset();
-    }
   }
 
   public double getTargetX(int id) {

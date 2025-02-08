@@ -26,13 +26,14 @@ public class DriveToObjectCommand extends Command {
 
   @Override
   public void execute() {
-    if (!lilihSubsystem.cameraConnected() || lilihSubsystem.getLimelightResultsDetector() == null) {
-      return;
-    }
+    // if (!lilihSubsystem.cameraConnected() || lilihSubsystem.getLimelightResultsDetector() ==
+    // null) {
+    //   return;
+    // }
 
-    double rotVar =
-        rotationPidController.calculate(lilihSubsystem.getLimelightResultsDetector().tx);
-    drivetrain.drive(0, 0, rotVar, false);
+    // double rotVar =
+    //     rotationPidController.calculate(lilihSubsystem.getLimelightResultsDetector().tx);
+    // drivetrain.drive(0, 0, rotVar, false);
   }
 
   @Override

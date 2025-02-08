@@ -12,7 +12,6 @@ import frc.robot.utilities.WebsocketListener;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.util.concurrent.ExecutionException;
-import org.littletonrobotics.junction.Logger;
 
 public class LilihSocket {
 
@@ -32,18 +31,14 @@ public class LilihSocket {
   private void createSocket() {
     HttpClient httpClient = HttpClient.newHttpClient();
     listener = new WebsocketListener();
-    new Thread(
-            () -> {
-              try {
-                httpClient
-                    .newWebSocketBuilder()
-                    .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener)
-                    .get();
-              } catch (InterruptedException | ExecutionException e) {
-                System.out.println(e.getMessage());
-              }
-            })
-        .start();
+    try {
+      httpClient
+          .newWebSocketBuilder()
+          .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener)
+          .get();
+    } catch (InterruptedException | ExecutionException e) {
+      System.out.println(e.getMessage());
+    }
   }
 
   public boolean isConnected() {

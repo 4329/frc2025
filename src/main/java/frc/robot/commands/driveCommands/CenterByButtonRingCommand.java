@@ -6,6 +6,7 @@ import frc.robot.utilities.ButtonRingController;
 
 public class CenterByButtonRingCommand extends CenterOnTargetCommand {
   ButtonRingController buttonRingController;
+  private final double clawOffset = 0.156;
 
   public CenterByButtonRingCommand(
       PoseEstimationSubsystem poseEstimationSubsystem,
@@ -18,7 +19,9 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
 
   @Override
   public void initialize() {
-    target = placeTarget(buttonRingController.getTagID(), buttonRingController.getxOffset());
+    target =
+        placeTarget(
+            buttonRingController.getTagID(), buttonRingController.getxOffset() + clawOffset);
     super.initialize();
   }
 }

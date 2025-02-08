@@ -2,6 +2,7 @@ package frc.robot.commands.driveCommands;
 
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -17,7 +18,7 @@ public class CenterOnTargetCommand extends Command {
   protected Pose2d target;
 
   private final PathConstraints constraints =
-      new PathConstraints(2, 3.0, Math.PI, Math.PI); // The constraints for this path.
+      new PathConstraints(2, 1.0, Math.PI, Math.PI); // The constraints for this path.
 
   private final double zDist = .8;
 
@@ -38,7 +39,10 @@ public class CenterOnTargetCommand extends Command {
   }
 
   Pose2d placeTarget(int targetID, double xOffset) {
-    Pose2d target = poseEstimationSubsystem.getTagPose(targetID).toPose2d();
+    Pose3d tmp = poseEstimationSubsystem.getTagPose(targetID);
+    if (tmp == null) return null;
+
+    target = tmp.toPose2d();
     Logger.recordOutput("target", target);
     target =
         new Pose2d(
@@ -56,6 +60,8 @@ public class CenterOnTargetCommand extends Command {
 
   @Override
   public void initialize() {
+    if (target == null) return;
+
     pathFind =
         new BetterPathfindingCommand(
             target,
@@ -72,6 +78,8 @@ public class CenterOnTargetCommand extends Command {
 
   @Override
   public boolean isFinished() {
+    if (target == null) return true;
+
     return poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation())
             < 0.1
         && Math.abs(
@@ -82,6 +90,6 @@ public class CenterOnTargetCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    pathFind.cancel();
+    if (pathFind != null) pathFind.cancel();
   }
 }

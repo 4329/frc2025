@@ -1,7 +1,5 @@
 package frc.robot.subsystems.lilih;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.GenericEntry;
@@ -158,9 +156,6 @@ public class LilihSubsystem extends SubsystemBase {
         lilihLog.tags[i].tX = fiducial.tx;
         lilihLog.tags[i].tY = fiducial.ty;
         lilihLog.tags[i].relativePose = fiducial.getCameraPose_TargetSpace();
-        Logger.recordOutput(
-            "acl/" + i,
-            AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField).getTagPose(i).get());
       } else {
         lilihLog.tags[i].tX = 0;
         lilihLog.tags[i].tY = 0;

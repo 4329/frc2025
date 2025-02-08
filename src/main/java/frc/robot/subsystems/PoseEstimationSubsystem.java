@@ -77,7 +77,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
   }
 
   public Pose3d getTagPose(int id) {
-    return aprilTagFieldLayout.getTagPose(id).get();
+    return aprilTagFieldLayout.getTagPose(id).orElse(null);
   }
 
   private void updateEstimation() {

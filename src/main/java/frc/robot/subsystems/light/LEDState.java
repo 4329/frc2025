@@ -19,21 +19,4 @@ public class LEDState {
 
   public static boolean targetVisible;
 
-  public static void log() {
-    Logger.recordOutput("LEDState/on", on);
-
-    Logger.recordOutput("LEDState/reefButton", reefButton);
-    Logger.recordOutput("LEDState/reefLevel", reefLevel);
-
-    Logger.recordOutput("LEDState/centerRunning", centerRunning);
-
-    Logger.recordOutput("LEDState/algeeWheelRunning", algeeWheelRunning);
-    Logger.recordOutput("LEDState/algeeWheelHolding", algeeWheelHolding);
-
-    Logger.recordOutput("LEDState/coralClawHolding", coralClawHolding);
-
-    Logger.recordOutput("LEDState/climbing", climbing);
-
-    Logger.recordOutput("LEDState/targetVisible", targetVisible);
-  }
 }

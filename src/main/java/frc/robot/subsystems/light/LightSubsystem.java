@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.model.LightLogAutoLogged;
+import frc.robot.model.LightLogEntry;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.light.ledAnimations.BeamsPattern;
 import frc.robot.subsystems.light.ledAnimations.CoutPattern;
@@ -24,7 +24,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
 
   private LEDAnimationNode currentAnimation;
 
-  private LightLogAutoLogged lightLogAutoLogged;
+  private LightLogEntry lightLogEntry;
 
   public LightSubsystem() {
     addressableLED = new AddressableLED(0);
@@ -40,7 +40,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
 
     currentAnimation = createGraph();
 
-    lightLogAutoLogged = new LightLogAutoLogged();
+	lightLogEntry = new LightLogEntry();
   }
 
   private LEDAnimationNode createGraph() {
@@ -90,14 +90,11 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
   @Override
   public void periodic() {
     resolveGraph();
-    
-    LEDState.log();
   }
 
   @Override
   public LoggableInputs log() {
-    lightLogAutoLogged.name = currentAnimation.name();
-
-    return lightLogAutoLogged;
+    lightLogEntry.name = currentAnimation.name();
+    return lightLogEntry;
   }
 }

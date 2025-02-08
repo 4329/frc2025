@@ -19,7 +19,6 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
-import frc.robot.commands.driveCommands.CenterOnTargetCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -85,11 +84,12 @@ public class RobotContainer {
     elevatorSubsystem = new ElevatorSubsystem();
     lightSubsystem = new LightSubsystem();
 
-    loggingSubsystem = new LoggingSubsystem(
-      poseEstimationSubsystem,
-      differentialArmSubsystem,
-      buttonRingController,
-      lightSubsystem);
+    loggingSubsystem =
+        new LoggingSubsystem(
+            poseEstimationSubsystem,
+            differentialArmSubsystem,
+            buttonRingController,
+            lightSubsystem);
 
     new CommandLoginator();
 

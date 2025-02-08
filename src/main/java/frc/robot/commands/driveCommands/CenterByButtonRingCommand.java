@@ -27,6 +27,6 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
 
   @Override
   public void end(boolean interrupted) {
-      LEDState.centerRunning = false;
+    LEDState.centerRunning = false;
   }
 }

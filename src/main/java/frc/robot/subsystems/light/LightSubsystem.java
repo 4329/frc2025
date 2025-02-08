@@ -10,12 +10,8 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LightLogEntry;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
-import frc.robot.subsystems.light.ledAnimations.BeamsPattern;
 import frc.robot.subsystems.light.ledAnimations.CoutPattern;
 import frc.robot.subsystems.light.ledAnimations.GrowPattern;
-import frc.robot.subsystems.light.ledAnimations.SinPattern;
-
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -40,29 +36,26 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
 
     currentAnimation = createGraph();
 
-	lightLogEntry = new LightLogEntry();
+    lightLogEntry = new LightLogEntry();
   }
 
   private LEDAnimationNode createGraph() {
     LEDAnimationNode idle =
         new LEDAnimationNode(
             (reader, writer) -> {
-            LEDPattern.rainbow(255, 255)
-                .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meter.of(1.0 / 120.0)).applyTo(reader, writer);
-                writer.setLED((int)(Math.random() * reader.getLength()), Color.kWhite);
+              LEDPattern.rainbow(255, 255)
+                  .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meter.of(1.0 / 120.0))
+                  .applyTo(reader, writer);
+              writer.setLED((int) (Math.random() * reader.getLength()), Color.kWhite);
             },
             new YesList(),
             "idle");
 
-    LEDAnimationNode centering = new LEDAnimationNode(
-        new CoutPattern(),
-        new YesList(),
-        "centering");
+    LEDAnimationNode centering =
+        new LEDAnimationNode(new CoutPattern(), new YesList(), "centering");
 
-    LEDAnimationNode targetVisible = new LEDAnimationNode(
-      new GrowPattern(),
-      new YesList(),
-      "targetVisible");
+    LEDAnimationNode targetVisible =
+        new LEDAnimationNode(new GrowPattern(), new YesList(), "targetVisible");
 
     idle.nextNodes().add(new LEDAnimationEdge(centering, () -> LEDState.centerRunning));
     centering.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.centerRunning));

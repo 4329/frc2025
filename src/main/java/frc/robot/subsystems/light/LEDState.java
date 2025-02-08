@@ -1,7 +1,5 @@
 package frc.robot.subsystems.light;
 
-import org.littletonrobotics.junction.Logger;
-
 public class LEDState {
   public static boolean on;
 
@@ -18,5 +16,4 @@ public class LEDState {
   public static boolean climbing;
 
   public static boolean targetVisible;
-
 }

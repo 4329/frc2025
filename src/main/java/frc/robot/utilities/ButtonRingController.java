@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import frc.robot.model.ButtonRingLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.light.LEDState;
-
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ButtonRingController extends CommandGenericHID implements LoggedSubsystem {

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.Mode;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
-import frc.robot.subsystems.swerve.drivetrain.DrivetrainReplay;
+import frc.robot.subsystems.swerve.drivetrain.DrivetrainFactory;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.SwerveAlignment;
 import java.io.File;
@@ -104,7 +104,7 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    drivetrain = new DrivetrainReplay();
+    drivetrain = DrivetrainFactory.makeDrivetrain();
     drivetrain.resetOdometry(new Pose2d());
 
     m_robotContainer = new RobotContainer(drivetrain);

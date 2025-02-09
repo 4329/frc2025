@@ -37,7 +37,7 @@ public class LilihSocket {
           .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener)
           .get();
     } catch (InterruptedException | ExecutionException e) {
-      System.out.println(e.getMessage());
+      e.printStackTrace();
     }
   }
 

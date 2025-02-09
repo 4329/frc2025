@@ -28,6 +28,6 @@ public class AlgeeWheelSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    LEDState.algeeWheelRunning = Math.abs(motor1.get()) != 0;
+    LEDState.algeeWheelRunning = motor1.get() != 0;
   }
 }

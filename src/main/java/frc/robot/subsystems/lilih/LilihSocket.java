@@ -17,35 +17,41 @@ public class LilihSocket {
 
   private WebsocketListener listener;
   private ObjectMapper objectMapper;
-  private boolean webSocketConnected;
-  int ip;
+  private int ip;
 
   public LilihSocket(int ip) {
-    HttpClient httpClient = HttpClient.newHttpClient();
-    listener = new WebsocketListener();
-    new Thread(
-            () -> {
-              try {
-                httpClient
-                    .newWebSocketBuilder()
-                    .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener)
-                    .get();
-                webSocketConnected = true;
-              } catch (InterruptedException | ExecutionException e) {
-                System.out.println(e.getMessage());
-              }
-            })
-        .start();
+    this.ip = ip;
+
+    createSocket();
+
     objectMapper = new ObjectMapper();
     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 
+  private void createSocket() {
+    HttpClient httpClient = HttpClient.newHttpClient();
+    listener = new WebsocketListener();
+    try {
+      httpClient
+          .newWebSocketBuilder()
+          .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener)
+          .get();
+    } catch (InterruptedException | ExecutionException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public boolean isConnected() {
+    return listener.isReceivingMessages();
+  }
+
   public LimelightHelpers.Results getResults() {
-    if (!webSocketConnected) return new LimelightHelpers.Results();
+    if (!isConnected()) {
+      return new LimelightHelpers.Results();
+    }
 
     try {
-      String asdfs = listener.getOutput();
-      return objectMapper.readValue(asdfs, LimelightHelpers.Results.class);
+      return objectMapper.readValue(listener.getOutput(), LimelightHelpers.Results.class);
     } catch (JsonProcessingException e) {
       System.err.println("lljson error: " + e.getMessage());
       return new LimelightHelpers.Results();

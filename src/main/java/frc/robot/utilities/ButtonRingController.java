@@ -3,6 +3,7 @@ package frc.robot.utilities;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import frc.robot.model.ButtonRingLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
+import frc.robot.subsystems.light.LEDState;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ButtonRingController extends CommandGenericHID implements LoggedSubsystem {
@@ -23,6 +24,8 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
               else if (getRawAxis(0) == -1) level = 4;
               else if (getRawAxis(1) == 1) level = 2;
               else if (getRawAxis(1) == -1) level = 1;
+
+              LEDState.reefLevel = level;
             })
         .repeatedly()
         .ignoringDisable(true)
@@ -36,6 +39,8 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                   () -> {
                     xOffset = why % 2 == 0 ? OFFSET_AMOUNT : -OFFSET_AMOUNT;
                     tagID = AprilTagUtil.getReef((why % 12) / 2);
+
+                    LEDState.reefButton = why;
                   }));
     }
 

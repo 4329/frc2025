@@ -4,7 +4,6 @@ import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
-import org.littletonrobotics.junction.Logger;
 
 public class CenterByButtonRingCommand extends CenterOnTargetCommand {
   ButtonRingController buttonRingController;

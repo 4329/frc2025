@@ -145,8 +145,8 @@ public class RobotContainer {
     driverController.leftBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> algeePivotSubsystem.run(-1))));
     driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
-
       () -> algeePivotSubsystem.run(1))));
+
     driverController.a().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
     driverController.b().onTrue(new InstantCommand(() -> driveByController.toggleFieldOrient()));
 

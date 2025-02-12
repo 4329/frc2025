@@ -10,141 +10,141 @@ import frc.robot.utilities.FieldRelativeSpeed;
 
 public class DrivetrainReplay implements Drivetrain {
 
-  @Override
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {}
+    @Override
+    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {}
 
-  @Override
-  public void periodic() {}
+    @Override
+    public void periodic() {}
 
-  @Override
-  public void setModuleStates(SwerveModuleState[] desiredStates) {}
+    @Override
+    public void setModuleStates(SwerveModuleState[] desiredStates) {}
 
-  @Override
-  public void setModuleStates(ChassisSpeeds chassisSpeeds) {}
+    @Override
+    public void setModuleStates(ChassisSpeeds chassisSpeeds) {}
 
-  @Override
-  public void stop() {}
+    @Override
+    public void stop() {}
 
-  @Override
-  public void updateOdometry() {}
+    @Override
+    public void updateOdometry() {}
 
-  @Override
-  public Rotation2d getGyro() {
+    @Override
+    public Rotation2d getGyro() {
 
-    return new Rotation2d();
-  }
+        return new Rotation2d();
+    }
 
-  @Override
-  public FieldRelativeSpeed getRelativeSpeed() {
+    @Override
+    public FieldRelativeSpeed getRelativeSpeed() {
 
-    return new FieldRelativeSpeed();
-  }
+        return new FieldRelativeSpeed();
+    }
 
-  @Override
-  public FieldRelativeAccel getRelativeAccel() {
+    @Override
+    public FieldRelativeAccel getRelativeAccel() {
 
-    return new FieldRelativeAccel();
-  }
+        return new FieldRelativeAccel();
+    }
 
-  @Override
-  public void setNesss(Pose2d set) {}
+    @Override
+    public void setNesss(Pose2d set) {}
 
-  @Override
-  public Pose2d jgetNesss() {
+    @Override
+    public Pose2d jgetNesss() {
 
-    return new Pose2d();
-  }
+        return new Pose2d();
+    }
 
-  @Override
-  public Pose2d getPose() {
+    @Override
+    public Pose2d getPose() {
 
-    return new Pose2d();
-  }
+        return new Pose2d();
+    }
 
-  @Override
-  public void resetOdometry(Pose2d pose) {}
+    @Override
+    public void resetOdometry(Pose2d pose) {}
 
-  @Override
-  public void setPose(Pose2d pose) {}
+    @Override
+    public void setPose(Pose2d pose) {}
 
-  @Override
-  public ChassisSpeeds getChassisSpeed() {
+    @Override
+    public ChassisSpeeds getChassisSpeed() {
 
-    return new ChassisSpeeds();
-  }
+        return new ChassisSpeeds();
+    }
 
-  @Override
-  public double getFrontLeftAngle() {
+    @Override
+    public double getFrontLeftAngle() {
 
-    return 0;
-  }
+        return 0;
+    }
 
-  @Override
-  public double getFrontRightAngle() {
+    @Override
+    public double getFrontRightAngle() {
 
-    return 0;
-  }
+        return 0;
+    }
 
-  @Override
-  public double getBackLeftAngle() {
+    @Override
+    public double getBackLeftAngle() {
 
-    return 0;
-  }
+        return 0;
+    }
 
-  @Override
-  public double getBackRightAngle() {
+    @Override
+    public double getBackRightAngle() {
 
-    return 0;
-  }
+        return 0;
+    }
 
-  @Override
-  public void brakeMode() {}
+    @Override
+    public void brakeMode() {}
 
-  @Override
-  public void coastMode() {}
+    @Override
+    public void coastMode() {}
 
-  @Override
-  public void lock() {}
+    @Override
+    public void lock() {}
 
-  @Override
-  public void unlock() {}
+    @Override
+    public void unlock() {}
 
-  @Override
-  public SwerveModulePosition[] getModulePositions() {
+    @Override
+    public SwerveModulePosition[] getModulePositions() {
 
-    return new SwerveModulePosition[] {
-      new SwerveModulePosition(),
-      new SwerveModulePosition(),
-      new SwerveModulePosition(),
-      new SwerveModulePosition()
-    };
-  }
+        return new SwerveModulePosition[] {
+            new SwerveModulePosition(),
+            new SwerveModulePosition(),
+            new SwerveModulePosition(),
+            new SwerveModulePosition()
+        };
+    }
 
-  @Override
-  public SwerveModuleState[] getModuleStates() {
+    @Override
+    public SwerveModuleState[] getModuleStates() {
 
-    return new SwerveModuleState[] {
-      new SwerveModuleState(),
-      new SwerveModuleState(),
-      new SwerveModuleState(),
-      new SwerveModuleState()
-    };
-  }
+        return new SwerveModuleState[] {
+            new SwerveModuleState(),
+            new SwerveModuleState(),
+            new SwerveModuleState(),
+            new SwerveModuleState()
+        };
+    }
 
-  @Override
-  public double getRoll() {
+    @Override
+    public double getRoll() {
 
-    return 0;
-  }
+        return 0;
+    }
 
-  @Override
-  public double getOffsetRoll() {
+    @Override
+    public double getOffsetRoll() {
 
-    return 0;
-  }
+        return 0;
+    }
 
-  @Override
-  public double getYaw() {
-    return 0;
-  }
+    @Override
+    public double getYaw() {
+        return 0;
+    }
 }

@@ -12,30 +12,30 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.SparkFactory;
 
 public class AlgeePivotSubsystem extends SubsystemBase {
-  SparkMax motor;
-  SparkBaseConfig config;
-  SparkClosedLoopController sparkClosedLoopController;
+    SparkMax motor;
+    SparkBaseConfig config;
+    SparkClosedLoopController sparkClosedLoopController;
 
-  public AlgeePivotSubsystem() {
-    motor = SparkFactory.createSparkMax(15);
-    config =
-        new SparkMaxConfig()
-            .apply(
-                new SoftLimitConfig()
-                    .forwardSoftLimit(-100)
-                    .forwardSoftLimitEnabled(true)
-                    .reverseSoftLimit(100)
-                    .reverseSoftLimitEnabled(true));
-    motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    public AlgeePivotSubsystem() {
+        motor = SparkFactory.createSparkMax(15);
+        config =
+                new SparkMaxConfig()
+                        .apply(
+                                new SoftLimitConfig()
+                                        .forwardSoftLimit(-100)
+                                        .forwardSoftLimitEnabled(true)
+                                        .reverseSoftLimit(100)
+                                        .reverseSoftLimitEnabled(true));
+        motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-    sparkClosedLoopController = motor.getClosedLoopController();
-  }
+        sparkClosedLoopController = motor.getClosedLoopController();
+    }
 
-  public void setSetpoint(double setpoint) {
-    sparkClosedLoopController.setReference(setpoint, ControlType.kMAXMotionPositionControl);
-  }
+    public void setSetpoint(double setpoint) {
+        sparkClosedLoopController.setReference(setpoint, ControlType.kMAXMotionPositionControl);
+    }
 
-  public void run(double speed) {
-    setSetpoint(motor.getEncoder().getPosition() + speed);
-  }
+    public void run(double speed) {
+        setSetpoint(motor.getEncoder().getPosition() + speed);
+    }
 }

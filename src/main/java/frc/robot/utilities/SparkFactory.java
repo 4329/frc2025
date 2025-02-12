@@ -10,33 +10,33 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class SparkFactory {
 
-  public static SparkMax createSparkMax(int id) {
+    public static SparkMax createSparkMax(int id) {
 
-    return createSparkMax(id, false);
-  }
+        return createSparkMax(id, false);
+    }
 
-  public static SparkMax createSparkMax(int id, Boolean flipSparkMax) {
-    return createSparkMax(id, flipSparkMax, false);
-  }
+    public static SparkMax createSparkMax(int id, Boolean flipSparkMax) {
+        return createSparkMax(id, flipSparkMax, false);
+    }
 
-  public static SparkMax createSparkMax(int id, Boolean flipSparkMax, boolean resetted) {
-    // something to the effect of we experimented with burn flash and reset to
-    // factory defaults, and it caused the drive motors to go bonkers
-    SparkMax canToMake = new SparkMax(id, MotorType.kBrushless);
-    SparkMaxConfig config = new SparkMaxConfig();
-    config
-        .apply(new SoftLimitConfig().forwardSoftLimitEnabled(false).reverseSoftLimitEnabled(false))
-        .idleMode(IdleMode.kBrake)
-        .disableFollowerMode()
-        .inverted(false);
+    public static SparkMax createSparkMax(int id, Boolean flipSparkMax, boolean resetted) {
+        // something to the effect of we experimented with burn flash and reset to
+        // factory defaults, and it caused the drive motors to go bonkers
+        SparkMax canToMake = new SparkMax(id, MotorType.kBrushless);
+        SparkMaxConfig config = new SparkMaxConfig();
+        config
+                .apply(new SoftLimitConfig().forwardSoftLimitEnabled(false).reverseSoftLimitEnabled(false))
+                .idleMode(IdleMode.kBrake)
+                .disableFollowerMode()
+                .inverted(false);
 
-    canToMake.getEncoder().setPosition(0);
+        canToMake.getEncoder().setPosition(0);
 
-    canToMake.configure(
-        config,
-        resetted ? ResetMode.kResetSafeParameters : ResetMode.kNoResetSafeParameters,
-        PersistMode.kPersistParameters);
+        canToMake.configure(
+                config,
+                resetted ? ResetMode.kResetSafeParameters : ResetMode.kNoResetSafeParameters,
+                PersistMode.kPersistParameters);
 
-    return canToMake;
-  }
+        return canToMake;
+    }
 }

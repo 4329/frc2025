@@ -6,29 +6,29 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LoggingSubsystem extends SubsystemBase {
 
-  private LoggedSubsystem[] subsystems;
-  private boolean isEven;
-  private int timer;
+    private LoggedSubsystem[] subsystems;
+    private boolean isEven;
+    private int timer;
 
-  public LoggingSubsystem(LoggedSubsystem... subsystems) {
-    this.subsystems = subsystems;
-  }
-
-  @Override
-  public void periodic() {
-    timer++;
-
-    if (timer % 3 == 0) {
-      for (int i = isEven ? 0 : 1; i < subsystems.length; i += 2) {
-        String name = subsystems[i].getClass().getSimpleName();
-        Logger.processInputs(name, subsystems[i].log());
-      }
-      isEven = !isEven;
+    public LoggingSubsystem(LoggedSubsystem... subsystems) {
+        this.subsystems = subsystems;
     }
-  }
 
-  public static interface LoggedSubsystem {
+    @Override
+    public void periodic() {
+        timer++;
 
-    public LoggableInputs log();
-  }
+        if (timer % 3 == 0) {
+            for (int i = isEven ? 0 : 1; i < subsystems.length; i += 2) {
+                String name = subsystems[i].getClass().getSimpleName();
+                Logger.processInputs(name, subsystems[i].log());
+            }
+            isEven = !isEven;
+        }
+    }
+
+    public static interface LoggedSubsystem {
+
+        public LoggableInputs log();
+    }
 }

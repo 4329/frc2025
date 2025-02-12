@@ -7,17 +7,17 @@ import org.littletonrobotics.junction.Logger;
 
 public class CommandConsumingLogger implements Consumer<Command> {
 
-  private final String message;
-  private final CommandLogEntry commandLogEntry;
+    private final String message;
+    private final CommandLogEntry commandLogEntry;
 
-  public CommandConsumingLogger(String message, CommandLogEntry commandLogEntry) {
-    this.message = message;
-    this.commandLogEntry = commandLogEntry;
-  }
+    public CommandConsumingLogger(String message, CommandLogEntry commandLogEntry) {
+        this.message = message;
+        this.commandLogEntry = commandLogEntry;
+    }
 
-  @Override
-  public void accept(Command command) {
-    commandLogEntry.set(command.getName(), message);
-    Logger.processInputs("Command", commandLogEntry);
-  }
+    @Override
+    public void accept(Command command) {
+        commandLogEntry.set(command.getName(), message);
+        Logger.processInputs("Command", commandLogEntry);
+    }
 }

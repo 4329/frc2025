@@ -1,4 +1,4 @@
-package frc.robot.utilities;
+package frc.robot.utilities.shufflebored;
 
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;

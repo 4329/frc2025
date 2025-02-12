@@ -71,6 +71,7 @@ public class RobotContainer {
 
     driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
     buttonRingController = new ButtonRingController(OIConstants.kOperatorControllerPort);
+    Shuffleboard.getTab("RobotData").add("Octagon", buttonRingController);
 
     driveByController = new DriveByController(drivetrain, driverController);
     m_robotDrive.setDefaultCommand(driveByController);

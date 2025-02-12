@@ -4,11 +4,19 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import frc.robot.model.ButtonRingLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.light.LEDState;
+
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class ButtonRingController extends CommandGenericHID implements LoggedSubsystem {
-  private double xOffset;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+
+public class ButtonRingController extends CommandGenericHID implements LoggedSubsystem, Sendable {
   private int level;
+
+  private double xOffset;
+  private int button;
   private int tagID;
 
   ButtonRingLogAutoLogged buttonRingLogAutoLogged;
@@ -30,13 +38,15 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
         .repeatedly()
         .ignoringDisable(true)
         .schedule();
-
+        
     for (int i = 1; i <= 12; i++) {
       final int why = i;
       button(i)
           .onTrue(
               new UnInstantCommand(
                   () -> {
+                    button = why;
+
                     xOffset = why % 2 == 0 ? OFFSET_AMOUNT : -OFFSET_AMOUNT;
                     tagID = AprilTagUtil.getReef((why % 12) / 2);
 
@@ -65,5 +75,12 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
 
   public int getTagID() {
     return tagID;
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.setSmartDashboardType("Octagon");
+    builder.addIntegerProperty("button", () -> button, (a) -> button = (int)a);
+    builder.addIntegerProperty("level", this::getLevel, (a) -> level = (int)a);
   }
 }

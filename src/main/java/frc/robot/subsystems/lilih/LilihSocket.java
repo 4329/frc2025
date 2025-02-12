@@ -31,14 +31,9 @@ public class LilihSocket {
   private void createSocket() {
     HttpClient httpClient = HttpClient.newHttpClient();
     listener = new WebsocketListener();
-    try {
-      httpClient
-          .newWebSocketBuilder()
-          .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener)
-          .get();
-    } catch (InterruptedException | ExecutionException e) {
-      e.printStackTrace();
-    }
+    httpClient
+        .newWebSocketBuilder()
+        .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener);
   }
 
   public boolean isConnected() {

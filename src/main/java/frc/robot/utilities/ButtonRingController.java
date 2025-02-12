@@ -41,24 +41,26 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
             button(i)
                     .onTrue(
                             new UnInstantCommand(
-                                    () -> {
-                                        button = why;
+                                            () -> {
+                                                button = why;
 
-                                        xOffset = why % 2 == 0 ? OFFSET_AMOUNT : -OFFSET_AMOUNT;
-                                        tagID = AprilTagUtil.getReef((why % 12) / 2);
+                                                xOffset = why % 2 == 0 ? OFFSET_AMOUNT : -OFFSET_AMOUNT;
+                                                tagID = AprilTagUtil.getReef((why % 12) / 2);
 
-                                        LEDState.reefButton = why;
-                                    }));
+                                                LEDState.reefButton = why;
+                                            })
+                                    .ignoringDisable(true));
             button(i)
                     .onFalse(
                             new UnInstantCommand(
-                                    () -> {
-                                        if (button == why) {
-                                            button = -1;
-                                            xOffset = 0;
-                                            tagID = 0;
-                                        }
-                                    }));
+                                            () -> {
+                                                if (button == why) {
+                                                    button = -1;
+                                                    xOffset = 0;
+                                                    tagID = 0;
+                                                }
+                                            })
+                                    .ignoringDisable(true));
         }
 
         buttonRingLogAutoLogged = new ButtonRingLogAutoLogged();

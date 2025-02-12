@@ -14,41 +14,41 @@ import java.net.http.HttpClient;
 
 public class LilihSocket {
 
-  private WebsocketListener listener;
-  private ObjectMapper objectMapper;
-  private int ip;
+    private WebsocketListener listener;
+    private ObjectMapper objectMapper;
+    private int ip;
 
-  public LilihSocket(int ip) {
-    this.ip = ip;
+    public LilihSocket(int ip) {
+        this.ip = ip;
 
-    createSocket();
+        createSocket();
 
-    objectMapper = new ObjectMapper();
-    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-  }
-
-  private void createSocket() {
-    HttpClient httpClient = HttpClient.newHttpClient();
-    listener = new WebsocketListener();
-    httpClient
-        .newWebSocketBuilder()
-        .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener);
-  }
-
-  public boolean isConnected() {
-    return listener.isReceivingMessages();
-  }
-
-  public LimelightHelpers.Results getResults() {
-    if (!isConnected()) {
-      return new LimelightHelpers.Results();
+        objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    try {
-      return objectMapper.readValue(listener.getOutput(), LimelightHelpers.Results.class);
-    } catch (JsonProcessingException e) {
-      System.err.println("lljson error: " + e.getMessage());
-      return new LimelightHelpers.Results();
+    private void createSocket() {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        listener = new WebsocketListener();
+        httpClient
+                .newWebSocketBuilder()
+                .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener);
     }
-  }
+
+    public boolean isConnected() {
+        return listener.isReceivingMessages();
+    }
+
+    public LimelightHelpers.Results getResults() {
+        if (!isConnected()) {
+            return new LimelightHelpers.Results();
+        }
+
+        try {
+            return objectMapper.readValue(listener.getOutput(), LimelightHelpers.Results.class);
+        } catch (JsonProcessingException e) {
+            System.err.println("lljson error: " + e.getMessage());
+            return new LimelightHelpers.Results();
+        }
+    }
 }

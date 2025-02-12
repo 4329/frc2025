@@ -15,79 +15,79 @@ import frc.robot.subsystems.light.ledAnimations.GrowPattern;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
-  AddressableLED addressableLED;
-  AddressableLEDBuffer addressableLEDBuffer;
+    AddressableLED addressableLED;
+    AddressableLEDBuffer addressableLEDBuffer;
 
-  private LEDAnimationNode currentAnimation;
+    private LEDAnimationNode currentAnimation;
 
-  private LightLogEntry lightLogEntry;
+    private LightLogEntry lightLogEntry;
 
-  public LightSubsystem() {
-    addressableLED = new AddressableLED(0);
-    addressableLEDBuffer = new AddressableLEDBuffer(60);
+    public LightSubsystem() {
+        addressableLED = new AddressableLED(0);
+        addressableLEDBuffer = new AddressableLEDBuffer(60);
 
-    addressableLED.setLength(addressableLEDBuffer.getLength());
-    addressableLED.setData(addressableLEDBuffer);
-    addressableLED.start();
+        addressableLED.setLength(addressableLEDBuffer.getLength());
+        addressableLED.setData(addressableLEDBuffer);
+        addressableLED.start();
 
-    LEDPattern teal = LEDPattern.solid(Color.kTeal);
-    teal.applyTo(addressableLEDBuffer);
-    addressableLED.setData(addressableLEDBuffer);
+        LEDPattern teal = LEDPattern.solid(Color.kTeal);
+        teal.applyTo(addressableLEDBuffer);
+        addressableLED.setData(addressableLEDBuffer);
 
-    currentAnimation = createGraph();
+        currentAnimation = createGraph();
 
-    lightLogEntry = new LightLogEntry();
-  }
+        lightLogEntry = new LightLogEntry();
+    }
 
-  private LEDAnimationNode createGraph() {
-    LEDAnimationNode idle =
-        new LEDAnimationNode(
-            (reader, writer) -> {
-              LEDPattern.rainbow(255, 255)
-                  .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meter.of(1.0 / 120.0))
-                  .applyTo(reader, writer);
-              writer.setLED((int) (Math.random() * reader.getLength()), Color.kWhite);
-            },
-            new YesList(),
-            "idle");
+    private LEDAnimationNode createGraph() {
+        LEDAnimationNode idle =
+                new LEDAnimationNode(
+                        (reader, writer) -> {
+                            LEDPattern.rainbow(255, 255)
+                                    .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meter.of(1.0 / 120.0))
+                                    .applyTo(reader, writer);
+                            writer.setLED((int) (Math.random() * reader.getLength()), Color.kWhite);
+                        },
+                        new YesList(),
+                        "idle");
 
-    LEDAnimationNode centering =
-        new LEDAnimationNode(new CoutPattern(), new YesList(), "centering");
+        LEDAnimationNode centering =
+                new LEDAnimationNode(new CoutPattern(), new YesList(), "centering");
 
-    LEDAnimationNode targetVisible =
-        new LEDAnimationNode(new GrowPattern(), new YesList(), "targetVisible");
+        LEDAnimationNode targetVisible =
+                new LEDAnimationNode(new GrowPattern(), new YesList(), "targetVisible");
 
-    idle.nextNodes().add(new LEDAnimationEdge(centering, () -> LEDState.centerRunning));
-    centering.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.centerRunning));
+        idle.nextNodes().add(new LEDAnimationEdge(centering, () -> LEDState.centerRunning));
+        centering.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.centerRunning));
 
-    idle.nextNodes().add(new LEDAnimationEdge(targetVisible, () -> LEDState.targetVisible));
-    targetVisible.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.targetVisible));
+        idle.nextNodes().add(new LEDAnimationEdge(targetVisible, () -> LEDState.targetVisible));
+        targetVisible.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.targetVisible));
 
-    return idle;
-  }
+        return idle;
+    }
 
-  private void resolveGraph() {
-    currentAnimation
-        .nextNodes()
-        .forEach(
-            x -> {
-              if (x.transfer().get()) {
-                currentAnimation = x.node();
-              }
-            });
+    private void resolveGraph() {
+        currentAnimation
+                .nextNodes()
+                .forEach(
+                        x -> {
+                            if (x.transfer().get()) {
+                                currentAnimation = x.node();
+                            }
+                        });
 
-    currentAnimation.head().applyTo(addressableLEDBuffer);
-    addressableLED.setData(addressableLEDBuffer);
-  }
+        currentAnimation.head().applyTo(addressableLEDBuffer);
+        addressableLED.setData(addressableLEDBuffer);
+    }
 
-  @Override
-  public void periodic() {
-    resolveGraph();
-  }
+    @Override
+    public void periodic() {
+        resolveGraph();
+    }
 
-  @Override
-  public LoggableInputs log() {
-    lightLogEntry.name = currentAnimation.name();
-    return lightLogEntry;
-  }
+    @Override
+    public LoggableInputs log() {
+        lightLogEntry.name = currentAnimation.name();
+        return lightLogEntry;
+    }
 }

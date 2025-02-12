@@ -28,6 +28,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                             else if (getRawAxis(0) == -1) level = 4;
                             else if (getRawAxis(1) == 1) level = 2;
                             else if (getRawAxis(1) == -1) level = 1;
+                            else level = 0;
 
                             LEDState.reefLevel = level;
                         })
@@ -47,6 +48,16 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                                         tagID = AprilTagUtil.getReef((why % 12) / 2);
 
                                         LEDState.reefButton = why;
+                                    }));
+            button(i)
+                    .onFalse(
+                            new UnInstantCommand(
+                                    () -> {
+                                        if (button == why) {
+                                            button = -1;
+                                            xOffset = 0;
+                                            tagID = 0;
+                                        }
                                     }));
         }
 

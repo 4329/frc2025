@@ -48,7 +48,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                                         tagID = AprilTagUtil.getReef((why % 12) / 2);
 
                                         LEDState.reefButton = why;
-                                    }));
+                                    }).ignoringDisable(true));
             button(i)
                     .onFalse(
                             new UnInstantCommand(
@@ -58,7 +58,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                                             xOffset = 0;
                                             tagID = 0;
                                         }
-                                    }));
+                                    }).ignoringDisable(true));
         }
 
         buttonRingLogAutoLogged = new ButtonRingLogAutoLogged();

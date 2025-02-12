@@ -1,16 +1,12 @@
 package frc.robot.utilities;
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import frc.robot.model.ButtonRingLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.light.LEDState;
-
 import org.littletonrobotics.junction.inputs.LoggableInputs;
-
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 public class ButtonRingController extends CommandGenericHID implements LoggedSubsystem, Sendable {
   private int level;
@@ -38,7 +34,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
         .repeatedly()
         .ignoringDisable(true)
         .schedule();
-        
+
     for (int i = 1; i <= 12; i++) {
       final int why = i;
       button(i)
@@ -80,7 +76,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Octagon");
-    builder.addIntegerProperty("button", () -> button, (a) -> button = (int)a);
-    builder.addIntegerProperty("level", this::getLevel, (a) -> level = (int)a);
+    builder.addIntegerProperty("button", () -> button, (a) -> button = (int) a);
+    builder.addIntegerProperty("level", this::getLevel, (a) -> level = (int) a);
   }
 }

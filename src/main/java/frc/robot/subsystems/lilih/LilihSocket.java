@@ -11,7 +11,6 @@ import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.WebsocketListener;
 import java.net.URI;
 import java.net.http.HttpClient;
-import java.util.concurrent.ExecutionException;
 
 public class LilihSocket {
 

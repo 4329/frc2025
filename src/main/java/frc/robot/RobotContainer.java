@@ -144,11 +144,6 @@ public class RobotContainer {
     driverController.rightTrigger(0.01).whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> elevatorSubsystem.runElevator(driverController.getRightTriggerAxis()))));
 
-    driverController.leftBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
-      () -> algeePivotSubsystem.run(-1))));
-    driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
-      () -> algeePivotSubsystem.run(1))));
-
     driverController.a().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
     driverController.b().onTrue(new InstantCommand(() -> driveByController.toggleFieldOrient()));
 	driverController.x().onTrue(new ToggleCommand(new ToggleAlgeeWheelCommand(algeeWheelSubsystem)));

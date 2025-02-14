@@ -15,6 +15,7 @@ public class ToggleCommand extends Command {
 	public void initialize() {
 		if (on) child.cancel();
 		else child.schedule();
+
 		on = !on;
 
 	}

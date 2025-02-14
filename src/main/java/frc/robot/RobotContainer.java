@@ -19,6 +19,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
+import frc.robot.commands.algeeWheelCommands.ToggleAlgeeWheelCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -32,6 +33,7 @@ import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CommandLoginator;
 import frc.robot.utilities.UnInstantCommand;
+import frc.robot.utilities.ToggleCommand;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +73,7 @@ public class RobotContainer {
 
         driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
         buttonRingController = new ButtonRingController(OIConstants.kOperatorControllerPort);
-        Shuffleboard.getTab("RobotData").add("Octagon", buttonRingController);
+        Shuffleboard.getTab("RobotData").add("Octagon", buttonRingController).withPosition(4, 0).withSize(3, 2);
 
         driveByController = new DriveByController(drivetrain, driverController);
         m_robotDrive.setDefaultCommand(driveByController);
@@ -149,6 +151,7 @@ public class RobotContainer {
 
     driverController.a().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
     driverController.b().onTrue(new InstantCommand(() -> driveByController.toggleFieldOrient()));
+	driverController.x().onTrue(new ToggleCommand(new ToggleAlgeeWheelCommand(algeeWheelSubsystem)));
 
     driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
     driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));

@@ -146,7 +146,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
         SwerveModuleState[] swerveModuleStates =
                 DriveConstants.kDriveKinematics.toSwerveModuleStates(
                         fieldRelative
-                                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, ahrs.getRotation2d())
+                                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyro())
                                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
         // normalize wheel speeds so all individual states are scaled to achievable
@@ -174,6 +174,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
         getPose();
 
         log.states = getModuleStates();
+        log.offset = offset;
 
         Logger.processInputs("Drivetrain", log);
     }
@@ -293,7 +294,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
     @Override
     public void resetOdometry(Pose2d pose) {
         // ahrs.reset();
-        offset = getRawGyro().plus(pose.getRotation()).getRadians();
+        offset = -getRawGyro().plus(pose.getRotation()).getRadians();
         keepAngle = getGyro().getRadians();
         m_odometry.resetPosition(ahrs.getRotation2d(), getModulePositions(), pose);
     }

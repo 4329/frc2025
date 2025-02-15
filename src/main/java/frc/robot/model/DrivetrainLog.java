@@ -6,4 +6,5 @@ import org.littletonrobotics.junction.AutoLog;
 @AutoLog
 public class DrivetrainLog {
     public SwerveModuleState[] states;
+    public double offset;
 }

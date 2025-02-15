@@ -28,6 +28,10 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     private final Drivetrain drivetrain;
     private final LilihSubsystem lilihSubsystem;
     private SwerveDrivePoseEstimator estimator;
+
+    private Rotation2d rotOffset;
+    private boolean initialed;
+
     private Field2d field = new Field2d();
     private Pose2d pathPlannerPose = new Pose2d();
 
@@ -72,6 +76,8 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                         drivetrain.getRawGyro(),
                         drivetrain.getModulePositions(),
                         initialPose);
+        rotOffset = initialPose.getRotation().minus(drivetrain.getRawGyro());
+        initialed = true;
     }
 
     public Pose2d getPose() {
@@ -83,16 +89,25 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     }
 
     private void updateEstimation() {
-        estimator.update(drivetrain.getGyro(), drivetrain.getModulePositions());
+        estimator.update(drivetrain.getRawGyro(), drivetrain.getModulePositions());
 
-        Logger.recordOutput("raw", drivetrain.getRawGyro());
         lilihSubsystem.addYawMeasurement(
-                drivetrain.getRawGyro().getDegrees()
-                        + (Alliance.Red.equals(DriverStation.getAlliance().orElse(null)) ? 180 : 0));
+                drivetrain
+                        .getRawGyro()
+                        .plus(
+                                new Rotation2d(
+                                        Alliance.Red.equals(DriverStation.getAlliance().orElse(null)) ? Math.PI : 0))
+                        .plus(initialed ? rotOffset : new Rotation2d())
+                        .getDegrees());
         if (lilihSubsystem.seeingAnything()) {
-            PoseEstimate poseEstimate = lilihSubsystem.getRobotPose_megaTag2();
+            PoseEstimate poseEstimate =
+                    initialed ? lilihSubsystem.getRobotPose_megaTag2() : lilihSubsystem.getRobotPose();
             if (poseEstimate.rawFiducials.length > 0 && poseEstimate.rawFiducials[0].ambiguity < .7) {
                 estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
+                if (!initialed) {
+                    rotOffset = poseEstimate.pose.getRotation().minus(drivetrain.getRawGyro());
+                    initialed = true;
+                }
             }
         }
     }

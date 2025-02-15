@@ -28,7 +28,6 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     private SwerveDrivePoseEstimator estimator;
 
     private Rotation2d rotOffset;
-    private boolean initialed;
 
     private Field2d field = new Field2d();
     private Pose2d pathPlannerPose = new Pose2d();
@@ -75,7 +74,6 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                         drivetrain.getModulePositions(),
                         initialPose);
         rotOffset = initialPose.getRotation().minus(drivetrain.getRawGyro());
-        initialed = true;
     }
 
     public Pose2d getPose() {
@@ -90,13 +88,13 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         estimator.update(drivetrain.getRawGyro(), drivetrain.getModulePositions());
 
         lilihSubsystem.addYawMeasurement(
-                drivetrain.getRawGyro().plus(initialed ? rotOffset : new Rotation2d()).getDegrees());
+                drivetrain.getRawGyro().plus(rotOffset != null ? rotOffset : new Rotation2d()).getDegrees());
         if (lilihSubsystem.seeingAnything()) {
             PoseEstimate poseEstimate =
-                    initialed ? lilihSubsystem.getRobotPose_megaTag2() : lilihSubsystem.getRobotPose();
+                    rotOffset != null ? lilihSubsystem.getRobotPose_megaTag2() : lilihSubsystem.getRobotPose();
             if (poseEstimate.rawFiducials.length > 0 && poseEstimate.rawFiducials[0].ambiguity < .7) {
                 estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
-                if (!initialed) {
+                if (rotOffset == null) {
                     setInitialPose(
                             new Pose2d(poseEstimate.pose.getTranslation(), poseEstimate.pose.getRotation()));
                 }
@@ -111,12 +109,12 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
     @Override
     public LoggableInputs log() {
+		poseEstimationLogAutoLogged.rotOffset = rotOffset;
+
         poseEstimationLogAutoLogged.combined = getPose();
         poseEstimationLogAutoLogged.limOnly = lilihSubsystem.getRobotPose().pose;
         poseEstimationLogAutoLogged.driveOnly = drivetrain.getPose();
         poseEstimationLogAutoLogged.pathPlannerPosy = pathPlannerPose;
-        Logger.recordOutput("zero", new Pose2d());
-        Logger.recordOutput("zeroes", new Pose3d[] {});
         return poseEstimationLogAutoLogged;
     }
 }

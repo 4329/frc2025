@@ -61,13 +61,17 @@ public class LilihSubsystem extends SubsystemBase {
         return getFiducial(id).getRobotPose_FieldSpace2D();
     }
 
+    public PoseEstimate getRobotPose() {
+        return LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightHelpNetworkTableName);
+    }
+
     /**
      * Pose calculated with all markers
      *
      * @return Pose
      */
-    public PoseEstimate getRobotPose() {
-        return LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightHelpNetworkTableName);
+    public PoseEstimate getRobotPose_megaTag2() {
+        return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightHelpNetworkTableName);
     }
 
     public Pose3d getRobotPoseInTargetSpace(int id) {
@@ -160,5 +164,9 @@ public class LilihSubsystem extends SubsystemBase {
 
     public double getTargetX(int id) {
         return getFiducial(id).tx;
+    }
+
+    public void addYawMeasurement(double yaw) {
+        LimelightHelpers.SetRobotOrientation(limelightHelpNetworkTableName, yaw, 0, 0, 0, 0, 0);
     }
 }

@@ -5,8 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.utilities.FieldRelativeAccel;
-import frc.robot.utilities.FieldRelativeSpeed;
 
 public class DrivetrainReplay implements Drivetrain {
 
@@ -29,30 +27,18 @@ public class DrivetrainReplay implements Drivetrain {
     public void updateOdometry() {}
 
     @Override
+    public void setInitialRotation(double initial) {}
+
+    @Override
     public Rotation2d getGyro() {
 
         return new Rotation2d();
     }
 
     @Override
-    public FieldRelativeSpeed getRelativeSpeed() {
+    public Rotation2d getRawGyro() {
 
-        return new FieldRelativeSpeed();
-    }
-
-    @Override
-    public FieldRelativeAccel getRelativeAccel() {
-
-        return new FieldRelativeAccel();
-    }
-
-    @Override
-    public void setNesss(Pose2d set) {}
-
-    @Override
-    public Pose2d jgetNesss() {
-
-        return new Pose2d();
+        return new Rotation2d();
     }
 
     @Override

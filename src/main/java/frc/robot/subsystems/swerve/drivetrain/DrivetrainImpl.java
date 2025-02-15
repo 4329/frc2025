@@ -20,16 +20,17 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants.*;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.model.DrivetrainLogAutoLogged;
+import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.swerve.module.SwerveModule;
 import frc.robot.subsystems.swerve.module.SwerveModuleFactory;
-import frc.robot.utilities.FieldRelativeAccel;
-import frc.robot.utilities.FieldRelativeSpeed;
-import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 /** Implements a swerve DrivetrainImpl Subsystem for the Robot */
-public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
+public class DrivetrainImpl extends SubsystemBase
+        implements Drivetrain, LoggingSubsystem.LoggedSubsystem {
 
     public boolean isLocked;
+    private double offset;
 
     private final SwerveModule m_frontLeft;
     private final SwerveModule m_frontRight;
@@ -64,10 +65,6 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
     private SlewRateLimiter slewY = new SlewRateLimiter(6.5);
     private SlewRateLimiter slewRot = new SlewRateLimiter(10.0);
 
-    private FieldRelativeSpeed m_fieldRelVel = new FieldRelativeSpeed();
-    private FieldRelativeSpeed m_lastFieldRelVel = new FieldRelativeSpeed();
-    private FieldRelativeAccel m_fieldRelAccel = new FieldRelativeAccel();
-
     double pitchOffset;
     double rollOffset;
 
@@ -80,7 +77,8 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
         pitchOffset = ahrs.getPitch();
         rollOffset = ahrs.getRoll();
-        ahrs.setAngleAdjustment(-90);
+        offset = -Math.PI / 2;
+        // ahrs.setAngleAdjustment(-90);
 
         m_frontLeft =
                 SwerveModuleFactory.makeSwerve(
@@ -144,7 +142,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
         SwerveModuleState[] swerveModuleStates =
                 DriveConstants.kDriveKinematics.toSwerveModuleStates(
                         fieldRelative
-                                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, ahrs.getRotation2d())
+                                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyro())
                                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
         // normalize wheel speeds so all individual states are scaled to achievable
@@ -160,20 +158,17 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
     @Override
     public void periodic() {
-        m_fieldRelVel = new FieldRelativeSpeed(getChassisSpeed(), getGyro());
-        m_fieldRelAccel =
-                new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, DriveConstants.kLoopTime);
-        m_lastFieldRelVel = m_fieldRelVel;
         // Update swerve drive odometry periodically so robot pose can be tracked
         updateOdometry();
-        // roll.setDouble(getOffsetRoll());
-        // pitch.setDouble(ahrs.getPitch());
-        // Calls get pose function which sends the Pose information to the
-        getPose();
+    }
 
+    @Override
+    public LoggableInputs log() {
         log.states = getModuleStates();
+        log.rot = getGyro();
+        log.offset = offset;
 
-        Logger.processInputs("Drivetrain", log);
+        return log;
     }
 
     @Override
@@ -225,6 +220,12 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
         m_odometry.update(ahrs.getRotation2d(), getModulePositions());
     }
 
+    @Override
+    public void setInitialRotation(double initial) {
+        ahrs.reset();
+        ahrs.setAngleAdjustment(initial);
+    }
+
     /**
      * Function to retrieve latest robot gyro angle.
      *
@@ -232,32 +233,12 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
      */
     @Override
     public Rotation2d getGyro() {
+        return ahrs.getRotation2d().plus(new Rotation2d(offset));
+    }
 
+    @Override
+    public Rotation2d getRawGyro() {
         return ahrs.getRotation2d();
-    }
-
-    @Override
-    public FieldRelativeSpeed getRelativeSpeed() {
-
-        return m_fieldRelVel;
-    }
-
-    @Override
-    public FieldRelativeAccel getRelativeAccel() {
-
-        return m_fieldRelAccel;
-    }
-
-    Pose2d set;
-
-    @Override
-    public void setNesss(Pose2d set) {
-        this.set = set;
-    }
-
-    @Override
-    public Pose2d jgetNesss() {
-        return set;
     }
 
     /**
@@ -266,7 +247,6 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
     @Override
     public Pose2d getPose() {
         Pose2d initialPose = m_odometry.getPoseMeters();
-        // System.out.println("______________________________________________________________________________");
         return new Pose2d(
                 initialPose.getX(),
                 initialPose.getY(),
@@ -280,8 +260,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
      */
     @Override
     public void resetOdometry(Pose2d pose) {
-        ahrs.reset();
-        ahrs.setAngleAdjustment(-pose.getRotation().getDegrees());
+        offset = -getRawGyro().plus(pose.getRotation()).getRadians();
         keepAngle = getGyro().getRadians();
         m_odometry.resetPosition(ahrs.getRotation2d(), getModulePositions(), pose);
     }
@@ -300,7 +279,6 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
      */
     @Override
     public ChassisSpeeds getChassisSpeed() {
-        // System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         return DriveConstants.kDriveKinematics.toChassisSpeeds(
                 m_frontLeft.getState(),
                 m_frontRight.getState(),

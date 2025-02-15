@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
+import frc.robot.commands.algeeWheelCommands.ToggleAlgeeWheelCommand;
 import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
@@ -31,6 +32,7 @@ import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CommandLoginator;
+import frc.robot.utilities.ToggleCommand;
 import frc.robot.utilities.UnInstantCommand;
 import java.io.File;
 import java.util.HashMap;
@@ -71,7 +73,10 @@ public class RobotContainer {
 
         driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
         buttonRingController = new ButtonRingController(OIConstants.kOperatorControllerPort);
-        Shuffleboard.getTab("RobotData").add("Octagon", buttonRingController);
+        Shuffleboard.getTab("RobotData")
+                .add("Octagon", buttonRingController)
+                .withPosition(4, 0)
+                .withSize(3, 2);
 
         driveByController = new DriveByController(drivetrain, driverController);
         m_robotDrive.setDefaultCommand(driveByController);
@@ -142,16 +147,22 @@ public class RobotContainer {
     driverController.rightTrigger(0.01).whileTrue(new RepeatCommand(new UnInstantCommand(
       () -> elevatorSubsystem.runElevator(driverController.getRightTriggerAxis()))));
 
-    driverController.leftBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
-      () -> algeePivotSubsystem.run(-1))));
-    driverController.rightBumper().whileTrue(new RepeatCommand(new UnInstantCommand(
-      () -> algeePivotSubsystem.run(1))));
+	driverController.leftBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
+	driverController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
 
     driverController.a().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
     driverController.b().onTrue(new InstantCommand(() -> driveByController.toggleFieldOrient()));
+	driverController.x().onTrue(new ToggleCommand(new ToggleAlgeeWheelCommand(algeeWheelSubsystem)));
 
-    driverController.povUp().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
-    driverController.povDown().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
+	driverController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(
+					() -> differentialArmSubsystem.runPitch(1))));
+	driverController.povDown().whileTrue(new RepeatCommand(new UnInstantCommand(
+					() -> differentialArmSubsystem.runPitch(-1))));
+
+	driverController.povRight().whileTrue(new RepeatCommand(new UnInstantCommand(
+					() -> differentialArmSubsystem.runRoll(1))));
+	driverController.povLeft().whileTrue(new RepeatCommand(new UnInstantCommand(
+					() -> differentialArmSubsystem.runRoll(-1))));
 
     driverController.rightStick().onTrue(new InstantCommand(
       () -> m_robotDrive.resetOdometry(new Pose2d())));

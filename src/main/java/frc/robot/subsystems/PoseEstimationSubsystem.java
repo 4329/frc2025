@@ -16,7 +16,6 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -26,6 +25,9 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     private final Drivetrain drivetrain;
     private final LilihSubsystem lilihSubsystem;
     private SwerveDrivePoseEstimator estimator;
+
+    private Rotation2d rotOffset;
+
     private Field2d field = new Field2d();
     private Pose2d pathPlannerPose = new Pose2d();
 
@@ -67,9 +69,10 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         estimator =
                 new SwerveDrivePoseEstimator(
                         Constants.DriveConstants.kDriveKinematics,
-                        drivetrain.getGyro(),
+                        drivetrain.getRawGyro(),
                         drivetrain.getModulePositions(),
                         initialPose);
+        rotOffset = initialPose.getRotation().minus(drivetrain.getRawGyro());
     }
 
     public Pose2d getPose() {
@@ -81,12 +84,22 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     }
 
     private void updateEstimation() {
-        estimator.update(drivetrain.getGyro(), drivetrain.getModulePositions());
+        estimator.update(drivetrain.getRawGyro(), drivetrain.getModulePositions());
 
+        lilihSubsystem.addYawMeasurement(
+                drivetrain
+                        .getRawGyro()
+                        .plus(rotOffset != null ? rotOffset : new Rotation2d())
+                        .getDegrees());
         if (lilihSubsystem.seeingAnything()) {
-            PoseEstimate poseEstimate = lilihSubsystem.getRobotPose();
-            if (poseEstimate.rawFiducials.length > 0 && poseEstimate.rawFiducials[0].ambiguity < .7)
+            PoseEstimate poseEstimate =
+                    rotOffset != null
+                            ? lilihSubsystem.getRobotPose_megaTag2()
+                            : lilihSubsystem.getRobotPose();
+            if (poseEstimate.rawFiducials.length > 0 && poseEstimate.rawFiducials[0].ambiguity < .7) {
                 estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
+                if (rotOffset == null) setInitialPose(poseEstimate.pose);
+            }
         }
     }
 
@@ -97,12 +110,12 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
     @Override
     public LoggableInputs log() {
+        poseEstimationLogAutoLogged.rotOffset = rotOffset;
+
         poseEstimationLogAutoLogged.combined = getPose();
         poseEstimationLogAutoLogged.limOnly = lilihSubsystem.getRobotPose().pose;
         poseEstimationLogAutoLogged.driveOnly = drivetrain.getPose();
         poseEstimationLogAutoLogged.pathPlannerPosy = pathPlannerPose;
-        Logger.recordOutput("zero", new Pose2d());
-        Logger.recordOutput("zeroes", new Pose3d[] {});
         return poseEstimationLogAutoLogged;
     }
 }

@@ -113,7 +113,8 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         poseEstimationLogAutoLogged.rotOffset = rotOffset;
 
         poseEstimationLogAutoLogged.combined = getPose();
-        poseEstimationLogAutoLogged.limOnly = lilihSubsystem.getRobotPose().pose;
+        if (lilihSubsystem.seeingAnything())
+            poseEstimationLogAutoLogged.limOnly = lilihSubsystem.getRobotPose().pose;
         poseEstimationLogAutoLogged.driveOnly = drivetrain.getPose();
         poseEstimationLogAutoLogged.pathPlannerPosy = pathPlannerPose;
         return poseEstimationLogAutoLogged;

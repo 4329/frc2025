@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.SparkFactory;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    private final double ELEVATOR_SPEED = 1;
+    private final double ELEVATOR_SPEED = .01;
 
     public enum ElevatorPosition {
         LOW(0),
@@ -31,8 +31,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkClosedLoopController controller;
 
     public ElevatorSubsystem() {
-        motor1 = SparkFactory.createSparkMax(11);
-        motor2 = SparkFactory.createSparkMax(12);
+        motor1 = SparkFactory.createSparkMax(110);
+        motor2 = SparkFactory.createSparkMax(120);
 
         motor1.configure(
                 new SparkMaxConfig()

@@ -22,14 +22,14 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     private final double MAX_POWER = 0.5;
 
-    private final double MIN_PITCH = -100000;
-    private final double MAX_PITCH = 1000000;
+    private final double MIN_PITCH = -2.7;
+    private final double MAX_PITCH = 0;
 
     private final double MIN_ROLL = -1000000;
     private final double MAX_ROLL = 10000000;
 
-    private final double FEED_FORWARD1 = 0.024;
-    private final double FEED_FORWARD2 = 0.018;
+    private final double FEED_FORWARD1 = 0.05;
+    private final double FEED_FORWARD2 = 0.05;
 
     private final double sharedP = 0.3;
     private final double sharedI = 0.4; // 0.00025
@@ -51,17 +51,15 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     ProfiledPIDController rollPID;
 
     public DifferentialArmImpl() {
-        motor1 = SparkFactory.createSparkMax(9);
+        motor1 = SparkFactory.createSparkMax(10);
 
-        SparkBaseConfig config1 = new SparkMaxConfig();
-        config1.smartCurrentLimit(30);
+        SparkBaseConfig config1 = new SparkMaxConfig().smartCurrentLimit(30);
         config1.encoder.positionConversionFactor(Math.PI / 4);
         motor1.configure(config1, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-        motor2 = SparkFactory.createSparkMax(10);
+        motor2 = SparkFactory.createSparkMax(12);
 
-        SparkBaseConfig config2 = new SparkMaxConfig().inverted(true);
-        config1.smartCurrentLimit(30);
+        SparkBaseConfig config2 = new SparkMaxConfig().smartCurrentLimit(30).inverted(true);
 
         config2.encoder.positionConversionFactor(Math.PI / 4);
         motor2.configure(config2, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);

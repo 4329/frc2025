@@ -7,8 +7,6 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -92,21 +90,15 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         estimator.update(drivetrain.getRawGyro(), drivetrain.getModulePositions());
 
         lilihSubsystem.addYawMeasurement(
-                drivetrain
-                        .getRawGyro()
-                        .plus(
-                                new Rotation2d(
-                                        Alliance.Red.equals(DriverStation.getAlliance().orElse(null)) ? Math.PI : 0))
-                        .plus(initialed ? rotOffset : new Rotation2d())
-                        .getDegrees());
+                drivetrain.getRawGyro().plus(initialed ? rotOffset : new Rotation2d()).getDegrees());
         if (lilihSubsystem.seeingAnything()) {
             PoseEstimate poseEstimate =
                     initialed ? lilihSubsystem.getRobotPose_megaTag2() : lilihSubsystem.getRobotPose();
             if (poseEstimate.rawFiducials.length > 0 && poseEstimate.rawFiducials[0].ambiguity < .7) {
                 estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
                 if (!initialed) {
-                    rotOffset = poseEstimate.pose.getRotation().minus(drivetrain.getRawGyro());
-                    initialed = true;
+                    setInitialPose(
+                            new Pose2d(poseEstimate.pose.getTranslation(), poseEstimate.pose.getRotation()));
                 }
             }
         }

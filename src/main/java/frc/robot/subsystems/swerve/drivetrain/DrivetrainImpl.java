@@ -229,6 +229,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
     @Override
     public void setInitialRotation(double initial) {
+        ahrs.reset();
         ahrs.setAngleAdjustment(initial);
     }
 

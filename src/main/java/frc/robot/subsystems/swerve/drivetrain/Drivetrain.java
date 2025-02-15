@@ -6,8 +6,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.utilities.FieldRelativeAccel;
-import frc.robot.utilities.FieldRelativeSpeed;
 
 public interface Drivetrain extends Subsystem {
 
@@ -50,14 +48,6 @@ public interface Drivetrain extends Subsystem {
     Rotation2d getGyro();
 
     Rotation2d getRawGyro();
-
-    FieldRelativeSpeed getRelativeSpeed();
-
-    FieldRelativeAccel getRelativeAccel();
-
-    void setNesss(Pose2d set);
-
-    Pose2d jgetNesss();
 
     /**
      * @return Pose2d object containing the X and Y position and the heading of the robot.

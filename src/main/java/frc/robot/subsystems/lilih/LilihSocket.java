@@ -39,16 +39,16 @@ public class LilihSocket {
         return listener.isReceivingMessages();
     }
 
-    public LimelightHelpers.Results getResults() {
+    public LimelightHelpers.LimelightResults getResults() {
         if (!isConnected()) {
-            return new LimelightHelpers.Results();
+            return new LimelightHelpers.LimelightResults();
         }
 
         try {
-            return objectMapper.readValue(listener.getOutput(), LimelightHelpers.Results.class);
+            return objectMapper.readValue(listener.getOutput(), LimelightHelpers.LimelightResults.class);
         } catch (JsonProcessingException e) {
             System.err.println("lljson error: " + e.getMessage());
-            return new LimelightHelpers.Results();
+            return new LimelightHelpers.LimelightResults();
         }
     }
 }

@@ -30,6 +30,7 @@ import org.littletonrobotics.junction.Logger;
 public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
     public boolean isLocked;
+    private double offset;
 
     private final SwerveModule m_frontLeft;
     private final SwerveModule m_frontRight;
@@ -80,7 +81,8 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
         pitchOffset = ahrs.getPitch();
         rollOffset = ahrs.getRoll();
-        ahrs.setAngleAdjustment(-90);
+        offset = -90;
+        // ahrs.setAngleAdjustment(-90);
 
         m_frontLeft =
                 SwerveModuleFactory.makeSwerve(
@@ -225,6 +227,11 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
         m_odometry.update(ahrs.getRotation2d(), getModulePositions());
     }
 
+    @Override
+    public void setInitialRotation(double initial) {
+        ahrs.setAngleAdjustment(initial);
+    }
+
     /**
      * Function to retrieve latest robot gyro angle.
      *
@@ -232,7 +239,11 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
      */
     @Override
     public Rotation2d getGyro() {
+        return ahrs.getRotation2d().plus(new Rotation2d(offset));
+    }
 
+    @Override
+    public Rotation2d getRawGyro() {
         return ahrs.getRotation2d();
     }
 
@@ -280,8 +291,8 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
      */
     @Override
     public void resetOdometry(Pose2d pose) {
-        ahrs.reset();
-        ahrs.setAngleAdjustment(-pose.getRotation().getDegrees());
+        // ahrs.reset();
+        offset = getRawGyro().plus(pose.getRotation()).getRadians();
         keepAngle = getGyro().getRadians();
         m_odometry.resetPosition(ahrs.getRotation2d(), getModulePositions(), pose);
     }
@@ -300,7 +311,6 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
      */
     @Override
     public ChassisSpeeds getChassisSpeed() {
-        // System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         return DriveConstants.kDriveKinematics.toChassisSpeeds(
                 m_frontLeft.getState(),
                 m_frontRight.getState(),

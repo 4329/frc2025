@@ -40,12 +40,16 @@ public interface Drivetrain extends Subsystem {
      */
     void updateOdometry();
 
+    void setInitialRotation(double initial);
+
     /**
      * Function to retrieve latest robot gyro angle.
      *
      * @return Rotation2d object containing Gyro angle
      */
     Rotation2d getGyro();
+
+    Rotation2d getRawGyro();
 
     FieldRelativeSpeed getRelativeSpeed();
 

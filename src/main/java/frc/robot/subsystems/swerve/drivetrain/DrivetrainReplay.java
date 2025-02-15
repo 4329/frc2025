@@ -29,7 +29,16 @@ public class DrivetrainReplay implements Drivetrain {
     public void updateOdometry() {}
 
     @Override
+    public void setInitialRotation(double initial) {}
+
+    @Override
     public Rotation2d getGyro() {
+
+        return new Rotation2d();
+    }
+
+    @Override
+    public Rotation2d getRawGyro() {
 
         return new Rotation2d();
     }

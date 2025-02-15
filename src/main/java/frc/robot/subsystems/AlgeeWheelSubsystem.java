@@ -26,9 +26,9 @@ public class AlgeeWheelSubsystem extends SubsystemBase {
         motor1.set(speed);
     }
 
-	public void stop() {
-		motor1.set(0);
-	}
+    public void stop() {
+        motor1.set(0);
+    }
 
     @Override
     public void periodic() {

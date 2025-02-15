@@ -4,29 +4,28 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class ToggleCommand extends Command {
 
-	private boolean on;
-	private Command child;
+    private boolean on;
+    private Command child;
 
-	public ToggleCommand(Command child) {
-		this.child = child;
-	}
+    public ToggleCommand(Command child) {
+        this.child = child;
+    }
 
-	@Override
-	public void initialize() {
-		if (on) child.cancel();
-		else child.schedule();
+    @Override
+    public void initialize() {
+        if (on) child.cancel();
+        else child.schedule();
 
-		on = !on;
+        on = !on;
+    }
 
-	}
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 
-	@Override
-	public boolean isFinished() {
-		return true;
-	}
-
-	@Override
-	public String getName() {
-		return child.getName();
-	}
+    @Override
+    public String getName() {
+        return child.getName();
+    }
 }

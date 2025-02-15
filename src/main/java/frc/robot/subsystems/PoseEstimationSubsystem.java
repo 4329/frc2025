@@ -31,6 +31,8 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
     private AprilTagFieldLayout aprilTagFieldLayout;
 
+    private boolean initialSet;
+
     public PoseEstimationSubsystem(Drivetrain drivetrain, LilihSubsystem lilihSubsystem) {
         this.lilihSubsystem = lilihSubsystem;
         this.drivetrain = drivetrain;
@@ -70,6 +72,9 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                         drivetrain.getGyro(),
                         drivetrain.getModulePositions(),
                         initialPose);
+        Logger.recordOutput("initialness", initialPose);
+
+        initialSet = true;
     }
 
     public Pose2d getPose() {
@@ -83,10 +88,25 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     private void updateEstimation() {
         estimator.update(drivetrain.getGyro(), drivetrain.getModulePositions());
 
+        Logger.recordOutput("raw", drivetrain.getRawGyro());
+        lilihSubsystem.addYawMeasurement(drivetrain.getRawGyro().getDegrees());
         if (lilihSubsystem.seeingAnything()) {
-            PoseEstimate poseEstimate = lilihSubsystem.getRobotPose();
-            if (poseEstimate.rawFiducials.length > 0 && poseEstimate.rawFiducials[0].ambiguity < .7)
+            PoseEstimate poseEstimate =
+                    initialSet ? lilihSubsystem.getRobotPose_megaTag2() : lilihSubsystem.getRobotPose();
+            if (poseEstimate.rawFiducials.length > 0 && poseEstimate.rawFiducials[0].ambiguity < .7) {
                 estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
+                if (!initialSet) {
+                    Logger.recordOutput(
+                            "initialness",
+                            new Rotation2d(
+                                    poseEstimate.pose.getRotation().getRadians()
+                                            - drivetrain.getRawGyro().getRadians()));
+                    drivetrain.setInitialRotation(
+                            poseEstimate.pose.getRotation().getRadians() - drivetrain.getRawGyro().getRadians());
+					setInitialPose(poseEstimate.pose);
+                    initialSet = true;
+                }
+            }
         }
     }
 
@@ -103,6 +123,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         poseEstimationLogAutoLogged.pathPlannerPosy = pathPlannerPose;
         Logger.recordOutput("zero", new Pose2d());
         Logger.recordOutput("zeroes", new Pose3d[] {});
+        Logger.recordOutput("initialed", initialSet);
         return poseEstimationLogAutoLogged;
     }
 }

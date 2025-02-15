@@ -81,7 +81,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
         pitchOffset = ahrs.getPitch();
         rollOffset = ahrs.getRoll();
-        offset = -90;
+        offset = -Math.PI / 2;
         // ahrs.setAngleAdjustment(-90);
 
         m_frontLeft =

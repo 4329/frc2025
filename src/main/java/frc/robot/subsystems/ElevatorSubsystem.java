@@ -10,11 +10,17 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.ElevatorLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
+import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem {
-    private final double ELEVATOR_SPEED = .01;
+    private final double ELEVATOR_SPEED = .5;
+
+    private final double MIN = 0;
+    private final double MAX = 100;
+
+    private final double MAX_INPUT_CONSTANT_K = 0.4329;
 
     public enum ElevatorPosition {
         LOW(0),
@@ -37,16 +43,16 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
     private final ElevatorLogAutoLogged elevatorLogAutoLogged;
 
     public ElevatorSubsystem() {
-        motor1 = SparkFactory.createSparkMax(11);
+        motor1 = SparkFactory.createSparkMax(10);
         motor2 = SparkFactory.createSparkMax(12);
 
         motor1.configure(
                 new SparkMaxConfig()
                         .apply(
                                 new SoftLimitConfig()
-                                        .forwardSoftLimit(100)
+                                        .forwardSoftLimit(MAX)
                                         .forwardSoftLimitEnabled(true)
-                                        .reverseSoftLimit(0)
+                                        .reverseSoftLimit(MIN)
                                         .reverseSoftLimitEnabled(true)),
                 ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
@@ -62,17 +68,26 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
         elevatorLogAutoLogged = new ElevatorLogAutoLogged();
     }
 
+    private void setSetpoint(double setpoint) {
+
+        elevatorPID.setSetpoint(MathUtils.clamp(MIN, MAX, setpoint));
+    }
+
     public void setSetpoint(ElevatorPosition setpoint) {
-        elevatorPID.setSetpoint(setpoint.pos);
+        setSetpoint(setpoint.pos);
     }
 
     public void runElevator(double speed) {
-        elevatorPID.setSetpoint(elevatorPID.getSetpoint() + speed * ELEVATOR_SPEED);
+        setSetpoint(elevatorPID.getSetpoint() + speed * ELEVATOR_SPEED);
     }
 
     @Override
     public void periodic() {
-        motor1.set(elevatorPID.calculate(motor1Encoder.getPosition()));
+        motor1.set(
+                MathUtils.clamp(
+                        -MAX_INPUT_CONSTANT_K,
+                        MAX_INPUT_CONSTANT_K,
+                        elevatorPID.calculate(motor1Encoder.getPosition())));
     }
 
     @Override

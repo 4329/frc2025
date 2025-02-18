@@ -63,6 +63,16 @@ public class Config {
 
     private EncoderType encoderType = EncoderType.REDUX;
 
+    private boolean hasDrivetrain = true;
+
+    public boolean getHasDrivetrain() {
+        return hasDrivetrain;
+    }
+
+    public void setHasDrivetrain(boolean a) {
+        hasDrivetrain = a;
+    }
+
     public boolean getUsesPhotonVision() {
         return usesPhotonVision;
     }

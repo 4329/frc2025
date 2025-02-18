@@ -36,7 +36,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     private final AlgeePivotLogAutoLogged algeePivotLogAutoLogged;
 
     public AlgeePivotSubsystem() {
-        motor = SparkFactory.createSparkMax(10);
+        motor = SparkFactory.createSparkMax(100);
         config =
                 new SparkMaxConfig()
                         .apply(

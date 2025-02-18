@@ -3,10 +3,13 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.SparkFactory;
 
@@ -28,7 +31,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMax motor1;
     SparkMax motor2;
 
-    SparkClosedLoopController controller;
+	RelativeEncoder motor1Encoder;
+	PIDController elevatorPID;
 
     public ElevatorSubsystem() {
         motor1 = SparkFactory.createSparkMax(110);
@@ -50,15 +54,20 @@ public class ElevatorSubsystem extends SubsystemBase {
                 ResetMode.kNoResetSafeParameters,
                 PersistMode.kPersistParameters);
 
-        controller = motor1.getClosedLoopController();
+		motor1Encoder = motor1.getEncoder();
+		elevatorPID = new PIDController(0.1, 0, 0);
     }
 
     public void setSetpoint(ElevatorPosition setpoint) {
-        controller.setReference(setpoint.pos, ControlType.kMAXMotionPositionControl);
+		elevatorPID.setSetpoint(setpoint.pos);
     }
 
     public void runElevator(double speed) {
-        controller.setReference(
-                motor1.getEncoder().getPosition() + speed, ControlType.kMAXMotionPositionControl);
+		elevatorPID.setSetpoint(elevatorPID.getSetpoint() + speed);
     }
+
+	@Override
+	public void periodic() {
+		motor1.set(elevatorPID.calculate(motor1Encoder.getPosition()));
+	}
 }

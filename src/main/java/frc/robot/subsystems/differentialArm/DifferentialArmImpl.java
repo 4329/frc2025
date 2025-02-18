@@ -52,17 +52,10 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     public DifferentialArmImpl() {
         motor1 = SparkFactory.createSparkMax(10);
-
-        SparkBaseConfig config1 = new SparkMaxConfig().smartCurrentLimit(30);
-        config1.encoder.positionConversionFactor(Math.PI / 4);
-        motor1.configure(config1, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+        motor1.configure(configureMotor(), ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
         motor2 = SparkFactory.createSparkMax(12);
-
-        SparkBaseConfig config2 = new SparkMaxConfig().smartCurrentLimit(30).inverted(true);
-
-        config2.encoder.positionConversionFactor(Math.PI / 4);
-        motor2.configure(config2, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+        motor2.configure(configureMotor().inverted(true), ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
         encoder1 = motor1.getEncoder();
         encoder2 = motor2.getEncoder();
@@ -82,6 +75,12 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
         differentialArmLogAutoLogged = new DifferentialArmLogAutoLogged();
     }
+
+	private SparkBaseConfig configureMotor() {
+        SparkBaseConfig config1 = new SparkMaxConfig().smartCurrentLimit(30);
+        config1.encoder.positionConversionFactor(Math.PI / 4);
+		return config1;
+	}
 
     @Override
     public void setPitchTarget(DifferentialArmPitch pitchTarget) {
@@ -119,16 +118,11 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     }
 
     private Map.Entry<Double, Double> normalizePowers(double power1, double power2) {
-        if (power1 > MAX_POWER) {
-            power2 /= power1;
-            power1 /= power1;
+		double max = Math.max(power1, power2);
+        if (max > MAX_POWER) {
+            power2 /= max;
+            power1 /= max;
         }
-
-        if (power2 > MAX_POWER) {
-            power1 /= power2;
-            power2 /= power2;
-        }
-
         return Map.entry(power1, power2);
     }
 

@@ -52,7 +52,7 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
                 PersistMode.kPersistParameters);
 
         motor2.configure(
-                new SparkMaxConfig().follow(motor1, true),
+                new SparkMaxConfig().follow(motor1, true).inverted(true),
                 ResetMode.kNoResetSafeParameters,
                 PersistMode.kPersistParameters);
 

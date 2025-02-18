@@ -12,11 +12,8 @@ import frc.robot.utilities.SparkFactory;
 public class AlgeeWheelSubsystem extends SubsystemBase {
     SparkMax motor1;
 
-    private double min = -10;
-    private double max = 10;
-
     public AlgeeWheelSubsystem() {
-        motor1 = SparkFactory.createSparkMax(90);
+        motor1 = SparkFactory.createSparkMax(9);
 
         motor1.configure(
                 new SparkMaxConfig()

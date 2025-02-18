@@ -51,11 +51,15 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     ProfiledPIDController rollPID;
 
     public DifferentialArmImpl() {
-        motor1 = SparkFactory.createSparkMax(10);
-        motor1.configure(configureMotor(), ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+        motor1 = SparkFactory.createSparkMax(13);
+        motor1.configure(
+                configureMotor(), ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-        motor2 = SparkFactory.createSparkMax(12);
-        motor2.configure(configureMotor().inverted(true), ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+        motor2 = SparkFactory.createSparkMax(14);
+        motor2.configure(
+                configureMotor().inverted(true),
+                ResetMode.kNoResetSafeParameters,
+                PersistMode.kPersistParameters);
 
         encoder1 = motor1.getEncoder();
         encoder2 = motor2.getEncoder();
@@ -76,11 +80,11 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         differentialArmLogAutoLogged = new DifferentialArmLogAutoLogged();
     }
 
-	private SparkBaseConfig configureMotor() {
+    private SparkBaseConfig configureMotor() {
         SparkBaseConfig config1 = new SparkMaxConfig().smartCurrentLimit(30);
         config1.encoder.positionConversionFactor(Math.PI / 4);
-		return config1;
-	}
+        return config1;
+    }
 
     @Override
     public void setPitchTarget(DifferentialArmPitch pitchTarget) {
@@ -118,7 +122,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     }
 
     private Map.Entry<Double, Double> normalizePowers(double power1, double power2) {
-		double max = Math.max(power1, power2);
+        double max = Math.max(power1, power2);
         if (max > MAX_POWER) {
             power2 /= max;
             power1 /= max;

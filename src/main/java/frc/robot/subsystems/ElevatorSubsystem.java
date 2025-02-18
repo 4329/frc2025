@@ -1,19 +1,19 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.model.ElevatorLogAutoLogged;
+import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.utilities.SparkFactory;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class ElevatorSubsystem extends SubsystemBase {
+public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem {
     private final double ELEVATOR_SPEED = .01;
 
     public enum ElevatorPosition {
@@ -31,12 +31,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMax motor1;
     SparkMax motor2;
 
-	RelativeEncoder motor1Encoder;
-	PIDController elevatorPID;
+    RelativeEncoder motor1Encoder;
+    PIDController elevatorPID;
+
+    private final ElevatorLogAutoLogged elevatorLogAutoLogged;
 
     public ElevatorSubsystem() {
-        motor1 = SparkFactory.createSparkMax(110);
-        motor2 = SparkFactory.createSparkMax(120);
+        motor1 = SparkFactory.createSparkMax(11);
+        motor2 = SparkFactory.createSparkMax(12);
 
         motor1.configure(
                 new SparkMaxConfig()
@@ -54,20 +56,28 @@ public class ElevatorSubsystem extends SubsystemBase {
                 ResetMode.kNoResetSafeParameters,
                 PersistMode.kPersistParameters);
 
-		motor1Encoder = motor1.getEncoder();
-		elevatorPID = new PIDController(0.1, 0, 0);
+        motor1Encoder = motor1.getEncoder();
+        elevatorPID = new PIDController(0.1, 0, 0);
+
+        elevatorLogAutoLogged = new ElevatorLogAutoLogged();
     }
 
     public void setSetpoint(ElevatorPosition setpoint) {
-		elevatorPID.setSetpoint(setpoint.pos);
+        elevatorPID.setSetpoint(setpoint.pos);
     }
 
     public void runElevator(double speed) {
-		elevatorPID.setSetpoint(elevatorPID.getSetpoint() + speed);
+        elevatorPID.setSetpoint(elevatorPID.getSetpoint() + speed * ELEVATOR_SPEED);
     }
 
-	@Override
-	public void periodic() {
-		motor1.set(elevatorPID.calculate(motor1Encoder.getPosition()));
-	}
+    @Override
+    public void periodic() {
+        motor1.set(elevatorPID.calculate(motor1Encoder.getPosition()));
+    }
+
+    @Override
+    public LoggableInputs log() {
+        elevatorLogAutoLogged.setpoint = elevatorPID.getSetpoint();
+        return elevatorLogAutoLogged;
+    }
 }

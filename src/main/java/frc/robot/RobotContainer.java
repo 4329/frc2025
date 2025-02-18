@@ -46,7 +46,6 @@ public class RobotContainer {
     private final Drivetrain m_robotDrive;
     private final PoseEstimationSubsystem poseEstimationSubsystem;
     private final LilihSubsystem lilihSubsystem;
-    private final LoggingSubsystem loggingSubsystem;
     private final DifferentialArmSubsystem differentialArmSubsystem;
     private final AlgeePivotSubsystem algeePivotSubsystem;
     private final AlgeeWheelSubsystem algeeWheelSubsystem;
@@ -89,12 +88,13 @@ public class RobotContainer {
         elevatorSubsystem = new ElevatorSubsystem();
         lightSubsystem = new LightSubsystem();
 
-        loggingSubsystem =
-                new LoggingSubsystem(
-                        poseEstimationSubsystem,
-                        differentialArmSubsystem,
-                        buttonRingController,
-                        lightSubsystem);
+        new LoggingSubsystem(
+                poseEstimationSubsystem,
+                differentialArmSubsystem,
+                algeePivotSubsystem,
+                elevatorSubsystem,
+                buttonRingController,
+                lightSubsystem);
 
         new CommandLoginator();
 

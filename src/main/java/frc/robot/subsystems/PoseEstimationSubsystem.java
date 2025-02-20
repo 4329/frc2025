@@ -7,6 +7,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +28,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     private SwerveDrivePoseEstimator estimator;
 
     private Rotation2d rotOffset;
+    private Timer offsetTimer = new Timer();
 
     private Field2d field = new Field2d();
     private Pose2d pathPlannerPose = new Pose2d();
@@ -98,7 +100,10 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                             : lilihSubsystem.getRobotPose();
             if (poseEstimate.rawFiducials.length > 0 && poseEstimate.rawFiducials[0].ambiguity < .7) {
                 estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
-                if (rotOffset == null) setInitialPose(poseEstimate.pose);
+                if (rotOffset == null) {
+                    offsetTimer.start();
+                    if (offsetTimer.get() > 0.5) setInitialPose(poseEstimate.pose);
+                }
             }
         }
     }

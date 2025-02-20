@@ -6,7 +6,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PathFollowingController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.utilities.HoorayConfig;
 
 /** Static method containing all constant values for the robot in one location */
@@ -190,13 +189,8 @@ public final class Constants {
         // but spinning fast is not particularly useful or driver
         // friendly
 
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-                new TrapezoidProfile.Constraints(
-                        kMaxAngularSpeed,
-                        kMaxAngularAccel); // Creates a trapezoidal motion for the auto rotational commands
-
-        public static PIDConstants translationPID = new PIDConstants(5, 0, 0);
-        public static PIDConstants rotationPID = new PIDConstants(3, 0, 0.01);
+        public static PIDConstants translationPID = new PIDConstants(3, 0, 0);
+        public static PIDConstants rotationPID = new PIDConstants(1.5, 0, 0);
         public static PathFollowingController ppHolonomicDriveController =
                 new PPHolonomicDriveController(
                         Constants.AutoConstants.translationPID, Constants.AutoConstants.rotationPID);

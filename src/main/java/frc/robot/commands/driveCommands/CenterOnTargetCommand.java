@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.BetterPathfindingCommand;
 import org.littletonrobotics.junction.Logger;
@@ -18,9 +19,9 @@ public class CenterOnTargetCommand extends Command {
     protected Pose2d target;
 
     private final PathConstraints constraints =
-            new PathConstraints(2, 1.0, Math.PI, Math.PI); // The constraints for this path.
+            new PathConstraints(2, 1.0, Math.PI / 4, Math.PI / 16); // The constraints for this path.
 
-    private final double zDist = .8;
+    private double zDist = DifferentialArmSubsystem.ARM_LENGTH + 0.1;
 
     public CenterOnTargetCommand(
             int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {
@@ -80,12 +81,27 @@ public class CenterOnTargetCommand extends Command {
     public boolean isFinished() {
         if (target == null) return true;
 
+        Logger.recordOutput(
+                "off",
+                poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation()));
+        Logger.recordOutput(
+                "off2",
+                Math.abs(
+                        poseEstimationSubsystem
+                                .getPose()
+                                .getRotation()
+                                .minus(target.getRotation())
+                                .getRadians()));
+
         return poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation())
-                        < 0.1
+                        < 0.002
                 && Math.abs(
-                                poseEstimationSubsystem.getPose().getRotation().getRadians()
-                                        - target.getRotation().getRadians())
-                        < 0.1;
+                                poseEstimationSubsystem
+                                        .getPose()
+                                        .getRotation()
+                                        .minus(target.getRotation())
+                                        .getRadians())
+                        < 0.01;
     }
 
     @Override

@@ -3,6 +3,8 @@ package frc.robot.subsystems.light;
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import java.util.ArrayList;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
@@ -48,14 +50,14 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
                                     .applyTo(reader, writer);
                             writer.setLED((int) (Math.random() * reader.getLength()), Color.kWhite);
                         },
-                        new YesList(),
+                        new ArrayList<>(),
                         "idle");
 
         LEDAnimationNode centering =
-                new LEDAnimationNode(new CoutPattern(), new YesList(), "centering");
+                new LEDAnimationNode(new CoutPattern(), new ArrayList<>(), "centering");
 
         LEDAnimationNode targetVisible =
-                new LEDAnimationNode(new GrowPattern(), new YesList(), "targetVisible");
+                new LEDAnimationNode(new GrowPattern(), new ArrayList<>(), "targetVisible");
 
         idle.nextNodes().add(new LEDAnimationEdge(centering, () -> LEDState.centerRunning));
         centering.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.centerRunning));

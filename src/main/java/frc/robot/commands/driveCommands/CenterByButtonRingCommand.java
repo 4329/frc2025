@@ -22,7 +22,7 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     public void initialize() {
         target =
                 placeTarget(
-                        buttonRingController.getTagID(), buttonRingController.getxOffset() + clawOffset);
+                        buttonRingController.getTagID(), buttonRingController.getxOffset() - clawOffset);
         super.initialize();
 
         LEDState.centerRunning = true;

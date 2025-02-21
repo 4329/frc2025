@@ -13,7 +13,6 @@ import org.littletonrobotics.junction.Logger;
 
 public class LilihSubsystem extends SubsystemBase {
 
-    double[] hrm;
     private final String limelightHelpNetworkTableName;
 
     LimelightTarget_Fiducial[] limelightResults;
@@ -121,7 +120,7 @@ public class LilihSubsystem extends SubsystemBase {
     }
 
     private void updateInputs() {
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < LilihLog.NUM_TAGS; i++) {
             lilihLog.tags[i].tV = getTargetVisible(i);
             if (lilihLog.tags[i].tV) {
                 LimelightTarget_Fiducial fiducial = getFiducial(i);

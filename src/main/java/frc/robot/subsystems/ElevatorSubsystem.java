@@ -1,17 +1,26 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.model.ElevatorLogAutoLogged;
+import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
+import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class ElevatorSubsystem extends SubsystemBase {
-    private final double ELEVATOR_SPEED = 1;
+public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem {
+    private final double ELEVATOR_SPEED = .5;
+
+    private final double MIN = 0;
+    private final double MAX = 100;
+
+    private final double MAX_INPUT_CONSTANT_K = 0.4329;
 
     public enum ElevatorPosition {
         LOW(0),
@@ -28,37 +37,62 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMax motor1;
     SparkMax motor2;
 
-    SparkClosedLoopController controller;
+    RelativeEncoder motor1Encoder;
+    PIDController elevatorPID;
+
+    private final ElevatorLogAutoLogged elevatorLogAutoLogged;
 
     public ElevatorSubsystem() {
-        motor1 = SparkFactory.createSparkMax(11);
+        motor1 = SparkFactory.createSparkMax(10);
         motor2 = SparkFactory.createSparkMax(12);
 
         motor1.configure(
                 new SparkMaxConfig()
                         .apply(
                                 new SoftLimitConfig()
-                                        .forwardSoftLimit(100)
+                                        .forwardSoftLimit(MAX)
                                         .forwardSoftLimitEnabled(true)
-                                        .reverseSoftLimit(0)
+                                        .reverseSoftLimit(MIN)
                                         .reverseSoftLimitEnabled(true)),
                 ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
 
         motor2.configure(
-                new SparkMaxConfig().follow(motor1, true),
+                new SparkMaxConfig().follow(motor1, true).inverted(true),
                 ResetMode.kNoResetSafeParameters,
                 PersistMode.kPersistParameters);
 
-        controller = motor1.getClosedLoopController();
+        motor1Encoder = motor1.getEncoder();
+        elevatorPID = new PIDController(0.1, 0, 0);
+
+        elevatorLogAutoLogged = new ElevatorLogAutoLogged();
+    }
+
+    private void setSetpoint(double setpoint) {
+
+        elevatorPID.setSetpoint(MathUtils.clamp(MIN, MAX, setpoint));
     }
 
     public void setSetpoint(ElevatorPosition setpoint) {
-        controller.setReference(setpoint.pos, ControlType.kMAXMotionPositionControl);
+        setSetpoint(setpoint.pos);
     }
 
     public void runElevator(double speed) {
-        controller.setReference(
-                motor1.getEncoder().getPosition() + speed, ControlType.kMAXMotionPositionControl);
+        setSetpoint(elevatorPID.getSetpoint() + speed * ELEVATOR_SPEED);
+    }
+
+    @Override
+    public void periodic() {
+        motor1.set(
+                MathUtils.clamp(
+                        -MAX_INPUT_CONSTANT_K,
+                        MAX_INPUT_CONSTANT_K,
+                        elevatorPID.calculate(motor1Encoder.getPosition())));
+    }
+
+    @Override
+    public LoggableInputs log() {
+        elevatorLogAutoLogged.setpoint = elevatorPID.getSetpoint();
+        return elevatorLogAutoLogged;
     }
 }

@@ -25,5 +25,7 @@
     "rollDirection": -1,
 
     "shooterkS": 0.52273,
-    "shooterkV": 0.12816
+    "shooterkV": 0.12816,
+
+	"hasDrivetrain": false
 }

@@ -16,4 +16,9 @@ public class RunAlgeePivotCommand extends Command {
     public void execute() {
         algeePivotSubsystem.run(speed);
     }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

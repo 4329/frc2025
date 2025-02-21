@@ -24,10 +24,10 @@ public class LilihLog implements LoggableInputs, Cloneable {
 
     public Fiducial[] tags;
     public boolean limlihConnected;
-    private final int numTags = 16;
+    public static final int NUM_TAGS = 22;
 
     public LilihLog() {
-        tags = new Fiducial[numTags];
+        tags = new Fiducial[NUM_TAGS];
         for (int i = 0; i < tags.length; i++) {
             tags[i] = new Fiducial(false, 0, 0, new Pose3d());
         }
@@ -36,7 +36,7 @@ public class LilihLog implements LoggableInputs, Cloneable {
     @Override
     public void toLog(LogTable table) {
         table.put("Limlihconnected", limlihConnected);
-        for (int i = 0; i < numTags; i++) {
+        for (int i = 0; i < NUM_TAGS; i++) {
             LogTable sub = table.getSubtable("" + i);
             sub.put("tV", tags[i].tV);
             sub.put("tX", tags[i].tX);
@@ -49,7 +49,7 @@ public class LilihLog implements LoggableInputs, Cloneable {
     @Override
     public void fromLog(LogTable table) {
         limlihConnected = table.get("Limlihconnected", limlihConnected);
-        for (int i = 0; i < numTags; i++) {
+        for (int i = 0; i < NUM_TAGS; i++) {
             LogTable sub = table.getSubtable("" + i);
             tags[i] =
                     new Fiducial(

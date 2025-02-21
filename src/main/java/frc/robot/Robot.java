@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.Mode;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.subsystems.swerve.drivetrain.DrivetrainFactory;
+import frc.robot.subsystems.swerve.drivetrain.DrivetrainReplay;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.SwerveAlignment;
 import java.io.File;
@@ -24,6 +25,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
@@ -92,11 +94,12 @@ public class Robot extends LoggedRobot {
 
         // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in
         // the "Understanding Data Flow" page
-        // DataLogManager.start();
-        // Logger.registerURCL(URCL.startExternal());
+
         Logger.recordMetadata("mode", Constants.robotMode.toString());
 
         Logger.recordMetadata("encoderType", HoorayConfig.gimmeConfig().getEncoderType().toString());
+        Logger.registerURCL(URCL.startExternal());
+
         Logger.start();
 
         HoorayConfig.gimmeConfig();
@@ -104,7 +107,10 @@ public class Robot extends LoggedRobot {
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
-        drivetrain = DrivetrainFactory.makeDrivetrain();
+        drivetrain =
+                HoorayConfig.gimmeConfig().getHasDrivetrain()
+                        ? DrivetrainFactory.makeDrivetrain()
+                        : new DrivetrainReplay();
         drivetrain.resetOdometry(new Pose2d());
 
         m_robotContainer = new RobotContainer(drivetrain);

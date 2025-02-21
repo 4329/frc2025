@@ -12,6 +12,7 @@ import frc.robot.model.LightLogEntry;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.light.ledAnimations.CoutPattern;
 import frc.robot.subsystems.light.ledAnimations.GrowPattern;
+import java.util.ArrayList;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -48,14 +49,14 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
                                     .applyTo(reader, writer);
                             writer.setLED((int) (Math.random() * reader.getLength()), Color.kWhite);
                         },
-                        new YesList(),
+                        new ArrayList<>(),
                         "idle");
 
         LEDAnimationNode centering =
-                new LEDAnimationNode(new CoutPattern(), new YesList(), "centering");
+                new LEDAnimationNode(new CoutPattern(), new ArrayList<>(), "centering");
 
         LEDAnimationNode targetVisible =
-                new LEDAnimationNode(new GrowPattern(), new YesList(), "targetVisible");
+                new LEDAnimationNode(new GrowPattern(), new ArrayList<>(), "targetVisible");
 
         idle.nextNodes().add(new LEDAnimationEdge(centering, () -> LEDState.centerRunning));
         centering.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.centerRunning));

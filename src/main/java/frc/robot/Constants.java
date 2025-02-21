@@ -6,15 +6,12 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PathFollowingController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.utilities.HoorayConfig;
 
 /** Static method containing all constant values for the robot in one location */
 public final class Constants {
 
     public static Mode robotMode;
-
-    public static int LEDNum = 0;
 
     public static enum Mode {
         REAL,
@@ -190,43 +187,12 @@ public final class Constants {
         // but spinning fast is not particularly useful or driver
         // friendly
 
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-                new TrapezoidProfile.Constraints(
-                        kMaxAngularSpeed,
-                        kMaxAngularAccel); // Creates a trapezoidal motion for the auto rotational commands
-
-        public static PIDConstants translationPID = new PIDConstants(5, 0, 0);
-        public static PIDConstants rotationPID = new PIDConstants(3, 0, 0.01);
+        public static PIDConstants translationPID = new PIDConstants(3, 0, 0);
+        public static PIDConstants rotationPID = new PIDConstants(1.5, 0, 0);
         public static PathFollowingController ppHolonomicDriveController =
                 new PPHolonomicDriveController(
                         Constants.AutoConstants.translationPID, Constants.AutoConstants.rotationPID);
 
         public static RobotConfig config;
-    }
-
-    public static final class CANIDConstants {
-
-        public static final int armRotation1 = 11;
-
-        public static final int shoot1 = 12;
-        public static final int shoot2 = 13;
-
-        public static final int elevatorMotor1 = 16;
-        public static final int elevatorMotor2 = 17;
-        public static final int climberMotor1 = 18;
-        public static final int climberMotor2 = 19;
-    }
-
-    public static final class LimlihConstants {
-        public static final double limlihHeight = 0.62;
-    }
-
-    public static final class ArmAngleSubsystemConstants {
-        public static final double armGearRatio = 1;
-    }
-
-    public static final class FieldConstants {
-        public static final double fieldWidth = 16;
-        public static final double fieldLength = 8;
     }
 }

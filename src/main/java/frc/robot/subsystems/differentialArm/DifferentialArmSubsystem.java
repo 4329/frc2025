@@ -5,6 +5,8 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 
 public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
 
+    public static final double ARM_LENGTH = 0.2794;
+
     public enum DifferentialArmPitch {
         STORAGE(0),
         THIRTY(Math.PI / 3),

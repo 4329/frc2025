@@ -1,4 +1,5 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.elevator;
+
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -10,32 +11,18 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.ElevatorLogAutoLogged;
-import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
+
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem {
+public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
     private final double ELEVATOR_SPEED = .5;
 
     private final double MIN = -22.589;
     private final double MAX = 58.91;
 
     private final double MAX_INPUT_CONSTANT_K = 0.4329;
-
-    public enum ElevatorPosition {
-        L2(-1.778),
-        L3(13.972),
-        L4(38.347),
-        MAX_HEIGHT(58.91),
-        ;
-
-        double pos;
-
-        ElevatorPosition(double pos) {
-            this.pos = pos;
-        }
-    }
 
     SparkMax motor1;
     SparkMax motor2;
@@ -45,7 +32,7 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
 
     private final ElevatorLogAutoLogged elevatorLogAutoLogged;
 
-    public ElevatorSubsystem() {
+    public ElevatorImpl() {
         motor1 = SparkFactory.createSparkMax(10);
         motor2 = SparkFactory.createSparkMax(12);
 
@@ -83,10 +70,12 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
         elevatorPID.setSetpoint(MathUtils.clamp(MIN, MAX, setpoint));
     }
 
+	@Override
     public void setSetpoint(ElevatorPosition setpoint) {
         setSetpoint(setpoint.pos);
     }
 
+	@Override
     public void runElevator(double speed) {
         setSetpoint(elevatorPID.getSetpoint() + speed * ELEVATOR_SPEED);
     }
@@ -105,4 +94,5 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
         elevatorLogAutoLogged.setpoint = elevatorPID.getSetpoint();
         return elevatorLogAutoLogged;
     }
+
 }

@@ -22,7 +22,8 @@ import frc.robot.commands.algeeWheelCommands.ToggleAlgeeWheelCommand;
 import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.elevator.ElevatorFactory;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
@@ -85,7 +86,7 @@ public class RobotContainer {
         differentialArmSubsystem = DifferentialArmFactory.createDifferentialArmSubsystem();
         algeePivotSubsystem = new AlgeePivotSubsystem();
         algeeWheelSubsystem = new AlgeeWheelSubsystem();
-        elevatorSubsystem = new ElevatorSubsystem();
+        elevatorSubsystem = ElevatorFactory.createElevatorSubsystem();
         lightSubsystem = new LightSubsystem();
 
         new LoggingSubsystem(

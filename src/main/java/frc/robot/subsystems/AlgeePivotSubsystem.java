@@ -8,6 +8,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.model.AlgeePivotLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.utilities.SparkFactory;
@@ -36,7 +37,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     private final AlgeePivotLogAutoLogged algeePivotLogAutoLogged;
 
     public AlgeePivotSubsystem() {
-        motor = SparkFactory.createSparkMax(100);
+        motor = SparkFactory.createSparkMax(Constants.SparkIDs.algeePivot);
         config =
                 new SparkMaxConfig()
                         .apply(

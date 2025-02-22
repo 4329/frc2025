@@ -29,10 +29,10 @@ public class ElevatorSim extends ElevatorImpl {
 				1,
 				100,
 				Units.inchesToMeters(1.788 / 2),
-				0,
-				100,
+				MIN,
+				MAX,
 				true,
-				0,
+				ELEVATOR_START,
 				0.01,
 				0.0);
 
@@ -40,5 +40,12 @@ public class ElevatorSim extends ElevatorImpl {
 
 	@Override
 	public void simulationPeriodic() {
+		elevatorSim.setInput(motorSim.getAppliedOutput() * RoboRioSim.getVInVoltage());
+		elevatorSim.update(0.02);
+
+		motorSim.iterate(elevatorSim.getVelocityMetersPerSecond(), RoboRioSim.getVInVoltage(), 0.02);
+
+        RoboRioSim.setVInVoltage(
+                BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSim.getCurrentDrawAmps()));
 	}
 }

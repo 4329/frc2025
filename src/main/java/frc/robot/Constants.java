@@ -195,4 +195,18 @@ public final class Constants {
 
         public static RobotConfig config;
     }
+
+	public static final class SparkIDs {
+		public static final int differential1 = 13;
+		public static final int differential2 = 14;
+
+		public static final int algeePivot = 11;
+		public static final int algeeWheel = 12;
+
+		public static final int elevator1 = 9;
+		public static final int elevator2 = 10;
+
+		public static final int intakePivot = 15;
+		public static final int intakeWheel = 16;
+	}
 }

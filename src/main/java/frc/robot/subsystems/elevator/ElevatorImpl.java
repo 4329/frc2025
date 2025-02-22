@@ -19,8 +19,8 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
     private final double ELEVATOR_SPEED = .5;
 
-    private final double MIN = -22.589;
-    private final double MAX = 58.91;
+    private final double MIN = 0.2785 - ELEVATOR_START;
+    private final double MAX = 2.3488 - ELEVATOR_START;
 
     private final double MAX_INPUT_CONSTANT_K = 0.4329;
 
@@ -68,7 +68,7 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
         final double gear1 = 11;
         final double gear2 = 54;
         final double gear3 = 28;
-        final double belt = 5;
+        final double belt = .127;
         configgled.encoder.positionConversionFactor(
                 (gear1 / gear2) * (gear2 / gear3) * (gear3 / belt)); // approximation
 

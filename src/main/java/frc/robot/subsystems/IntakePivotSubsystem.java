@@ -31,6 +31,10 @@ public class IntakePivotSubsystem extends SubsystemBase {
         pidController = new PIDController(.1, 0, 0);
     }
 
+    public void run(double dir) {
+        pidController.setSetpoint(pidController.getSetpoint() + dir * 0.01);
+    }
+
     public void setSetpoint(double setpoint) {
         pidController.setSetpoint(setpoint);
     }

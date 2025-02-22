@@ -10,6 +10,8 @@ public class RunAlgeePivotCommand extends Command {
     public RunAlgeePivotCommand(AlgeePivotSubsystem algeePivotSubsystem, double speed) {
         this.algeePivotSubsystem = algeePivotSubsystem;
         this.speed = speed;
+
+        addRequirements(algeePivotSubsystem);
     }
 
     @Override

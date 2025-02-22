@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.light.LEDState;
@@ -13,16 +12,10 @@ public class AlgeeWheelSubsystem extends SubsystemBase {
     SparkMax motor1;
 
     public AlgeeWheelSubsystem() {
-        motor1 = SparkFactory.createSparkMax(9);
+        motor1 = SparkFactory.createSparkMax(10);
 
         motor1.configure(
-                new SparkMaxConfig()
-                        .apply(
-                                new SoftLimitConfig()
-                                        .forwardSoftLimit(10)
-                                        .forwardSoftLimitEnabled(true)
-                                        .reverseSoftLimit(-10)
-                                        .reverseSoftLimitEnabled(true)),
+                new SparkMaxConfig().inverted(true),
                 ResetMode.kNoResetSafeParameters,
                 PersistMode.kPersistParameters);
     }
@@ -33,6 +26,10 @@ public class AlgeeWheelSubsystem extends SubsystemBase {
 
     public void stop() {
         motor1.set(0);
+    }
+
+    public double getCurrent() {
+        return motor1.getOutputCurrent();
     }
 
     @Override

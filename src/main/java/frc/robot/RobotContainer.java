@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
@@ -159,8 +158,8 @@ public class RobotContainer {
 
     driverController.a().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
     driverController.b().onTrue(new InstantCommand(() -> driveByController.toggleFieldOrient()));
-	driverController.x().onTrue(new ToggleCommand(new ToggleAlgeeWheelCommand(algeeWheelSubsystem)));
-	driverController.y().onTrue(new ToggleCommand(new StartEndCommand(() -> intakeWheelSubsystem.run(0.1), intakeWheelSubsystem::stop)));
+	driverController.x().onTrue(new ToggleCommand(new ToggleAlgeeWheelCommand(algeeWheelSubsystem, 1)));
+	driverController.y().onTrue(new ToggleCommand(new ToggleAlgeeWheelCommand(algeeWheelSubsystem, -1)));
 
 	driverController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(
 					() -> differentialArmSubsystem.runPitch(1))));

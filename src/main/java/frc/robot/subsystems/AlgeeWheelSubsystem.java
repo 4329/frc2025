@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.SparkFactory;
 
@@ -12,7 +13,7 @@ public class AlgeeWheelSubsystem extends SubsystemBase {
     SparkMax motor1;
 
     public AlgeeWheelSubsystem() {
-        motor1 = SparkFactory.createSparkMax(10);
+        motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.algeeWheel);
 
         motor1.configure(
                 new SparkMaxConfig().inverted(true),

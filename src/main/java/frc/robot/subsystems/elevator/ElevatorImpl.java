@@ -10,6 +10,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.model.ElevatorLogAutoLogged;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
@@ -17,10 +18,10 @@ import frc.robot.utilities.SparkFactory;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
-    private final double ELEVATOR_SPEED = .5;
+    private final double ELEVATOR_SPEED = .01;
 
-    private final double MIN = 0.2785 - ELEVATOR_START;
-    private final double MAX = 2.3488 - ELEVATOR_START;
+    final double MIN = 0.2785 - ELEVATOR_START;
+    final double MAX = 2.3488 - ELEVATOR_START;
 
     private final double MAX_INPUT_CONSTANT_K = 0.4329;
 
@@ -53,8 +54,8 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
     private final ElevatorLogAutoLogged elevatorLogAutoLogged;
 
     public ElevatorImpl() {
-        motor1 = SparkFactory.createSparkMax(10);
-        motor2 = SparkFactory.createSparkMax(12);
+        motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator1);
+        motor2 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator2);
 
         SparkBaseConfig configgled =
                 new SparkMaxConfig()

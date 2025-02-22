@@ -9,6 +9,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.model.DifferentialArmLogAutoLogged;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
@@ -51,11 +52,11 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     ProfiledPIDController rollPID;
 
     public DifferentialArmImpl() {
-        motor1 = SparkFactory.createSparkMax(13);
+        motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.differential1);
         motor1.configure(
                 configureMotor(), ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-        motor2 = SparkFactory.createSparkMax(14);
+        motor2 = SparkFactory.createSparkMax(Constants.SparkIDs.differential2);
         motor2.configure(
                 configureMotor().inverted(true),
                 ResetMode.kNoResetSafeParameters,

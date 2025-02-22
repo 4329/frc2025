@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
@@ -24,10 +24,10 @@ import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LoggingSubsystem;
-import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.IntakePivotSubsystem;
 import frc.robot.subsystems.IntakeWheelSubsystem;
+import frc.robot.subsystems.LoggingSubsystem;
+import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.light.LightSubsystem;
@@ -56,7 +56,7 @@ public class RobotContainer {
     private final LightSubsystem lightSubsystem;
     private final IntakeWheelSubsystem intakeWheelSubsystem;
     private final IntakePivotSubsystem intakePivotSubsystem;
-    
+
     private final DriveByController driveByController;
 
     final SendableChooser<Command> m_chooser;
@@ -90,8 +90,8 @@ public class RobotContainer {
         differentialArmSubsystem = DifferentialArmFactory.createDifferentialArmSubsystem();
         algeePivotSubsystem = new AlgeePivotSubsystem();
         algeeWheelSubsystem = new AlgeeWheelSubsystem();
-	intakePivotSubsystem = new IntakePivotSubsystem();
-	intakeWheelSubsystem = new IntakeWheelSubsystem();
+        intakePivotSubsystem = new IntakePivotSubsystem();
+        intakeWheelSubsystem = new IntakeWheelSubsystem();
         elevatorSubsystem = new ElevatorSubsystem();
         lightSubsystem = new LightSubsystem();
 

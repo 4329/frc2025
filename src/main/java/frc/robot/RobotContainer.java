@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
@@ -23,6 +24,8 @@ import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakePivotSubsystem;
+import frc.robot.subsystems.IntakeWheelSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
@@ -51,6 +54,8 @@ public class RobotContainer {
     private final AlgeeWheelSubsystem algeeWheelSubsystem;
     private final ElevatorSubsystem elevatorSubsystem;
     private final LightSubsystem lightSubsystem;
+    private final IntakeWheelSubsystem intakeWheelSubsystem;
+    private final IntakePivotSubsystem intakePivotSubsystem;
 
     private final DriveByController driveByController;
 
@@ -85,6 +90,8 @@ public class RobotContainer {
         differentialArmSubsystem = DifferentialArmFactory.createDifferentialArmSubsystem();
         algeePivotSubsystem = new AlgeePivotSubsystem();
         algeeWheelSubsystem = new AlgeeWheelSubsystem();
+        intakePivotSubsystem = new IntakePivotSubsystem();
+        intakeWheelSubsystem = new IntakeWheelSubsystem();
         elevatorSubsystem = new ElevatorSubsystem();
         lightSubsystem = new LightSubsystem();
 
@@ -153,6 +160,7 @@ public class RobotContainer {
     driverController.a().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
     driverController.b().onTrue(new InstantCommand(() -> driveByController.toggleFieldOrient()));
 	driverController.x().onTrue(new ToggleCommand(new ToggleAlgeeWheelCommand(algeeWheelSubsystem)));
+	driverController.y().onTrue(new ToggleCommand(new StartEndCommand(() -> intakeWheelSubsystem.run(0.1), intakeWheelSubsystem::stop)));
 
 	driverController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(
 					() -> differentialArmSubsystem.runPitch(1))));

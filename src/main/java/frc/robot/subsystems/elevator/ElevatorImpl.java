@@ -1,4 +1,5 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.elevator;
+
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -10,12 +11,12 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.ElevatorLogAutoLogged;
-import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
+
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem {
+public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
     private final double ELEVATOR_SPEED = .5;
 
     private final double MIN = -22.589;
@@ -51,9 +52,9 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
 
     private final ElevatorLogAutoLogged elevatorLogAutoLogged;
 
-    public ElevatorSubsystem() {
-        motor1 = SparkFactory.createSparkMax(1000);
-        motor2 = SparkFactory.createSparkMax(1200);
+    public ElevatorImpl() {
+        motor1 = SparkFactory.createSparkMax(10);
+        motor2 = SparkFactory.createSparkMax(12);
 
         SparkBaseConfig configgled =
                 new SparkMaxConfig()
@@ -89,10 +90,12 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
         elevatorPID.setSetpoint(MathUtils.clamp(MIN, MAX, setpoint));
     }
 
+	@Override
     public void setSetpoint(ElevatorPosition setpoint) {
         setSetpoint(setpoint.pos);
     }
 
+	@Override
     public void runElevator(double speed) {
         setSetpoint(elevatorPID.getSetpoint() + speed * ELEVATOR_SPEED);
     }
@@ -115,4 +118,5 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
         elevatorLogAutoLogged.setpoint = elevatorPID.getSetpoint();
         return elevatorLogAutoLogged;
     }
+
 }

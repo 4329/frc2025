@@ -5,11 +5,12 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 
 public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
 
+	public static final double ELEVATOR_START = 0.8525;
     public enum ElevatorPosition {
-        L2(-1.778),
-        L3(13.972),
-        L4(38.347),
-        MAX_HEIGHT(58.91),
+        L2(0.8073 - ELEVATOR_START),
+        L3(1.2073 - ELEVATOR_START),
+        L4(1.8265 - ELEVATOR_START),
+        MAX_HEIGHT(2.3488 - ELEVATOR_START),
         ;
 
         double pos;

@@ -27,6 +27,8 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
         L2(-1.778),
         L3(13.972),
         L4(38.347),
+        ALGEE_HIGH(0),
+        ALGEE_LOW(0),
         MAX_HEIGHT(58.91),
         ;
 
@@ -89,6 +91,10 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
 
     public void runElevator(double speed) {
         setSetpoint(elevatorPID.getSetpoint() + speed * ELEVATOR_SPEED);
+    }
+
+    public boolean atSetpoint() {
+        return elevatorPID.atSetpoint();
     }
 
     @Override

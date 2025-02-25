@@ -28,6 +28,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                             else if (getRawAxis(0) == -1) level = 4;
                             else if (getRawAxis(1) == 1) level = 2;
                             else if (getRawAxis(1) == -1) level = 1;
+                            else level = 0;
 
                             LEDState.reefLevel = level;
                         })

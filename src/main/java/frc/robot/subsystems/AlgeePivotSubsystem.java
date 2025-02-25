@@ -75,6 +75,10 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
         setSetpoint(angle.angle);
     }
 
+    public boolean atSetpoint() {
+        return pidController.atSetpoint();
+    }
+
     @Override
     public void periodic() {
         motor.set(pidController.calculate(motor.getEncoder().getPosition()));

@@ -18,11 +18,15 @@ import frc.robot.utilities.SparkFactory;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsystem {
+    private final double ALGEE_PIVOT_SPEED = 0.3;
+
+    private final double MIN = 0;
+    private final double MAX = 14;
 
     public enum AlgeePivotAngle {
         ZERO(0),
-        HIGH(Math.PI / 4),
-        LOW(-Math.PI / 4);
+        OUT(14),
+        ;
 
         public double angle;
 
@@ -30,10 +34,6 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
             this.angle = angle;
         }
     }
-
-    private final double ALGEE_PIVOT_SPEED = 0.3;
-    private final double MIN = 0;
-    private final double MAX = 14;
 
     private SparkMax motor;
     private SparkBaseConfig config;
@@ -73,6 +73,10 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
 
     public void setSetpoint(AlgeePivotAngle angle) {
         setSetpoint(angle.angle);
+    }
+
+    public boolean atSetpoint() {
+        return pidController.atSetpoint();
     }
 
     @Override

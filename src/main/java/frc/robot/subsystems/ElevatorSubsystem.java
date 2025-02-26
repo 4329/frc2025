@@ -27,7 +27,13 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
         L2(-1.778),
         L3(13.972),
         L4(38.347),
+        ALGEE_HIGH(0), // calculate these later WIP
+        ALGEE_LOW(0), // calculate these later WIP
         MAX_HEIGHT(58.91),
+        ZERO(0),
+        INTAKE(2), // calculate these later WIPWIP
+        PORCESSOR(
+                -2), // WIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIP
         ;
 
         double pos;
@@ -89,6 +95,10 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
 
     public void runElevator(double speed) {
         setSetpoint(elevatorPID.getSetpoint() + speed * ELEVATOR_SPEED);
+    }
+
+    public boolean atSetpoint() {
+        return elevatorPID.atSetpoint();
     }
 
     @Override

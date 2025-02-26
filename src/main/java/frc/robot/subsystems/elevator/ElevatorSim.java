@@ -14,13 +14,13 @@ public class ElevatorSim extends ElevatorImpl {
     public ElevatorSim() {
         super();
 
-        DCMotor gearbox = DCMotor.getNEO(1);
+        DCMotor gearbox = DCMotor.getNEO(2);
         motorSim = new SparkMaxSim(motor1, gearbox);
         elevatorSim =
                 new edu.wpi.first.wpilibj.simulation.ElevatorSim(
                         gearbox,
-                        1,
-                        100,
+                        16,
+                        Units.lbsToKilograms(25),
                         Units.inchesToMeters(1.788 / 2),
                         MIN,
                         MAX,

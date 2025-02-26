@@ -8,12 +8,12 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
     public static final double ELEVATOR_START = 0.8525;
 
     public enum ElevatorPosition {
-        L2(-1.778),
-        L3(13.972),
-        L4(38.347),
+        L2(0.8073 - ELEVATOR_START),
+        L3(1.2073 - ELEVATOR_START),
+        L4(1.8265 - ELEVATOR_START),
+        MAX_HEIGHT(2.3488 - ELEVATOR_START),
         ALGEE_HIGH(0), // calculate these later WIP
         ALGEE_LOW(0), // calculate these later WIP
-        MAX_HEIGHT(58.91),
         ZERO(0),
         INTAKE(2), // calculate these later WIPWIP
         PORCESSOR(
@@ -27,9 +27,9 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
         }
     }
 
-    public void setSetpoint(ElevatorPosition setpoint);
 
+    public void setSetpoint(ElevatorPosition setpoint);
     public void runElevator(double speed);
 
-    public boolean atSetpoint();
+	public boolean atSetpoint();
 }

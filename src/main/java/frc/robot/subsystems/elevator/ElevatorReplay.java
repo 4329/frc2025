@@ -14,4 +14,9 @@ public class ElevatorReplay implements ElevatorSubsystem {
 
     @Override
     public void runElevator(double speed) {}
+
+    @Override
+    public boolean atSetpoint() {
+        return true;
+    }
 }

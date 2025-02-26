@@ -24,8 +24,6 @@ import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.IntakePivotSubsystem;
 import frc.robot.subsystems.IntakeWheelSubsystem;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.elevator.ElevatorFactory;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;

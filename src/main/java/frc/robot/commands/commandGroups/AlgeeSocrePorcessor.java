@@ -7,10 +7,10 @@ import frc.robot.commands.elevatorCommands.SetElevatorCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 
 public class AlgeeSocrePorcessor extends ParallelCommandGroup {

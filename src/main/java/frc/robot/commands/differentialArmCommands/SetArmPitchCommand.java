@@ -8,7 +8,8 @@ public class SetArmPitchCommand extends Command {
     private final DifferentialArmSubsystem differentialArmSubsystem;
     private final DifferentialArmSubsystem.DifferentialArmPitch pitchTarget;
 
-    public SetArmPitchCommand(DifferentialArmSubsystem differentialArmSubsystem, DifferentialArmPitch pitchTarget) {
+    public SetArmPitchCommand(
+            DifferentialArmSubsystem differentialArmSubsystem, DifferentialArmPitch pitchTarget) {
         this.differentialArmSubsystem = differentialArmSubsystem;
         this.pitchTarget = pitchTarget;
     }

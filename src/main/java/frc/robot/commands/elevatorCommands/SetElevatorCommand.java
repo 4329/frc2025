@@ -7,14 +7,14 @@ import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 public class SetElevatorCommand extends Command {
     ElevatorSubsystem elevatorSubsystem;
     ElevatorSubsystem.ElevatorPosition elevatorPosition;
-    
-    public SetElevatorCommand(ElevatorSubsystem elevatorSubsystem, ElevatorPosition elevatorPosition) {
+
+    public SetElevatorCommand(
+            ElevatorSubsystem elevatorSubsystem, ElevatorPosition elevatorPosition) {
         this.elevatorSubsystem = elevatorSubsystem;
         this.elevatorPosition = elevatorPosition;
     }
-    
 
-    @Override 
+    @Override
     public void initialize() {
         elevatorSubsystem.setSetpoint(elevatorPosition);
     }
@@ -23,5 +23,4 @@ public class SetElevatorCommand extends Command {
     public boolean isFinished() {
         return elevatorSubsystem.atSetpoint();
     }
-
 }

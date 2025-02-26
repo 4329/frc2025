@@ -1,22 +1,24 @@
 package frc.robot.commands.algeeWheelCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 
-public class ToggleAlgeeWheelCommand extends Command {
+public class OuttakeAlgeeCommand extends Command {
 
     private AlgeeWheelSubsystem algeeWheelSubsystem;
     private double speed;
+    private Timer timer;
 
-    public ToggleAlgeeWheelCommand(AlgeeWheelSubsystem algeeWheelSubsystem, double speed) {
+    public OuttakeAlgeeCommand(AlgeeWheelSubsystem algeeWheelSubsystem) {
         this.algeeWheelSubsystem = algeeWheelSubsystem;
-        this.speed = speed;
-
-        addRequirements(algeeWheelSubsystem);
+        this.speed = 1;
+        timer = new Timer();
     }
 
     @Override
     public void initialize() {
+        timer.start();
         algeeWheelSubsystem.run(speed);
     }
 
@@ -27,6 +29,10 @@ public class ToggleAlgeeWheelCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return algeeWheelSubsystem.getAlgeed();
+        if (timer.hasElapsed(0.3)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

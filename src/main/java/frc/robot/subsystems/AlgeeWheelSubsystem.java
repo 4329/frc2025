@@ -28,8 +28,8 @@ public class AlgeeWheelSubsystem extends SubsystemBase {
         motor1.set(0);
     }
 
-    public double getCurrent() {
-        return motor1.getOutputCurrent();
+    public boolean getAlgeed() {
+        return motor1.getOutputCurrent() > 100;
     }
 
     @Override

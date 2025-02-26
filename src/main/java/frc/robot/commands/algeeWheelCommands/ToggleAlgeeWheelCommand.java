@@ -6,14 +6,18 @@ import frc.robot.subsystems.AlgeeWheelSubsystem;
 public class ToggleAlgeeWheelCommand extends Command {
 
     private AlgeeWheelSubsystem algeeWheelSubsystem;
+    private double speed;
 
-    public ToggleAlgeeWheelCommand(AlgeeWheelSubsystem algeeWheelSubsystem) {
+    public ToggleAlgeeWheelCommand(AlgeeWheelSubsystem algeeWheelSubsystem, double speed) {
         this.algeeWheelSubsystem = algeeWheelSubsystem;
+        this.speed = speed;
+
+        addRequirements(algeeWheelSubsystem);
     }
 
     @Override
     public void initialize() {
-        algeeWheelSubsystem.run(1);
+        algeeWheelSubsystem.run(speed);
     }
 
     @Override
@@ -23,6 +27,6 @@ public class ToggleAlgeeWheelCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return algeeWheelSubsystem.getCurrent() > 100;
     }
 }

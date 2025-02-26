@@ -46,8 +46,8 @@ public class ElevatorSubsystem extends SubsystemBase implements LoggedSubsystem 
     private final ElevatorLogAutoLogged elevatorLogAutoLogged;
 
     public ElevatorSubsystem() {
-        motor1 = SparkFactory.createSparkMax(10);
-        motor2 = SparkFactory.createSparkMax(12);
+        motor1 = SparkFactory.createSparkMax(1000);
+        motor2 = SparkFactory.createSparkMax(1200);
 
         SparkBaseConfig configgled =
                 new SparkMaxConfig()

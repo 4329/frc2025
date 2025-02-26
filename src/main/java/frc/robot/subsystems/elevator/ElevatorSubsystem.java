@@ -27,9 +27,9 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
         }
     }
 
-
     public void setSetpoint(ElevatorPosition setpoint);
+
     public void runElevator(double speed);
 
-	public boolean atSetpoint();
+    public boolean atSetpoint();
 }

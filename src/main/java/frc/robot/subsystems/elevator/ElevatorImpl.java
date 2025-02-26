@@ -1,6 +1,5 @@
 package frc.robot.subsystems.elevator;
 
-
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -14,7 +13,6 @@ import frc.robot.Constants;
 import frc.robot.model.ElevatorLogAutoLogged;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
-
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
@@ -91,12 +89,12 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
         elevatorPID.setSetpoint(MathUtils.clamp(MIN, MAX, setpoint));
     }
 
-	@Override
+    @Override
     public void setSetpoint(ElevatorPosition setpoint) {
         setSetpoint(setpoint.pos);
     }
 
-	@Override
+    @Override
     public void runElevator(double speed) {
         setSetpoint(elevatorPID.getSetpoint() + speed * ELEVATOR_SPEED);
     }
@@ -119,5 +117,4 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
         elevatorLogAutoLogged.setpoint = elevatorPID.getSetpoint();
         return elevatorLogAutoLogged;
     }
-
 }

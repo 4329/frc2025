@@ -1,11 +1,13 @@
 package frc.robot.subsystems.differentialArm;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 
 public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
 
-    public static final double ARM_LENGTH = 0.2794;
+    public static final double ARM_LENGTH_CORAL_CENTER = Units.inchesToMeters(20);
+    public static final double ARM_LENGTH_CLAW_END = Units.inchesToMeters(21);
 
     public enum DifferentialArmPitch {
         STORAGE(0),

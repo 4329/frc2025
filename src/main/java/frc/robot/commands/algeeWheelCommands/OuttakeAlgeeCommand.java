@@ -31,7 +31,7 @@ public class OuttakeAlgeeCommand extends Command {
     @Override
     public boolean isFinished() {
         if (timer.hasElapsed(0.3)) {
-			LEDState.algeeWheelHolding = false;
+            LEDState.algeeWheelHolding = false;
             return true;
         } else {
             return false;

@@ -19,14 +19,14 @@ public class IntakeAlgeeCommand extends Command {
         algeeWheelSubsystem.run(speed);
     }
 
-	@Override
-	public void execute() {
-		if (algeeWheelSubsystem.getAlgeed()) cancel();
-	}
+    @Override
+    public void execute() {
+        if (algeeWheelSubsystem.getAlgeed()) cancel();
+    }
 
     @Override
     public void end(boolean interrupted) {
-		if (interrupted) LEDState.algeeWheelHolding = true;
+        if (interrupted) LEDState.algeeWheelHolding = true;
 
         algeeWheelSubsystem.stop();
     }

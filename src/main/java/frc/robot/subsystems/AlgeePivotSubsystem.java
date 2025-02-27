@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.AlgeePivotLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
@@ -65,7 +66,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     }
 
     private void setSetpoint(double setpoint) {
-        pidController.setGoal(MathUtils.clamp(MIN, MAX, setpoint));
+		if (!LEDState.algeeWheelHolding) pidController.setGoal(MathUtils.clamp(MIN, MAX, setpoint));
     }
 
     public void run(double speed) {

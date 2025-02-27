@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.model.AlgeePivotLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.utilities.MathUtils;
@@ -47,7 +48,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     private final GenericEntry maxAccel = Shuffleboard.getTab("yep").add("accel", 0).getEntry();
 
     public AlgeePivotSubsystem() {
-        motor = SparkFactory.createSparkMax(12);
+        motor = SparkFactory.createSparkMax(Constants.SparkIDs.algeePivot);
         config =
                 new SparkMaxConfig()
                         .apply(

@@ -11,8 +11,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.ElevatorLogAutoLogged;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
@@ -31,7 +33,9 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
 
     private final ElevatorLogAutoLogged elevatorLogAutoLogged;
 
-    public ElevatorImpl() {
+    private final Supplier<Double> armAngle;
+
+    public ElevatorImpl(Supplier<Double> armAngle) {
         motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator1);
         motor2 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator2);
 
@@ -49,7 +53,10 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
         final double gear3 = 28;
         final double belt = .127;
         configgled.encoder.positionConversionFactor(
-                (gear1 / gear2) * (gear2 / gear3) * (gear3 / belt)); // approximation
+                (gear1 / gear2)
+                        * (gear2 / gear3)
+                        * (gear3 / belt)); // approximation //also we know how math works its camden's fault we
+        // didn't simplify
 
         motor1.configure(configgled, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -62,10 +69,13 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
         elevatorPID = new PIDController(0.1, 0, 0);
 
         elevatorLogAutoLogged = new ElevatorLogAutoLogged();
+        this.armAngle = armAngle;
     }
 
     private void setSetpoint(double setpoint) {
-        elevatorPID.setSetpoint(MathUtils.clamp(MIN, MAX, setpoint));
+        double armLengthY =
+                Math.abs(DifferentialArmSubsystem.ARM_LENGTH_CLAW_END / Math.cos(armAngle.get()));
+        elevatorPID.setSetpoint(MathUtils.clamp(MIN + armLengthY, MAX, setpoint));
     }
 
     @Override

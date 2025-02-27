@@ -92,7 +92,7 @@ public class RobotContainer {
         algeeWheelSubsystem = new AlgeeWheelSubsystem();
         intakePivotSubsystem = new IntakePivotSubsystem();
         intakeWheelSubsystem = new IntakeWheelSubsystem();
-        elevatorSubsystem = ElevatorFactory.createElevatorSubsystem();
+        elevatorSubsystem = ElevatorFactory.createElevatorSubsystem(differentialArmSubsystem::getPitch);
         lightSubsystem = new LightSubsystem();
 
         new LoggingSubsystem(

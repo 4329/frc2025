@@ -5,14 +5,15 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import java.util.function.Supplier;
 
 public class ElevatorSim extends ElevatorImpl {
 
     private SparkMaxSim motorSim;
     private edu.wpi.first.wpilibj.simulation.ElevatorSim elevatorSim;
 
-    public ElevatorSim() {
-        super();
+    public ElevatorSim(Supplier<Double> armAngle) {
+        super(armAngle);
 
         DCMotor gearbox = DCMotor.getNEO(2);
         motorSim = new SparkMaxSim(motor1, gearbox);

@@ -26,11 +26,11 @@ public class AlgeeSocrePorcessor extends SequentialCommandGroup {
             AlgeeWheelSubsystem algeeWheelSubsystem) {
 
         addCommands(
-				new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmSubsystem.DifferentialArmPitch.NINETY),
-				new ParallelCommandGroup(
-					new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT),
-					new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.PORCESSOR)
-				),
+                new SetArmPitchCommand(
+                        differentialArmSubsystem, DifferentialArmSubsystem.DifferentialArmPitch.NINETY),
+                new ParallelCommandGroup(
+                        new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT),
+                        new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.PORCESSOR)),
                 new OuttakeAlgeeCommand(algeeWheelSubsystem));
     }
 }

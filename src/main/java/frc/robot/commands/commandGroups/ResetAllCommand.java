@@ -13,13 +13,14 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 public class ResetAllCommand extends ParallelCommandGroup {
 
     public ResetAllCommand(
-            DifferentialArmSubsystem differentialArmSubsystem, ElevatorSubsystem elevatorSubsystem, AlgeePivotSubsystem algeePivotSubsystem) {
+            DifferentialArmSubsystem differentialArmSubsystem,
+            ElevatorSubsystem elevatorSubsystem,
+            AlgeePivotSubsystem algeePivotSubsystem) {
 
-		addCommands(
-				new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO),
-				new SetArmPitchCommand(
-					differentialArmSubsystem, DifferentialArmSubsystem.DifferentialArmPitch.STORAGE),
-				new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO)
-				);
+        addCommands(
+                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO),
+                new SetArmPitchCommand(
+                        differentialArmSubsystem, DifferentialArmSubsystem.DifferentialArmPitch.STORAGE),
+                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
     }
 }

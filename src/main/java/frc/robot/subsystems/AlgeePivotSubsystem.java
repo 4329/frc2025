@@ -38,7 +38,6 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     }
 
     private SparkMax motor;
-    private SparkBaseConfig config;
 
     private ProfiledPIDController pidController;
     private TrapezoidProfile.Constraints profile = new TrapezoidProfile.Constraints(6, 2);
@@ -50,7 +49,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
 
     public AlgeePivotSubsystem() {
         motor = SparkFactory.createSparkMax(Constants.SparkIDs.algeePivot);
-        config =
+        SparkBaseConfig config =
                 new SparkMaxConfig()
                         .apply(
                                 new SoftLimitConfig()

@@ -1,13 +1,19 @@
 package frc.robot.model;
 
+import static edu.wpi.first.units.Units.Ohm;
+
 import java.util.HashMap;
 import java.util.Map;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
+
 public class CommandLogEntry implements LoggableInputs, Cloneable {
 
-    public Map<String, String> commands;
+    public Map<Command, String> commands;
 
     public CommandLogEntry() {
         commands = new HashMap<>();
@@ -16,16 +22,23 @@ public class CommandLogEntry implements LoggableInputs, Cloneable {
     @Override
     public void toLog(LogTable table) {
         commands.forEach(
-                (String name, String message) -> {
-                    table.put(name, message);
+                (Command command, String message) -> {
+                    if (command instanceof LoggableInputs) {
+                        System.out.println(command.getName());
+                        ((LoggableInputs)command).toLog(table.getSubtable(command.getName()));
+                    }
+                    table.put(command.getName(), message);
                 });
     }
 
     @Override
     public void fromLog(LogTable table) {
         commands.forEach(
-                (String name, String message) -> {
-                    commands.replace(name, table.get(name, message));
+                (Command command, String message) -> {
+                    if (command instanceof LoggedSequentialCommandGroup) {
+                        ((LoggedSequentialCommandGroup)command).fromLog(table.getSubtable(command.getName()));
+                    }
+                    commands.replace(command, table.get(command.getName(), message));
                 });
     }
 
@@ -35,8 +48,7 @@ public class CommandLogEntry implements LoggableInputs, Cloneable {
         return copy;
     }
 
-    public void set(String name, String message) {
-        if (!commands.containsKey(name)) commands.put(name, message);
-        else commands.replace(name, message);
+    public void put(Command name, String message) {
+        commands.put(name, message);
     }
 }

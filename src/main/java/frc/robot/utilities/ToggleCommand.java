@@ -1,5 +1,8 @@
 package frc.robot.utilities;
 
+import org.littletonrobotics.junction.LogTable;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ToggleCommand extends Command {
@@ -9,6 +12,7 @@ public class ToggleCommand extends Command {
 
     public ToggleCommand(Command child) {
         this.child = child;
+        setName("Toggle(" + child.getName() + ")");
     }
 
     @Override
@@ -24,8 +28,4 @@ public class ToggleCommand extends Command {
         return true;
     }
 
-    @Override
-    public String getName() {
-        return child.getName();
-    }
 }

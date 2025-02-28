@@ -2,13 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.utilities;
+package frc.robot.utilities.loggedComands;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.model.CommandLogEntry;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import org.littletonrobotics.junction.LogTable;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 /**
  * A command composition that runs a list of commands in sequence.
@@ -19,11 +24,18 @@ import java.util.List;
  *
  * <p>This class is provided by the NewCommands VendorDep
  */
-public class NotFinalSequentialCommandGroup extends Command {
+public class LoggedSequentialCommandGroup extends LoggedCommandComposer implements LoggableInputs {
     private final List<Command> m_commands = new ArrayList<>();
     private int m_currentCommandIndex = -1;
     private boolean m_runWhenDisabled = true;
     private InterruptionBehavior m_interruptBehavior = InterruptionBehavior.kCancelIncoming;
+
+    private CommandLogEntry commandLogEntry;
+
+    protected LoggedSequentialCommandGroup(Command... commands) {
+        commandLogEntry = new CommandLogEntry();
+        addCommands(commands);
+    }
 
     /**
      * Creates a new SequentialCommandGroup. The given commands will be run sequentially, with the
@@ -32,8 +44,9 @@ public class NotFinalSequentialCommandGroup extends Command {
      * @param commands the commands to include in this composition.
      */
     @SuppressWarnings("this-escape")
-    public NotFinalSequentialCommandGroup(Command... commands) {
-        addCommands(commands);
+    public LoggedSequentialCommandGroup(String name, Command... commands) {
+        this(commands);
+        setName(name);
     }
 
     /**
@@ -66,6 +79,7 @@ public class NotFinalSequentialCommandGroup extends Command {
 
         if (!m_commands.isEmpty()) {
             m_commands.get(0).initialize();
+            commandLogEntry.put(m_commands.get(0), "initialize()");
         }
     }
 
@@ -78,11 +92,16 @@ public class NotFinalSequentialCommandGroup extends Command {
         Command currentCommand = m_commands.get(m_currentCommandIndex);
 
         currentCommand.execute();
+        commandLogEntry.put(currentCommand, "execute()");
+
         if (currentCommand.isFinished()) {
             currentCommand.end(false);
+            commandLogEntry.put(currentCommand, "end(false)");
             m_currentCommandIndex++;
+            
             if (m_currentCommandIndex < m_commands.size()) {
                 m_commands.get(m_currentCommandIndex).initialize();
+                commandLogEntry.put(m_commands.get(m_currentCommandIndex), "initialize()");
             }
         }
     }
@@ -94,6 +113,7 @@ public class NotFinalSequentialCommandGroup extends Command {
                 && m_currentCommandIndex > -1
                 && m_currentCommandIndex < m_commands.size()) {
             m_commands.get(m_currentCommandIndex).end(true);
+            commandLogEntry.put(m_commands.get(m_currentCommandIndex), "end(true)");
         }
         m_currentCommandIndex = -1;
     }
@@ -119,4 +139,15 @@ public class NotFinalSequentialCommandGroup extends Command {
 
         builder.addIntegerProperty("index", () -> m_currentCommandIndex, null);
     }
+
+    @Override
+    public void toLog(LogTable table) {
+        commandLogEntry.toLog(table);
+    }
+
+    @Override
+    public void fromLog(LogTable table) {
+        commandLogEntry.fromLog(table);
+    }
+
 }

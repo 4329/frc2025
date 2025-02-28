@@ -11,10 +11,11 @@ import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
-import frc.robot.utilities.NotFinalSequentialCommandGroup;
 import frc.robot.utilities.UnInstantCommand;
+import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
+import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
-public class AlgeeIntake extends NotFinalSequentialCommandGroup {
+public class AlgeeIntake extends LoggedSequentialCommandGroup {
 
     private ButtonRingController buttonRingController;
 
@@ -29,15 +30,17 @@ public class AlgeeIntake extends NotFinalSequentialCommandGroup {
         this.buttonRingController = buttonRingController;
 
         addCommands(
-                new ParallelCommandGroup(
+                new LoggedParallelCommandGroup(
+                        "SetInitialPositions",
                         new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT),
                         new UnInstantCommand(
+                                        "SetElevatorByButtonRing",
                                         () ->
                                                 elevatorSubsystem.setSetpoint(
                                                         buttonRingController.getxOffset() < 0
                                                                 ? ElevatorSubsystem.ElevatorPosition.ALGEE_HIGH
                                                                 : ElevatorSubsystem.ElevatorPosition.ALGEE_LOW))
-                                .until(elevatorSubsystem::atSetpoint)),
+                                                        .untilLog(elevatorSubsystem::atSetpoint)),
                 new CenterOnAlgeeCommand(poseEstimationSubsystem, drivetrain, buttonRingController),
                 new IntakeAlgeeCommand(algeeWheelSubsystem, 1));
     }

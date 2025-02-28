@@ -1,6 +1,7 @@
 package frc.robot.commands.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.differentialArmCommands.SetArmPitchCommand;
 import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
@@ -11,10 +12,11 @@ import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
-import frc.robot.utilities.NotFinalSequentialCommandGroup;
 import frc.robot.utilities.UnInstantCommand;
+import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
+import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
-public class ScoreWithArm extends NotFinalSequentialCommandGroup {
+public class ScoreWithArm extends LoggedSequentialCommandGroup {
 
     ButtonRingController buttonRingController;
 
@@ -29,9 +31,11 @@ public class ScoreWithArm extends NotFinalSequentialCommandGroup {
         this.buttonRingController = buttonRingController;
 
         addCommands(
-                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO),
-                new ParallelCommandGroup(
+                // new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO),
+                new LoggedParallelCommandGroup(
+                        "SetInitialPosition",
                         new UnInstantCommand(
+                                        "SetElevatorByButton",
                                         () ->
                                                 elevatorSubsystem.setSetpoint(
                                                         switch (buttonRingController.getLevel()) {
@@ -40,7 +44,7 @@ public class ScoreWithArm extends NotFinalSequentialCommandGroup {
                                                             case 4 -> ElevatorSubsystem.ElevatorPosition.L4;
                                                             default -> ElevatorSubsystem.ElevatorPosition.L2;
                                                         }))
-                                .until(() -> elevatorSubsystem.atSetpoint()),
+                                .untilLog(() -> elevatorSubsystem.atSetpoint()),
                         new SetArmPitchCommand(
                                 differentialArmSubsystem,
                                 DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)),

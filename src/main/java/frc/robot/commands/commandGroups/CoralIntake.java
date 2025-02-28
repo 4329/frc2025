@@ -7,15 +7,17 @@ import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
-import frc.robot.utilities.NotFinalSequentialCommandGroup;
+import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
+import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
-public class CoralIntake extends NotFinalSequentialCommandGroup {
+public class CoralIntake extends LoggedSequentialCommandGroup {
 
     public CoralIntake(
             ElevatorSubsystem elevatorSubsystem, DifferentialArmSubsystem differentialArmSubsystem) {
 
         addCommands(
-                new ParallelCommandGroup(
+                new LoggedParallelCommandGroup(
+                        "SetElevatorAndArm",
                         new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.INTAKE),
                         new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.STORAGE)),
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO));

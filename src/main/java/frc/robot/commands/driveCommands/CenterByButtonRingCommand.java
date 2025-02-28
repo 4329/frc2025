@@ -14,17 +14,19 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     public CenterByButtonRingCommand(
             PoseEstimationSubsystem poseEstimationSubsystem,
             Drivetrain drivetrain,
-            ButtonRingController buttonRingController) {
+            ButtonRingController buttonRingController,
+            double zDist) {
         super(1, poseEstimationSubsystem, drivetrain);
 
         this.buttonRingController = buttonRingController;
+        this.zDist = zDist;
     }
 
     @Override
     public void initialize() {
         target =
                 placeTarget(
-                        buttonRingController.getTagID(), buttonRingController.getxOffset() - clawOffset);
+                        buttonRingController.getTagID(), buttonRingController.getxOffset() - clawOffset, zDist);
         super.initialize();
 
         LEDState.centerRunning = true;

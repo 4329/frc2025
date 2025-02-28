@@ -2,7 +2,14 @@
   "robotWidth": 0.9,
   "robotLength": 0.9,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Side F",
+    "Side A",
+    "Side B",
+    "Side C",
+    "Side D",
+    "Side E"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
@@ -28,5 +35,8 @@
   "brModuleY": -0.273,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Coral Claw\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.1016,\"y\":-0.246},\"end\":{\"x\":0.699,\"y\":-0.246},\"strokeWidth\":0.02}}",
+    "{\"name\":\"Algae Claw\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.1016,\"y\":0.23},\"end\":{\"x\":0.478,\"y\":0.23},\"strokeWidth\":0.02}}"
+  ]
 }

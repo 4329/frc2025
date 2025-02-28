@@ -40,10 +40,10 @@ public class CenterOnTargetCommand extends Command {
         this.poseEstimationSubsystem = poseEstimationSubsystem;
         this.drivetrain = drivetrain;
 
-        target = placeTarget(targetID, xOffset);
+        target = placeTarget(targetID, xOffset, DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER);
     }
 
-    Pose2d placeTarget(int targetID, double xOffset) {
+    protected Pose2d placeTarget(int targetID, double xOffset, double zDist) {
         Pose3d tmp = poseEstimationSubsystem.getTagPose(targetID);
         if (tmp == null) return null;
 

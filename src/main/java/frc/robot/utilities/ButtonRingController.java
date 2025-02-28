@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import frc.robot.model.ButtonRingLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
+import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -18,8 +19,6 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
     private int tagID;
 
     ButtonRingLogAutoLogged buttonRingLogAutoLogged;
-
-    private final double OFFSET_AMOUNT = 0.1651;
 
     public ButtonRingController(int port) {
         super(port);

@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -43,6 +44,7 @@ import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.elevator.ElevatorFactory;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
@@ -127,12 +129,73 @@ public class RobotContainer {
                 lightSubsystem);
 
         new CommandLoginator();
-
+        configureNamedCommands();
         configureButtonBindings();
         configureAutoBuilder();
 
         m_chooser = new SendableChooser<>();
         configureAutoChooser(drivetrain);
+    }
+
+    private void configureNamedCommands() {
+        NamedCommands.registerCommand(
+                "elevatorL2",
+                new AutoScoreCoralCommand(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        ElevatorPosition.L2,
+                        differentialArmSubsystem));
+        NamedCommands.registerCommand(
+                "elevatorL3",
+                new AutoScoreCoralCommand(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        ElevatorPosition.L3,
+                        differentialArmSubsystem));
+        NamedCommands.registerCommand(
+                "elevatorL4",
+                new AutoScoreCoralCommand(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        ElevatorPosition.L4,
+                        differentialArmSubsystem));
+
+        NamedCommands.registerCommand(
+                "intakeCoral",
+                new HPIntakeCommand(
+                        elevatorSubsystem, differentialArmSubsystem));
+
+        for (int i = 0; i < 6; i++) {
+            addCool(i, ElevatorPosition.L2);
+            addCool(i, ElevatorPosition.L3);
+            addCool(i, ElevatorPosition.L4);
+        }
+    }
+
+    private void addCool(int num, ElevatorPosition position) {
+        NamedCommands.registerCommand(
+                "tag" + num + position + "Right",
+                new AutoScoreCoralButCool(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        position,
+                        differentialArmSubsystem,
+                        poseEstimationSubsystem,
+                        m_robotDrive,
+                        num,
+                        true));
+        NamedCommands.registerCommand(
+                "tag" + num + position + "Left",
+                new AutoScoreCoralButCool(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        position,
+                        differentialArmSubsystem,
+                        poseEstimationSubsystem,
+                        m_robotDrive,
+                        num,
+                        false));
+        NamedCommands.registerCommand("lowerArm", new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY));
     }
 
     private void configureAutoBuilder() {
@@ -251,7 +314,7 @@ public class RobotContainer {
                 String name = pathFile.getName().replace(".auto", "");
                 PathPlannerAuto pathCommand = new PathPlannerAuto(name);
                 Command autoCommand =
-                        new SequentialCommandGroup(pathCommand, new InstantCommand(drivetrain::stop));
+                        new SequentialCommandGroup(new MustDoInAutoCommand(algeePivotSubsystem, elevatorSubsystem, differentialArmSubsystem),pathCommand, new InstantCommand(drivetrain::stop));
                 m_chooser.addOption(name, autoCommand);
 
                 autoName.put(autoCommand, pathCommand);

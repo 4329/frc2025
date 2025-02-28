@@ -9,6 +9,7 @@ import frc.robot.utilities.ButtonRingController;
 public class CenterOnAlgeeCommand extends CenterOnTargetCommand {
 
     ButtonRingController buttonRingController;
+    private final double zDist = 1; // WIP change this later please
 
     private final double clawOffset = 0.156;
 

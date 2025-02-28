@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,7 +20,10 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.ToggleAlgeeWheelCommand;
+import frc.robot.commands.autoCommands.AutoScoreCoralCommand;
+import frc.robot.commands.commandGroups.HPIntakeCommand;
 import frc.robot.commands.commandGroups.ScoreWithArm;
+import frc.robot.commands.elevatorCommands.SetElevatorCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.IntakePivotSubsystem;
@@ -30,6 +34,7 @@ import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.elevator.ElevatorFactory;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.light.LightSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
@@ -104,12 +109,22 @@ public class RobotContainer {
                 lightSubsystem);
 
         new CommandLoginator();
-
+        configureNamedCommands();
         configureButtonBindings();
         configureAutoBuilder();
 
         m_chooser = new SendableChooser<>();
         configureAutoChooser(drivetrain);
+    }
+        private void configureNamedCommands() {
+        NamedCommands.registerCommand(
+                "elevatorL2", new AutoScoreCoralCommand(algeePivotSubsystem,elevatorSubsystem,ElevatorPosition.L2,differentialArmSubsystem,poseEstimationSubsystem,m_robotDrive));
+        NamedCommands.registerCommand(
+                "elevatorL3", new AutoScoreCoralCommand(algeePivotSubsystem,elevatorSubsystem,ElevatorPosition.L3,differentialArmSubsystem,poseEstimationSubsystem,m_robotDrive));
+        NamedCommands.registerCommand(
+                "elevatorL4", new AutoScoreCoralCommand(algeePivotSubsystem,elevatorSubsystem,ElevatorPosition.L4,differentialArmSubsystem,poseEstimationSubsystem,m_robotDrive));
+
+        NamedCommands.registerCommand("intakeCoral",new HPIntakeCommand(elevatorSubsystem, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
     }
 
     private void configureAutoBuilder() {
@@ -118,6 +133,7 @@ public class RobotContainer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    
 
         AutoBuilder.configure(
                 poseEstimationSubsystem::getPose,

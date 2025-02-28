@@ -1,7 +1,6 @@
 package frc.robot.commands.commandGroups;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.differentialArmCommands.SetArmPitchCommand;
 import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
@@ -31,20 +30,20 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
         this.buttonRingController = buttonRingController;
 
         addCommands(
-                // new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO),
+                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO),
                 new LoggedParallelCommandGroup(
                         "SetInitialPosition",
                         new UnInstantCommand(
-                                        "SetElevatorByButton",
-                                        () ->
-                                                elevatorSubsystem.setSetpoint(
-                                                        switch (buttonRingController.getLevel()) {
-                                                            case 2 -> ElevatorSubsystem.ElevatorPosition.L2;
-                                                            case 3 -> ElevatorSubsystem.ElevatorPosition.L3;
-                                                            case 4 -> ElevatorSubsystem.ElevatorPosition.L4;
-                                                            default -> ElevatorSubsystem.ElevatorPosition.L2;
-                                                        }))
-                                .untilLog(() -> elevatorSubsystem.atSetpoint()),
+                                "SetElevatorByButton",
+                                () ->
+                                        elevatorSubsystem.setSetpoint(
+                                                switch (buttonRingController.getLevel()) {
+                                                    case 2 -> ElevatorSubsystem.ElevatorPosition.L2;
+                                                    case 3 -> ElevatorSubsystem.ElevatorPosition.L3;
+                                                    case 4 -> ElevatorSubsystem.ElevatorPosition.L4;
+                                                    default -> ElevatorSubsystem.ElevatorPosition.L2;
+                                                })),
+                        new WaitUntilCommand(() -> elevatorSubsystem.atSetpoint()),
                         new SetArmPitchCommand(
                                 differentialArmSubsystem,
                                 DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)),
@@ -53,9 +52,10 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
                         differentialArmSubsystem, DifferentialArmSubsystem.DifferentialArmPitch.NINETY));
     }
 
-    @Override
-    public void execute() {
-        if (buttonRingController.getTagID() != 0 && buttonRingController.getxOffset() != 0)
-            super.execute();
-    }
+    // @Override
+    // public void execute() {
+    // if (buttonRingController.getTagID() != 0 && buttonRingController.getxOffset()
+    // != 0)
+    // super.execute();
+    // }
 }

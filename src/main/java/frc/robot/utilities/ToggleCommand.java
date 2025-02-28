@@ -1,8 +1,5 @@
 package frc.robot.utilities;
 
-import org.littletonrobotics.junction.LogTable;
-import org.littletonrobotics.junction.inputs.LoggableInputs;
-
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ToggleCommand extends Command {
@@ -27,5 +24,4 @@ public class ToggleCommand extends Command {
     public boolean isFinished() {
         return true;
     }
-
 }

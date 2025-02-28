@@ -23,7 +23,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
         super(port);
 
         new UnInstantCommand(
-            "SetButtonRingLevel",
+                        "SetButtonRingLevel",
                         () -> {
                             if (getRawAxis(0) == 1) level = 3;
                             else if (getRawAxis(0) == -1) level = 4;
@@ -41,8 +41,8 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
             final int why = i;
             button(i)
                     .onTrue(
-                        new UnInstantCommand(
-                                "SetButtonRingButtonDown",
+                            new UnInstantCommand(
+                                            "SetButtonRingButtonDown",
                                             () -> {
                                                 button = why;
 
@@ -55,7 +55,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
             button(i)
                     .onFalse(
                             new UnInstantCommand(
-                            "SetButtonRingButtonDown",
+                                            "SetButtonRingButtonDown",
                                             () -> {
                                                 if (button == why) {
                                                     button = -1;

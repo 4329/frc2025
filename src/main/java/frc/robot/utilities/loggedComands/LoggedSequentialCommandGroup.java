@@ -8,10 +8,8 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.model.CommandLogEntry;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -98,7 +96,7 @@ public class LoggedSequentialCommandGroup extends LoggedCommandComposer implemen
             currentCommand.end(false);
             commandLogEntry.put(currentCommand, "end(false)");
             m_currentCommandIndex++;
-            
+
             if (m_currentCommandIndex < m_commands.size()) {
                 m_commands.get(m_currentCommandIndex).initialize();
                 commandLogEntry.put(m_commands.get(m_currentCommandIndex), "initialize()");
@@ -149,5 +147,4 @@ public class LoggedSequentialCommandGroup extends LoggedCommandComposer implemen
     public void fromLog(LogTable table) {
         commandLogEntry.fromLog(table);
     }
-
 }

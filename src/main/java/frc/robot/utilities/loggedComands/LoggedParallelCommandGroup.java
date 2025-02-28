@@ -1,16 +1,14 @@
 package frc.robot.utilities.loggedComands;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.model.CommandLogEntry;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import frc.robot.model.CommandLogEntry;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class LoggedParallelCommandGroup extends LoggedCommandComposer implements LoggableInputs {
     // maps commands in this composition to whether they are still running
@@ -29,10 +27,8 @@ public class LoggedParallelCommandGroup extends LoggedCommandComposer implements
     }
 
     /**
-     * Creates a new ParallelCommandGroup. The given commands will be executed
-     * simultaneously. The
-     * command composition will finish when the last command finishes. If the
-     * composition is
+     * Creates a new ParallelCommandGroup. The given commands will be executed simultaneously. The
+     * command composition will finish when the last command finishes. If the composition is
      * interrupted, only the commands that are still running will be interrupted.
      *
      * @param commands the commands to include in this composition.

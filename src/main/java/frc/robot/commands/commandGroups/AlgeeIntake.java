@@ -1,6 +1,5 @@
 package frc.robot.commands.commandGroups;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.driveCommands.CenterOnAlgeeCommand;
@@ -40,7 +39,7 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
                                                         buttonRingController.getxOffset() < 0
                                                                 ? ElevatorSubsystem.ElevatorPosition.ALGEE_HIGH
                                                                 : ElevatorSubsystem.ElevatorPosition.ALGEE_LOW))
-                                                        .untilLog(elevatorSubsystem::atSetpoint)),
+                                .untilLog(elevatorSubsystem::atSetpoint)),
                 new CenterOnAlgeeCommand(poseEstimationSubsystem, drivetrain, buttonRingController),
                 new IntakeAlgeeCommand(algeeWheelSubsystem, 1));
     }

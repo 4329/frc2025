@@ -1,25 +1,23 @@
 package frc.robot.utilities.loggedComands;
 
-import java.util.Set;
-
-import org.littletonrobotics.junction.LogTable;
-import org.littletonrobotics.junction.inputs.LoggableInputs;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import java.util.Set;
+import org.littletonrobotics.junction.LogTable;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LoggedWrapperCommand extends Command implements LoggableInputs {
     /** Command being wrapped. */
     protected final Command m_command;
+
     String message;
 
     /**
      * Wrap a command.
      *
-     * @param command the command being wrapped. Trying to directly schedule this
-     *                command or add it to
-     *                a composition will throw an exception.
+     * @param command the command being wrapped. Trying to directly schedule this command or add it to
+     *     a composition will throw an exception.
      */
     @SuppressWarnings("this-escape")
     protected LoggedWrapperCommand(Command command) {
@@ -29,19 +27,14 @@ public class LoggedWrapperCommand extends Command implements LoggableInputs {
         setName(command.getName());
     }
 
-    /**
-     * The initial subroutine of a command. Called once when the command is
-     * initially scheduled.
-     */
+    /** The initial subroutine of a command. Called once when the command is initially scheduled. */
     @Override
     public void initialize() {
         message = "initialize()";
         m_command.initialize();
     }
 
-    /**
-     * The main body of a command. Called repeatedly while the command is scheduled.
-     */
+    /** The main body of a command. Called repeatedly while the command is scheduled. */
     @Override
     public void execute() {
         message = "execute()";
@@ -49,13 +42,10 @@ public class LoggedWrapperCommand extends Command implements LoggableInputs {
     }
 
     /**
-     * The action to take when the command ends. Called when either the command
-     * finishes normally, or
+     * The action to take when the command ends. Called when either the command finishes normally, or
      * when it interrupted/canceled.
      *
-     * <p>
-     * Do not schedule commands here that share requirements with this command. Use
-     * {@link
+     * <p>Do not schedule commands here that share requirements with this command. Use {@link
      * #andThen(Command...)} instead.
      *
      * @param interrupted whether the command was interrupted/canceled
@@ -67,8 +57,7 @@ public class LoggedWrapperCommand extends Command implements LoggableInputs {
     }
 
     /**
-     * Whether the command has finished. Once a command finishes, the scheduler will
-     * call its end()
+     * Whether the command has finished. Once a command finishes, the scheduler will call its end()
      * method and un-schedule it.
      *
      * @return whether the command has finished.
@@ -79,19 +68,13 @@ public class LoggedWrapperCommand extends Command implements LoggableInputs {
     }
 
     /**
-     * Specifies the set of subsystems used by this command. Two commands cannot use
-     * the same
-     * subsystem at the same time. If the command is scheduled as interruptible and
-     * another command is
-     * scheduled that shares a requirement, the command will be interrupted. Else,
-     * the command will
+     * Specifies the set of subsystems used by this command. Two commands cannot use the same
+     * subsystem at the same time. If the command is scheduled as interruptible and another command is
+     * scheduled that shares a requirement, the command will be interrupted. Else, the command will
      * not be scheduled. If no subsystems are required, return an empty set.
      *
-     * <p>
-     * Note: it is recommended that user implementations contain the requirements as
-     * a field, and
-     * return that field here, rather than allocating a new set every time this is
-     * called.
+     * <p>Note: it is recommended that user implementations contain the requirements as a field, and
+     * return that field here, rather than allocating a new set every time this is called.
      *
      * @return the set of subsystems that are required
      */
@@ -101,8 +84,7 @@ public class LoggedWrapperCommand extends Command implements LoggableInputs {
     }
 
     /**
-     * Whether the given command should run when the robot is disabled. Override to
-     * return true if the
+     * Whether the given command should run when the robot is disabled. Override to return true if the
      * command should run when disabled.
      *
      * @return whether the command should run when the robot is disabled
@@ -119,17 +101,13 @@ public class LoggedWrapperCommand extends Command implements LoggableInputs {
 
     @Override
     public void toLog(LogTable table) {
-        if (m_command instanceof LoggableInputs)
-            ((LoggableInputs) m_command).toLog(table);
-        else
-            table.put(m_command.getName(), message);
+        if (m_command instanceof LoggableInputs) ((LoggableInputs) m_command).toLog(table);
+        else table.put(m_command.getName(), message);
     }
 
     @Override
     public void fromLog(LogTable table) {
-        if (m_command instanceof LoggableInputs)
-            ((LoggableInputs) m_command).fromLog(table);
-        else
-            message = table.get(m_command.getName(), message);
+        if (m_command instanceof LoggableInputs) ((LoggableInputs) m_command).fromLog(table);
+        else message = table.get(m_command.getName(), message);
     }
 }

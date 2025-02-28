@@ -1,6 +1,5 @@
 package frc.robot.utilities;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utilities.loggedComands.LoggedCommandComposer;
 
 public class UnInstantCommand extends LoggedCommandComposer {

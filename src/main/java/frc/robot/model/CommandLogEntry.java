@@ -1,15 +1,11 @@
 package frc.robot.model;
 
-import static edu.wpi.first.units.Units.Ohm;
-
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 import java.util.HashMap;
 import java.util.Map;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
 public class CommandLogEntry implements LoggableInputs, Cloneable {
 
@@ -24,8 +20,7 @@ public class CommandLogEntry implements LoggableInputs, Cloneable {
         commands.forEach(
                 (Command command, String message) -> {
                     if (command instanceof LoggableInputs) {
-                        System.out.println(command.getName());
-                        ((LoggableInputs)command).toLog(table.getSubtable(command.getName()));
+                        ((LoggableInputs) command).toLog(table.getSubtable(command.getName()));
                     }
                     table.put(command.getName(), message);
                 });
@@ -36,7 +31,7 @@ public class CommandLogEntry implements LoggableInputs, Cloneable {
         commands.forEach(
                 (Command command, String message) -> {
                     if (command instanceof LoggedSequentialCommandGroup) {
-                        ((LoggedSequentialCommandGroup)command).fromLog(table.getSubtable(command.getName()));
+                        ((LoggedSequentialCommandGroup) command).fromLog(table.getSubtable(command.getName()));
                     }
                     commands.replace(command, table.get(command.getName(), message));
                 });

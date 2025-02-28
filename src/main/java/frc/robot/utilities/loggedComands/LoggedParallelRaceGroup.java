@@ -1,16 +1,14 @@
 package frc.robot.utilities.loggedComands;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.model.CommandLogEntry;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import frc.robot.model.CommandLogEntry;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class LoggedParallelRaceGroup extends LoggedCommandComposer implements LoggableInputs {
     // LinkedHashSet guarantees we iterate over commands in the order they were
@@ -26,12 +24,10 @@ public class LoggedParallelRaceGroup extends LoggedCommandComposer implements Lo
         commandLogEntry = new CommandLogEntry();
         addCommands(commands);
     }
-  
+
     /**
-     * Creates a new ParallelCommandRace. The given commands will be executed
-     * simultaneously, and will
-     * "race to the finish" - the first command to finish ends the entire command,
-     * with all other
+     * Creates a new ParallelCommandRace. The given commands will be executed simultaneously, and will
+     * "race to the finish" - the first command to finish ends the entire command, with all other
      * commands being interrupted.
      *
      * @param commands the commands to include in this composition.

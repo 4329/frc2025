@@ -2,12 +2,11 @@ package frc.robot.utilities.loggedComands;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
-import org.littletonrobotics.junction.LogTable;
-import org.littletonrobotics.junction.inputs.LoggableInputs;
-
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import org.littletonrobotics.junction.LogTable;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LoggedRepeatCommand extends Command implements LoggableInputs {
     private final Command m_command;
@@ -15,19 +14,19 @@ public class LoggedRepeatCommand extends Command implements LoggableInputs {
 
     private String message;
 
-  /**
-   * Creates a new RepeatCommand. Will run another command repeatedly, restarting it whenever it
-   * ends, until this command is interrupted.
-   *
-   * @param command the command to run repeatedly
-   */
-  @SuppressWarnings("this-escape")
-  public LoggedRepeatCommand(Command command) {
-    m_command = requireNonNullParam(command, "command", "RepeatCommand");
-    CommandScheduler.getInstance().registerComposedCommands(command);
-    addRequirements(command.getRequirements());
-    setName("Repeat(" + command.getName() + ")");
-  }
+    /**
+     * Creates a new RepeatCommand. Will run another command repeatedly, restarting it whenever it
+     * ends, until this command is interrupted.
+     *
+     * @param command the command to run repeatedly
+     */
+    @SuppressWarnings("this-escape")
+    public LoggedRepeatCommand(Command command) {
+        m_command = requireNonNullParam(command, "command", "RepeatCommand");
+        CommandScheduler.getInstance().registerComposedCommands(command);
+        addRequirements(command.getRequirements());
+        setName("Repeat(" + command.getName() + ")");
+    }
 
     @Override
     public void initialize() {
@@ -87,14 +86,13 @@ public class LoggedRepeatCommand extends Command implements LoggableInputs {
 
     @Override
     public void toLog(LogTable table) {
-        if (m_command instanceof LoggableInputs) ((LoggableInputs)m_command).toLog(table);
+        if (m_command instanceof LoggableInputs) ((LoggableInputs) m_command).toLog(table);
         else table.put(getName(), message);
     }
 
-
     @Override
     public void fromLog(LogTable table) {
-        if (m_command instanceof LoggableInputs) ((LoggableInputs)m_command).fromLog(table);
+        if (m_command instanceof LoggableInputs) ((LoggableInputs) m_command).fromLog(table);
         else message = table.get(getName(), message);
     }
 }

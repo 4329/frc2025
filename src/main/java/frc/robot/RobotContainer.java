@@ -20,6 +20,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.ToggleAlgeeWheelCommand;
+import frc.robot.commands.autoCommands.AutoScoreCoralButCool;
 import frc.robot.commands.autoCommands.AutoScoreCoralCommand;
 import frc.robot.commands.autoCommands.CenterInAutoCommand;
 import frc.robot.commands.commandGroups.HPIntakeCommand;
@@ -152,6 +153,10 @@ public class RobotContainer {
                         elevatorSubsystem, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
 
         for (int i = 0; i < 6; i++) {
+			addCool(i, ElevatorPosition.L2);
+			addCool(i, ElevatorPosition.L3);
+			addCool(i, ElevatorPosition.L4);
+
             NamedCommands.registerCommand(
                     "tag" + i + "Right",
                     new CenterInAutoCommand(poseEstimationSubsystem, m_robotDrive, i, true));
@@ -160,6 +165,15 @@ public class RobotContainer {
                     new CenterInAutoCommand(poseEstimationSubsystem, m_robotDrive, i, false));
         }
     }
+
+	private void addCool(int num, ElevatorPosition position) {
+            NamedCommands.registerCommand(
+                    "tag" + num + position + "Right",
+                    new AutoScoreCoralButCool(algeePivotSubsystem, elevatorSubsystem, position, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive, num, true));
+            NamedCommands.registerCommand(
+                    "tag" + num + position + "Left",
+                    new AutoScoreCoralButCool(algeePivotSubsystem, elevatorSubsystem, position, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive, num, false));
+	}
 
     private void configureAutoBuilder() {
         try {

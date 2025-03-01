@@ -10,21 +10,32 @@ public class CenterInAutoCommand extends CenterOnTargetCommand {
 
     boolean right;
     int num;
+	double zDist;
+
+	public CenterInAutoCommand(
+            PoseEstimationSubsystem poseEstimationSubsystem,
+            Drivetrain drivetrain,
+            int num,
+            boolean right) {
+		this(poseEstimationSubsystem, drivetrain, num, right, DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER);
+			}
 
     public CenterInAutoCommand(
             PoseEstimationSubsystem poseEstimationSubsystem,
             Drivetrain drivetrain,
             int num,
-            boolean right) {
+            boolean right,
+			double zDist) {
         super(1, poseEstimationSubsystem, drivetrain);
         this.num = num;
         this.right = right;
+		this.zDist = zDist;
     }
 
     @Override
     public void initialize() {
         target =
-                placeTarget(AprilTagUtil.getReef(num), PoseEstimationSubsystem.OFFSET * (right ? 1 : -1), DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER);
+                placeTarget(AprilTagUtil.getReef(num), PoseEstimationSubsystem.OFFSET * (right ? 1 : -1), zDist);
         super.initialize();
     }
 }

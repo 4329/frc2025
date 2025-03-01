@@ -31,41 +31,37 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
         addCommands(
                 new LoggedParallelCommandGroup(
                         "Setup and cetner",
-                        new CenterByButtonRingCommand(poseEstimationSubsystem, drivetrain,
+                        new CenterByButtonRingCommand(
+                                poseEstimationSubsystem,
+                                drivetrain,
                                 buttonRingController,
                                 DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER * 2),
                         new LoggedSequentialCommandGroup(
                                 "Setup",
-                                new SetAlgeePivotCommand(algeePivotSubsystem,
-                                        AlgeePivotAngle.ZERO),
+                                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO),
                                 new LoggedParallelCommandGroup(
                                         "SetInitialPosition",
                                         new UnInstantCommand(
-                                                "SetElevatorByButton",
-                                                () -> elevatorSubsystem
-                                                        .setSetpoint(
-                                                                switch (buttonRingController
-                                                                        .getLevel()) {
-                                                                    case 2 ->
-                                                                        ElevatorSubsystem.ElevatorPosition.L2;
-                                                                    case 3 ->
-                                                                        ElevatorSubsystem.ElevatorPosition.L3;
-                                                                    case 4 ->
-                                                                        ElevatorSubsystem.ElevatorPosition.L4;
-                                                                    default ->
-                                                                        ElevatorSubsystem.ElevatorPosition.L2;
-                                                                }))
-                                                .whileLog(() -> !elevatorSubsystem
-                                                        .atSetpoint()),
+                                                        "SetElevatorByButton",
+                                                        () ->
+                                                                elevatorSubsystem.setSetpoint(
+                                                                        switch (buttonRingController.getLevel()) {
+                                                                            case 2 -> ElevatorSubsystem.ElevatorPosition.L2;
+                                                                            case 3 -> ElevatorSubsystem.ElevatorPosition.L3;
+                                                                            case 4 -> ElevatorSubsystem.ElevatorPosition.L4;
+                                                                            default -> ElevatorSubsystem.ElevatorPosition.L2;
+                                                                        }))
+                                                .whileLog(() -> !elevatorSubsystem.atSetpoint()),
                                         new SetArmPitchCommand(
                                                 differentialArmSubsystem,
                                                 DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE))),
-                        new CenterByButtonRingCommand(poseEstimationSubsystem, drivetrain,
+                        new CenterByButtonRingCommand(
+                                poseEstimationSubsystem,
+                                drivetrain,
                                 buttonRingController,
                                 DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER),
                         new SetArmPitchCommand(
-                                differentialArmSubsystem,
-                                DifferentialArmSubsystem.DifferentialArmPitch.NINETY)));
+                                differentialArmSubsystem, DifferentialArmSubsystem.DifferentialArmPitch.NINETY)));
     }
 
     @Override

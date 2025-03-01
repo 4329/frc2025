@@ -153,9 +153,9 @@ public class RobotContainer {
                         elevatorSubsystem, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
 
         for (int i = 0; i < 6; i++) {
-			addCool(i, ElevatorPosition.L2);
-			addCool(i, ElevatorPosition.L3);
-			addCool(i, ElevatorPosition.L4);
+            addCool(i, ElevatorPosition.L2);
+            addCool(i, ElevatorPosition.L3);
+            addCool(i, ElevatorPosition.L4);
 
             NamedCommands.registerCommand(
                     "tag" + i + "Right",
@@ -166,14 +166,30 @@ public class RobotContainer {
         }
     }
 
-	private void addCool(int num, ElevatorPosition position) {
-            NamedCommands.registerCommand(
-                    "tag" + num + position + "Right",
-                    new AutoScoreCoralButCool(algeePivotSubsystem, elevatorSubsystem, position, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive, num, true));
-            NamedCommands.registerCommand(
-                    "tag" + num + position + "Left",
-                    new AutoScoreCoralButCool(algeePivotSubsystem, elevatorSubsystem, position, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive, num, false));
-	}
+    private void addCool(int num, ElevatorPosition position) {
+        NamedCommands.registerCommand(
+                "tag" + num + position + "Right",
+                new AutoScoreCoralButCool(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        position,
+                        differentialArmSubsystem,
+                        poseEstimationSubsystem,
+                        m_robotDrive,
+                        num,
+                        true));
+        NamedCommands.registerCommand(
+                "tag" + num + position + "Left",
+                new AutoScoreCoralButCool(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        position,
+                        differentialArmSubsystem,
+                        poseEstimationSubsystem,
+                        m_robotDrive,
+                        num,
+                        false));
+    }
 
     private void configureAutoBuilder() {
         try {

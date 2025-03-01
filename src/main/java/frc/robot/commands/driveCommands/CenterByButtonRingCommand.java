@@ -1,8 +1,6 @@
 package frc.robot.commands.driveCommands;
 
 import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.differentialArm.DifferentialArmSim;
-import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;

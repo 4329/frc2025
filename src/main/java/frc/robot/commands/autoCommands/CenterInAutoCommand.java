@@ -2,6 +2,7 @@ package frc.robot.commands.autoCommands;
 
 import frc.robot.commands.driveCommands.CenterOnTargetCommand;
 import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.AprilTagUtil;
 
@@ -23,7 +24,7 @@ public class CenterInAutoCommand extends CenterOnTargetCommand {
     @Override
     public void initialize() {
         target =
-                placeTarget(AprilTagUtil.getReef(num), PoseEstimationSubsystem.OFFSET * (right ? 1 : -1));
+                placeTarget(AprilTagUtil.getReef(num), PoseEstimationSubsystem.OFFSET * (right ? 1 : -1), DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER);
         super.initialize();
     }
 }

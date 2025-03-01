@@ -1,5 +1,6 @@
 package frc.robot.commands.driveCommands;
 
+import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
@@ -8,6 +9,7 @@ import frc.robot.utilities.ButtonRingController;
 public class CenterOnAlgeeCommand extends CenterOnTargetCommand {
 
     ButtonRingController buttonRingController;
+    private final double zDist = 1; //WIP change this later please
 
     public CenterOnAlgeeCommand(
             PoseEstimationSubsystem poseEstimationSubsystem,
@@ -19,7 +21,7 @@ public class CenterOnAlgeeCommand extends CenterOnTargetCommand {
 
     @Override
     public void initialize() {
-        target = placeTarget(buttonRingController.getTagID(), 0);
+        target = placeTarget(buttonRingController.getTagID(), 0, zDist);
         super.initialize();
         LEDState.centerRunning = true;
     }

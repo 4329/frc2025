@@ -21,8 +21,6 @@ public class CenterOnTargetCommand extends Command {
     private final PathConstraints constraints =
             new PathConstraints(2, 1.0, Math.PI / 4, Math.PI / 16); // The constraints for this path.
 
-    private double zDist = DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER;
-
     public CenterOnTargetCommand(
             int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {
         this(targetID, poseEstimationSubsystem, drivetrain, 0);
@@ -36,10 +34,10 @@ public class CenterOnTargetCommand extends Command {
         this.poseEstimationSubsystem = poseEstimationSubsystem;
         this.drivetrain = drivetrain;
 
-        target = placeTarget(targetID, xOffset);
+        target = placeTarget(targetID, xOffset, DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER);
     }
 
-    protected Pose2d placeTarget(int targetID, double xOffset) {
+    protected Pose2d placeTarget(int targetID, double xOffset, double zDist) {
         Pose3d tmp = poseEstimationSubsystem.getTagPose(targetID);
         if (tmp == null) return null;
 

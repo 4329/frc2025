@@ -10,10 +10,10 @@ import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
-import frc.robot.utilities.NotFinalSequentialCommandGroup;
+import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 import frc.robot.utilities.UnInstantCommand;
 
-public class AutoScoreCoralCommand extends NotFinalSequentialCommandGroup {
+public class AutoScoreCoralCommand extends LoggedSequentialCommandGroup {
 
     public AutoScoreCoralCommand(
             AlgeePivotSubsystem algeePivotSubsystem,
@@ -26,7 +26,7 @@ public class AutoScoreCoralCommand extends NotFinalSequentialCommandGroup {
         addCommands(
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO),
                 new ParallelCommandGroup(
-                        new UnInstantCommand(
+                        new UnInstantCommand("elevator",
                                         () ->
                                                 elevatorSubsystem.setSetpoint(
                                                         switch (elevatorPosition) {
@@ -35,7 +35,7 @@ public class AutoScoreCoralCommand extends NotFinalSequentialCommandGroup {
                                                             case L4 -> ElevatorSubsystem.ElevatorPosition.L4;
                                                             default -> ElevatorSubsystem.ElevatorPosition.L2;
                                                         }))
-                                .until(() -> elevatorSubsystem.atSetpoint()),
+                                .whileLog(() -> !elevatorSubsystem.atSetpoint()),
                         new SetArmPitchCommand(
                                 differentialArmSubsystem,
                                 DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)),

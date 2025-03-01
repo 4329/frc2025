@@ -11,7 +11,7 @@ import frc.robot.utilities.HoorayConfig;
 /** Static method containing all constant values for the robot in one location */
 public final class Constants {
 
-    public static Mode robotMode;
+    public static Mode robotMode = Mode.REPLAY;
 
     public static enum Mode {
         REAL,

@@ -7,7 +7,7 @@ import java.util.Set;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class LoggedWrapperCommand extends Command implements LoggableInputs {
+public class LoggedWrapperCommand extends LoggedCommandComposer {
     /** Command being wrapped. */
     protected final Command m_command;
 
@@ -97,17 +97,5 @@ public class LoggedWrapperCommand extends Command implements LoggableInputs {
     @Override
     public InterruptionBehavior getInterruptionBehavior() {
         return m_command.getInterruptionBehavior();
-    }
-
-    @Override
-    public void toLog(LogTable table) {
-        if (m_command instanceof LoggableInputs) ((LoggableInputs) m_command).toLog(table);
-        else table.put(m_command.getName(), message);
-    }
-
-    @Override
-    public void fromLog(LogTable table) {
-        if (m_command instanceof LoggableInputs) ((LoggableInputs) m_command).fromLog(table);
-        else message = table.get(m_command.getName(), message);
     }
 }

@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class LoggedRepeatCommand extends Command implements LoggableInputs {
+public class LoggedRepeatCommand extends LoggedCommandComposer implements LoggableInputs {
     private final Command m_command;
     private boolean m_ended;
 
@@ -25,7 +25,7 @@ public class LoggedRepeatCommand extends Command implements LoggableInputs {
         m_command = requireNonNullParam(command, "command", "RepeatCommand");
         CommandScheduler.getInstance().registerComposedCommands(command);
         addRequirements(command.getRequirements());
-        setName("Repeat(" + command.getName() + ")");
+        setName("LoggedRepeat(" + command.getName() + ")");
     }
 
     @Override
@@ -87,7 +87,7 @@ public class LoggedRepeatCommand extends Command implements LoggableInputs {
     @Override
     public void toLog(LogTable table) {
         if (m_command instanceof LoggableInputs) ((LoggableInputs) m_command).toLog(table);
-        else table.put(getName(), message);
+        else table.put(m_command.getName(), message);
     }
 
     @Override

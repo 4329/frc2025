@@ -33,7 +33,7 @@ public class CommandLogEntry implements LoggableInputs, Cloneable {
                     if (command instanceof LoggedSequentialCommandGroup) {
                         ((LoggedSequentialCommandGroup) command).fromLog(table.getSubtable(command.getName()));
                     }
-                    commands.replace(command, table.get(command.getName(), message));
+                    commands.put(command, table.get(command.getName(), message));
                 });
     }
 

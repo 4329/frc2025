@@ -33,8 +33,8 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
 
                             LEDState.reefLevel = level;
                         })
-                .repeatedly()
-                .ignoringDisable(true)
+                .repeatedlyLog()
+                .ignoringDisableLog(true)
                 .schedule();
 
         for (int i = 1; i <= 12; i++) {
@@ -51,7 +51,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
 
                                                 LEDState.reefButton = why;
                                             })
-                                    .ignoringDisable(true));
+                                    .ignoringDisableLog(true));
             button(i)
                     .onFalse(
                             new UnInstantCommand(
@@ -63,7 +63,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                                                     tagID = 0;
                                                 }
                                             })
-                                    .ignoringDisable(true));
+                                    .ignoringDisableLog(true));
         }
 
         buttonRingLogAutoLogged = new ButtonRingLogAutoLogged();

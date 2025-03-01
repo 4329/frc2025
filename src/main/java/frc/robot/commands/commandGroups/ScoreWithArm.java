@@ -42,8 +42,7 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
                                                     case 3 -> ElevatorSubsystem.ElevatorPosition.L3;
                                                     case 4 -> ElevatorSubsystem.ElevatorPosition.L4;
                                                     default -> ElevatorSubsystem.ElevatorPosition.L2;
-                                                })),
-                        new WaitUntilCommand(() -> elevatorSubsystem.atSetpoint()),
+                                                })).whileLog(() -> !elevatorSubsystem.atSetpoint()),
                         new SetArmPitchCommand(
                                 differentialArmSubsystem,
                                 DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)),
@@ -52,10 +51,9 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
                         differentialArmSubsystem, DifferentialArmSubsystem.DifferentialArmPitch.NINETY));
     }
 
-    // @Override
-    // public void execute() {
-    // if (buttonRingController.getTagID() != 0 && buttonRingController.getxOffset()
-    // != 0)
-    // super.execute();
-    // }
+     @Override
+     public void execute() {
+     if (buttonRingController.getTagID() != 0 && buttonRingController.getxOffset() != 0)
+         super.execute();
+     }
 }

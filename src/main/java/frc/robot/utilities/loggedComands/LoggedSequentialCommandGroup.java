@@ -61,13 +61,16 @@ public class LoggedSequentialCommandGroup extends LoggedCommandComposer implemen
 
         CommandScheduler.getInstance().registerComposedCommands(commands);
 
+        int i = 0;
         for (Command command : commands) {
+            command.setName(i + " " + command.getName());
             m_commands.add(command);
             addRequirements(command.getRequirements());
             m_runWhenDisabled &= command.runsWhenDisabled();
             if (command.getInterruptionBehavior() == InterruptionBehavior.kCancelSelf) {
                 m_interruptBehavior = InterruptionBehavior.kCancelSelf;
             }
+            i++;
         }
     }
 

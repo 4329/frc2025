@@ -21,7 +21,7 @@ public class RunAlgeePivotCommandTest {
 
     @Test
     public void testThing() {
-        runAlgeePivotCommand.initialize();
+        runAlgeePivotCommand.execute();
         verify(algeePivotSubsystem).run(1);
     }
 }

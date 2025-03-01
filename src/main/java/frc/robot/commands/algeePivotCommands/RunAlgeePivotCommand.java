@@ -19,10 +19,10 @@ public class RunAlgeePivotCommand extends Command {
         algeePivotSubsystem.run(speed);
     }
 
-	@Override
-	public void end(boolean interrupted) {
-		algeePivotSubsystem.run(0);
-	}
+    @Override
+    public void end(boolean interrupted) {
+        algeePivotSubsystem.run(0);
+    }
 
     @Override
     public boolean isFinished() {

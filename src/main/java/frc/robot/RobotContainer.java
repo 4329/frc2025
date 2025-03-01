@@ -21,9 +21,9 @@ import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.ToggleAlgeeWheelCommand;
 import frc.robot.commands.autoCommands.AutoScoreCoralCommand;
+import frc.robot.commands.autoCommands.CenterInAutoCommand;
 import frc.robot.commands.commandGroups.HPIntakeCommand;
 import frc.robot.commands.commandGroups.ScoreWithArm;
-import frc.robot.commands.elevatorCommands.SetElevatorCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.IntakePivotSubsystem;
@@ -116,15 +116,49 @@ public class RobotContainer {
         m_chooser = new SendableChooser<>();
         configureAutoChooser(drivetrain);
     }
-        private void configureNamedCommands() {
-        NamedCommands.registerCommand(
-                "elevatorL2", new AutoScoreCoralCommand(algeePivotSubsystem,elevatorSubsystem,ElevatorPosition.L2,differentialArmSubsystem,poseEstimationSubsystem,m_robotDrive));
-        NamedCommands.registerCommand(
-                "elevatorL3", new AutoScoreCoralCommand(algeePivotSubsystem,elevatorSubsystem,ElevatorPosition.L3,differentialArmSubsystem,poseEstimationSubsystem,m_robotDrive));
-        NamedCommands.registerCommand(
-                "elevatorL4", new AutoScoreCoralCommand(algeePivotSubsystem,elevatorSubsystem,ElevatorPosition.L4,differentialArmSubsystem,poseEstimationSubsystem,m_robotDrive));
 
-        NamedCommands.registerCommand("intakeCoral",new HPIntakeCommand(elevatorSubsystem, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
+    private void configureNamedCommands() {
+        NamedCommands.registerCommand(
+                "elevatorL2",
+                new AutoScoreCoralCommand(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        ElevatorPosition.L2,
+                        differentialArmSubsystem,
+                        poseEstimationSubsystem,
+                        m_robotDrive));
+        NamedCommands.registerCommand(
+                "elevatorL3",
+                new AutoScoreCoralCommand(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        ElevatorPosition.L3,
+                        differentialArmSubsystem,
+                        poseEstimationSubsystem,
+                        m_robotDrive));
+        NamedCommands.registerCommand(
+                "elevatorL4",
+                new AutoScoreCoralCommand(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        ElevatorPosition.L4,
+                        differentialArmSubsystem,
+                        poseEstimationSubsystem,
+                        m_robotDrive));
+
+        NamedCommands.registerCommand(
+                "intakeCoral",
+                new HPIntakeCommand(
+                        elevatorSubsystem, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
+
+        for (int i = 0; i < 6; i++) {
+            NamedCommands.registerCommand(
+                    "tag" + i + "Right",
+                    new CenterInAutoCommand(poseEstimationSubsystem, m_robotDrive, i, true));
+            NamedCommands.registerCommand(
+                    "tag" + i + "Left",
+                    new CenterInAutoCommand(poseEstimationSubsystem, m_robotDrive, i, false));
+        }
     }
 
     private void configureAutoBuilder() {
@@ -133,7 +167,6 @@ public class RobotContainer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    
 
         AutoBuilder.configure(
                 poseEstimationSubsystem::getPose,

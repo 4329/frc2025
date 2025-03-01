@@ -39,7 +39,7 @@ public class CenterOnTargetCommand extends Command {
         target = placeTarget(targetID, xOffset);
     }
 
-    Pose2d placeTarget(int targetID, double xOffset) {
+    protected Pose2d placeTarget(int targetID, double xOffset) {
         Pose3d tmp = poseEstimationSubsystem.getTagPose(targetID);
         if (tmp == null) return null;
 

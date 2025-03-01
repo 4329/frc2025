@@ -5,6 +5,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import frc.robot.model.ButtonRingLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
+import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -16,8 +17,6 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
     private int tagID;
 
     ButtonRingLogAutoLogged buttonRingLogAutoLogged;
-
-    private final double OFFSET_AMOUNT = 0.1651;
 
     public ButtonRingController(int port) {
         super(port);
@@ -46,7 +45,10 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                                             () -> {
                                                 button = why;
 
-                                                xOffset = why % 2 == 0 ? OFFSET_AMOUNT : -OFFSET_AMOUNT;
+                                                xOffset =
+                                                        why % 2 == 0
+                                                                ? PoseEstimationSubsystem.OFFSET
+                                                                : -PoseEstimationSubsystem.OFFSET;
                                                 tagID = AprilTagUtil.getReef((why % 12) / 2);
 
                                                 LEDState.reefButton = why;

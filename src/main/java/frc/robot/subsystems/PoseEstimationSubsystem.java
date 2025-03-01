@@ -21,6 +21,8 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubsystem {
 
+    public static final double OFFSET = 0.1651;
+
     PoseEstimationLogAutoLogged poseEstimationLogAutoLogged;
 
     private final Drivetrain drivetrain;

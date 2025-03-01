@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.swerve.module;
 
+import org.littletonrobotics.junction.Logger;
+
 // import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.revrobotics.CANEncoder;
 import com.revrobotics.RelativeEncoder;
@@ -67,6 +69,8 @@ public class SwerveModuleImpl implements SwerveModule {
                     ModuleConstants.kTurnPID[0], ModuleConstants.kTurnPID[1], ModuleConstants.kTurnPID[2]);
 
     private double angularOffset;
+
+	private SwerveModuleLogAutoLogged inputs;
 
     /**
      * Constructs a SwerveModule with a drive motor, turning motor, and turning encoder.
@@ -154,6 +158,8 @@ public class SwerveModuleImpl implements SwerveModule {
 
         // Sets the moduleID to the value stored in the tuningVals array
         moduleID = tuningVals[3];
+
+		inputs = new SwerveModuleLogAutoLogged();
     }
 
     /**
@@ -180,21 +186,20 @@ public class SwerveModuleImpl implements SwerveModule {
     @Override
     public void setDesiredState(SwerveModuleState desiredState) {
         // Optimize the reference state to avoid spinning further than 90 degrees
-        SwerveModuleState state =
-                SwerveModuleState.optimize(desiredState, new Rotation2d(getTurnEncoder()));
+		desiredState.optimize(new Rotation2d(getTurnEncoder()));
         // Calculate the drive output from the drive PID controller.
         final double driveOutput =
-                m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
+                m_drivePIDController.calculate(m_driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
         // Calculates the desired feedForward motor % from the current desired velocity
         // and the static and feedforward gains
-        final double driveFF = driveFeedForward.calculate(state.speedMetersPerSecond);
+        final double driveFF = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
         // Set the drive motor to the sum of the feedforward calculation and PID
         // calculation
         final double finalDriveOutput = driveOutput + driveFF;
         m_driveMotor.set(finalDriveOutput);
         // Calculate the turning motor output from the turning PID controller.
         final double turnOutput =
-                m_turningPIDController.calculate(getTurnEncoder(), state.angle.getRadians());
+                m_turningPIDController.calculate(getTurnEncoder(), desiredState.angle.getRadians());
         // Set the turning motor to this output value
         m_turningMotor.set(-turnOutput);
     }
@@ -238,7 +243,14 @@ public class SwerveModuleImpl implements SwerveModule {
 
     @Override
     public SwerveModulePosition getPosition() {
-
         return new SwerveModulePosition(m_driveEncoder.getPosition(), new Rotation2d(getTurnEncoder()));
     }
+
+	@Override
+	public void updateInputs() {
+		inputs.state = getState();
+		inputs.offset = angularOffset;
+		inputs.position = getPosition();
+		Logger.processInputs("Drivetrain/Module" + moduleID, inputs);
+	}
 }

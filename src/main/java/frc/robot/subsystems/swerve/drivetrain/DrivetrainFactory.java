@@ -5,8 +5,9 @@ import frc.robot.Constants;
 public class DrivetrainFactory {
     public static Drivetrain makeDrivetrain() {
         return switch (Constants.robotMode) {
+			case REAL -> new DrivetrainImpl();
             case SIM -> new DrivetrainSim();
-            default -> new DrivetrainImpl();
+            case REPLAY -> new DrivetrainReplay();
         };
     }
 }

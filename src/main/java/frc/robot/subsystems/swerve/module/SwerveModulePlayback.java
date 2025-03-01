@@ -1,55 +1,51 @@
 package frc.robot.subsystems.swerve.module;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveModulePlayback implements SwerveModule {
 
+	SwerveModuleLogAutoLogged inputs = new SwerveModuleLogAutoLogged();
+
     @Override
     public SwerveModuleState getState() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getState'");
+		return inputs.state;
     }
 
     @Override
     public SwerveModuleState getStateNoOffset() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getStateNoOffset'");
+		return new SwerveModuleState(inputs.state.speedMetersPerSecond, new Rotation2d(inputs.state.angle.getRadians() - inputs.offset));
     }
 
     @Override
     public void setDesiredState(SwerveModuleState desiredState) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setDesiredState'");
     }
 
     @Override
     public void stop() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stop'");
     }
 
     @Override
     public double getTurnEncoder() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTurnEncoder'");
+		return inputs.position.angle.getRadians();
     }
 
     @Override
     public void brakeModeModule() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'brakeModeModule'");
     }
 
     @Override
     public void coastModeModule() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'coastModeModule'");
     }
 
     @Override
     public SwerveModulePosition getPosition() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
+		return inputs.position;
     }
+
+	@Override
+	public void updateInputs() {
+
+	}
 }

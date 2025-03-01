@@ -1,12 +1,17 @@
 package frc.robot.subsystems.swerve.drivetrain;
 
+import org.littletonrobotics.junction.inputs.LoggableInputs;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.model.DrivetrainLogAutoLogged;
 
 public class DrivetrainReplay implements Drivetrain {
+
+	public DrivetrainLogAutoLogged inputs = new DrivetrainLogAutoLogged();
 
     @Override
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {}
@@ -32,19 +37,19 @@ public class DrivetrainReplay implements Drivetrain {
     @Override
     public Rotation2d getGyro() {
 
-        return new Rotation2d();
+        return inputs.gyro;
     }
 
     @Override
     public Rotation2d getRawGyro() {
 
-        return new Rotation2d();
+        return inputs.gyro.minus(new Rotation2d(inputs.offset));
     }
 
     @Override
     public Pose2d getPose() {
 
-        return new Pose2d();
+        return inputs.pose;
     }
 
     @Override
@@ -56,31 +61,7 @@ public class DrivetrainReplay implements Drivetrain {
     @Override
     public ChassisSpeeds getChassisSpeed() {
 
-        return new ChassisSpeeds();
-    }
-
-    @Override
-    public double getFrontLeftAngle() {
-
-        return 0;
-    }
-
-    @Override
-    public double getFrontRightAngle() {
-
-        return 0;
-    }
-
-    @Override
-    public double getBackLeftAngle() {
-
-        return 0;
-    }
-
-    @Override
-    public double getBackRightAngle() {
-
-        return 0;
+        return inputs.chassisSpeeds;
     }
 
     @Override
@@ -98,39 +79,16 @@ public class DrivetrainReplay implements Drivetrain {
     @Override
     public SwerveModulePosition[] getModulePositions() {
 
-        return new SwerveModulePosition[] {
-            new SwerveModulePosition(),
-            new SwerveModulePosition(),
-            new SwerveModulePosition(),
-            new SwerveModulePosition()
-        };
+		return inputs.positions;
     }
 
     @Override
     public SwerveModuleState[] getModuleStates() {
-
-        return new SwerveModuleState[] {
-            new SwerveModuleState(),
-            new SwerveModuleState(),
-            new SwerveModuleState(),
-            new SwerveModuleState()
-        };
+		return inputs.states;
     }
 
-    @Override
-    public double getRoll() {
-
-        return 0;
-    }
-
-    @Override
-    public double getOffsetRoll() {
-
-        return 0;
-    }
-
-    @Override
-    public double getYaw() {
-        return 0;
-    }
+	@Override
+	public LoggableInputs log() {
+		return inputs;
+	}
 }

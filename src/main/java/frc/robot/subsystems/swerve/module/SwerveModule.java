@@ -1,9 +1,18 @@
 package frc.robot.subsystems.swerve.module;
 
+import org.littletonrobotics.junction.AutoLog;
+
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public interface SwerveModule {
+
+	@AutoLog
+	public static class SwerveModuleLog {
+		public SwerveModuleState state;
+		public double offset;
+		public SwerveModulePosition position;
+	}
 
     /**
      * Returns the current state of the module.
@@ -36,4 +45,6 @@ public interface SwerveModule {
     void coastModeModule();
 
     SwerveModulePosition getPosition();
+
+	void updateInputs();
 }

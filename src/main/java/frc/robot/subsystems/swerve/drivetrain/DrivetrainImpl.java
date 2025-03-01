@@ -26,8 +26,7 @@ import frc.robot.subsystems.swerve.module.SwerveModuleFactory;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 /** Implements a swerve DrivetrainImpl Subsystem for the Robot */
-public class DrivetrainImpl extends SubsystemBase
-        implements Drivetrain, LoggingSubsystem.LoggedSubsystem {
+public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
     public boolean isLocked;
     private double offset;
@@ -78,7 +77,6 @@ public class DrivetrainImpl extends SubsystemBase
         pitchOffset = ahrs.getPitch();
         rollOffset = ahrs.getRoll();
         offset = -Math.PI / 2;
-        // ahrs.setAngleAdjustment(-90);
 
         m_frontLeft =
                 SwerveModuleFactory.makeSwerve(
@@ -164,9 +162,17 @@ public class DrivetrainImpl extends SubsystemBase
 
     @Override
     public LoggableInputs log() {
+		log.pose = getPose();
         log.states = getModuleStates();
-        log.rot = getGyro();
+		log.positions = getModulePositions();
+        log.gyro = getGyro();
         log.offset = offset;
+		log.chassisSpeeds = getChassisSpeed();
+
+		m_frontLeft.updateInputs();
+		m_frontRight.updateInputs();
+		m_backLeft.updateInputs();
+		m_backRight.updateInputs();
 
         return log;
     }
@@ -340,26 +346,6 @@ public class DrivetrainImpl extends SubsystemBase
     }
 
     @Override
-    public double getFrontLeftAngle() {
-        return m_frontLeft.getTurnEncoder();
-    }
-
-    @Override
-    public double getFrontRightAngle() {
-        return m_frontRight.getTurnEncoder();
-    }
-
-    @Override
-    public double getBackLeftAngle() {
-        return m_backLeft.getTurnEncoder();
-    }
-
-    @Override
-    public double getBackRightAngle() {
-        return m_backRight.getTurnEncoder();
-    }
-
-    @Override
     public void brakeMode() {
         m_frontLeft.brakeModeModule();
         m_frontRight.brakeModeModule();
@@ -411,23 +397,5 @@ public class DrivetrainImpl extends SubsystemBase
         return new SwerveModuleState[] {
             m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState()
         };
-    }
-
-    @Override
-    public double getRoll() {
-
-        return ahrs.getRoll();
-    }
-
-    @Override
-    public double getOffsetRoll() {
-
-        return ahrs.getRoll() - rollOffset;
-    }
-
-    @Override
-    public double getYaw() {
-
-        return ahrs.getYaw();
     }
 }

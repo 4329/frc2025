@@ -96,6 +96,7 @@ public class RobotContainer {
         lightSubsystem = new LightSubsystem();
 
         new LoggingSubsystem(
+				drivetrain,
                 poseEstimationSubsystem,
                 differentialArmSubsystem,
                 algeePivotSubsystem,

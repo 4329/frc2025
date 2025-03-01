@@ -20,7 +20,7 @@ public class LoggingSubsystem extends SubsystemBase {
 
         if (timer % 3 == 0) {
             for (int i = isEven ? 0 : 1; i < subsystems.length; i += 2) {
-                String name = subsystems[i].getClass().getSimpleName();
+                String name = subsystems[i].getLogName();
                 Logger.processInputs(name, subsystems[i].log());
             }
             isEven = !isEven;
@@ -28,6 +28,9 @@ public class LoggingSubsystem extends SubsystemBase {
     }
 
     public static interface LoggedSubsystem {
+		public default String getLogName() {
+			return getClass().getSimpleName();
+		}
 
         public LoggableInputs log();
     }

@@ -6,8 +6,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.LoggingSubsystem;
 
-public interface Drivetrain extends Subsystem {
+public interface Drivetrain extends Subsystem, LoggingSubsystem.LoggedSubsystem {
 
     /**
      * Method to drive the robot using joystick info.
@@ -71,14 +72,6 @@ public interface Drivetrain extends Subsystem {
      */
     ChassisSpeeds getChassisSpeed();
 
-    double getFrontLeftAngle();
-
-    double getFrontRightAngle();
-
-    double getBackLeftAngle();
-
-    double getBackRightAngle();
-
     void brakeMode();
 
     void coastMode();
@@ -91,9 +84,8 @@ public interface Drivetrain extends Subsystem {
 
     SwerveModuleState[] getModuleStates();
 
-    double getRoll();
-
-    double getOffsetRoll();
-
-    double getYaw();
+	@Override
+	public default String getLogName() {
+		return "Drivetrain";
+	}
 }

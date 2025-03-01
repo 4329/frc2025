@@ -1,5 +1,7 @@
 package frc.robot.subsystems.swerve.module;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.sim.SparkRelativeEncoderSim;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -49,6 +51,9 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
     // The static and feedforward gains should be passed into the class contructor
     // via the "tuningCals" array
     private SimpleMotorFeedforward driveFeedForward;
+
+	private final int moduleID;
+	private final SwerveModuleLogAutoLogged inputs;
 
     public SwerveModuleSim(
             int driveMotorChannel,
@@ -130,6 +135,9 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
                 new PIDController(
                         ModuleConstants.kTurnPID[0], ModuleConstants.kTurnPID[1], ModuleConstants.kTurnPID[2]);
         m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+		moduleID = (int)tuningVals[3];
+		inputs = new SwerveModuleLogAutoLogged();
     }
 
     @Override
@@ -222,4 +230,12 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
                 BatterySim.calculateDefaultBatteryLoadedVoltage(
                         m_driveSim.getCurrentDrawAmps(), m_turningSim.getCurrentDrawAmps()));
     }
+
+	@Override
+	public void updateInputs() {
+		inputs.offset = 0;
+		inputs.state = getState();
+		inputs.position = getPosition();
+		Logger.processInputs("Drivetrain/Module" + moduleID, inputs);
+	}
 }

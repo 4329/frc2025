@@ -12,6 +12,12 @@
         },
         {
           "type": "named",
+          "data":{
+            "named": "tag2Right"
+          }
+        },
+        {
+          "type": "named",
           "data": {
             "name": "elevatorL4"
           }

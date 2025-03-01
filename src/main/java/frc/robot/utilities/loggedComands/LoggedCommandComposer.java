@@ -6,9 +6,8 @@ import java.util.function.BooleanSupplier;
 
 public class LoggedCommandComposer extends Command {
     public LoggedWrapperCommand withNameLog(String name) {
-        LoggedWrapperCommand wrapper = new LoggedWrapperCommand(this) {
+        LoggedWrapperCommand wrapper = new LoggedWrapperCommand(this) {};
 
-        };
         wrapper.setName(name);
         return wrapper;
     }
@@ -28,20 +27,20 @@ public class LoggedCommandComposer extends Command {
     }
 
     public LoggedWrapperCommand ignoringDisableLog(boolean doesRunWhenDisabled) {
-      return new LoggedWrapperCommand(this) {
-        @Override
-        public boolean runsWhenDisabled() {
-          return doesRunWhenDisabled;
-        }
-      };
-  }
+        return new LoggedWrapperCommand(this) {
+            @Override
+            public boolean runsWhenDisabled() {
+                return doesRunWhenDisabled;
+            }
+        };
+    }
 
-  public LoggedWrapperCommand whileLog(BooleanSupplier condition) {
-    return new LoggedWrapperCommand(this) {
-      @Override
-      public boolean isFinished() {
-        return !condition.getAsBoolean();
-      }
-    };
-  }
+    public LoggedWrapperCommand whileLog(BooleanSupplier condition) {
+        return new LoggedWrapperCommand(this) {
+            @Override
+            public boolean isFinished() {
+                return !condition.getAsBoolean();
+            }
+        };
+    }
 }

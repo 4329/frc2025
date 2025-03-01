@@ -208,5 +208,7 @@ public final class Constants {
 
         public static final int intakePivot = 15;
         public static final int intakeWheel = 16;
+    
+        public static final int climber = 17;
     }
 }

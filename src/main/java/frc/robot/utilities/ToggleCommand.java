@@ -9,6 +9,7 @@ public class ToggleCommand extends Command {
 
     public ToggleCommand(Command child) {
         this.child = child;
+        setName("Toggle(" + child.getName() + ")");
     }
 
     @Override
@@ -22,10 +23,5 @@ public class ToggleCommand extends Command {
     @Override
     public boolean isFinished() {
         return true;
-    }
-
-    @Override
-    public String getName() {
-        return child.getName();
     }
 }

@@ -23,6 +23,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
         super(port);
 
         new UnInstantCommand(
+                        "SetButtonRingLevel",
                         () -> {
                             if (getRawAxis(0) == 1) level = 3;
                             else if (getRawAxis(0) == -1) level = 4;
@@ -32,8 +33,8 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
 
                             LEDState.reefLevel = level;
                         })
-                .repeatedly()
-                .ignoringDisable(true)
+                .repeatedlyLog()
+                .ignoringDisableLog(true)
                 .schedule();
 
         for (int i = 1; i <= 12; i++) {
@@ -41,6 +42,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
             button(i)
                     .onTrue(
                             new UnInstantCommand(
+                                            "SetButtonRingButtonDown",
                                             () -> {
                                                 button = why;
 
@@ -49,10 +51,11 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
 
                                                 LEDState.reefButton = why;
                                             })
-                                    .ignoringDisable(true));
+                                    .ignoringDisableLog(true));
             button(i)
                     .onFalse(
                             new UnInstantCommand(
+                                            "SetButtonRingButtonDown",
                                             () -> {
                                                 if (button == why) {
                                                     button = -1;
@@ -60,7 +63,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                                                     tagID = 0;
                                                 }
                                             })
-                                    .ignoringDisable(true));
+                                    .ignoringDisableLog(true));
         }
 
         buttonRingLogAutoLogged = new ButtonRingLogAutoLogged();

@@ -15,7 +15,7 @@ public class SetAlgeePivotCommand extends Command {
     }
 
     @Override
-    public void initialize() {
+    public void execute() {
         algeePivotSubsystem.setSetpoint(algeePivotAngle);
     }
 

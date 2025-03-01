@@ -17,7 +17,7 @@ public class CommandConsumingLogger implements Consumer<Command> {
 
     @Override
     public void accept(Command command) {
-        commandLogEntry.set(command.getName(), message);
+        commandLogEntry.put(command, message);
         Logger.processInputs("Command", commandLogEntry);
     }
 }

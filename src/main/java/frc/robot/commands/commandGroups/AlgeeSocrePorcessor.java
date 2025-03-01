@@ -1,6 +1,5 @@
 package frc.robot.commands.commandGroups;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
@@ -14,6 +13,7 @@ import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
+import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
 
 public class AlgeeSocrePorcessor extends SequentialCommandGroup {
 
@@ -28,7 +28,8 @@ public class AlgeeSocrePorcessor extends SequentialCommandGroup {
         addCommands(
                 new SetArmPitchCommand(
                         differentialArmSubsystem, DifferentialArmSubsystem.DifferentialArmPitch.NINETY),
-                new ParallelCommandGroup(
+                new LoggedParallelCommandGroup(
+                        "",
                         new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT),
                         new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.PORCESSOR)),
                 new OuttakeAlgeeCommand(algeeWheelSubsystem));

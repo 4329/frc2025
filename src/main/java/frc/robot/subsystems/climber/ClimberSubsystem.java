@@ -26,6 +26,20 @@ public class ClimberSubsystem extends SubsystemBase implements LoggedSubsystem {
 
     private double setpoint = 0;
 
+    public enum ClimberPosition {
+        DEPLOYED(10), // WIP
+        ZERO(0), // WIP
+        CLIMBED(-10); // WIP
+        private double pos;
+        ClimberPosition(double climberPosition) {
+            this.pos = climberPosition;
+        }
+
+        public double getPos() {
+            return pos;
+        }
+    }
+
     private ClimberLogAutoLogged climberLogAutoLogged = new ClimberLogAutoLogged();
 
     SparkMax motor;
@@ -55,6 +69,10 @@ public class ClimberSubsystem extends SubsystemBase implements LoggedSubsystem {
     private void setSetpoint(double settyPointy) {
         this.setpoint = MathUtils.clamp(MIN, MAX, settyPointy);
         pidController.setSetpoint(this.setpoint);
+    }
+
+    public void setSetpoint(ClimberPosition climby) {
+        setSetpoint(climby.getPos());
     }
 
     public void run(double speed) {

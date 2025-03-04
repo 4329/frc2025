@@ -5,11 +5,9 @@ import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.differentialArmCommands.SetArmPitchCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
-import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
-import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
@@ -19,9 +17,8 @@ public class AutoScoreCoralCommand extends LoggedSequentialCommandGroup {
             AlgeePivotSubsystem algeePivotSubsystem,
             ElevatorSubsystem elevatorSubsystem,
             ElevatorPosition elevatorPosition,
-            DifferentialArmSubsystem differentialArmSubsystem,
-            PoseEstimationSubsystem poseEstimationSubsystem,
-            Drivetrain drivetrain) {
+            DifferentialArmSubsystem differentialArmSubsystem
+            ) {
 
         addCommands(
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO),
@@ -39,8 +36,6 @@ public class AutoScoreCoralCommand extends LoggedSequentialCommandGroup {
                                 .whileLog(() -> !elevatorSubsystem.atSetpoint()),
                         new SetArmPitchCommand(
                                 differentialArmSubsystem,
-                                DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)),
-                new SetArmPitchCommand(
-                        differentialArmSubsystem, DifferentialArmSubsystem.DifferentialArmPitch.NINETY));
+                                DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)));
     }
 }

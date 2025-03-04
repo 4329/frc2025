@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side A Combo Meal"
-          }
-        },
-        {
-          "type": "named",
-          "data":{
-            "named": "tag2Right"
+            "pathName": "Side A Right Main Course"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "elevatorL4"
+            "name": "tag3L4Right"
           }
         }
       ]

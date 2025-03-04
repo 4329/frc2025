@@ -21,8 +21,8 @@ public class SetAlgeePivotCommandTest {
     }
 
     @Test
-    public void testThing() {
-        setAlgeePivotCommand.initialize();
+    public void testExecute() {
+        setAlgeePivotCommand.execute();
         verify(algeePivotSubsystem).setSetpoint(AlgeePivotAngle.OUT);
     }
 }

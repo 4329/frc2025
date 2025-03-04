@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.AlgeePivotLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
@@ -37,7 +38,6 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     }
 
     private SparkMax motor;
-    private SparkBaseConfig config;
 
     private ProfiledPIDController pidController;
     private TrapezoidProfile.Constraints profile = new TrapezoidProfile.Constraints(6, 2);
@@ -49,7 +49,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
 
     public AlgeePivotSubsystem() {
         motor = SparkFactory.createSparkMax(Constants.SparkIDs.algeePivot);
-        config =
+        SparkBaseConfig config =
                 new SparkMaxConfig()
                         .apply(
                                 new SoftLimitConfig()
@@ -65,7 +65,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     }
 
     private void setSetpoint(double setpoint) {
-        pidController.setGoal(MathUtils.clamp(MIN, MAX, setpoint));
+        if (!LEDState.algeeWheelHolding) pidController.setGoal(MathUtils.clamp(MIN, MAX, setpoint));
     }
 
     public void run(double speed) {

@@ -23,6 +23,12 @@ public class LilihSubsystem extends SubsystemBase {
 
     private LilihLog lilihLog;
 
+    public LilihSubsystem(LilihSocket lilihSocket) {
+        this.lilihSocket = lilihSocket;
+        lilihLog = new LilihLog();
+        this.limelightHelpNetworkTableName = "";
+    }
+
     public LilihSubsystem(int ip, String limelightHelpNetworkTableName) {
         timer = new Timer();
         timer.start();

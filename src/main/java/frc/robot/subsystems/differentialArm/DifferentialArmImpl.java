@@ -122,7 +122,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         return ((encoder1.getPosition() - encoder2.getPosition()) / 2) % (2 * Math.PI);
     }
 
-    private Map.Entry<Double, Double> normalizePowers(double power1, double power2) {
+    Map.Entry<Double, Double> normalizePowers(double power1, double power2) {
         double max = Math.max(power1, power2);
         if (max > MAX_POWER) {
             power2 /= max;
@@ -142,7 +142,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     }
 
     private double feedforward(double power, double feedForward) {
-        if (Math.abs(power) > 0) {
+        if (Math.abs(power) != 0) {
             power += feedForward * Math.signum(power);
         }
 
@@ -157,8 +157,8 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         double power1 = pitchCalc + rollCalc;
         double power2 = pitchCalc - rollCalc;
 
-        feedforward(power1, FEED_FORWARD1);
-        feedforward(power2, FEED_FORWARD2);
+        power1 = feedforward(power1, FEED_FORWARD1);
+        power2 = feedforward(power2, FEED_FORWARD2);
 
         Map.Entry<Double, Double> powers = normalizePowers(power1, power2);
 

@@ -4,16 +4,17 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.ElevatorLogAutoLogged;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
+import frc.robot.utilities.shufflebored.ShuffledPIDController;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -39,14 +40,13 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
         motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator1);
         motor2 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator2);
 
-        SparkBaseConfig configgled =
-                new SparkMaxConfig()
-                        .apply(
-                                new SoftLimitConfig()
-                                        .forwardSoftLimit(MAX)
-                                        .forwardSoftLimitEnabled(true)
-                                        .reverseSoftLimit(MIN)
-                                        .reverseSoftLimitEnabled(true));
+        SparkBaseConfig configgled = new SparkMaxConfig();
+        // .apply(
+        // new SoftLimitConfig()
+        //         .forwardSoftLimit(MAX)
+        //         .forwardSoftLimitEnabled(true)
+        //         .reverseSoftLimit(MIN)
+        //         .reverseSoftLimitEnabled(true));
 
         final double gear1 = 11;
         final double gear2 = 54;
@@ -66,7 +66,8 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
                 PersistMode.kPersistParameters);
 
         motor1Encoder = motor1.getEncoder();
-        elevatorPID = new PIDController(0.1, 0, 0);
+        elevatorPID = new ShuffledPIDController(0.02, 0, 0);
+        Shuffleboard.getTab("Asdf").add("a", elevatorPID);
 
         elevatorLogAutoLogged = new ElevatorLogAutoLogged();
         this.armAngle = armAngle;

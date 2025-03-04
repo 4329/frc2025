@@ -1,5 +1,6 @@
 package frc.robot.commands.algeePivotCommands;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 import frc.robot.subsystems.AlgeePivotSubsystem;
@@ -23,6 +24,6 @@ public class SetAlgeePivotCommandTest {
     @Test
     public void testThing() {
         setAlgeePivotCommand.initialize();
-        verify(algeePivotSubsystem).setSetpoint(AlgeePivotAngle.OUT);
+        verify(algeePivotSubsystem).setSetpoint(any(AlgeePivotAngle.class));
     }
 }

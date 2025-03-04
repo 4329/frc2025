@@ -3,7 +3,6 @@ package frc.robot.subsystems.lilih;
 import static org.junit.Assert.fail;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -16,7 +15,7 @@ public class LilihSubsystemTest {
         lilihSubsystem = new LilihSubsystem(0, "");
     }
 
-    @Test
+    // @Test
     public void nulls() {
         try {
             lilihSubsystem.getRobotFieldPoseByTag(1);

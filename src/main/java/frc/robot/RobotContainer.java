@@ -23,6 +23,7 @@ import frc.robot.commands.algeeWheelCommands.ToggleAlgeeWheelCommand;
 import frc.robot.commands.autoCommands.AutoScoreCoralButCool;
 import frc.robot.commands.autoCommands.AutoScoreCoralCommand;
 import frc.robot.commands.autoCommands.CenterInAutoCommand;
+import frc.robot.commands.autoCommands.MustDoInAutoCommand;
 import frc.robot.commands.commandGroups.HPIntakeCommand;
 import frc.robot.commands.commandGroups.ScoreWithArm;
 import frc.robot.commands.differentialArmCommands.SetArmPitchCommand;
@@ -272,7 +273,7 @@ public class RobotContainer {
                 String name = pathFile.getName().replace(".auto", "");
                 PathPlannerAuto pathCommand = new PathPlannerAuto(name);
                 Command autoCommand =
-                        new SequentialCommandGroup(pathCommand, new InstantCommand(drivetrain::stop));
+                        new SequentialCommandGroup(new MustDoInAutoCommand(algeePivotSubsystem, elevatorSubsystem, differentialArmSubsystem),pathCommand, new InstantCommand(drivetrain::stop));
                 m_chooser.addOption(name, autoCommand);
 
                 autoName.put(autoCommand, pathCommand);

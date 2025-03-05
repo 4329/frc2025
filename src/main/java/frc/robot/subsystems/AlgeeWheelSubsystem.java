@@ -30,7 +30,7 @@ public class AlgeeWheelSubsystem extends SubsystemBase {
     }
 
     public boolean getAlgeed() {
-        return motor1.getOutputCurrent() > 100;
+        return motor1.getOutputCurrent() > 30;
     }
 
     @Override

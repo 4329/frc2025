@@ -21,15 +21,15 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsystem {
     private final double ALGEE_PIVOT_SPEED = 0.3;
-    private GenericEntry speed = Shuffleboard.getTab("Asdf").add("aSpeed", 0).getEntry();
-    private GenericEntry accel = Shuffleboard.getTab("Asdf").add("aAccel", 0).getEntry();
+    private GenericEntry speed = Shuffleboard.getTab("Asdf").add("aSpeed", 9).getEntry();
+    private GenericEntry accel = Shuffleboard.getTab("Asdf").add("aAccel", 11).getEntry();
 
-    private final double MIN = -10000;
-    private final double MAX = 14000;
+    private final double MIN = 0;
+    private final double MAX = 19;
 
     public enum AlgeePivotAngle {
         ZERO(0),
-        OUT(14),
+        OUT(19),
         ;
 
         public double angle;
@@ -55,8 +55,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
                                         .forwardSoftLimit(MAX)
                                         .forwardSoftLimitEnabled(true)
                                         .reverseSoftLimit(MIN)
-                                        .reverseSoftLimitEnabled(true))
-                        .inverted(true);
+                                        .reverseSoftLimitEnabled(true));
         motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
         pidController = new ProfiledPIDController(.1, 0, 0, profile);

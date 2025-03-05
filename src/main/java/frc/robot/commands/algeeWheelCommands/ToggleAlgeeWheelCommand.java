@@ -27,6 +27,6 @@ public class ToggleAlgeeWheelCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return algeeWheelSubsystem.getAlgeed();
+        return false;
     }
 }

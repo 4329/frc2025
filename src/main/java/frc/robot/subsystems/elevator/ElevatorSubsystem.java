@@ -7,13 +7,21 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
 
     public static final double ELEVATOR_START = 0.8525;
 
+    public static final double ELEVATOR_SCORE = 7;
+
     public enum ElevatorPosition {
-        L2(0.8073 - ELEVATOR_START),
-        L3(1.2073 - ELEVATOR_START),
-        L4(1.8265 - ELEVATOR_START),
-        MAX_HEIGHT(2.3488 - ELEVATOR_START),
-        ALGEE_HIGH(0), // calculate these later WIP
-        ALGEE_LOW(0), // calculate these later WIP
+        L2(30),
+        L2Score(24),
+
+        L3(110),
+        L3Score(45),
+
+        L4(235),
+        L4Score(200),
+
+        ALGEE_LOW(13), // calculate these later WIP
+        ALGEE_HIGH(88), // calculate these later WIP
+
         ZERO(0),
         INTAKE(2), // calculate these later WIPWIP
         PORCESSOR(

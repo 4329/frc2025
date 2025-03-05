@@ -17,10 +17,13 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
-import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
+import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
+import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
+import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.ToggleAlgeeWheelCommand;
 import frc.robot.commands.commandGroups.ScoreWithArm;
 import frc.robot.subsystems.AlgeePivotSubsystem;
+import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
@@ -154,13 +157,13 @@ public class RobotContainer {
             "ElevatorDown",
             () -> elevatorSubsystem.runElevator(-driverController.getLeftTriggerAxis())).repeatedlyLog());
 
-	driverController.leftBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
-	driverController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
+	driverController.leftBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
+	driverController.rightBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
 
     driverController.a().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
     driverController.b().onTrue(new UnInstantCommand("ToggleFieldOrient", () -> driveByController.toggleFieldOrient()));
-	driverController.x().onTrue(new ToggleCommand(new ToggleAlgeeWheelCommand(algeeWheelSubsystem, 1)));
-	driverController.y().onTrue(new ToggleCommand(new ToggleAlgeeWheelCommand(algeeWheelSubsystem, -1)));
+	driverController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem, 1));
+	driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
     driverController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(
             "ArmPitchUp",

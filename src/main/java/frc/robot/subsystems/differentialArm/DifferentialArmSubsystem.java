@@ -40,8 +40,8 @@ public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
 
     boolean rollAtSetpoint();
 
-	@Override
-	public default String getName() {
-		return "DifferentialArmSubsystem";
-	}
+    @Override
+    public default String getNameLog() {
+        return "DifferentialArmSubsystem";
+    }
 }

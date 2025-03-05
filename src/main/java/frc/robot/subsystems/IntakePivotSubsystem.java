@@ -7,6 +7,7 @@ import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.utilities.SparkFactory;
 
 public class IntakePivotSubsystem extends SubsystemBase {
@@ -15,7 +16,7 @@ public class IntakePivotSubsystem extends SubsystemBase {
     private PIDController pidController;
 
     public IntakePivotSubsystem() {
-        spark = SparkFactory.createSparkMax(17);
+        spark = SparkFactory.createSparkMax(Constants.SparkIDs.intakePivot);
 
         spark.configure(
                 new SparkMaxConfig()

@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -48,15 +49,10 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
         //         .reverseSoftLimit(MIN)
         //         .reverseSoftLimitEnabled(true));
 
-        final double gear1 = 11;
-        final double gear2 = 54;
-        final double gear3 = 28;
-        final double belt = .127;
-        configgled.encoder.positionConversionFactor(
-                (gear1 / gear2)
-                        * (gear2 / gear3)
-                        * (gear3 / belt)); // approximation //also we know how math works its camden's fault we
-        // didn't simplify
+		final double pulleyTeeth = 28;
+		final double belt = Units.inchesToMeters(5.5);
+		final double gearRatio = 1 / 25;
+        configgled.encoder.positionConversionFactor(pulleyTeeth / belt * gearRatio); 
 
         motor1.configure(configgled, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -106,6 +102,7 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
     @Override
     public LoggableInputs log() {
         elevatorLogAutoLogged.setpoint = elevatorPID.getSetpoint();
+		elevatorLogAutoLogged.position = motor1Encoder.getPosition();
         return elevatorLogAutoLogged;
     }
 }

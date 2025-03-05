@@ -39,4 +39,9 @@ public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
     boolean pitchAtSetpoint();
 
     boolean rollAtSetpoint();
+
+	@Override
+	public default String getName() {
+		return "DifferentialArmSubsystem";
+	}
 }

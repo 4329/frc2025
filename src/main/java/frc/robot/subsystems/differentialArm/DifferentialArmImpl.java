@@ -168,8 +168,6 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     @Override
     public LoggableInputs log() {
-        Logger.recordOutput("motor1", encoder1.getPosition());
-        Logger.recordOutput("motor2", encoder2.getPosition());
         differentialArmLogAutoLogged.pitch = getPitch();
         differentialArmLogAutoLogged.roll = getRoll();
 

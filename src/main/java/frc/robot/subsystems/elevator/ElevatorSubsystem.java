@@ -32,4 +32,9 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
     public void runElevator(double speed);
 
     public boolean atSetpoint();
+
+	@Override
+	public default String getName() {
+		return "ElevatorSubsystem";
+	}
 }

@@ -12,20 +12,20 @@
         "y": 3.9160245901639343
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right A Start Pos"
     },
     {
       "anchor": {
-        "x": 6.321,
+        "x": 6.113729508196721,
         "y": 3.94
       },
       "prevControl": {
-        "x": 7.13616393442623,
+        "x": 6.928893442622952,
         "y": 3.928012295081967
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Side A Right"
     }
   ],
   "rotationTargets": [],

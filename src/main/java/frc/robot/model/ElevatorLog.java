@@ -5,4 +5,5 @@ import org.littletonrobotics.junction.AutoLog;
 @AutoLog
 public class ElevatorLog {
     public double setpoint;
+	public double position;
 }

@@ -21,9 +21,11 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsystem {
     private final double ALGEE_PIVOT_SPEED = 0.3;
+    private GenericEntry speed = Shuffleboard.getTab("Asdf").add("aSpeed", 0).getEntry();
+    private GenericEntry accel = Shuffleboard.getTab("Asdf").add("aAccel", 0).getEntry();
 
-    private final double MIN = 0;
-    private final double MAX = 14;
+    private final double MIN = -10000;
+    private final double MAX = 14000;
 
     public enum AlgeePivotAngle {
         ZERO(0),
@@ -44,9 +46,6 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
 
     private final AlgeePivotLogAutoLogged algeePivotLogAutoLogged;
 
-    private final GenericEntry maxVel = Shuffleboard.getTab("yep").add("vel", 0).getEntry();
-    private final GenericEntry maxAccel = Shuffleboard.getTab("yep").add("accel", 0).getEntry();
-
     public AlgeePivotSubsystem() {
         motor = SparkFactory.createSparkMax(Constants.SparkIDs.algeePivot);
         SparkBaseConfig config =
@@ -56,10 +55,12 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
                                         .forwardSoftLimit(MAX)
                                         .forwardSoftLimitEnabled(true)
                                         .reverseSoftLimit(MIN)
-                                        .reverseSoftLimitEnabled(true));
+                                        .reverseSoftLimitEnabled(true))
+                        .inverted(true);
         motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
         pidController = new ProfiledPIDController(.1, 0, 0, profile);
+        Shuffleboard.getTab("Asdf").add("apivot", pidController);
 
         algeePivotLogAutoLogged = new AlgeePivotLogAutoLogged();
     }
@@ -82,10 +83,10 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
 
     @Override
     public void periodic() {
-        motor.set(pidController.calculate(motor.getEncoder().getPosition()));
-
         pidController.setConstraints(
-                new TrapezoidProfile.Constraints(maxVel.getDouble(0), maxAccel.getDouble(0)));
+                new TrapezoidProfile.Constraints(speed.getDouble(0), accel.getDouble(0)));
+
+        motor.set(pidController.calculate(motor.getEncoder().getPosition()));
     }
 
     @Override

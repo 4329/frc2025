@@ -8,13 +8,13 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.DifferentialArmLogAutoLogged;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
 import java.util.Map;
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class DifferentialArmImpl extends SubsystemBase implements DifferentialArmSubsystem {
@@ -23,19 +23,16 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     private final double MAX_POWER = 0.5;
 
-    private final double MIN_PITCH = -2.7;
-    private final double MAX_PITCH = 0;
+    private final double MIN_PITCH = 0;
+    private final double MAX_PITCH = 2.7;
 
     private final double MIN_ROLL = -1000000;
     private final double MAX_ROLL = 10000000;
 
-    private final double FEED_FORWARD1 = 0.05;
-    private final double FEED_FORWARD2 = 0.05;
-
-    private final double sharedP = 0.3;
-    private final double sharedI = 0.4; // 0.00025
+    private final double sharedP = 0.6;
+    private final double sharedI = 0.4;
     private final double sharedD = 0.0025;
-    private final double sharedIZone = 0.1; // 0.1
+    private final double sharedIZone = 0.1;
 
     private final DifferentialArmLogAutoLogged differentialArmLogAutoLogged;
 
@@ -58,7 +55,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
         motor2 = SparkFactory.createSparkMax(Constants.SparkIDs.differential2);
         motor2.configure(
-                configureMotor().inverted(true),
+                configureMotor().follow(motor1, true),
                 ResetMode.kNoResetSafeParameters,
                 PersistMode.kPersistParameters);
 
@@ -77,6 +74,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         rollPID.setIZone(sharedIZone);
         rollPID.enableContinuousInput(0, 2 * Math.PI);
         rollPID.setGoal(0);
+        Shuffleboard.getTab("Asdf").add("diff", pitchPID);
 
         differentialArmLogAutoLogged = new DifferentialArmLogAutoLogged();
     }
@@ -152,18 +150,18 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     @Override
     public void periodic() {
         double pitchCalc = pitchPID.calculate(getPitch(), pitchTarget);
-        double rollCalc = rollPID.calculate(getRoll(), rollTarget);
+        // double rollCalc = rollPID.calculate(getRoll(), rollTarget);
 
-        double power1 = pitchCalc + rollCalc;
-        double power2 = pitchCalc - rollCalc;
+        // double power1 = pitchCalc + rollCalc;
+        // double power2 = pitchCalc - rollCalc;
+        //
+        // power1 = feedforward(power1, FEED_FORWARD1);
+        // power2 = feedforward(power2, FEED_FORWARD2);
+        //
+        // Map.Entry<Double, Double> powers = normalizePowers(power1, power2);
 
-        power1 = feedforward(power1, FEED_FORWARD1);
-        power2 = feedforward(power2, FEED_FORWARD2);
-
-        Map.Entry<Double, Double> powers = normalizePowers(power1, power2);
-
-        motor1.set(powers.getKey());
-        motor2.set(powers.getValue());
+        motor1.set(pitchCalc);
+        // motor2.set(powers.getValue());
     }
 
     @Override

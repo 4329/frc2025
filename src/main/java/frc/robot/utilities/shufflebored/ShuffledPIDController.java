@@ -42,6 +42,6 @@ public class ShuffledPIDController extends PIDController {
                 });
         builder.addDoubleProperty("tol", this::getErrorTolerance, this::setTolerance);
         builder.addDoubleProperty("setpoint", this::getSetpoint, this::setSetpoint);
-        builder.addDoubleProperty("output", () -> output, (x) -> output = x);
+        builder.addDoubleProperty("output", () -> output, x -> output = x);
     }
 }

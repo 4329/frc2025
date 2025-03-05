@@ -22,8 +22,6 @@ import frc.robot.commands.algeeWheelCommands.ToggleAlgeeWheelCommand;
 import frc.robot.commands.commandGroups.ScoreWithArm;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
-import frc.robot.subsystems.IntakePivotSubsystem;
-import frc.robot.subsystems.IntakeWheelSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
@@ -54,8 +52,8 @@ public class RobotContainer {
     private final AlgeeWheelSubsystem algeeWheelSubsystem;
     private final ElevatorSubsystem elevatorSubsystem;
     private final LightSubsystem lightSubsystem;
-    private final IntakeWheelSubsystem intakeWheelSubsystem;
-    private final IntakePivotSubsystem intakePivotSubsystem;
+    // private final IntakeWheelSubsystem intakeWheelSubsystem;
+    // private final IntakePivotSubsystem intakePivotSubsystem;
 
     private final DriveByController driveByController;
 
@@ -90,9 +88,9 @@ public class RobotContainer {
         differentialArmSubsystem = DifferentialArmFactory.createDifferentialArmSubsystem();
         algeePivotSubsystem = new AlgeePivotSubsystem();
         algeeWheelSubsystem = new AlgeeWheelSubsystem();
-        intakePivotSubsystem = new IntakePivotSubsystem();
-        intakeWheelSubsystem = new IntakeWheelSubsystem();
-        elevatorSubsystem = ElevatorFactory.createElevatorSubsystem(differentialArmSubsystem::getPitch);
+        // intakePivotSubsystem = new IntakePivotSubsystem();
+        // intakeWheelSubsystem = new IntakeWheelSubsystem();
+        elevatorSubsystem = ElevatorFactory.createElevatorSubsystem(() -> 0.0);
         lightSubsystem = new LightSubsystem();
 
         new LoggingSubsystem(
@@ -170,14 +168,14 @@ public class RobotContainer {
     driverController.povDown().whileTrue(new RepeatCommand(new UnInstantCommand(
             "ArmPitchDown",
             () -> differentialArmSubsystem.runPitch(-1))));
-
-    driverController.povRight().whileTrue(new RepeatCommand(new UnInstantCommand(
-            "ArmRollClockwise",
-            () -> differentialArmSubsystem.runRoll(1))));
-    driverController.povLeft().whileTrue(new RepeatCommand(new UnInstantCommand(
-            "ArmRollCounterClockwise",
-            () -> differentialArmSubsystem.runRoll(-1))));
-
+    //
+    //driverController.povRight().whileTrue(new RepeatCommand(new UnInstantCommand(
+    //        "ArmRollClockwise",
+    //        () -> differentialArmSubsystem.runRoll(1))));
+    //driverController.povLeft().whileTrue(new RepeatCommand(new UnInstantCommand(
+    //        "ArmRollCounterClockwise",
+    //        () -> differentialArmSubsystem.runRoll(-1))));
+    //
     driverController.rightStick().onTrue(new UnInstantCommand(
             "ResetOdometry",
             () -> m_robotDrive.resetOdometry(new Pose2d())));

@@ -200,8 +200,8 @@ public final class Constants {
         public static final int differential1 = 13;
         public static final int differential2 = 14;
 
-        public static final int algeePivot = 11;
-        public static final int algeeWheel = 12;
+        public static final int algeePivot = 12;
+        public static final int algeeWheel = 11;
 
         public static final int elevator1 = 9;
         public static final int elevator2 = 10;

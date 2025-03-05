@@ -33,8 +33,8 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
 
     public boolean atSetpoint();
 
-	@Override
-	public default String getName() {
-		return "ElevatorSubsystem";
-	}
+    @Override
+    public default String getNameLog() {
+        return "ElevatorSubsystem";
+    }
 }

@@ -7,6 +7,12 @@ then
 fi
 
 git checkout main
+if [ $? -ne 0 ]
+then
+    printf "\n\U01F92E oh my golly geepers gracious! I couldn't checkout main.  I'm just stoppin now.\n\n"
+    exit 1
+fi
+
 for branch in `git branch -vv | grep ': gone]' | awk '{print  $1}'`
 do
     git branch -D $branch 

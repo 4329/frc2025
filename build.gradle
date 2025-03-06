@@ -58,7 +58,7 @@ deploy {
 }
 
 task cleanPathPlanner(type: Exec) {
-
+    ignoreExitValue true
     commandLine "bash", './cleanPathPlanner.sh'
 }
 
@@ -135,7 +135,7 @@ deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
 deployArtifact.dependsOn(cleanPathPlanner)
-deployArtifact.dependsOn(spotlessApply)
+build.dependsOn(spotlessApply)
 
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {

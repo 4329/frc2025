@@ -57,7 +57,7 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
 
         // final double pulleyTeeth = 28;
         // final double belt = 5.5 / Units.inchesToMeters(1);
-        // final double gearRatio = 1 / 25;
+        // final double gearRatio = 1.0 / 25.0;
         // configgled.encoder.positionConversionFactor(pulleyTeeth / belt * gearRatio);
 
         motor1.configure(configgled, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

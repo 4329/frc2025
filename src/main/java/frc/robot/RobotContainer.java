@@ -148,7 +148,7 @@ public class RobotContainer {
     // spotless:off
 
   private void configureButtonBindings() {
-    // driverController.start().onTrue(new UnInstantCommand(driveByController::changeFieldOrient));
+    driverController.start().onTrue(new UnInstantCommand("ToggleFieldOrient", driveByController::toggleFieldOrient));
 
     driverController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
             "ElevatorUp",
@@ -161,7 +161,6 @@ public class RobotContainer {
 	driverController.rightBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
 
     driverController.a().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
-    driverController.b().onTrue(new UnInstantCommand("ToggleFieldOrient", () -> driveByController.toggleFieldOrient()));
 	driverController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem, 1));
 	driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
@@ -171,14 +170,7 @@ public class RobotContainer {
     driverController.povDown().whileTrue(new RepeatCommand(new UnInstantCommand(
             "ArmPitchDown",
             () -> differentialArmSubsystem.runPitch(-1))));
-    //
-    //driverController.povRight().whileTrue(new RepeatCommand(new UnInstantCommand(
-    //        "ArmRollClockwise",
-    //        () -> differentialArmSubsystem.runRoll(1))));
-    //driverController.povLeft().whileTrue(new RepeatCommand(new UnInstantCommand(
-    //        "ArmRollCounterClockwise",
-    //        () -> differentialArmSubsystem.runRoll(-1))));
-    //
+
     driverController.rightStick().onTrue(new UnInstantCommand(
             "ResetOdometry",
             () -> m_robotDrive.resetOdometry(new Pose2d())));

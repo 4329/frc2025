@@ -9,6 +9,8 @@ public class CenterOnAlgeeCommand extends CenterOnTargetCommand {
 
     ButtonRingController buttonRingController;
 
+    private final double clawOffset = 0.156;
+
     public CenterOnAlgeeCommand(
             PoseEstimationSubsystem poseEstimationSubsystem,
             Drivetrain drivetrain,
@@ -19,14 +21,8 @@ public class CenterOnAlgeeCommand extends CenterOnTargetCommand {
 
     @Override
     public void initialize() {
-        target = placeTarget(buttonRingController.getTagID(), 0);
+        target = placeTarget(buttonRingController.getTagID(), clawOffset);
         super.initialize();
-        LEDState.centerRunning = true;
     }
 
-    @Override
-    public void end(boolean interrupted) {
-        super.end(interrupted);
-        LEDState.centerRunning = false;
-    }
 }

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.BetterPathfindingCommand;
 import org.littletonrobotics.junction.Logger;
@@ -75,6 +76,8 @@ public class CenterOnTargetCommand extends Command {
                         Constants.AutoConstants.config,
                         drivetrain);
         pathFind.schedule();
+
+		LEDState.centerRunning = true;
     }
 
     @Override
@@ -107,5 +110,7 @@ public class CenterOnTargetCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         if (pathFind != null) pathFind.cancel();
+
+		LEDState.centerRunning = false;
     }
 }

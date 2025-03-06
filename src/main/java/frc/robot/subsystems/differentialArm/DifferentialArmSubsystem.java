@@ -6,8 +6,8 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 
 public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
 
-    public static final double ARM_LENGTH_CORAL_CENTER = Units.inchesToMeters(20);
-    public static final double ARM_LENGTH_CLAW_END = Units.inchesToMeters(21);
+    public static final double ARM_LENGTH_CORAL_CENTER = Units.inchesToMeters(17.151904);
+    public static final double ARM_LENGTH_CLAW_END = Units.inchesToMeters(18.151904);
 
     public enum DifferentialArmPitch {
         STORAGE(0),

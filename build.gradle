@@ -58,7 +58,7 @@ deploy {
 }
 
 task cleanPathPlanner(type: Exec) {
-
+    ignoreExitValue true
     commandLine "bash", './cleanPathPlanner.sh'
 }
 

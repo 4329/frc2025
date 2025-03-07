@@ -17,7 +17,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.Constants.*;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.model.DrivetrainLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem;
@@ -26,8 +25,7 @@ import frc.robot.subsystems.swerve.module.SwerveModuleFactory;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 /** Implements a swerve DrivetrainImpl Subsystem for the Robot */
-public class DrivetrainImpl extends SubsystemBase
-        implements Drivetrain, LoggingSubsystem.LoggedSubsystem {
+public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
 
     public boolean isLocked;
     private double offset;
@@ -65,9 +63,6 @@ public class DrivetrainImpl extends SubsystemBase
     private SlewRateLimiter slewY = new SlewRateLimiter(6.5);
     private SlewRateLimiter slewRot = new SlewRateLimiter(10.0);
 
-    double pitchOffset;
-    double rollOffset;
-
     /** Constructs a DrivetrainImpl and resets the Gyro and Keep Angle parameters */
     public DrivetrainImpl() {
         keepAngleTimer.reset();
@@ -75,10 +70,7 @@ public class DrivetrainImpl extends SubsystemBase
         m_keepAnglePID.enableContinuousInput(-Math.PI, Math.PI);
         ahrs.reset();
 
-        pitchOffset = ahrs.getPitch();
-        rollOffset = ahrs.getRoll();
-        offset = -Math.PI / 2;
-        // ahrs.setAngleAdjustment(-90);
+        offset = Math.PI;
 
         m_frontLeft =
                 SwerveModuleFactory.makeSwerve(
@@ -217,7 +209,7 @@ public class DrivetrainImpl extends SubsystemBase
     @Override
     public void updateOdometry() {
 
-        m_odometry.update(ahrs.getRotation2d(), getModulePositions());
+        m_odometry.update(getGyro(), getModulePositions());
     }
 
     @Override
@@ -413,21 +405,4 @@ public class DrivetrainImpl extends SubsystemBase
         };
     }
 
-    @Override
-    public double getRoll() {
-
-        return ahrs.getRoll();
-    }
-
-    @Override
-    public double getOffsetRoll() {
-
-        return ahrs.getRoll() - rollOffset;
-    }
-
-    @Override
-    public double getYaw() {
-
-        return ahrs.getYaw();
-    }
 }

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
@@ -35,6 +36,7 @@ import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CommandLoginator;
+import frc.robot.utilities.ToggleCommand;
 import frc.robot.utilities.UnInstantCommand;
 import java.io.File;
 import java.util.HashMap;
@@ -91,10 +93,11 @@ public class RobotContainer {
         algeeWheelSubsystem = new AlgeeWheelSubsystem();
         // intakePivotSubsystem = new IntakePivotSubsystem();
         // intakeWheelSubsystem = new IntakeWheelSubsystem();
-        elevatorSubsystem = ElevatorFactory.createElevatorSubsystem(() -> 0.0);
+        elevatorSubsystem = ElevatorFactory.createElevatorSubsystem(differentialArmSubsystem::getPitch);
         lightSubsystem = new LightSubsystem();
 
         new LoggingSubsystem(
+				drivetrain,
                 poseEstimationSubsystem,
                 differentialArmSubsystem,
                 algeePivotSubsystem,
@@ -159,6 +162,7 @@ public class RobotContainer {
 	driverController.rightBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
 
     driverController.a().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
+	driverController.b().whileTrue(new ToggleCommand(new StartEndCommand(() -> elevatorSubsystem.setSetpoint(ElevatorSubsystem.ElevatorPosition.L2), () -> elevatorSubsystem.setSetpoint(ElevatorSubsystem.ElevatorPosition.L2Score))));
 	driverController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem, 1));
 	driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 

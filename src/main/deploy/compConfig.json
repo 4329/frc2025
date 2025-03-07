@@ -1,14 +1,14 @@
 {
-    "frontLeftDriveMotorPort": 1,
-    "frontRightDriveMotorPort": 7,
-    "backLeftDriveMotorPort": 3,
-    "backRightDriveMotorPort": 5,
+    "frontLeftDriveMotorPort": 7,
+    "frontRightDriveMotorPort": 5,
+    "backLeftDriveMotorPort": 1,
+    "backRightDriveMotorPort": 3,
 
-    "frontLeftTurningMotorPort": 2,
-    "frontRightTurningMotorPort": 8,
-    "backLeftTurningMotorPort": 4,
-    "backRightTurningMotorPort": 6,
-    
+    "frontLeftTurningMotorPort": 8,
+    "frontRightTurningMotorPort": 6,
+    "backLeftTurningMotorPort": 2,
+    "backRightTurningMotorPort": 4,
+
     "extraShuffleBoardToggle": false,
     "limelighturl": "http://10.43.29.11:5800",
     "usesPhotonVision": false,

@@ -90,9 +90,9 @@ public final class Constants {
         // NOTE: 2910 Swerve the wheels are not directly under the center of rotation
         // (Take into consideration when measuring)
         // Center distance in meters between left and right wheels on robot
-        public static final double kWheelBaseWidth = 0.675;
+        public static final double kWheelBaseWidth = 0.629;
         // Center distance in meters between front and back wheels on robot
-        public static final double kWheelBaseLength = 0.5461;
+		public static final double kWheelBaseLength = 0.616;
 
         // Because the swerve modules position does not change, define a constant
         // SwerveDriveKinematics for use throughout the code

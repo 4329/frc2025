@@ -1,12 +1,16 @@
 package frc.robot.subsystems.swerve.drivetrain;
 
+import org.littletonrobotics.junction.inputs.LoggableInputs;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.model.DrivetrainLogAutoLogged;
 
 public class DrivetrainReplay implements Drivetrain {
+	DrivetrainLogAutoLogged drivetrainLogAutoLogged = new DrivetrainLogAutoLogged();
 
     @Override
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {}
@@ -117,20 +121,9 @@ public class DrivetrainReplay implements Drivetrain {
         };
     }
 
-    @Override
-    public double getRoll() {
+	@Override
+	public LoggableInputs log() {
+		return drivetrainLogAutoLogged;
+	}
 
-        return 0;
-    }
-
-    @Override
-    public double getOffsetRoll() {
-
-        return 0;
-    }
-
-    @Override
-    public double getYaw() {
-        return 0;
-    }
 }

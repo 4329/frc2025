@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.BetterPathfindingCommand;
@@ -78,7 +77,7 @@ public class CenterOnTargetCommand extends Command {
                         drivetrain);
         pathFind.schedule();
 
-		LEDState.centerRunning = true;
+        LEDState.centerRunning = true;
     }
 
     @Override
@@ -112,6 +111,6 @@ public class CenterOnTargetCommand extends Command {
     public void end(boolean interrupted) {
         if (pathFind != null) pathFind.cancel();
 
-		LEDState.centerRunning = false;
+        LEDState.centerRunning = false;
     }
 }

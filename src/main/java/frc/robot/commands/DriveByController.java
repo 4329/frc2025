@@ -15,13 +15,13 @@ public class DriveByController extends Command {
     private final Drivetrain m_robotDrive;
     private final CommandXboxController m_controller;
     private boolean fieldOrient = true;
-	private GenericEntry fieldOrientStatus = 
-		Shuffleboard.getTab("RobotData")
-		.add("Field Orient On", true)
-		.withProperties(Map.of("Color when true", "#FFFFFF", "Color when false", "#000000"))
-		.withSize(4, 2)
-		.withPosition(0, 2)
-		.getEntry();
+    private GenericEntry fieldOrientStatus =
+            Shuffleboard.getTab("RobotData")
+                    .add("Field Orient On", true)
+                    .withProperties(Map.of("Color when true", "#FFFFFF", "Color when false", "#000000"))
+                    .withSize(4, 2)
+                    .withPosition(0, 2)
+                    .getEntry();
 
     private final boolean logStuff;
 
@@ -37,7 +37,8 @@ public class DriveByController extends Command {
         m_robotDrive = drive; // Set the private member to the input drivetrain
         m_controller = controller; // Set the private member to the input controller
         addRequirements(
-                m_robotDrive); // Because this will be used as a default command, add the subsystem which will use this as the default
+                m_robotDrive); // Because this will be used as a default command, add the subsystem which
+        // will use this as the default
         logStuff = true;
     }
 

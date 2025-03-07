@@ -8,6 +8,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.light.LEDState;
@@ -22,11 +23,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class IntakeAlgeeCommandTest {
     @Mock AlgeeWheelSubsystem algeeWheelSubsystem;
     @Mock CommandScheduler mockCommandScheduler;
+	@Mock Timer timer;
     IntakeAlgeeCommand intakeAlgeeCommand;
 
     @BeforeEach
     public void init() {
-        intakeAlgeeCommand = new IntakeAlgeeCommand(algeeWheelSubsystem, 1);
+        intakeAlgeeCommand = new IntakeAlgeeCommand(algeeWheelSubsystem, 1, timer);
         LEDState.algeeWheelHolding = false;
     }
 
@@ -76,6 +78,7 @@ public class IntakeAlgeeCommandTest {
 
     @Test
     public void isFinished() {
+		when(timer.get()).thenReturn(1000.0);
         when(algeeWheelSubsystem.getAlgeed()).thenReturn(true);
         boolean result = intakeAlgeeCommand.isFinished();
         assertTrue(result);

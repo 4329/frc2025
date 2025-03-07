@@ -26,19 +26,11 @@ public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
 
     void setPitchTarget(double pitchTarget);
 
-    void setRollTarget(double rollTarget);
-
     void runPitch(double sign);
-
-    void runRoll(double sign);
 
     double getPitch();
 
-    double getRoll();
-
     boolean pitchAtSetpoint();
-
-    boolean rollAtSetpoint();
 
     @Override
     public default String getNameLog() {

@@ -24,21 +24,9 @@ public class DifferentialArmPlayback extends SubsystemBase implements Differenti
     }
 
     @Override
-    public void setRollTarget(double rollTarget) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setRollTarget'");
-    }
-
-    @Override
     public double getPitch() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getPitch'");
-    }
-
-    @Override
-    public double getRoll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRoll'");
     }
 
     @Override
@@ -48,20 +36,8 @@ public class DifferentialArmPlayback extends SubsystemBase implements Differenti
     }
 
     @Override
-    public boolean rollAtSetpoint() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'rollAtSetpoint'");
-    }
-
-    @Override
     public void runPitch(double sign) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'runPitch'");
-    }
-
-    @Override
-    public void runRoll(double sign) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'runRoll'");
     }
 }

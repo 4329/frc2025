@@ -6,7 +6,7 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 
 public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
 
-	public static final double ELEVATOR_DIST = Units.inchesToMeters(13.75);
+    public static final double ELEVATOR_DIST = Units.inchesToMeters(13.75);
     public static final double ELEVATOR_START = 0.8525;
 
     public static final double ELEVATOR_SCORE = 7;

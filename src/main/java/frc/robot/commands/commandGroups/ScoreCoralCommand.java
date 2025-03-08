@@ -25,7 +25,10 @@ public class ScoreCoralCommand extends Command {
 		elevatorSubsystem.setSetpoint(switch (buttonRingController.getLevel()) {
 			case 2 -> ElevatorPosition.L2Score;
 			case 3 -> ElevatorPosition.L3Score;
-			case 4 -> ElevatorPosition.L4;
+			case 4 -> {
+				differentialArmSubsystem.setPitchTarget(DifferentialArmPitch.NINETY);
+				yield ElevatorPosition.L4;
+			}
 			default -> ElevatorPosition.L2;
 		});
 	}

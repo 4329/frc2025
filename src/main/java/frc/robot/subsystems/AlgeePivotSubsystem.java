@@ -59,6 +59,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
         motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
         pidController = new ShuffledTrapezoidController(.1, 0, 0, profile);
+		pidController.setTolerance(0.5);
         Shuffleboard.getTab("Asdf").add("apivot", pidController);
 
         algeePivotLogAutoLogged = new AlgeePivotLogAutoLogged();
@@ -77,7 +78,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     }
 
     public boolean atSetpoint() {
-        return pidController.atSetpoint();
+        return pidController.atGoal();
     }
 
     @Override

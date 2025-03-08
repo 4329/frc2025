@@ -26,21 +26,12 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     private final double MIN_PITCH = 0;
     private final double MAX_PITCH = 2.95;
 
-    private final double sharedP = 0.4;
-    private final double sharedI = 0.8;
-    private final double sharedD = 0.0025;
-    private final double sharedIZone = 0.03;
-
     private final DifferentialArmLogAutoLogged differentialArmLogAutoLogged;
-
-	GenericEntry gGain = Shuffleboard.getTab("Asdf").add("diffgGain", 0).getEntry();
 
     SparkMax motor1;
     SparkMax motor2;
 
     RelativeEncoder encoder1;
-
-    double pitchTarget;
 
     ProfiledPIDController pitchPID;
 
@@ -58,9 +49,9 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         encoder1 = motor1.getEncoder();
 
         pitchPID =
-                new ShuffledTrapezoidController(
-                        sharedP, sharedI, sharedD, new TrapezoidProfile.Constraints(6, 8));
-        pitchPID.setIZone(sharedIZone);
+                new ShuffledTrapezoidController(0.2, 1, 0.0025, new TrapezoidProfile.Constraints(6, 8));
+        pitchPID.setIZone(0.3);
+		pitchPID.setTolerance(0.1);
         pitchPID.setGoal(0);
 
         Shuffleboard.getTab("Asdf").add("diff", pitchPID);
@@ -71,23 +62,22 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     private SparkBaseConfig configureMotor() {
         SparkBaseConfig config1 = new SparkMaxConfig().smartCurrentLimit(30);
         config1.encoder.positionConversionFactor(Math.PI / 4);
-        //config1.encoder.positionConversionFactor(1 / 7 * (2 * Math.PI));
         return config1;
     }
 
     @Override
     public void setPitchTarget(DifferentialArmPitch pitchTarget) {
-        this.pitchTarget = pitchTarget.rotation;
+		setPitchTarget(pitchTarget.rotation);
     }
 
     @Override
     public void setPitchTarget(double pitchTarget) {
-        this.pitchTarget = MathUtils.clamp(MIN_PITCH, MAX_PITCH, pitchTarget);
+        pitchPID.setGoal(MathUtils.clamp(MIN_PITCH, MAX_PITCH, pitchTarget));
     }
 
     @Override
     public void runPitch(double sign) {
-        setPitchTarget(pitchTarget + PITCH_SPEED * sign);
+        setPitchTarget(pitchPID.getGoal().position + PITCH_SPEED * sign);
     }
 
     @Override
@@ -102,7 +92,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     @Override
     public void periodic() {
-        double pitchCalc = pitchPID.calculate(getPitch(), pitchTarget) + Math.sin(gGain.getDouble(0));
+        double pitchCalc = pitchPID.calculate(getPitch());
 
         motor1.set(pitchCalc);
     }
@@ -119,7 +109,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     @Override
     public LoggableInputs log() {
         differentialArmLogAutoLogged.pitch = getPitch();
-        differentialArmLogAutoLogged.pitchTarget = pitchTarget;
+        differentialArmLogAutoLogged.pitchTarget = pitchPID.getGoal().position;
 		differentialArmLogAutoLogged.atSetpoint = pitchAtSetpoint();
 
         return differentialArmLogAutoLogged;

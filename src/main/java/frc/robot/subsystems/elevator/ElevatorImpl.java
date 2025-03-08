@@ -61,6 +61,7 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
 
         motor1Encoder = motor1.getEncoder();
         elevatorPID = new ShuffledTrapezoidController(0.09, 0, 0, profile);
+		elevatorPID.setTolerance(1);
         Shuffleboard.getTab("Asdf").add("elevator", elevatorPID);
 
         elevatorLogAutoLogged = new ElevatorLogAutoLogged();

@@ -14,7 +14,7 @@ import org.littletonrobotics.junction.Logger;
 public class DriveByController extends Command {
     private final Drivetrain m_robotDrive;
     private final CommandXboxController m_controller;
-    private boolean fieldOrient = true;
+    private boolean fieldOrient = false;
     private GenericEntry fieldOrientStatus =
             Shuffleboard.getTab("RobotData")
                     .add("Field Orient On", true)

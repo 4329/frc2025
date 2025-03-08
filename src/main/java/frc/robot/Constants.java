@@ -166,7 +166,7 @@ public final class Constants {
         public static final int kOperatorControllerPort =
                 1; // When making use of multiple controllers for drivers each
         // controller will be on a different port
-        public static final int kPitControllerPort =
+        public static final int kManualControllerPort =
                 2; //  When making blah blah blah make the ports different!
     }
 

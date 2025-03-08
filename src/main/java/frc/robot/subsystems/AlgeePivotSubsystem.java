@@ -25,7 +25,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     private final double ALGEE_PIVOT_SPEED = 0.3;
 
     private final double MIN = 0;
-    private final double MAX = 19;
+    private final double MAX = 27.9;
 
     public enum AlgeePivotAngle {
         ZERO(0),
@@ -88,6 +88,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     @Override
     public LoggableInputs log() {
         algeePivotLogAutoLogged.setpoint = pidController.getGoal().position;
+        algeePivotLogAutoLogged.actual = motor.getEncoder().getPosition();
         return algeePivotLogAutoLogged;
     }
 }

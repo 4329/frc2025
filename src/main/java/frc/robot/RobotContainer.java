@@ -19,9 +19,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
+import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
+import frc.robot.commands.commandGroups.ResetAllCommand;
 import frc.robot.commands.commandGroups.ScoreWithArm;
 import frc.robot.commands.commandGroups.StartCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
@@ -43,6 +45,7 @@ import frc.robot.utilities.UnInstantCommand;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import frc.robot.commands.elevatorCommands.CoolEvator;
 
 /* (including subsystems, commands, and button mappings) should be declared here
  */
@@ -66,6 +69,7 @@ public class RobotContainer {
 
     // The driver's controllers
     private final CommandXboxController driverController;
+    private final CommandXboxController manualController;
 
     private final ButtonRingController buttonRingController;
 
@@ -79,6 +83,7 @@ public class RobotContainer {
         m_robotDrive = drivetrain;
 
         driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+        manualController = new CommandXboxController(OIConstants.kManualControllerPort);
         buttonRingController = new ButtonRingController(OIConstants.kOperatorControllerPort);
         Shuffleboard.getTab("RobotData")
                 .add("Octagon", buttonRingController)
@@ -95,7 +100,7 @@ public class RobotContainer {
         algeeWheelSubsystem = new AlgeeWheelSubsystem();
         // intakePivotSubsystem = new IntakePivotSubsystem();
         // intakeWheelSubsystem = new IntakeWheelSubsystem();
-        elevatorSubsystem = ElevatorFactory.createElevatorSubsystem(differentialArmSubsystem::getPitch);
+        elevatorSubsystem = ElevatorFactory.createElevatorSubsystem();
         lightSubsystem = new LightSubsystem();
 
         new LoggingSubsystem(
@@ -151,48 +156,60 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     // spotless:off
+	private void configureButtonBindings() {
 
-  private void configureButtonBindings() {
-    driverController.start().onTrue(new UnInstantCommand("ToggleFieldOrient", driveByController::toggleFieldOrient));
-    driverController.back().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
+		driverController.start().onTrue(new UnInstantCommand(
+					"ToggleFieldOrient",
+					driveByController::toggleFieldOrient
+					));
+	
+		driverController.rightStick().onTrue(new UnInstantCommand(
+					"ResetOdometry",
+					() -> m_robotDrive.resetOdometry(new Pose2d())));
 
-    driverController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
-            "ElevatorUp",
-            () -> elevatorSubsystem.runElevator(driverController.getRightTriggerAxis())).repeatedlyLog());
-    driverController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
-            "ElevatorDown",
-            () -> elevatorSubsystem.runElevator(-driverController.getLeftTriggerAxis())).repeatedlyLog());
+		manualController.start().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
+		manualController.back().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
 
-	driverController.leftBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
-	driverController.rightBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
+		manualController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
+					"ElevatorUp",
+					() -> elevatorSubsystem.runElevator(manualController.getRightTriggerAxis())).repeatedlyLog());
+		manualController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
+					"ElevatorDown",
+					() -> elevatorSubsystem.runElevator(-manualController.getLeftTriggerAxis())).repeatedlyLog());
 
-    driverController.a().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
-	driverController.b().whileTrue(new ToggleCommand(new StartEndCommand(() -> elevatorSubsystem.setSetpoint(ElevatorSubsystem.ElevatorPosition.values()[(int)level.getDouble(0) * 2]), () -> elevatorSubsystem.setSetpoint(ElevatorSubsystem.ElevatorPosition.values()[((int)level.getDouble(0) + 1) * 2]))));
-	driverController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem, 1));
-	driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
+		manualController.leftBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
+		manualController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
 
-    driverController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(
-            "ArmPitchUp",
-            () -> differentialArmSubsystem.runPitch(1))));
-    driverController.povDown().whileTrue(new RepeatCommand(new UnInstantCommand(
-            "ArmPitchDown",
-            () -> differentialArmSubsystem.runPitch(-1))));
+		manualController.a().onTrue(new ResetAllCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 
-	driverController.povRight().onTrue(new UnInstantCommand(
-				"Dif90",
-				() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.NINETY)
-			));
-	driverController.povLeft().onTrue(new UnInstantCommand(
-				"Dif135",
-				() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)
-			));
+		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
+		manualController.b().whileTrue(new ToggleCommand(eleCool).until(eleCool::isFinished));
+		manualController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem, 1));
+		manualController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
-    driverController.rightStick().onTrue(new UnInstantCommand(
-            "ResetOdometry",
-            () -> m_robotDrive.resetOdometry(new Pose2d())));
-  }
+		manualController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(
+						"ArmPitchUp",
+						() -> differentialArmSubsystem.runPitch(1))));
+		manualController.povDown().whileTrue(new RepeatCommand(new UnInstantCommand(
+						"ArmPitchDown",
+						() -> differentialArmSubsystem.runPitch(-1))));
 
-  // spotless:on
+		manualController.povRight().onTrue(new UnInstantCommand(
+					"Dif90",
+					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.NINETY)
+					));
+		manualController.povLeft().onTrue(new UnInstantCommand(
+					"Dif0",
+					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.STORAGE)
+					));
+
+		manualController.rightStick().onTrue(new UnInstantCommand(
+					"Dif135",
+					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)
+					));
+	}
+
+	// spotless:on
 
     // jonathan was here today 2/3/2023
     // benjamin e. was here today 1/18/2025

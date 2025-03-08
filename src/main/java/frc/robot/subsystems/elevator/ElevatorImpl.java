@@ -37,11 +37,9 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
 
     private final ElevatorLogAutoLogged elevatorLogAutoLogged;
 
-    private final Supplier<Double> armAngle;
-
     private TrapezoidProfile.Constraints profile = new TrapezoidProfile.Constraints(160, 240);
 
-    public ElevatorImpl(Supplier<Double> armAngle) {
+    public ElevatorImpl() {
         motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator1);
         motor2 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator2);
 
@@ -70,12 +68,11 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
         Shuffleboard.getTab("Asdf").add("elevator", elevatorPID);
 
         elevatorLogAutoLogged = new ElevatorLogAutoLogged();
-        this.armAngle = armAngle;
     }
 
     private void setSetpoint(double setpoint) {
         double armLengthY =
-                Math.abs(DifferentialArmSubsystem.ARM_LENGTH_CLAW_END / Math.cos(armAngle.get()));
+                Math.abs(DifferentialArmSubsystem.ARM_LENGTH_CLAW_END);
         elevatorPID.setGoal(MathUtils.clamp(MIN + armLengthY, MAX, setpoint));
     }
 

@@ -47,17 +47,10 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
                                 differentialArmSubsystem,
                                 DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)),
                 new CenterByButtonRingCommand(poseEstimationSubsystem, drivetrain, buttonRingController),
-                new UnInstantCommand(
-                                "SetElevatorByButton",
-                                () ->
-                                        elevatorSubsystem.setSetpoint(
-                                                switch (buttonRingController.getLevel()) {
-                                                    case 2 -> ElevatorSubsystem.ElevatorPosition.L2Score;
-                                                    case 3 -> ElevatorSubsystem.ElevatorPosition.L3Score;
-                                                    case 4 -> ElevatorSubsystem.ElevatorPosition.L4Score;
-                                                    default -> ElevatorSubsystem.ElevatorPosition.L2Score;
-                                                }))
-                        .whileLog(() -> !elevatorSubsystem.atSetpoint()));
+				new SetArmPitchCommand(
+						differentialArmSubsystem,
+						DifferentialArmSubsystem.DifferentialArmPitch.NINETY),
+				new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
     }
 
     @Override

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -17,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
@@ -42,6 +45,8 @@ import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CommandLoginator;
 import frc.robot.utilities.ToggleCommand;
 import frc.robot.utilities.UnInstantCommand;
+import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,15 +87,15 @@ public class RobotContainer {
     public RobotContainer(Drivetrain drivetrain) {
         m_robotDrive = drivetrain;
 
-        driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-        manualController = new CommandXboxController(OIConstants.kManualControllerPort);
+        driverController = new CommandXboxController(OIConstants.kManualControllerPort); //these are switched WIP
+        manualController = new CommandXboxController(OIConstants.kDriverControllerPort); //oh no
         buttonRingController = new ButtonRingController(OIConstants.kOperatorControllerPort);
         Shuffleboard.getTab("RobotData")
                 .add("Octagon", buttonRingController)
                 .withPosition(4, 0)
                 .withSize(3, 2);
 
-        driveByController = new DriveByController(drivetrain, driverController);
+        driveByController = new DriveByController(drivetrain, manualController); //switch
         m_robotDrive.setDefaultCommand(driveByController);
 
         lilihSubsystem = new LilihSubsystem(11, "limelight-lilih");
@@ -147,8 +152,6 @@ public class RobotContainer {
                 m_robotDrive);
     }
 
-	private final GenericEntry level = Shuffleboard.getTab("Asdf").add("sad", 0).getEntry();
-
     /**
      * Use this method to define your button->command mappings. Buttons can be created by
      * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
@@ -167,6 +170,9 @@ public class RobotContainer {
 					"ResetOdometry",
 					() -> m_robotDrive.resetOdometry(new Pose2d())));
 
+		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
+		driverController.povLeft().onTrue(new ResetAllCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
+
 		manualController.start().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
 		manualController.back().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
 
@@ -183,7 +189,7 @@ public class RobotContainer {
 		manualController.a().onTrue(new ResetAllCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 
 		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
-		manualController.b().whileTrue(new ToggleCommand(eleCool).until(eleCool::isFinished));
+		manualController.b().whileTrue(new ToggleCommand(eleCool).untilLog(eleCool::isFinished));
 		manualController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem, 1));
 		manualController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
@@ -196,17 +202,14 @@ public class RobotContainer {
 
 		manualController.povRight().onTrue(new UnInstantCommand(
 					"Dif90",
-					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.NINETY)
-					));
+					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.NINETY)));
 		manualController.povLeft().onTrue(new UnInstantCommand(
 					"Dif0",
-					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.STORAGE)
-					));
+					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.STORAGE)));
 
 		manualController.rightStick().onTrue(new UnInstantCommand(
 					"Dif135",
-					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)
-					));
+					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)));
 	}
 
 	// spotless:on
@@ -235,6 +238,19 @@ public class RobotContainer {
                 autoName.put(autoCommand, pathCommand);
             }
         }
+
+		SysIdRoutine routine = new SysIdRoutine(
+				new SysIdRoutine.Config(null, null, null, null),
+				new SysIdRoutine.Mechanism(differentialArmSubsystem::voltageDrive, differentialArmSubsystem::logMotors, differentialArmSubsystem));
+
+		m_chooser.addOption(
+				"diffid",
+				new LoggedSequentialCommandGroup(
+					"diffid",
+					routine.quasistatic(Direction.kForward),
+					routine.quasistatic(Direction.kForward),
+					routine.dynamic(Direction.kForward),
+					routine.dynamic(Direction.kForward)));
 
         Shuffleboard.getTab("RobotData").add("SelectAuto", m_chooser).withSize(4, 2).withPosition(0, 0);
     }

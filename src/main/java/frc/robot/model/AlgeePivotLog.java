@@ -6,4 +6,5 @@ import org.littletonrobotics.junction.AutoLog;
 public class AlgeePivotLog {
     public double actual;
     public double setpoint;
+	public boolean atSetpoint;
 }

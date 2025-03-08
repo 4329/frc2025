@@ -1,5 +1,7 @@
 package frc.robot.subsystems.differentialArm;
 
+import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -40,4 +42,16 @@ public class DifferentialArmPlayback extends SubsystemBase implements Differenti
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'runPitch'");
     }
+
+	@Override
+	public void voltageDrive(Voltage voltage) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'voltageDrive'");
+	}
+
+	@Override
+	public void logMotors(SysIdRoutineLog log) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'logMotors'");
+	}
 }

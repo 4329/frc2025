@@ -4,6 +4,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -43,18 +44,13 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
         motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator1);
         motor2 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator2);
 
-        SparkBaseConfig configgled = new SparkMaxConfig().inverted(true);
-        // .apply(
-        // new SoftLimitConfig()
-        //         .forwardSoftLimit(MAX)
-        //         .forwardSoftLimitEnabled(true)
-        //         .reverseSoftLimit(MIN)
-        //         .reverseSoftLimitEnabled(true));
-
-        // final double pulleyTeeth = 28;
-        // final double belt = 5.5 / Units.inchesToMeters(1);
-        // final double gearRatio = 1.0 / 25.0;
-        // configgled.encoder.positionConversionFactor(pulleyTeeth / belt * gearRatio);
+		SparkBaseConfig configgled = new SparkMaxConfig().inverted(true)
+			.apply(
+					new SoftLimitConfig()
+					.forwardSoftLimit(MAX)
+					.forwardSoftLimitEnabled(true)
+					.reverseSoftLimit(MIN)
+					.reverseSoftLimitEnabled(true));
 
         motor1.configure(configgled, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -71,9 +67,9 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
     }
 
     private void setSetpoint(double setpoint) {
-        double armLengthY =
-                Math.abs(DifferentialArmSubsystem.ARM_LENGTH_CLAW_END);
-        elevatorPID.setGoal(MathUtils.clamp(MIN + armLengthY, MAX, setpoint));
+        //double armLengthY =
+        //        Math.abs(DifferentialArmSubsystem.ARM_LENGTH_CLAW_END);
+        elevatorPID.setGoal(MathUtils.clamp(MIN, MAX, setpoint));
     }
 
     @Override
@@ -88,7 +84,7 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
 
     @Override
     public boolean atSetpoint() {
-        return elevatorPID.atSetpoint();
+        return elevatorPID.atGoal();
     }
 
     @Override
@@ -105,6 +101,7 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
     public LoggableInputs log() {
         elevatorLogAutoLogged.setpoint = elevatorPID.getGoal().position;
         elevatorLogAutoLogged.position = motor1Encoder.getPosition();
+		elevatorLogAutoLogged.atSetpoint = atSetpoint();
         return elevatorLogAutoLogged;
     }
 }

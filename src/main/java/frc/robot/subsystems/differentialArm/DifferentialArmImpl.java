@@ -8,7 +8,10 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.DifferentialArmLogAutoLogged;
@@ -20,7 +23,6 @@ import frc.robot.utilities.shufflebored.*;
 public class DifferentialArmImpl extends SubsystemBase implements DifferentialArmSubsystem {
     private final double PITCH_SPEED = .05;
 
-
     private final double MIN_PITCH = 0;
     private final double MAX_PITCH = 2.95;
 
@@ -30,6 +32,8 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     private final double sharedIZone = 0.03;
 
     private final DifferentialArmLogAutoLogged differentialArmLogAutoLogged;
+
+	GenericEntry gGain = Shuffleboard.getTab("Asdf").add("diffgGain", 0).getEntry();
 
     SparkMax motor1;
     SparkMax motor2;
@@ -67,6 +71,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     private SparkBaseConfig configureMotor() {
         SparkBaseConfig config1 = new SparkMaxConfig().smartCurrentLimit(30);
         config1.encoder.positionConversionFactor(Math.PI / 4);
+        //config1.encoder.positionConversionFactor(1 / 7 * (2 * Math.PI));
         return config1;
     }
 
@@ -92,21 +97,30 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     @Override
     public boolean pitchAtSetpoint() {
-        return pitchPID.atSetpoint();
+        return pitchPID.atGoal();
     }
 
     @Override
     public void periodic() {
-        double pitchCalc = pitchPID.calculate(getPitch(), pitchTarget);
+        double pitchCalc = pitchPID.calculate(getPitch(), pitchTarget) + Math.sin(gGain.getDouble(0));
 
         motor1.set(pitchCalc);
     }
 
+	@Override
+	public void voltageDrive(Voltage voltage) {
+		motor1.setVoltage(voltage);
+	}
+
+	@Override
+	public void logMotors(SysIdRoutineLog log) {
+	}
+
     @Override
     public LoggableInputs log() {
         differentialArmLogAutoLogged.pitch = getPitch();
-
         differentialArmLogAutoLogged.pitchTarget = pitchTarget;
+		differentialArmLogAutoLogged.atSetpoint = pitchAtSetpoint();
 
         return differentialArmLogAutoLogged;
     }

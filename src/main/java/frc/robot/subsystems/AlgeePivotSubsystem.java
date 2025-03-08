@@ -89,6 +89,8 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     public LoggableInputs log() {
         algeePivotLogAutoLogged.setpoint = pidController.getGoal().position;
         algeePivotLogAutoLogged.actual = motor.getEncoder().getPosition();
+		algeePivotLogAutoLogged.atSetpoint = atSetpoint();
+
         return algeePivotLogAutoLogged;
     }
 }

@@ -1,6 +1,8 @@
 package frc.robot.subsystems.differentialArm;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 
@@ -30,6 +32,10 @@ public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
     double getPitch();
 
     boolean pitchAtSetpoint();
+
+	public void voltageDrive(Voltage voltage);
+
+	public void logMotors(SysIdRoutineLog log);
 
     @Override
     public default String getNameLog() {

@@ -12,6 +12,10 @@ public class LoggedCommandComposer extends Command {
         return wrapper;
     }
 
+	public LoggedSequentialCommandGroup andThenLog(Command next) {
+		return new LoggedSequentialCommandGroup(this.getName() + "," + next.getName(), this, next);
+	}
+
     public LoggedParallelRaceGroup raceWithLog(String name, Command... parallel) {
         LoggedParallelRaceGroup group = new LoggedParallelRaceGroup(name, this);
         group.addCommands(parallel);

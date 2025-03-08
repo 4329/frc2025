@@ -41,7 +41,7 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
                                                                 : ElevatorSubsystem.ElevatorPosition.ALGEE_LOW))
                                 .untilLog(elevatorSubsystem::atSetpoint)),
                 new CenterOnAlgeeCommand(poseEstimationSubsystem, drivetrain, buttonRingController),
-                new IntakeAlgeeCommand(algeeWheelSubsystem, 1));
+                new IntakeAlgeeCommand(algeeWheelSubsystem));
     }
 
     @Override

@@ -26,6 +26,7 @@ import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
+import frc.robot.commands.commandGroups.HappyResetCommand;
 import frc.robot.commands.commandGroups.PositionCoralCommand;
 import frc.robot.commands.commandGroups.ResetAllCommand;
 import frc.robot.commands.commandGroups.ScoreCoralCommand;
@@ -91,15 +92,15 @@ public class RobotContainer {
     public RobotContainer(Drivetrain drivetrain) {
         m_robotDrive = drivetrain;
 
-        driverController = new CommandXboxController(OIConstants.kManualControllerPort); //these are switched WIP
-        manualController = new CommandXboxController(OIConstants.kDriverControllerPort); //oh no
+        driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+        manualController = new CommandXboxController(OIConstants.kManualControllerPort);
         buttonRingController = new ButtonRingController(OIConstants.kOperatorControllerPort);
         Shuffleboard.getTab("RobotData")
                 .add("Octagon", buttonRingController)
                 .withPosition(4, 0)
                 .withSize(3, 2);
 
-        driveByController = new DriveByController(drivetrain, manualController); //switch
+        driveByController = new DriveByController(drivetrain, driverController);
         m_robotDrive.setDefaultCommand(driveByController);
 
         lilihSubsystem = new LilihSubsystem(11, "limelight-lilih");
@@ -174,12 +175,26 @@ public class RobotContainer {
 					"ResetOdometry",
 					() -> m_robotDrive.resetOdometry(new Pose2d())));
 
+		driverController.rightTrigger(0.01).whileTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ALGEE_HIGH));
+		driverController.leftTrigger(0.01).whileTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ALGEE_LOW));
+
+		driverController.leftBumper().onTrue(new UnInstantCommand(
+					"Dif90",
+					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.NINETY)));
+		driverController.rightBumper().onTrue(new UnInstantCommand(
+					"Dif0",
+					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.STORAGE)));
+
+
 		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
 		driverController.povLeft().onTrue(new ResetAllCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
-		driverController.povUp().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO));
+		driverController.povUp().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
+		driverController.povDown().onTrue(new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 
 		driverController.a().onTrue(new PositionCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
 		driverController.b().onTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
+		driverController.x().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT).andThen(new IntakeAlgeeCommand(algeeWheelSubsystem)));
+		driverController.y().onTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
 		manualController.start().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
 		manualController.back().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
@@ -198,7 +213,7 @@ public class RobotContainer {
 
 		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
 		manualController.b().whileTrue(new ToggleCommand(eleCool).untilLog(eleCool::isFinished));
-		manualController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem, 1));
+		manualController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem));
 		manualController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
 		manualController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(

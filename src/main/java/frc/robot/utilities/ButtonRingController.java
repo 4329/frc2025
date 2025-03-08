@@ -25,10 +25,10 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
         new UnInstantCommand(
                         "SetButtonRingLevel",
                         () -> {
-                            if (getRawAxis(0) == 1) level = 3;
-                            else if (getRawAxis(0) == -1) level = 4;
-                            else if (getRawAxis(1) == 1) level = 2;
-                            else if (getRawAxis(1) == -1) level = 1;
+                            if (getRawAxis(0) == 1) level = 2;
+                            else if (getRawAxis(0) == -1) level = 1;
+                            else if (getRawAxis(1) == 1) level = 3;
+                            else if (getRawAxis(1) == -1) level = 4;
                             else level = 0;
 
                             LEDState.reefLevel = level;

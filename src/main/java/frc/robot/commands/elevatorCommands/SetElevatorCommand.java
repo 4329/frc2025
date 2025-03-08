@@ -3,8 +3,9 @@ package frc.robot.commands.elevatorCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.utilities.loggedComands.LoggedCommandComposer;
 
-public class SetElevatorCommand extends Command {
+public class SetElevatorCommand extends LoggedCommandComposer {
     ElevatorSubsystem elevatorSubsystem;
     ElevatorSubsystem.ElevatorPosition elevatorPosition;
 	boolean set;

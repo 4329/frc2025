@@ -12,11 +12,11 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
     public static final double ELEVATOR_SCORE = 7;
 
     public enum ElevatorPosition {
-        L2(66.4),
-		L2Score(-6),
+        L2(55.26),
+		L2Score(10),
 
-        L3(136.2),
-        L3Score(60.4),
+        L3(125.46),
+        L3Score(57.81),
 
         L4(196),
         L4AGAIN(L4.pos),

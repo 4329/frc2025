@@ -7,6 +7,7 @@ import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
@@ -30,6 +31,7 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
 
         addCommands(
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO),
+				new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY),
 				new PositionCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController),
                 new CenterByButtonRingCommand(poseEstimationSubsystem, drivetrain, buttonRingController),
 				new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));

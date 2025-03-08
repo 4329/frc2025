@@ -10,6 +10,7 @@ import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
+import frc.robot.utilities.CenterDistance;
 import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
@@ -40,7 +41,8 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
                                                                 ? ElevatorSubsystem.ElevatorPosition.ALGEE_HIGH
                                                                 : ElevatorSubsystem.ElevatorPosition.ALGEE_LOW))
                                 .untilLog(elevatorSubsystem::atSetpoint)),
-                new CenterOnAlgeeCommand(poseEstimationSubsystem, drivetrain, buttonRingController),
+                new CenterOnAlgeeCommand(
+                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING),
                 new IntakeAlgeeCommand(algeeWheelSubsystem));
     }
 

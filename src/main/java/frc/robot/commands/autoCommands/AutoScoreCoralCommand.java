@@ -17,8 +17,7 @@ public class AutoScoreCoralCommand extends LoggedSequentialCommandGroup {
             AlgeePivotSubsystem algeePivotSubsystem,
             ElevatorSubsystem elevatorSubsystem,
             ElevatorPosition elevatorPosition,
-            DifferentialArmSubsystem differentialArmSubsystem
-            ) {
+            DifferentialArmSubsystem differentialArmSubsystem) {
 
         addCommands(
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO),

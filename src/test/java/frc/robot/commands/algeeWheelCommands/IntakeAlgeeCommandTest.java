@@ -28,7 +28,7 @@ public class IntakeAlgeeCommandTest {
 
     @BeforeEach
     public void init() {
-        intakeAlgeeCommand = new IntakeAlgeeCommand(algeeWheelSubsystem, 1, timer);
+        intakeAlgeeCommand = new IntakeAlgeeCommand(algeeWheelSubsystem, timer);
         LEDState.algeeWheelHolding = false;
     }
 

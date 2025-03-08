@@ -1,11 +1,10 @@
 package frc.robot.commands.driveCommands;
 
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
+import frc.robot.utilities.CenterDistance;
 
 public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     ButtonRingController buttonRingController;
@@ -15,18 +14,20 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
             PoseEstimationSubsystem poseEstimationSubsystem,
             Drivetrain drivetrain,
             ButtonRingController buttonRingController,
-            double zDist) {
+            CenterDistance centerDistance) {
         super(1, poseEstimationSubsystem, drivetrain);
 
         this.buttonRingController = buttonRingController;
-        this.zDist = zDist;
+        this.centerDistance = centerDistance;
     }
 
     @Override
     public void initialize() {
         target =
                 placeTarget(
-                        buttonRingController.getTagID(), buttonRingController.getxOffset() - clawOffset, zDist);
+                        buttonRingController.getTagID(),
+                        buttonRingController.getxOffset() - clawOffset,
+                        centerDistance);
         super.initialize();
 
         LEDState.centerRunning = true;

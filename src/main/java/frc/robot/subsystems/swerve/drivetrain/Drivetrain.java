@@ -92,8 +92,8 @@ public interface Drivetrain extends Subsystem, LoggingSubsystem.LoggedSubsystem 
 
     SwerveModuleState[] getModuleStates();
 
-	@Override
-	public default String getNameLog() {
-		return "Drivetrain";
-	}
+    @Override
+    public default String getNameLog() {
+        return "Drivetrain";
+    }
 }

@@ -9,17 +9,14 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.ElevatorLogAutoLogged;
-import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
-import java.util.function.Supplier;
-import org.littletonrobotics.junction.inputs.LoggableInputs;
 import frc.robot.utilities.shufflebored.*;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
 
@@ -44,13 +41,15 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
         motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator1);
         motor2 = SparkFactory.createSparkMax(Constants.SparkIDs.elevator2);
 
-		SparkBaseConfig configgled = new SparkMaxConfig().inverted(true)
-			.apply(
-					new SoftLimitConfig()
-					.forwardSoftLimit(MAX)
-					.forwardSoftLimitEnabled(true)
-					.reverseSoftLimit(MIN)
-					.reverseSoftLimitEnabled(true));
+        SparkBaseConfig configgled =
+                new SparkMaxConfig()
+                        .inverted(true)
+                        .apply(
+                                new SoftLimitConfig()
+                                        .forwardSoftLimit(MAX)
+                                        .forwardSoftLimitEnabled(true)
+                                        .reverseSoftLimit(MIN)
+                                        .reverseSoftLimitEnabled(true));
 
         motor1.configure(configgled, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -61,14 +60,14 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
 
         motor1Encoder = motor1.getEncoder();
         elevatorPID = new ShuffledTrapezoidController(0.09, 0, 0, profile);
-		elevatorPID.setTolerance(1);
+        elevatorPID.setTolerance(1);
         Shuffleboard.getTab("Asdf").add("elevator", elevatorPID);
 
         elevatorLogAutoLogged = new ElevatorLogAutoLogged();
     }
 
     private void setSetpoint(double setpoint) {
-        //double armLengthY =
+        // double armLengthY =
         //        Math.abs(DifferentialArmSubsystem.ARM_LENGTH_CLAW_END);
         elevatorPID.setGoal(MathUtils.clamp(MIN, MAX, setpoint));
     }
@@ -91,19 +90,20 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
     @Override
     public void periodic() {
 
-		motor1.set(!atSetpoint() ?
-				MathUtils.clamp(
-					-MAX_OUTPUT_CONSTANT_K,
-					MAX_OUTPUT_CONSTANT_K,
-					elevatorPID.calculate(motor1Encoder.getPosition())) :
-				0);
+        motor1.set(
+                !atSetpoint()
+                        ? MathUtils.clamp(
+                                -MAX_OUTPUT_CONSTANT_K,
+                                MAX_OUTPUT_CONSTANT_K,
+                                elevatorPID.calculate(motor1Encoder.getPosition()))
+                        : 0);
     }
 
     @Override
     public LoggableInputs log() {
         elevatorLogAutoLogged.setpoint = elevatorPID.getGoal().position;
         elevatorLogAutoLogged.position = motor1Encoder.getPosition();
-		elevatorLogAutoLogged.atSetpoint = atSetpoint();
+        elevatorLogAutoLogged.atSetpoint = atSetpoint();
         return elevatorLogAutoLogged;
     }
 }

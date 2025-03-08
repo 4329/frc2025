@@ -33,9 +33,9 @@ public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
 
     boolean pitchAtSetpoint();
 
-	public void voltageDrive(Voltage voltage);
+    public void voltageDrive(Voltage voltage);
 
-	public void logMotors(SysIdRoutineLog log);
+    public void logMotors(SysIdRoutineLog log);
 
     @Override
     public default String getNameLog() {

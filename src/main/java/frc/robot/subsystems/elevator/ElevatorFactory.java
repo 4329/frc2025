@@ -1,7 +1,6 @@
 package frc.robot.subsystems.elevator;
 
 import frc.robot.Constants;
-import java.util.function.Supplier;
 
 public class ElevatorFactory {
     public static ElevatorSubsystem createElevatorSubsystem() {

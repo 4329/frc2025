@@ -8,7 +8,6 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,7 +17,6 @@ import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
 import frc.robot.utilities.shufflebored.ShuffledTrapezoidController;
-
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -59,7 +57,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
         motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
         pidController = new ShuffledTrapezoidController(.1, 0, 0, profile);
-		pidController.setTolerance(0.5);
+        pidController.setTolerance(0.5);
         Shuffleboard.getTab("Asdf").add("apivot", pidController);
 
         algeePivotLogAutoLogged = new AlgeePivotLogAutoLogged();
@@ -90,7 +88,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     public LoggableInputs log() {
         algeePivotLogAutoLogged.setpoint = pidController.getGoal().position;
         algeePivotLogAutoLogged.actual = motor.getEncoder().getPosition();
-		algeePivotLogAutoLogged.atSetpoint = atSetpoint();
+        algeePivotLogAutoLogged.atSetpoint = atSetpoint();
 
         return algeePivotLogAutoLogged;
     }

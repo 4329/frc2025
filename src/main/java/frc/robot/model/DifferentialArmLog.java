@@ -6,5 +6,5 @@ import org.littletonrobotics.junction.AutoLog;
 public class DifferentialArmLog {
     public double pitch;
     public double pitchTarget;
-	public boolean atSetpoint;
+    public boolean atSetpoint;
 }

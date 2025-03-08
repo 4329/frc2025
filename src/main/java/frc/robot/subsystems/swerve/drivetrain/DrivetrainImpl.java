@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.model.DrivetrainLogAutoLogged;
-import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.swerve.module.SwerveModule;
 import frc.robot.subsystems.swerve.module.SwerveModuleFactory;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
@@ -404,5 +403,4 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
             m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState()
         };
     }
-
 }

@@ -33,7 +33,7 @@ public class ShuffledTrapezoidController extends ProfiledPIDController {
         builder.addDoubleProperty("i", this::getI, this::setI);
         builder.addDoubleProperty("d", this::getD, this::setD);
         builder.addDoubleProperty(
-                "izone",
+                "iZone",
                 this::getIZone,
                 (double toSet) -> {
                     try {

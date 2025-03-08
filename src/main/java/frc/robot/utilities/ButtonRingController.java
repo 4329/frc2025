@@ -1,7 +1,9 @@
 package frc.robot.utilities;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import frc.robot.model.ButtonRingLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
@@ -46,7 +48,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                                             () -> {
                                                 button = why;
 
-                                                xOffset = why % 2 == 0 ? OFFSET_AMOUNT : -OFFSET_AMOUNT;
+                                                xOffset = OFFSET_AMOUNT * (why % 2 == 0 ? 1 : -1);
                                                 tagID = AprilTagUtil.getReef((why % 12) / 2);
 
                                                 LEDState.reefButton = why;

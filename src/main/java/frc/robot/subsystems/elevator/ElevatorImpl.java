@@ -91,11 +91,12 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
     @Override
     public void periodic() {
 
-        motor1.set(
-                MathUtils.clamp(
-                        -MAX_OUTPUT_CONSTANT_K,
-                        MAX_OUTPUT_CONSTANT_K,
-                        elevatorPID.calculate(motor1Encoder.getPosition())));
+		motor1.set(!atSetpoint() ?
+				MathUtils.clamp(
+					-MAX_OUTPUT_CONSTANT_K,
+					MAX_OUTPUT_CONSTANT_K,
+					elevatorPID.calculate(motor1Encoder.getPosition())) :
+				0);
     }
 
     @Override

@@ -23,16 +23,12 @@ public class OuttakeAlgeeCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
+		LEDState.algeeWheelHolding = false;
         algeeWheelSubsystem.stop();
     }
 
     @Override
     public boolean isFinished() {
-        if (timer.hasElapsed(0.3)) {
-            LEDState.algeeWheelHolding = false;
-            return true;
-        } else {
-            return false;
-        }
-    }
+		return timer.hasElapsed(0.3);
+	}
 }

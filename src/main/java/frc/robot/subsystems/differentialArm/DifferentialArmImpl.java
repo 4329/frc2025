@@ -92,9 +92,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     @Override
     public void periodic() {
-        double pitchCalc = pitchPID.calculate(getPitch());
-
-        motor1.set(pitchCalc);
+        motor1.set(pitchPID.calculate(getPitch()));
     }
 
 	@Override

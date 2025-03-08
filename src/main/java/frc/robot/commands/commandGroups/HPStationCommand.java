@@ -12,9 +12,9 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
-public class ResetAllCommand extends LoggedSequentialCommandGroup {
+public class HPStationCommand extends LoggedSequentialCommandGroup {
 
-    public ResetAllCommand(
+    public HPStationCommand(
             DifferentialArmSubsystem differentialArmSubsystem,
             ElevatorSubsystem elevatorSubsystem,
             AlgeePivotSubsystem algeePivotSubsystem) {

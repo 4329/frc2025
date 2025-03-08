@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,6 +23,7 @@ import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
 import frc.robot.commands.commandGroups.ScoreWithArm;
+import frc.robot.commands.commandGroups.StartCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
@@ -140,6 +142,8 @@ public class RobotContainer {
                 m_robotDrive);
     }
 
+	private final GenericEntry level = Shuffleboard.getTab("Asdf").add("sad", 0).getEntry();
+
     /**
      * Use this method to define your button->command mappings. Buttons can be created by
      * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
@@ -150,6 +154,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     driverController.start().onTrue(new UnInstantCommand("ToggleFieldOrient", driveByController::toggleFieldOrient));
+    driverController.back().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
 
     driverController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
             "ElevatorUp",
@@ -162,7 +167,7 @@ public class RobotContainer {
 	driverController.rightBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
 
     driverController.a().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
-	driverController.b().whileTrue(new ToggleCommand(new StartEndCommand(() -> elevatorSubsystem.setSetpoint(ElevatorSubsystem.ElevatorPosition.L2), () -> elevatorSubsystem.setSetpoint(ElevatorSubsystem.ElevatorPosition.L2Score))));
+	driverController.b().whileTrue(new ToggleCommand(new StartEndCommand(() -> elevatorSubsystem.setSetpoint(ElevatorSubsystem.ElevatorPosition.values()[(int)level.getDouble(0) * 2]), () -> elevatorSubsystem.setSetpoint(ElevatorSubsystem.ElevatorPosition.values()[((int)level.getDouble(0) + 1) * 2]))));
 	driverController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem, 1));
 	driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
@@ -172,6 +177,15 @@ public class RobotContainer {
     driverController.povDown().whileTrue(new RepeatCommand(new UnInstantCommand(
             "ArmPitchDown",
             () -> differentialArmSubsystem.runPitch(-1))));
+
+	driverController.povRight().onTrue(new UnInstantCommand(
+				"Dif90",
+				() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.NINETY)
+			));
+	driverController.povLeft().onTrue(new UnInstantCommand(
+				"Dif135",
+				() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)
+			));
 
     driverController.rightStick().onTrue(new UnInstantCommand(
             "ResetOdometry",

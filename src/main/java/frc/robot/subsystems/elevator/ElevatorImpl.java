@@ -18,11 +18,9 @@ import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
+import frc.robot.utilities.shufflebored.*;
 
 public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
-    private GenericEntry a = Shuffleboard.getTab("Asdf").add("0", 2).getEntry();
-    private GenericEntry speed = Shuffleboard.getTab("Asdf").add("speed", 160).getEntry();
-    private GenericEntry accel = Shuffleboard.getTab("Asdf").add("accel", 240).getEntry();
 
     private double ELEVATOR_SPEED = 2;
 
@@ -68,8 +66,8 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
                 PersistMode.kPersistParameters);
 
         motor1Encoder = motor1.getEncoder();
-        elevatorPID = new ProfiledPIDController(0.09, 0, 0, profile);
-        Shuffleboard.getTab("Asdf").add("a", elevatorPID);
+        elevatorPID = new ShuffledTrapezoidController(0.09, 0, 0, profile);
+        Shuffleboard.getTab("Asdf").add("elevator", elevatorPID);
 
         elevatorLogAutoLogged = new ElevatorLogAutoLogged();
         this.armAngle = armAngle;
@@ -98,9 +96,6 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
 
     @Override
     public void periodic() {
-        elevatorPID.setConstraints(
-                new TrapezoidProfile.Constraints(speed.getDouble(0), accel.getDouble(0)));
-        ELEVATOR_SPEED = a.getDouble(0);
 
         motor1.set(
                 MathUtils.clamp(

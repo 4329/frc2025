@@ -17,12 +17,12 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
+import frc.robot.utilities.shufflebored.ShuffledTrapezoidController;
+
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsystem {
     private final double ALGEE_PIVOT_SPEED = 0.3;
-    private GenericEntry speed = Shuffleboard.getTab("Asdf").add("aSpeed", 9).getEntry();
-    private GenericEntry accel = Shuffleboard.getTab("Asdf").add("aAccel", 11).getEntry();
 
     private final double MIN = 0;
     private final double MAX = 19;
@@ -42,7 +42,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     private SparkMax motor;
 
     private ProfiledPIDController pidController;
-    private TrapezoidProfile.Constraints profile = new TrapezoidProfile.Constraints(6, 2);
+    private TrapezoidProfile.Constraints profile = new TrapezoidProfile.Constraints(85, 145);
 
     private final AlgeePivotLogAutoLogged algeePivotLogAutoLogged;
 
@@ -58,7 +58,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
                                         .reverseSoftLimitEnabled(true));
         motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-        pidController = new ProfiledPIDController(.1, 0, 0, profile);
+        pidController = new ShuffledTrapezoidController(.1, 0, 0, profile);
         Shuffleboard.getTab("Asdf").add("apivot", pidController);
 
         algeePivotLogAutoLogged = new AlgeePivotLogAutoLogged();
@@ -82,9 +82,6 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
 
     @Override
     public void periodic() {
-        pidController.setConstraints(
-                new TrapezoidProfile.Constraints(speed.getDouble(0), accel.getDouble(0)));
-
         motor.set(pidController.calculate(motor.getEncoder().getPosition()));
     }
 

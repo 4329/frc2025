@@ -15,19 +15,19 @@ import frc.robot.model.DifferentialArmLogAutoLogged;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
+import frc.robot.utilities.shufflebored.*;
 
 public class DifferentialArmImpl extends SubsystemBase implements DifferentialArmSubsystem {
     private final double PITCH_SPEED = .05;
 
-    private final double MAX_POWER = 0.5;
 
     private final double MIN_PITCH = 0;
-    private final double MAX_PITCH = 2.7;
+    private final double MAX_PITCH = 2.95;
 
-    private final double sharedP = 0.6;
-    private final double sharedI = 0.4;
+    private final double sharedP = 0.4;
+    private final double sharedI = 0.8;
     private final double sharedD = 0.0025;
-    private final double sharedIZone = 0.1;
+    private final double sharedIZone = 0.03;
 
     private final DifferentialArmLogAutoLogged differentialArmLogAutoLogged;
 
@@ -54,7 +54,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         encoder1 = motor1.getEncoder();
 
         pitchPID =
-                new ProfiledPIDController(
+                new ShuffledTrapezoidController(
                         sharedP, sharedI, sharedD, new TrapezoidProfile.Constraints(6, 8));
         pitchPID.setIZone(sharedIZone);
         pitchPID.setGoal(0);

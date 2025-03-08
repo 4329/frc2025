@@ -12,7 +12,7 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
     public static final double ELEVATOR_SCORE = 7;
 
     public enum ElevatorPosition {
-        L2(30),
+        L2(21.7),
         L2Score(24),
 
         L3(110),
@@ -28,6 +28,9 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
         INTAKE(2), // calculate these later WIPWIP
         PORCESSOR(
                 -2), // WIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIP
+
+		DIFFERENTIAL_ARM_OUT(19.7),
+		ALGEE_CLAW_OUT(-14.4),
         ;
 
         double pos;

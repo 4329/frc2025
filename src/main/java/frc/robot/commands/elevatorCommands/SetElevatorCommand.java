@@ -3,10 +3,12 @@ package frc.robot.commands.elevatorCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.utilities.loggedComands.LoggedCommandComposer;
 
-public class SetElevatorCommand extends Command {
+public class SetElevatorCommand extends LoggedCommandComposer {
     ElevatorSubsystem elevatorSubsystem;
     ElevatorSubsystem.ElevatorPosition elevatorPosition;
+	boolean set;
 
     public SetElevatorCommand(
             ElevatorSubsystem elevatorSubsystem, ElevatorPosition elevatorPosition) {
@@ -14,9 +16,17 @@ public class SetElevatorCommand extends Command {
         this.elevatorPosition = elevatorPosition;
     }
 
+	@Override
+	public void initialize() {
+		set = false;
+	}
+
     @Override
-    public void initialize() {
-        elevatorSubsystem.setSetpoint(elevatorPosition);
+    public void execute() {
+		if (!set) {
+			elevatorSubsystem.setSetpoint(elevatorPosition);
+			set = true;
+		}
     }
 
     @Override

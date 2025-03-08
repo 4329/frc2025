@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.swerve.module;
 
+import org.littletonrobotics.junction.Logger;
+
 // import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.revrobotics.CANEncoder;
 import com.revrobotics.RelativeEncoder;
@@ -143,6 +145,7 @@ public class SwerveModuleImpl implements SwerveModule {
         // Limit the PID Controller's input range between -pi and pi and set the input
         // to be continuous so the PID will command the shortest path.
         m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+		m_turningPIDController.setTolerance(0);
 
         // Creates the SimpleMotorFeedForward for the swerve module using the static and
         // feedforward gains from the tuningVals array
@@ -180,21 +183,21 @@ public class SwerveModuleImpl implements SwerveModule {
     @Override
     public void setDesiredState(SwerveModuleState desiredState) {
         // Optimize the reference state to avoid spinning further than 90 degrees
-        SwerveModuleState state =
-                SwerveModuleState.optimize(desiredState, new Rotation2d(getTurnEncoder()));
+        desiredState.optimize(new Rotation2d(getTurnEncoder()));
         // Calculate the drive output from the drive PID controller.
         final double driveOutput =
-                m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
+                m_drivePIDController.calculate(m_driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
         // Calculates the desired feedForward motor % from the current desired velocity
         // and the static and feedforward gains
-        final double driveFF = driveFeedForward.calculate(state.speedMetersPerSecond);
+        final double driveFF = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
         // Set the drive motor to the sum of the feedforward calculation and PID
         // calculation
         final double finalDriveOutput = driveOutput + driveFF;
         m_driveMotor.set(finalDriveOutput);
         // Calculate the turning motor output from the turning PID controller.
         final double turnOutput =
-                m_turningPIDController.calculate(getTurnEncoder(), state.angle.getRadians());
+                m_turningPIDController.calculate(getTurnEncoder(), desiredState.angle.getRadians());
+		Logger.recordOutput("" + moduleID, m_turningPIDController.getError());
         // Set the turning motor to this output value
         m_turningMotor.set(-turnOutput);
     }

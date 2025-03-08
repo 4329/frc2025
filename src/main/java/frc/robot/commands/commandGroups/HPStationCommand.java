@@ -9,18 +9,20 @@ import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
+import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
-public class ResetAllCommand extends ParallelCommandGroup {
+public class HPStationCommand extends LoggedSequentialCommandGroup {
 
-    public ResetAllCommand(
+    public HPStationCommand(
             DifferentialArmSubsystem differentialArmSubsystem,
             ElevatorSubsystem elevatorSubsystem,
             AlgeePivotSubsystem algeePivotSubsystem) {
 
         addCommands(
-                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO),
-                new SetArmPitchCommand(
-                        differentialArmSubsystem, DifferentialArmSubsystem.DifferentialArmPitch.STORAGE),
-                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
+				new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
+				new SetArmPitchCommand(
+					differentialArmSubsystem, DifferentialArmSubsystem.DifferentialArmPitch.STORAGE)
+				);
     }
 }

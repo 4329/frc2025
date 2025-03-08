@@ -1,15 +1,17 @@
 package frc.robot.utilities.shufflebored;
 
 import edu.wpi.first.math.MathSharedStore;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
-public class ShuffledPIDController extends PIDController {
+public class ShuffledTrapezoidController extends ProfiledPIDController {
 
     private double output;
 
-    public ShuffledPIDController(double p, double i, double d) {
-        super(p, i, d);
+    public ShuffledTrapezoidController(
+            double p, double i, double d, TrapezoidProfile.Constraints constraints) {
+        super(p, i, d, constraints);
     }
 
     @Override
@@ -40,8 +42,16 @@ public class ShuffledPIDController extends PIDController {
                         MathSharedStore.reportError("IZone must be a non-negative number!", e.getStackTrace());
                     }
                 });
-        builder.addDoubleProperty("tol", this::getErrorTolerance, this::setTolerance);
-        builder.addDoubleProperty("setpoint", this::getSetpoint, this::setSetpoint);
+        builder.addDoubleProperty("tol", this::getPositionTolerance, this::setTolerance);
+        builder.addDoubleProperty("setpoint", () -> getGoal().position, this::setGoal);
         builder.addDoubleProperty("output", () -> output, x -> output = x);
+        builder.addDoubleProperty(
+                "speed",
+                () -> getConstraints().maxVelocity,
+                x -> setConstraints(new TrapezoidProfile.Constraints(x, getConstraints().maxAcceleration)));
+        builder.addDoubleProperty(
+                "accel",
+                () -> getConstraints().maxAcceleration,
+                x -> setConstraints(new TrapezoidProfile.Constraints(getConstraints().maxAcceleration, x)));
     }
 }

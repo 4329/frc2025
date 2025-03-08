@@ -4,10 +4,14 @@ import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.BetterPathfindingCommand;
 import org.littletonrobotics.junction.Logger;
@@ -21,7 +25,7 @@ public class CenterOnTargetCommand extends Command {
     private final PathConstraints constraints =
             new PathConstraints(2, 1.0, Math.PI / 4, Math.PI / 16); // The constraints for this path.
 
-    private double zDist = DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER;
+    double zDist = DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER;
 
     public CenterOnTargetCommand(
             int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {
@@ -75,6 +79,8 @@ public class CenterOnTargetCommand extends Command {
                         Constants.AutoConstants.config,
                         drivetrain);
         pathFind.schedule();
+
+        LEDState.centerRunning = true;
     }
 
     @Override
@@ -107,5 +113,7 @@ public class CenterOnTargetCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         if (pathFind != null) pathFind.cancel();
+
+        LEDState.centerRunning = false;
     }
 }

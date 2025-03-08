@@ -12,8 +12,7 @@ public class ElevatorSim extends ElevatorImpl {
     private SparkMaxSim motorSim;
     private edu.wpi.first.wpilibj.simulation.ElevatorSim elevatorSim;
 
-    public ElevatorSim(Supplier<Double> armAngle) {
-        super(armAngle);
+    public ElevatorSim() {
 
         DCMotor gearbox = DCMotor.getNEO(2);
         motorSim = new SparkMaxSim(motor1, gearbox);

@@ -1,19 +1,20 @@
 package frc.robot.subsystems.differentialArm;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 
 public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
 
-    public static final double ARM_LENGTH_CORAL_CENTER = Units.inchesToMeters(20);
-    public static final double ARM_LENGTH_CLAW_END = Units.inchesToMeters(21);
+    public static final double ARM_LENGTH_CORAL_CENTER = Units.inchesToMeters(17.151904);
+    public static final double ARM_LENGTH_CLAW_END = Units.inchesToMeters(18.151904);
 
     public enum DifferentialArmPitch {
         STORAGE(0),
-        THIRTY(Math.PI / 3),
-        NINETY(2 * Math.PI / 5),
-        ONETHIRTYFIVE(3 * Math.PI / 4);
+        NINETY(2.1),
+        ONETHIRTYFIVE(2.95); // 3.3714
 
         double rotation;
 
@@ -26,17 +27,18 @@ public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
 
     void setPitchTarget(double pitchTarget);
 
-    void setRollTarget(double rollTarget);
-
     void runPitch(double sign);
-
-    void runRoll(double sign);
 
     double getPitch();
 
-    double getRoll();
-
     boolean pitchAtSetpoint();
 
-    boolean rollAtSetpoint();
+	public void voltageDrive(Voltage voltage);
+
+	public void logMotors(SysIdRoutineLog log);
+
+    @Override
+    public default String getNameLog() {
+        return "DifferentialArmSubsystem";
+    }
 }

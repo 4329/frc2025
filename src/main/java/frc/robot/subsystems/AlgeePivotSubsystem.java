@@ -17,17 +17,19 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
+import frc.robot.utilities.shufflebored.ShuffledTrapezoidController;
+
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsystem {
     private final double ALGEE_PIVOT_SPEED = 0.3;
 
     private final double MIN = 0;
-    private final double MAX = 14;
+    private final double MAX = 27.9;
 
     public enum AlgeePivotAngle {
         ZERO(0),
-        OUT(14),
+        OUT(19),
         ;
 
         public double angle;
@@ -40,12 +42,9 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     private SparkMax motor;
 
     private ProfiledPIDController pidController;
-    private TrapezoidProfile.Constraints profile = new TrapezoidProfile.Constraints(6, 2);
+    private TrapezoidProfile.Constraints profile = new TrapezoidProfile.Constraints(85, 145);
 
     private final AlgeePivotLogAutoLogged algeePivotLogAutoLogged;
-
-    private final GenericEntry maxVel = Shuffleboard.getTab("yep").add("vel", 0).getEntry();
-    private final GenericEntry maxAccel = Shuffleboard.getTab("yep").add("accel", 0).getEntry();
 
     public AlgeePivotSubsystem() {
         motor = SparkFactory.createSparkMax(Constants.SparkIDs.algeePivot);
@@ -59,7 +58,9 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
                                         .reverseSoftLimitEnabled(true));
         motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-        pidController = new ProfiledPIDController(.1, 0, 0, profile);
+        pidController = new ShuffledTrapezoidController(.1, 0, 0, profile);
+		pidController.setTolerance(0.5);
+        Shuffleboard.getTab("Asdf").add("apivot", pidController);
 
         algeePivotLogAutoLogged = new AlgeePivotLogAutoLogged();
     }
@@ -77,20 +78,20 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     }
 
     public boolean atSetpoint() {
-        return pidController.atSetpoint();
+        return pidController.atGoal();
     }
 
     @Override
     public void periodic() {
         motor.set(pidController.calculate(motor.getEncoder().getPosition()));
-
-        pidController.setConstraints(
-                new TrapezoidProfile.Constraints(maxVel.getDouble(0), maxAccel.getDouble(0)));
     }
 
     @Override
     public LoggableInputs log() {
         algeePivotLogAutoLogged.setpoint = pidController.getGoal().position;
+        algeePivotLogAutoLogged.actual = motor.getEncoder().getPosition();
+		algeePivotLogAutoLogged.atSetpoint = atSetpoint();
+
         return algeePivotLogAutoLogged;
     }
 }

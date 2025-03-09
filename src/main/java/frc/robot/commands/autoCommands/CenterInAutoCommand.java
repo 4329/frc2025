@@ -1,5 +1,7 @@
 package frc.robot.commands.autoCommands;
 
+import org.littletonrobotics.junction.Logger;
+
 import frc.robot.commands.driveCommands.CenterOnTargetCommand;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
@@ -22,6 +24,22 @@ public class CenterInAutoCommand extends CenterOnTargetCommand {
         this.right = right;
         this.centerDistance = centerDistance;
     }
+
+	@Override
+	public void execute() {
+        Logger.recordOutput(
+                "off",
+                poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation()));
+        Logger.recordOutput(
+                "off2",
+                Math.abs(
+                        poseEstimationSubsystem
+                                .getPose()
+                                .getRotation()
+                                .minus(target.getRotation())
+                                .getRadians()));
+
+	}
 
     @Override
     public void initialize() {

@@ -14,7 +14,7 @@ import frc.robot.utilities.CenterDistance;
 import org.littletonrobotics.junction.Logger;
 
 public class CenterOnTargetCommand extends Command {
-    PoseEstimationSubsystem poseEstimationSubsystem;
+    protected PoseEstimationSubsystem poseEstimationSubsystem;
     Drivetrain drivetrain;
     Command pathFind;
     protected Pose2d target;
@@ -82,18 +82,6 @@ public class CenterOnTargetCommand extends Command {
     @Override
     public boolean isFinished() {
         if (target == null) return true;
-
-        Logger.recordOutput(
-                "off",
-                poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation()));
-        Logger.recordOutput(
-                "off2",
-                Math.abs(
-                        poseEstimationSubsystem
-                                .getPose()
-                                .getRotation()
-                                .minus(target.getRotation())
-                                .getRadians()));
 
         return poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation())
                         < 0.002

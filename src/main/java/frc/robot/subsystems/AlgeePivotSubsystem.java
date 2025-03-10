@@ -86,6 +86,16 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
         motor.set(pidController.calculate(motor.getEncoder().getPosition()));
     }
 
+    public void enableLimits(boolean enabled) {
+        motor.configure(
+            new SparkMaxConfig().apply(
+                new SoftLimitConfig()
+                    .forwardSoftLimitEnabled(enabled)
+                    .reverseSoftLimitEnabled(enabled)),
+            ResetMode.kNoResetSafeParameters,
+            PersistMode.kNoPersistParameters);
+    }
+
     @Override
     public LoggableInputs log() {
         algeePivotLogAutoLogged.setpoint = pidController.getGoal().position;

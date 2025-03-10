@@ -19,4 +19,10 @@ public class ElevatorReplay implements ElevatorSubsystem {
     public boolean atSetpoint() {
         return true;
     }
+
+    @Override
+    public void enableLimits(boolean enabled) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'enableLimits'");
+    }
 }

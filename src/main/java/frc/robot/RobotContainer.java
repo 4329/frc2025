@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.commands.limitless.LimitlessRunElevatorCommand;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
@@ -195,20 +196,12 @@ public class RobotContainer {
 		manualController.start().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
 		manualController.back().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
 
-		manualController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
-					"ElevatorUp",
-					() -> elevatorSubsystem.runElevator(manualController.getRightTriggerAxis())).repeatedlyLog());
-		manualController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
-					"ElevatorDown",
-					() -> elevatorSubsystem.runElevator(-manualController.getLeftTriggerAxis())).repeatedlyLog());
+		manualController.leftTrigger(0.01).whileTrue(new LimitlessRunElevatorCommand(elevatorSubsystem, () -> -manualController.getLeftTriggerAxis()));
+		manualController.rightTrigger(0.01).whileTrue(new LimitlessRunElevatorCommand(elevatorSubsystem, manualController::getRightTriggerAxis));
 
 		manualController.leftBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
 		manualController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
 
-		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
-
-		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
-		manualController.b().whileTrue(new ToggleCommand(eleCool).untilLog(eleCool::isFinished));
 		manualController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem));
 		manualController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 

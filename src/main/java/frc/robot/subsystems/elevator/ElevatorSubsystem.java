@@ -45,6 +45,8 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
 
     public boolean atSetpoint();
 
+    public void enableLimits(boolean enabled);
+
     @Override
     public default String getNameLog() {
         return "ElevatorSubsystem";

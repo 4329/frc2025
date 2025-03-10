@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 
 public class RunAlgeePivotCommand extends Command {
-    private AlgeePivotSubsystem algeePivotSubsystem;
+    protected AlgeePivotSubsystem algeePivotSubsystem;
     private double speed;
 
     public RunAlgeePivotCommand(AlgeePivotSubsystem algeePivotSubsystem, double speed) {

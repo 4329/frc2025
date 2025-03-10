@@ -106,4 +106,14 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
 		elevatorLogAutoLogged.atSetpoint = atSetpoint();
         return elevatorLogAutoLogged;
     }
+
+    @Override
+    public void enableLimits(boolean enabled) {
+        motor1.configure(new SparkMaxConfig().apply(
+            new SoftLimitConfig()
+                .forwardSoftLimitEnabled(enabled)
+                .reverseSoftLimitEnabled(enabled)),
+            ResetMode.kNoResetSafeParameters,
+            PersistMode.kNoPersistParameters);
+    }
 }

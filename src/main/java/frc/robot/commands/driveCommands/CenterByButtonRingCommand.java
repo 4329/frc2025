@@ -38,4 +38,14 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
         super.end(interrupted);
         LEDState.centerRunning = false;
     }
+
+	@Override
+	public double getTranslationTolerance() {
+		return centerDistance.getTranslationTolerance();
+	}
+
+	@Override
+	public double getRotationTolerance() {
+		return centerDistance.getRotationTolerance();
+	}
 }

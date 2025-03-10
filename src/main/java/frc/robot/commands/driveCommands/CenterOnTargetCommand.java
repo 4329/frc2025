@@ -84,14 +84,14 @@ public class CenterOnTargetCommand extends Command {
         if (target == null) return true;
 
         return poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation())
-                        < 0.002
+                        < getTranslationTolerance()
                 && Math.abs(
                                 poseEstimationSubsystem
                                         .getPose()
                                         .getRotation()
                                         .minus(target.getRotation())
                                         .getRadians())
-                        < 0.01;
+                        < getRotationTolerance();
     }
 
     @Override
@@ -100,4 +100,12 @@ public class CenterOnTargetCommand extends Command {
 
         LEDState.centerRunning = false;
     }
+
+	public double getTranslationTolerance() {
+		return 0.002;
+	}
+
+	public double getRotationTolerance() {
+		return 0.01;
+	}
 }

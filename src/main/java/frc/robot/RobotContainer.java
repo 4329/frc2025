@@ -164,8 +164,9 @@ public class RobotContainer {
     }
 
     private void addCool(int num, ElevatorPosition position, ElevatorPosition scorePosition) {
+		final String letters = "EFABCD";
         NamedCommands.registerCommand(
-                "tag" + num + position + "Right",
+                "Side" + letters.charAt(num) + "Right" + position,
                 new AutoScoreCoralButCool(
                         algeePivotSubsystem,
                         elevatorSubsystem,
@@ -177,7 +178,7 @@ public class RobotContainer {
                         num,
                         true));
         NamedCommands.registerCommand(
-                "tag" + num + position + "Left",
+                "Side" + letters.charAt(num) + "Left" + position,
                 new AutoScoreCoralButCool(
                         algeePivotSubsystem,
                         elevatorSubsystem,

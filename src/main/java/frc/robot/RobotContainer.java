@@ -1,6 +1,6 @@
 package frc.robot;
 
-import frc.robot.commands.limitless.LimitlessRunElevatorCommand;
+import frc.robot.commands.limitless.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
@@ -199,18 +199,14 @@ public class RobotContainer {
 		manualController.leftTrigger(0.01).whileTrue(new LimitlessRunElevatorCommand(elevatorSubsystem, () -> -manualController.getLeftTriggerAxis()));
 		manualController.rightTrigger(0.01).whileTrue(new LimitlessRunElevatorCommand(elevatorSubsystem, manualController::getRightTriggerAxis));
 
-		manualController.leftBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
-		manualController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
+		manualController.leftBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
+		manualController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
 
 		manualController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem));
 		manualController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
-		manualController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(
-						"ArmPitchUp",
-						() -> differentialArmSubsystem.runPitch(1))));
-		manualController.povDown().whileTrue(new RepeatCommand(new UnInstantCommand(
-						"ArmPitchDown",
-						() -> differentialArmSubsystem.runPitch(-1))));
+		manualController.povUp().whileTrue(new LimitlessRunDifferentialArmCommand(differentialArmSubsystem, 1));
+		manualController.povDown().whileTrue(new LimitlessRunDifferentialArmCommand(differentialArmSubsystem, -1));
 
 		manualController.povRight().onTrue(new UnInstantCommand(
 					"Dif90",

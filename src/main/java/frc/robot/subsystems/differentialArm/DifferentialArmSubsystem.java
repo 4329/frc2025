@@ -37,6 +37,8 @@ public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
 
 	public void logMotors(SysIdRoutineLog log);
 
+	public void enableLimits(boolean enabled);
+
     @Override
     public default String getNameLog() {
         return "DifferentialArmSubsystem";

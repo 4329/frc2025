@@ -4,6 +4,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -112,4 +113,14 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
         return differentialArmLogAutoLogged;
     }
+
+	@Override
+	public void enableLimits(boolean enabled) {
+		motor1.configure(new SparkMaxConfig().apply(
+					new SoftLimitConfig()
+					.forwardSoftLimitEnabled(enabled)
+					.reverseSoftLimitEnabled(enabled)),
+			ResetMode.kNoResetSafeParameters,
+			PersistMode.kNoPersistParameters);
+	}
 }

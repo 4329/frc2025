@@ -54,4 +54,11 @@ public class DifferentialArmPlayback extends SubsystemBase implements Differenti
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'logMotors'");
 	}
+
+	@Override
+	public void enableLimits(boolean enabled) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'enableLimits'");
+	}
+
 }

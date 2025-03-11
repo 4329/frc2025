@@ -158,6 +158,9 @@ public class RobotContainer {
             addCool(i, ElevatorPosition.L3,ElevatorPosition.L3Score);
             addCool(i, ElevatorPosition.L4,ElevatorPosition.L4);
         }
+
+        NamedCommands.registerCommand(
+                "lowerArm", new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY));
     }
 
     private void addCool(int num, ElevatorPosition position, ElevatorPosition scorePosition) {
@@ -185,8 +188,6 @@ public class RobotContainer {
                         m_robotDrive,
                         num,
                         false));
-        NamedCommands.registerCommand(
-                "lowerArm", new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY));
     }
 
     private void configureAutoBuilder() {

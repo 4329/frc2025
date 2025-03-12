@@ -26,15 +26,15 @@ import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
 import frc.robot.commands.autoCommands.AutoScoreCoralButCool;
 import frc.robot.commands.autoCommands.AutoScoreCoralCommand;
+import frc.robot.commands.commandGroups.AlgeeIntake;
 import frc.robot.commands.commandGroups.AlgeeIntakeLameCommand;
 import frc.robot.commands.commandGroups.HPStationCommand;
 import frc.robot.commands.commandGroups.HappyResetCommand;
 import frc.robot.commands.commandGroups.PositionCoralCommand;
 import frc.robot.commands.commandGroups.ScoreCoralCommand;
+import frc.robot.commands.commandGroups.ScoreWithArm;
 import frc.robot.commands.commandGroups.StartCommand;
 import frc.robot.commands.differentialArmCommands.SetArmPitchCommand;
-import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
-import frc.robot.commands.driveCommands.CenterOnAlgeeCommand;
 import frc.robot.commands.elevatorCommands.CoolEvator;
 import frc.robot.commands.elevatorCommands.SetElevatorCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
@@ -52,7 +52,6 @@ import frc.robot.subsystems.light.LightSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
-import frc.robot.utilities.CenterDistance;
 import frc.robot.utilities.CommandLoginator;
 import frc.robot.utilities.ToggleCommand;
 import frc.robot.utilities.UnInstantCommand;
@@ -154,9 +153,9 @@ public class RobotContainer {
                 new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 
         for (int i = 0; i < 6; i++) {
-            addCool(i, ElevatorPosition.L2,ElevatorPosition.L2Score);
-            addCool(i, ElevatorPosition.L3,ElevatorPosition.L3Score);
-            addCool(i, ElevatorPosition.L4,ElevatorPosition.L4);
+            addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);
+            addCool(i, ElevatorPosition.L3, ElevatorPosition.L3Score);
+            addCool(i, ElevatorPosition.L4, ElevatorPosition.L4);
         }
 
         NamedCommands.registerCommand(
@@ -164,7 +163,7 @@ public class RobotContainer {
     }
 
     private void addCool(int num, ElevatorPosition position, ElevatorPosition scorePosition) {
-		final String letters = "EFABCD";
+        final String letters = "EFABCD";
         NamedCommands.registerCommand(
                 "Side" + letters.charAt(num) + "Right" + position,
                 new AutoScoreCoralButCool(
@@ -226,23 +225,22 @@ public class RobotContainer {
     // spotless:off
 	private void configureButtonBindings() {
 
-		//driverController.start().onTrue(new UnInstantCommand(
-		//			"ToggleFieldOrient",
-		//			driveByController::toggleFieldOrient
-		//			));
+		driverController.start().onTrue(new UnInstantCommand(
+					"ToggleFieldOrient",
+					driveByController::toggleFieldOrient
+					));
 
-		driverController.start().whileTrue(new CenterOnAlgeeCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController,CenterDistance.SCORING));
-		driverController.back().whileTrue(new AutoScoreCoralButCool(algeePivotSubsystem, elevatorSubsystem, ElevatorPosition.L4, ElevatorPosition.L4,differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive, 2, false));
-	
-		driverController.a().onTrue(new PositionCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
-		driverController.b().onTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
-		driverController.x().whileTrue(new AlgeeIntakeLameCommand(elevatorSubsystem, algeePivotSubsystem, algeeWheelSubsystem, buttonRingController));
-		driverController.y().onTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
+		driverController.rightBumper().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
+		driverController.leftBumper().whileTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
 
-		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
-		driverController.povLeft().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
-		driverController.povUp().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
+		driverController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
+		driverController.b().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
+		driverController.x().onTrue(new AlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, buttonRingController));
+		driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
+
+		driverController.povUp().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
 		driverController.povDown().onTrue(new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
+		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
 
 		driverController.rightStick().onTrue(new UnInstantCommand(
 					"ResetOdometry",

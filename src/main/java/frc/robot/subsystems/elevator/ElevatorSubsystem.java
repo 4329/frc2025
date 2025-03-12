@@ -11,6 +11,9 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
 
     public static final double ELEVATOR_SCORE = 7;
 
+    final double MIN = -50;
+    final double MAX = 267;
+
     public enum ElevatorPosition {
         L2(55.26),
         L2Score(10),
@@ -23,6 +26,8 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
 
         ALGEE_LOW(30.26),
         ALGEE_HIGH(103.41),
+
+		NET(MAX - 10),
 
         ZERO(0),
         PORCESSOR(

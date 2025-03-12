@@ -35,6 +35,6 @@ public class IntakeAlgeeCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return timer.get() > WAIT_TIME && algeeWheelSubsystem.getAlgeed();
+        return timer.hasElapsed(WAIT_TIME) && algeeWheelSubsystem.getAlgeed();
     }
 }

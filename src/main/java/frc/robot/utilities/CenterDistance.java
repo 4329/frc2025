@@ -3,29 +3,28 @@ package frc.robot.utilities;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 
 public enum CenterDistance {
-    INITIAL(DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER * 2, 0.2, 0.1),
-    SCORING(DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER, 0.002, 0.01);
+    INITIAL(DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER * 2, 0.1, 0.04),
+    SCORING(DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER + 0.05, 0.05, 0.03);
 
     private double zDist;
-	private double translationTolerance;
-	private double rotationTolerance;
+    private double translationTolerance;
+    private double rotationTolerance;
 
-	CenterDistance(double zDist, double translationTolerance, double rotationTolerance) {
-		this.zDist = zDist;
-		this.translationTolerance = translationTolerance;
-		this.rotationTolerance = rotationTolerance;
-	}
+    CenterDistance(double zDist, double translationTolerance, double rotationTolerance) {
+        this.zDist = zDist;
+        this.translationTolerance = translationTolerance;
+        this.rotationTolerance = rotationTolerance;
+    }
 
-	public double getzDist() {
-		return zDist;
-	}
+    public double getzDist() {
+        return zDist;
+    }
 
-	public double getTranslationTolerance() {
-		return translationTolerance;
-	}
+    public double getTranslationTolerance() {
+        return translationTolerance;
+    }
 
-	public double getRotationTolerance() {
-		return rotationTolerance;
-	}
-
+    public double getRotationTolerance() {
+        return rotationTolerance;
+    }
 }

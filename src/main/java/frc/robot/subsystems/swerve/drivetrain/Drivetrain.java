@@ -92,6 +92,8 @@ public interface Drivetrain extends Subsystem, LoggingSubsystem.LoggedSubsystem 
 
     SwerveModuleState[] getModuleStates();
 
+	void resetKeepAngle();
+
     @Override
     public default String getNameLog() {
         return "Drivetrain";

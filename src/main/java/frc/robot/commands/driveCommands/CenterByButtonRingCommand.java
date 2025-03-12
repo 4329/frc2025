@@ -39,13 +39,13 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
         LEDState.centerRunning = false;
     }
 
-	@Override
-	public double getTranslationTolerance() {
-		return centerDistance.getTranslationTolerance();
-	}
+    @Override
+    public double getTranslationTolerance() {
+        return centerDistance.getTranslationTolerance();
+    }
 
-	@Override
-	public double getRotationTolerance() {
-		return centerDistance.getRotationTolerance();
-	}
+    @Override
+    public double getRotationTolerance() {
+        return centerDistance.getRotationTolerance();
+    }
 }

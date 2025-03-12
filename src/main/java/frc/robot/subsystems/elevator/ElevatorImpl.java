@@ -22,8 +22,6 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
 
     private double ELEVATOR_SPEED = 2;
 
-    final double MIN = -50;
-    final double MAX = 267;
 
     private final double MAX_OUTPUT_CONSTANT_K = 1;
 

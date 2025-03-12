@@ -8,16 +8,13 @@ import frc.robot.subsystems.light.LEDState;
 public class OuttakeAlgeeCommand extends Command {
 
     private AlgeeWheelSubsystem algeeWheelSubsystem;
-    private Timer timer;
 
     public OuttakeAlgeeCommand(AlgeeWheelSubsystem algeeWheelSubsystem) {
         this.algeeWheelSubsystem = algeeWheelSubsystem;
-        timer = new Timer();
     }
 
     @Override
     public void initialize() {
-        timer.restart();
         algeeWheelSubsystem.run(-1);
     }
 
@@ -29,6 +26,6 @@ public class OuttakeAlgeeCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(0.3);
+        return false;
     }
 }

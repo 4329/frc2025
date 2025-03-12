@@ -403,4 +403,9 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
             m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState()
         };
     }
+
+	@Override
+	public void resetKeepAngle() {
+		keepAngle = getGyro().getRadians();
+	}
 }

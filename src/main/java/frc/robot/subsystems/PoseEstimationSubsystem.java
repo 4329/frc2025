@@ -37,7 +37,9 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
     private AprilTagFieldLayout aprilTagFieldLayout;
 
-    public PoseEstimationSubsystem(Drivetrain drivetrain, LilihSubsystem lilihSubsystem) {
+	private boolean limelighting = true;
+
+	public PoseEstimationSubsystem(Drivetrain drivetrain, LilihSubsystem lilihSubsystem) {
         this.lilihSubsystem = lilihSubsystem;
         this.drivetrain = drivetrain;
 
@@ -90,26 +92,28 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     private void updateEstimation() {
         estimator.update(drivetrain.getRawGyro(), drivetrain.getModulePositions());
 
-        lilihSubsystem.addYawMeasurement(
-                drivetrain
-                        .getRawGyro()
-                        .plus(rotOffset != null ? rotOffset : new Rotation2d())
-                        .getDegrees());
-        if (lilihSubsystem.seeingAnything()) {
-            PoseEstimate poseEstimate =
-                    rotOffset != null
-                            ? lilihSubsystem.getRobotPose_megaTag2()
-                            : lilihSubsystem.getRobotPose();
-            if (poseEstimate.rawFiducials != null
-                    && poseEstimate.rawFiducials.length > 0
-                    && poseEstimate.rawFiducials[0].ambiguity < .7) {
-                estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
-                if (rotOffset == null) {
-                    offsetTimer.start();
-                    if (offsetTimer.get() > 0.5) setInitialPose(poseEstimate.pose);
-                }
-            }
-        }
+		if (limelighting) {
+			lilihSubsystem.addYawMeasurement(
+					drivetrain
+							.getRawGyro()
+							.plus(rotOffset != null ? rotOffset : new Rotation2d())
+							.getDegrees());
+			if (lilihSubsystem.seeingAnything()) {
+				PoseEstimate poseEstimate =
+						rotOffset != null
+								? lilihSubsystem.getRobotPose_megaTag2()
+								: lilihSubsystem.getRobotPose();
+				if (poseEstimate.rawFiducials != null
+						&& poseEstimate.rawFiducials.length > 0
+						&& poseEstimate.rawFiducials[0].ambiguity < .7) {
+					estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
+					if (rotOffset == null) {
+						offsetTimer.start();
+						if (offsetTimer.get() > 0.5) setInitialPose(poseEstimate.pose);
+					}
+				}
+			}
+		}
     }
 
     @Override
@@ -128,4 +132,13 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         poseEstimationLogAutoLogged.pathPlannerPosy = pathPlannerPose;
         return poseEstimationLogAutoLogged;
     }
+
+    public boolean isLimelighting() {
+		return limelighting;
+	}
+
+	public void setLimelighting(boolean limelighting) {
+		this.limelighting = limelighting;
+	}
+
 }

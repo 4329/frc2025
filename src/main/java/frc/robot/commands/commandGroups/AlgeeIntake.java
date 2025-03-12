@@ -18,6 +18,7 @@ import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 public class AlgeeIntake extends LoggedSequentialCommandGroup {
 
     private ButtonRingController buttonRingController;
+	AlgeeWheelSubsystem algeeWheelSubsystem;
 
     public AlgeeIntake(
             Drivetrain drivetrain,
@@ -28,6 +29,7 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
             ButtonRingController buttonRingController) {
 
         this.buttonRingController = buttonRingController;
+		this.algeeWheelSubsystem = algeeWheelSubsystem;
 
         addCommands(
                 new LoggedParallelCommandGroup(
@@ -42,12 +44,21 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
                                                                 : ElevatorSubsystem.ElevatorPosition.ALGEE_LOW))
                                 .untilLog(elevatorSubsystem::atSetpoint)),
                 new CenterOnAlgeeCommand(
-                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING),
-                new IntakeAlgeeCommand(algeeWheelSubsystem));
+                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING));
     }
+
+	@Override
+	public void initialize() {
+		algeeWheelSubsystem.run(1);
+	}
 
     @Override
     public void execute() {
         if (buttonRingController.getTagID() != 0) super.execute();
     }
+
+	@Override
+	public void end(boolean interrupted) {
+		algeeWheelSubsystem.stop();
+	}
 }

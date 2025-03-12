@@ -1,6 +1,9 @@
 package frc.robot.commands.driveCommands;
 
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.pathfinding.LocalADStar;
+import com.pathplanner.lib.pathfinding.Pathfinding;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -37,6 +40,8 @@ public class CenterOnTargetCommand extends Command {
         this.drivetrain = drivetrain;
 
         target = placeTarget(targetID, xOffset, centerDistance);
+
+		addRequirements(drivetrain);
     }
 
     protected Pose2d placeTarget(int targetID, double xOffset, CenterDistance centerDistance) {
@@ -63,6 +68,8 @@ public class CenterOnTargetCommand extends Command {
     public void initialize() {
         if (target == null) return;
 
+		Pathfinding.setPathfinder(new LocalADStar());
+
         pathFind =
                 new BetterPathfindingCommand(
                         target,
@@ -76,6 +83,8 @@ public class CenterOnTargetCommand extends Command {
                         drivetrain);
         pathFind.schedule();
 
+
+		poseEstimationSubsystem.setLimelighting(false);
         LEDState.centerRunning = true;
     }
 
@@ -83,29 +92,34 @@ public class CenterOnTargetCommand extends Command {
     public boolean isFinished() {
         if (target == null) return true;
 
-        return poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation())
-                        < getTranslationTolerance()
-                && Math.abs(
+		double dst = poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation());
+		double rotation = Math.abs(
                                 poseEstimationSubsystem
                                         .getPose()
                                         .getRotation()
                                         .minus(target.getRotation())
-                                        .getRadians())
-                        < getRotationTolerance();
+                                        .getRadians());
+
+		Logger.recordOutput("dstErr", dst);
+		Logger.recordOutput("rotationErr", rotation);
+
+        return dst < getTranslationTolerance() && rotation < getRotationTolerance();
     }
 
     @Override
     public void end(boolean interrupted) {
         if (pathFind != null) pathFind.cancel();
 
+		poseEstimationSubsystem.setLimelighting(true);
+		drivetrain.resetKeepAngle();
         LEDState.centerRunning = false;
     }
 
-	public double getTranslationTolerance() {
-		return 0.002;
-	}
+    public double getTranslationTolerance() {
+        return 0.002;
+    }
 
-	public double getRotationTolerance() {
-		return 0.01;
-	}
+    public double getRotationTolerance() {
+        return 0.01;
+    }
 }

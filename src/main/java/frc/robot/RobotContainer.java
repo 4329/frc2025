@@ -58,6 +58,7 @@ import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import frc.robot.commands.DoAFunctionalCommand;
 
 /* (including subsystems, commands, and button mappings) should be declared here
  */
@@ -82,6 +83,7 @@ public class RobotContainer {
     // The driver's controllers
     private final CommandXboxController driverController;
     private final CommandXboxController manualController;
+    private final CommandXboxController functionalController;
 
     private final ButtonRingController buttonRingController;
 
@@ -96,6 +98,7 @@ public class RobotContainer {
 
         driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
         manualController = new CommandXboxController(OIConstants.kManualControllerPort);
+        functionalController = new CommandXboxController(OIConstants.kFuntionalControllerPort);
         buttonRingController = new ButtonRingController(OIConstants.kOperatorControllerPort);
         Shuffleboard.getTab("RobotData")
                 .add("Octagon", buttonRingController)
@@ -361,6 +364,7 @@ public class RobotContainer {
     public void teleopInit() {
         // limDriveSetCommand.schedule();
         // autoZero.schedule();
+
     }
 
     public void autonomousPeriodic() {}

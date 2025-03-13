@@ -168,6 +168,8 @@ public final class Constants {
         // controller will be on a different port
         public static final int kManualControllerPort =
                 2; //  When making blah blah blah make the ports different!
+        public static final int kFuntionalControllerPort = 
+                5;
     }
 
     /*

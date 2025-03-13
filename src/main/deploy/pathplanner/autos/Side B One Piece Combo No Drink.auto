@@ -27,6 +27,12 @@
           "data": {
             "name": "elevatorScoreL4"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side B Right Reverse Extra Sauce"
+          }
         }
       ]
     }

@@ -56,4 +56,10 @@ public class LoggedCommandComposer extends Command {
     public LoggedParallelRaceGroup onlyWhileLog(BooleanSupplier condition) {
         return untilLog(() -> !condition.getAsBoolean());
     }
+
+  public LoggedParallelCommandGroup alongWithLog(Command... parallel) {
+    LoggedParallelCommandGroup group = new LoggedParallelCommandGroup(this);
+    group.addCommands(parallel);
+    return group;
+  }
 }

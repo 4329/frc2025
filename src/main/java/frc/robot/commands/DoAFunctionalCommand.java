@@ -1,12 +1,13 @@
 package frc.robot.commands;
 
-import java.util.Arrays;
-
-import frc.robot.commands.algeeWheelCommands.*;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
+import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
+import frc.robot.commands.commandGroups.HPStationCommand;
+import frc.robot.commands.commandGroups.HappyResetCommand;
 import frc.robot.commands.commandGroups.StartCommand;
+import frc.robot.commands.elevatorCommands.SetElevatorCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
@@ -15,10 +16,9 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedCommandComposer;
+import frc.robot.utilities.loggedComands.LoggedRepeatCommand;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
-import frc.robot.commands.elevatorCommands.*;
-import frc.robot.commands.commandGroups.*;
-import frc.robot.utilities.loggedComands.*;
+import frc.robot.utilities.loggedComands.LoggedWaitUntilCommand;
 
 public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
     private final double speed = 1;
@@ -67,15 +67,11 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
                 new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
         };
 
-        LoggedCommandComposer[] outCommands = new LoggedCommandComposer[commands.length * 3];
-        for (int i = 0; i < outCommands.length; i += 3) {
-            System.out.println(Arrays.toString(outCommands));
-            outCommands[i] = commands[i / 3].onlyWhileLog(() -> !controller.getAButtonPressed());
-            outCommands[i + 1] = new LoggedWaitUntilCommand(controller::getAButtonPressed);
-            outCommands[i + 2] = new LoggedWaitUntilCommand(controller::getAButtonReleased);
+        for (int i = 0; i < commands.length; i++) {
+            commands[i] = commands[i].onlyWhileLog(() -> !controller.getAButtonPressed()).raceWithLog("nota", new LoggedWaitUntilCommand(controller::getAButtonPressed));
         }
 
-        addCommands(outCommands);
+        addCommands(commands);
         addRequirements(drivetrain);
     }
 }

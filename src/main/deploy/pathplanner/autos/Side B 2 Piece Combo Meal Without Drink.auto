@@ -69,6 +69,18 @@
           "data": {
             "name": "elevatorScoreL4"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side C Right Reverse Extra Sauce"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeCoral"
+          }
         }
       ]
     }

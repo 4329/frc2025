@@ -98,6 +98,7 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
 
         drivetrain.resetKeepAngle();
         LEDState.centerRunning = false;
+        drivetrain.stop();
     }
 
     public double getTranslationTolerance() {

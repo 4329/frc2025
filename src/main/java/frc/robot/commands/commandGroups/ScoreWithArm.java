@@ -30,11 +30,11 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
 
         addCommands(
                 new CenterByButtonRingCommand(
-                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.INITIAL).withTimeoutLog(1),
+                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.INITIAL),
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT),
                 new PositionCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController),
                 new CenterByButtonRingCommand(
-                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING).withTimeoutLog(2),
+                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING),
                 new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
     }
 

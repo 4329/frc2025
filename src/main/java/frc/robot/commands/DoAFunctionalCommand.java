@@ -28,27 +28,27 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
             DifferentialArmSubsystem differentialArmSubsystem, AlgeePivotSubsystem algeePivotSubsystem,
             AlgeeWheelSubsystem algeeWheelSubsystem) {
         LoggedCommandComposer[] commands = new LoggedCommandComposer[] {
-                new UnInstantCommand(
+                new LoggedRepeatCommand(new UnInstantCommand(
                         "forward",
-                        () -> drivetrain.drive(0, speed, 0, false)),
-                new UnInstantCommand(
+                        () -> drivetrain.drive(0, speed, 0, false))),
+                new LoggedRepeatCommand(new UnInstantCommand(
                         "back",
-                        () -> drivetrain.drive(0, -speed, 0, false)),
-                new UnInstantCommand(
+                        () -> drivetrain.drive(0, -speed, 0, false))),
+                new LoggedRepeatCommand(new UnInstantCommand(
                         "left",
-                        () -> drivetrain.drive(-speed, 0, 0, false)),
-                new UnInstantCommand(
+                        () -> drivetrain.drive(-speed, 0, 0, false))),
+                new LoggedRepeatCommand(new UnInstantCommand(
                         "right",
-                        () -> drivetrain.drive(speed, 0, 0, false)),
-                new UnInstantCommand(
+                        () -> drivetrain.drive(speed, 0, 0, false))),
+                new LoggedRepeatCommand(new UnInstantCommand(
                         "rotRight",
-                        () -> drivetrain.drive(0, 0, rotSpeed, false)),
-                new UnInstantCommand(
+                        () -> drivetrain.drive(0, 0, rotSpeed, false))),
+                new LoggedRepeatCommand(new UnInstantCommand(
                         "rotLeft",
-                        () -> drivetrain.drive(0, 0, -rotSpeed, false)),
-                new UnInstantCommand(
+                        () -> drivetrain.drive(0, 0, -rotSpeed, false))),
+                new LoggedRepeatCommand(new UnInstantCommand(
                         "stop",
-                        () -> drivetrain.stop()),
+                        () -> drivetrain.stop())),
 
                 new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem),
 

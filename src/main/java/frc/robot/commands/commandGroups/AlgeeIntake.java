@@ -1,6 +1,7 @@
 package frc.robot.commands.commandGroups;
 
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
+import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.driveCommands.CenterOnAlgeeCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
@@ -38,18 +39,16 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
                                         "SetElevatorByButtonRing",
                                         () ->
                                                 elevatorSubsystem.setSetpoint(
-                                                        buttonRingController.getxOffset() < 0
+                                                        buttonRingController.getLevel() == 3
                                                                 ? ElevatorSubsystem.ElevatorPosition.ALGEE_HIGH
                                                                 : ElevatorSubsystem.ElevatorPosition.ALGEE_LOW))
-                                .untilLog(elevatorSubsystem::atSetpoint)),
-                new CenterOnAlgeeCommand(
-                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING));
-    }
+                                .whileLog(() -> !elevatorSubsystem.atSetpoint())
+                ),
 
-    @Override
-    public void initialize() {
-        super.initialize();
-        algeeWheelSubsystem.run(1);
+                new CenterOnAlgeeCommand(
+                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING),
+                new IntakeAlgeeCommand(algeeWheelSubsystem)
+        );
     }
 
     @Override
@@ -57,9 +56,4 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
         if (buttonRingController.getTagID() != 0) super.execute();
     }
 
-    @Override
-    public void end(boolean interrupted) {
-        super.end(interrupted);
-        algeeWheelSubsystem.stop();
-    }
 }

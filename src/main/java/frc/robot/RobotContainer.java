@@ -137,6 +137,7 @@ public class RobotContainer {
     }
 
     private void configureNamedCommands() {
+        NamedCommands.registerCommand("startCommand", new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
         NamedCommands.registerCommand(
                 "elevatorL2",
                 new AutoPositionCoralCommand(
@@ -282,7 +283,7 @@ public class RobotContainer {
 		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
 		manualController.b().whileTrue(new ToggleCommand(eleCool).untilLog(eleCool::isFinished));
-		manualController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem));
+		manualController.x().whileTrue(new IntakeAlgeeCommand(algeeWheelSubsystem));
 		manualController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
 		manualController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(
@@ -328,8 +329,6 @@ public class RobotContainer {
                 PathPlannerAuto pathCommand = new PathPlannerAuto(name);
                 Command autoCommand =
                         new SequentialCommandGroup(
-                                new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem),
-                                pathCommand,
                                 new InstantCommand(drivetrain::stop));
                 m_chooser.addOption(name, autoCommand);
 

@@ -15,45 +15,39 @@ import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
-public class AlgeeIntake extends LoggedSequentialCommandGroup {
+public class AlgeeIntake extends LoggedParallelCommandGroup {
 
-    private ButtonRingController buttonRingController;
-    AlgeeWheelSubsystem algeeWheelSubsystem;
+	private ButtonRingController buttonRingController;
+	AlgeeWheelSubsystem algeeWheelSubsystem;
 
-    public AlgeeIntake(
-            Drivetrain drivetrain,
-            ElevatorSubsystem elevatorSubsystem,
-            AlgeeWheelSubsystem algeeWheelSubsystem,
-            AlgeePivotSubsystem algeePivotSubsystem,
-            PoseEstimationSubsystem poseEstimationSubsystem,
-            ButtonRingController buttonRingController) {
+	public AlgeeIntake(
+			Drivetrain drivetrain,
+			ElevatorSubsystem elevatorSubsystem,
+			AlgeeWheelSubsystem algeeWheelSubsystem,
+			AlgeePivotSubsystem algeePivotSubsystem,
+			PoseEstimationSubsystem poseEstimationSubsystem,
+			ButtonRingController buttonRingController) {
 
-        this.buttonRingController = buttonRingController;
-        this.algeeWheelSubsystem = algeeWheelSubsystem;
+		this.buttonRingController = buttonRingController;
+		this.algeeWheelSubsystem = algeeWheelSubsystem;
 
-        addCommands(
-                new LoggedParallelCommandGroup(
-                        "SetInitialPositions",
-                        new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT),
-                        new UnInstantCommand(
-                                        "SetElevatorByButtonRing",
-                                        () ->
-                                                elevatorSubsystem.setSetpoint(
-                                                        buttonRingController.getLevel() == 3
-                                                                ? ElevatorSubsystem.ElevatorPosition.ALGEE_HIGH
-                                                                : ElevatorSubsystem.ElevatorPosition.ALGEE_LOW))
-                                .whileLog(() -> !elevatorSubsystem.atSetpoint())
-                ),
+		addCommands(
+				new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT),
+				new UnInstantCommand(
+						"SetElevatorByButtonRing",
+						() -> elevatorSubsystem.setSetpoint(
+								buttonRingController.getLevel() == 3
+										? ElevatorSubsystem.ElevatorPosition.ALGEE_HIGH
+										: ElevatorSubsystem.ElevatorPosition.ALGEE_LOW))
+						.whileLog(() -> !elevatorSubsystem.atSetpoint()),
 
-                new CenterOnAlgeeCommand(
-                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING),
-                new IntakeAlgeeCommand(algeeWheelSubsystem)
-        );
-    }
+				new IntakeAlgeeCommand(algeeWheelSubsystem));
+	}
 
-    @Override
-    public void execute() {
-        if (buttonRingController.getTagID() != 0) super.execute();
-    }
+	@Override
+	public void execute() {
+		if (buttonRingController.getTagID() != 0)
+			super.execute();
+	}
 
 }

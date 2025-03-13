@@ -68,7 +68,7 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
         };
 
         for (int i = 0; i < commands.length; i++) {
-            commands[i] = commands[i].onlyWhileLog(() -> !controller.getAButtonPressed()).raceWithLog("nota", new LoggedWaitUntilCommand(controller::getAButtonPressed));
+            commands[i] = commands[i].onlyWhileLog(() -> !controller.getAButtonPressed()).alongWithLog(new LoggedWaitUntilCommand(controller::getAButtonPressed));
         }
 
         addCommands(commands);

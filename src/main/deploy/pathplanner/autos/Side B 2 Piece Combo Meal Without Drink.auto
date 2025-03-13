@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Side B Right Main Course"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "startCommand"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Side B Right Main Course"
+                }
+              }
+            ]
           }
         },
         {
@@ -29,15 +42,34 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Side B Right Reverse Extra Sauce"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Side B DoorDash"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeCoral"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Side B DoorDash"
+                }
+              }
+            ]
           }
         },
         {

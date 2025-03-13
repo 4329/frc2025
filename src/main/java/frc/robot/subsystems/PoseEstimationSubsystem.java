@@ -117,6 +117,10 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         updateEstimation();
     }
 
+    public void resetRotOffset() {
+        rotOffset = null;
+    }
+
     @Override
     public LoggableInputs log() {
         poseEstimationLogAutoLogged.rotOffset = rotOffset;

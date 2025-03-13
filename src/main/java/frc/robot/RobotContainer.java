@@ -246,6 +246,10 @@ public class RobotContainer {
 					driveByController::toggleFieldOrient
 					));
 
+        driverController.back().onTrue(new UnInstantCommand(
+            "ResetRotation",
+            poseEstimationSubsystem::resetRotOffset));
+
 		driverController.rightBumper().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
 		driverController.leftBumper().whileTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
 

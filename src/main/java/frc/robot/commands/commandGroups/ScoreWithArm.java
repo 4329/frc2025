@@ -15,6 +15,7 @@ import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 public class ScoreWithArm extends LoggedSequentialCommandGroup {
 
     ButtonRingController buttonRingController;
+        Drivetrain drivetrain;
 
     public ScoreWithArm(
             AlgeePivotSubsystem algeePivotSubsystem,
@@ -25,14 +26,15 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
             Drivetrain drivetrain) {
 
         this.buttonRingController = buttonRingController;
+        this.drivetrain = drivetrain;
 
         addCommands(
                 new CenterByButtonRingCommand(
-                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.INITIAL),
+                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.INITIAL).withTimeout(1),
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT),
                 new PositionCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController),
                 new CenterByButtonRingCommand(
-                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING),
+                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING).withTimeoutLog(2),
                 new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
     }
 
@@ -40,5 +42,7 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
     public void execute() {
         if (buttonRingController.getTagID() != 0 && buttonRingController.getxOffset() != 0)
             super.execute();
+        else 
+            drivetrain.stop();
     }
 }

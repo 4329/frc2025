@@ -14,9 +14,11 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.UnInstantCommand;
+import frc.robot.utilities.loggedComands.LoggedCommandComposer;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 import frc.robot.commands.elevatorCommands.*;
 import frc.robot.commands.commandGroups.*;
+import frc.robot.utilities.loggedComands.*;
 
 public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
     private final double speed = 1;
@@ -25,7 +27,7 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
     public DoAFunctionalCommand(Drivetrain drivetrain, XboxController controller, ElevatorSubsystem elevatorSubsystem,
             DifferentialArmSubsystem differentialArmSubsystem, AlgeePivotSubsystem algeePivotSubsystem,
             AlgeeWheelSubsystem algeeWheelSubsystem) {
-        Command[] commands = new Command[] {
+        LoggedCommandComposer[] commands = new LoggedCommandComposer[] {
                 new UnInstantCommand(
                         "forward",
                         () -> drivetrain.drive(0, speed, 0, false)),
@@ -51,12 +53,7 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
                 new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem),
 
                 new IntakeAlgeeCommand(algeeWheelSubsystem),
-                new UnInstantCommand(
-                        "algeeout",
-                        () -> algeeWheelSubsystem.run(-1)),
-                new UnInstantCommand(
-                        "algeeStop",
-                        () -> algeeWheelSubsystem.stop()),
+                new OuttakeAlgeeCommand(algeeWheelSubsystem),
 
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L2),
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L3),
@@ -65,17 +62,17 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
 
                 new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
 
-                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThen(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)),
+                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)),
 
                 new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
         };
 
-        Command[] outCommands = new Command[commands.length * 3];
+        LoggedCommandComposer[] outCommands = new LoggedCommandComposer[commands.length * 3];
         for (int i = 0; i < outCommands.length; i += 3) {
             System.out.println(Arrays.toString(outCommands));
-            outCommands[i] = commands[i / 3];
-            outCommands[i + 1] = new WaitUntilCommand(controller::getAButtonPressed);
-            outCommands[i + 2] = new WaitUntilCommand(controller::getAButtonReleased);
+            outCommands[i] = commands[i / 3].onlyWhileLog(() -> !controller.getAButtonPressed());
+            outCommands[i + 1] = new LoggedWaitUntilCommand(controller::getAButtonPressed);
+            outCommands[i + 2] = new LoggedWaitUntilCommand(controller::getAButtonReleased);
         }
 
         addCommands(outCommands);

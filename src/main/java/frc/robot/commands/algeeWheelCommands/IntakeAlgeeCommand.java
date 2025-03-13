@@ -4,8 +4,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.light.LEDState;
+import frc.robot.utilities.loggedComands.LoggedCommandComposer;
 
-public class IntakeAlgeeCommand extends Command {
+public class IntakeAlgeeCommand extends LoggedCommandComposer {
 
     private AlgeeWheelSubsystem algeeWheelSubsystem;
     private final Timer timer;

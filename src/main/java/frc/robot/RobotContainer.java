@@ -179,7 +179,7 @@ public class RobotContainer {
     }
 
     private void addCool(int num, ElevatorPosition position, ElevatorPosition scorePosition) {
-        final String letters = "EFABCD";
+        final String letters = "CBAFED";
         NamedCommands.registerCommand(
                 "Side" + letters.charAt(num) + "Right" + position,
                 new AutoScoreCoralButCool(

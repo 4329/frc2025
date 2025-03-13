@@ -1,5 +1,6 @@
 package frc.robot.commands.driveCommands;
 
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
@@ -13,9 +14,11 @@ import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.BetterPathfindingCommand;
 import frc.robot.utilities.CenterDistance;
+import frc.robot.utilities.loggedComands.LoggedCommandComposer;
+
 import org.littletonrobotics.junction.Logger;
 
-public class CenterOnTargetCommand extends Command {
+public class CenterOnTargetCommand extends LoggedCommandComposer {
     protected PoseEstimationSubsystem poseEstimationSubsystem;
     Drivetrain drivetrain;
     Command pathFind;
@@ -67,10 +70,10 @@ public class CenterOnTargetCommand extends Command {
     public void initialize() {
         if (target == null) return;
 
-        Pathfinding.setPathfinder(new LocalADStar());
-
         pathFind =
                 new BetterPathfindingCommand(
+                        getTranslationTolerance(),
+                        getRotationTolerance(),
                         target,
                         constraints,
                         0,
@@ -82,35 +85,18 @@ public class CenterOnTargetCommand extends Command {
                         drivetrain);
         pathFind.schedule();
 
-        poseEstimationSubsystem.setLimelighting(false);
         LEDState.centerRunning = true;
     }
 
     @Override
     public boolean isFinished() {
-        if (target == null) return true;
-
-        double dst =
-                poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation());
-        double rotation =
-                Math.abs(
-                        poseEstimationSubsystem
-                                .getPose()
-                                .getRotation()
-                                .minus(target.getRotation())
-                                .getRadians());
-
-        Logger.recordOutput("dstErr", dst);
-        Logger.recordOutput("rotationErr", rotation);
-
-        return dst < getTranslationTolerance() && rotation < getRotationTolerance();
+        return pathFind.isFinished();
     }
 
     @Override
     public void end(boolean interrupted) {
         if (pathFind != null) pathFind.cancel();
 
-        poseEstimationSubsystem.setLimelighting(true);
         drivetrain.resetKeepAngle();
         LEDState.centerRunning = false;
     }

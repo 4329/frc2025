@@ -37,8 +37,6 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
     private AprilTagFieldLayout aprilTagFieldLayout;
 
-    private boolean limelighting = true;
-
     public PoseEstimationSubsystem(Drivetrain drivetrain, LilihSubsystem lilihSubsystem) {
         this.lilihSubsystem = lilihSubsystem;
         this.drivetrain = drivetrain;
@@ -92,7 +90,6 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     private void updateEstimation() {
         estimator.update(drivetrain.getRawGyro(), drivetrain.getModulePositions());
 
-        if (limelighting) {
             lilihSubsystem.addYawMeasurement(
                     drivetrain
                             .getRawGyro()
@@ -113,7 +110,6 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                     }
                 }
             }
-        }
     }
 
     @Override
@@ -133,11 +129,4 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         return poseEstimationLogAutoLogged;
     }
 
-    public boolean isLimelighting() {
-        return limelighting;
-    }
-
-    public void setLimelighting(boolean limelighting) {
-        this.limelighting = limelighting;
-    }
 }

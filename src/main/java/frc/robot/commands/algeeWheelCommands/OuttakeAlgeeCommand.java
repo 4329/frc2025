@@ -3,8 +3,9 @@ package frc.robot.commands.algeeWheelCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.light.LEDState;
+import frc.robot.utilities.loggedComands.LoggedCommandComposer;
 
-public class OuttakeAlgeeCommand extends Command {
+public class OuttakeAlgeeCommand extends LoggedCommandComposer {
 
     private AlgeeWheelSubsystem algeeWheelSubsystem;
 

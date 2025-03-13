@@ -1,6 +1,7 @@
 package frc.robot.utilities.loggedComands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import java.util.function.BooleanSupplier;
 
@@ -26,6 +27,10 @@ public class LoggedCommandComposer extends Command {
         return raceWithLog("Until(" + getName() + ")", new WaitUntilCommand(condition));
     }
 
+    public LoggedParallelRaceGroup withTimeoutLog(double seconds) {
+        return raceWithLog("Timeout(" + getName() + ")", new WaitCommand(seconds));
+    }
+
     public LoggedRepeatCommand repeatedlyLog() {
         return new LoggedRepeatCommand(this);
     }
@@ -46,5 +51,9 @@ public class LoggedCommandComposer extends Command {
                 return !condition.getAsBoolean();
             }
         };
+    }
+
+    public LoggedParallelRaceGroup onlyWhileLog(BooleanSupplier condition) {
+        return untilLog(() -> !condition.getAsBoolean());
     }
 }

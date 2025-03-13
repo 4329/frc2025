@@ -7,25 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side A Right Main Course"
+            "pathName": "Side B Right Main Course"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "elevatorL4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Extra Sauce For Side A"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "elevatorScoreL4"
+            "name": "SideBRightL4"
           }
         }
       ]

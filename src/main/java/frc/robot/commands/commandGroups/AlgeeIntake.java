@@ -1,7 +1,6 @@
 package frc.robot.commands.commandGroups;
 
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
-import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.driveCommands.CenterOnAlgeeCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
@@ -18,7 +17,7 @@ import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 public class AlgeeIntake extends LoggedSequentialCommandGroup {
 
     private ButtonRingController buttonRingController;
-	AlgeeWheelSubsystem algeeWheelSubsystem;
+    AlgeeWheelSubsystem algeeWheelSubsystem;
 
     public AlgeeIntake(
             Drivetrain drivetrain,
@@ -29,7 +28,7 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
             ButtonRingController buttonRingController) {
 
         this.buttonRingController = buttonRingController;
-		this.algeeWheelSubsystem = algeeWheelSubsystem;
+        this.algeeWheelSubsystem = algeeWheelSubsystem;
 
         addCommands(
                 new LoggedParallelCommandGroup(
@@ -47,18 +46,20 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
                         poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING));
     }
 
-	@Override
-	public void initialize() {
-		algeeWheelSubsystem.run(1);
-	}
+    @Override
+    public void initialize() {
+        super.initialize();
+        algeeWheelSubsystem.run(1);
+    }
 
     @Override
     public void execute() {
         if (buttonRingController.getTagID() != 0) super.execute();
     }
 
-	@Override
-	public void end(boolean interrupted) {
-		algeeWheelSubsystem.stop();
-	}
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        algeeWheelSubsystem.stop();
+    }
 }

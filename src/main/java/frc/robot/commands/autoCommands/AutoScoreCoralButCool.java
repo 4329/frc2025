@@ -27,8 +27,9 @@ public class AutoScoreCoralButCool extends LoggedSequentialCommandGroup {
                 new LoggedParallelCommandGroup(
                         "Setup and minDist",
                         new CenterInAutoCommand(
-                                poseEstimationSubsystem, drivetrain, num, right, CenterDistance.INITIAL)),
-                new AutoPositionCoralCommand(elevatorSubsystem, differentialArmSubsystem, elevatorPosition),
+                                poseEstimationSubsystem, drivetrain, num, right, CenterDistance.INITIAL),
+                        new AutoPositionCoralCommand(
+                                elevatorSubsystem, differentialArmSubsystem, elevatorPosition)),
                 new CenterInAutoCommand(
                         poseEstimationSubsystem, drivetrain, num, right, CenterDistance.SCORING),
                 new AutoActuallyScoreCoralCommand(

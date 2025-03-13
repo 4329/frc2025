@@ -24,13 +24,12 @@ import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
+import frc.robot.commands.autoCommands.AutoActuallyScoreCoralCommand;
+import frc.robot.commands.autoCommands.AutoPositionCoralCommand;
 import frc.robot.commands.autoCommands.AutoScoreCoralButCool;
-import frc.robot.commands.autoCommands.AutoScoreCoralCommand;
 import frc.robot.commands.commandGroups.AlgeeIntake;
-import frc.robot.commands.commandGroups.AlgeeIntakeLameCommand;
 import frc.robot.commands.commandGroups.HPStationCommand;
 import frc.robot.commands.commandGroups.HappyResetCommand;
-import frc.robot.commands.commandGroups.PositionCoralCommand;
 import frc.robot.commands.commandGroups.ScoreCoralCommand;
 import frc.robot.commands.commandGroups.ScoreWithArm;
 import frc.robot.commands.commandGroups.StartCommand;
@@ -137,16 +136,30 @@ public class RobotContainer {
     private void configureNamedCommands() {
         NamedCommands.registerCommand(
                 "elevatorL2",
-                new AutoScoreCoralCommand(
-                        algeePivotSubsystem, elevatorSubsystem, ElevatorPosition.L2, differentialArmSubsystem));
+                new AutoPositionCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L2));
+        NamedCommands.registerCommand(
+                "elevatorScoreL2",
+                new AutoActuallyScoreCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L2));
+
         NamedCommands.registerCommand(
                 "elevatorL3",
-                new AutoScoreCoralCommand(
-                        algeePivotSubsystem, elevatorSubsystem, ElevatorPosition.L3, differentialArmSubsystem));
+                new AutoPositionCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L3));
+        NamedCommands.registerCommand(
+                "elevatorScoreL3",
+                new AutoActuallyScoreCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L3));
+
         NamedCommands.registerCommand(
                 "elevatorL4",
-                new AutoScoreCoralCommand(
-                        algeePivotSubsystem, elevatorSubsystem, ElevatorPosition.L4, differentialArmSubsystem));
+                new AutoPositionCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L4));
+        NamedCommands.registerCommand(
+                "elevatorScoreL4",
+                new AutoActuallyScoreCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L4));
 
         NamedCommands.registerCommand(
                 "intakeCoral",

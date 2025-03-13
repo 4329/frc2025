@@ -120,10 +120,8 @@ public class DrivetrainReplay implements Drivetrain {
         };
     }
 
-	@Override
-	public void resetKeepAngle() {
-
-	}
+    @Override
+    public void resetKeepAngle() {}
 
     @Override
     public LoggableInputs log() {

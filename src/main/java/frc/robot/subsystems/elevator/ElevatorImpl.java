@@ -22,7 +22,6 @@ public class ElevatorImpl extends SubsystemBase implements ElevatorSubsystem {
 
     private double ELEVATOR_SPEED = 2;
 
-
     private final double MAX_OUTPUT_CONSTANT_K = 1;
 
     SparkMax motor1;

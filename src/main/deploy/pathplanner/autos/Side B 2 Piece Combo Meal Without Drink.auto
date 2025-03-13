@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side B Right Main Course"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "elevatorL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side B Right Extra Sauce"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "elevatorScoreL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side B Right Reverse Extra Sauce"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side B DoorDash"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side C Right Delivery"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "elevatorL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side C Right Extra Sauce"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "elevatorScoreL4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

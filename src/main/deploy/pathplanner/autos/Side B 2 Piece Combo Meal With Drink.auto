@@ -7,25 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side A Right Main Course"
+            "pathName": "Side B Right Main Course"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "elevatorL4"
+            "name": "SideBRightL4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Extra Sauce For Side A"
+            "pathName": "Side B DoorDash"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side C Right Delivery"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "elevatorScoreL4"
+            "name": "SideCRightL4"
           }
         }
       ]

@@ -3,7 +3,6 @@ package frc.robot.commands.driveCommands;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -41,10 +40,10 @@ public class CenterOnTargetCommand extends Command {
 
         target = placeTarget(targetID, xOffset, centerDistance);
 
-		addRequirements(drivetrain);
+        addRequirements(drivetrain);
     }
 
-    protected Pose2d placeTarget(int targetID, double xOffset, CenterDistance centerDistance) {
+    public Pose2d placeTarget(int targetID, double xOffset, CenterDistance centerDistance) {
         Pose3d tmp = poseEstimationSubsystem.getTagPose(targetID);
         if (tmp == null) return null;
 
@@ -68,7 +67,7 @@ public class CenterOnTargetCommand extends Command {
     public void initialize() {
         if (target == null) return;
 
-		Pathfinding.setPathfinder(new LocalADStar());
+        Pathfinding.setPathfinder(new LocalADStar());
 
         pathFind =
                 new BetterPathfindingCommand(
@@ -83,8 +82,7 @@ public class CenterOnTargetCommand extends Command {
                         drivetrain);
         pathFind.schedule();
 
-
-		poseEstimationSubsystem.setLimelighting(false);
+        poseEstimationSubsystem.setLimelighting(false);
         LEDState.centerRunning = true;
     }
 
@@ -92,16 +90,18 @@ public class CenterOnTargetCommand extends Command {
     public boolean isFinished() {
         if (target == null) return true;
 
-		double dst = poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation());
-		double rotation = Math.abs(
-                                poseEstimationSubsystem
-                                        .getPose()
-                                        .getRotation()
-                                        .minus(target.getRotation())
-                                        .getRadians());
+        double dst =
+                poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation());
+        double rotation =
+                Math.abs(
+                        poseEstimationSubsystem
+                                .getPose()
+                                .getRotation()
+                                .minus(target.getRotation())
+                                .getRadians());
 
-		Logger.recordOutput("dstErr", dst);
-		Logger.recordOutput("rotationErr", rotation);
+        Logger.recordOutput("dstErr", dst);
+        Logger.recordOutput("rotationErr", rotation);
 
         return dst < getTranslationTolerance() && rotation < getRotationTolerance();
     }
@@ -110,8 +110,8 @@ public class CenterOnTargetCommand extends Command {
     public void end(boolean interrupted) {
         if (pathFind != null) pathFind.cancel();
 
-		poseEstimationSubsystem.setLimelighting(true);
-		drivetrain.resetKeepAngle();
+        poseEstimationSubsystem.setLimelighting(true);
+        drivetrain.resetKeepAngle();
         LEDState.centerRunning = false;
     }
 

@@ -64,7 +64,7 @@ public class LoggedSequentialCommandGroup extends LoggedCommandComposer implemen
         for (int i = 0; i < commands.length; i++) {
             commands[i].setName(i + " " + commands[i].getName());
             m_commands.add(commands[i]);
-			//commands[i] = commands[i].withTimeout(1);
+            // commands[i] = commands[i].withTimeout(1);
             addRequirements(commands[i].getRequirements());
             m_runWhenDisabled &= commands[i].runsWhenDisabled();
             if (commands[i].getInterruptionBehavior() == InterruptionBehavior.kCancelSelf) {

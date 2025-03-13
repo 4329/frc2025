@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.Arrays;
 
+import frc.robot.commands.algeeWheelCommands.*;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -15,11 +16,11 @@ import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 import frc.robot.commands.elevatorCommands.*;
-import frc.robot.commands.commandGroups.HPStationCommand;
+import frc.robot.commands.commandGroups.*;
 
 public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
-    private final double speed = 0.1;
-    private final double rotSpeed = 0.1;
+    private final double speed = 1;
+    private final double rotSpeed = 1;
 
     public DoAFunctionalCommand(Drivetrain drivetrain, XboxController controller, ElevatorSubsystem elevatorSubsystem,
             DifferentialArmSubsystem differentialArmSubsystem, AlgeePivotSubsystem algeePivotSubsystem,
@@ -45,27 +46,28 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
                         () -> drivetrain.drive(0, 0, -rotSpeed, false)),
                 new UnInstantCommand(
                         "stop",
-                        () -> drivetrain.drive(0, 0, 0, false)),
+                        () -> drivetrain.stop()),
 
                 new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem),
 
-                new UnInstantCommand(
-                        "algeein",
-                        () -> algeeWheelSubsystem.run(1)),
-
+                new IntakeAlgeeCommand(algeeWheelSubsystem),
                 new UnInstantCommand(
                         "algeeout",
                         () -> algeeWheelSubsystem.run(-1)),
-
                 new UnInstantCommand(
                         "algeeStop",
                         () -> algeeWheelSubsystem.stop()),
 
+                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L2),
+                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L3),
+                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L4),
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET),
 
-                new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem)
+                new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
 
+                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThen(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)),
 
+                new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
         };
 
         Command[] outCommands = new Command[commands.length * 3];
@@ -77,5 +79,6 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
         }
 
         addCommands(outCommands);
+        addRequirements(drivetrain);
     }
 }

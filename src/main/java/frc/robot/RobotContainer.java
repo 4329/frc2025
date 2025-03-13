@@ -98,7 +98,7 @@ public class RobotContainer {
 
         driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
         manualController = new CommandXboxController(OIConstants.kManualControllerPort);
-        functionalController = new CommandXboxController(OIConstants.kFuntionalControllerPort);
+        functionalController = new CommandXboxController(OIConstants.kFunctionalControllerPort);
         buttonRingController = new ButtonRingController(OIConstants.kOperatorControllerPort);
         Shuffleboard.getTab("RobotData")
                 .add("Octagon", buttonRingController)
@@ -276,7 +276,6 @@ public class RobotContainer {
 		manualController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
 
 		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
-
 		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
 		manualController.b().whileTrue(new ToggleCommand(eleCool).untilLog(eleCool::isFinished));
 		manualController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem));
@@ -299,6 +298,9 @@ public class RobotContainer {
 		manualController.rightStick().onTrue(new UnInstantCommand(
 					"Dif135",
 					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)));
+
+
+        functionalController.a().onFalse(new DoAFunctionalCommand(m_robotDrive, functionalController.getHID(), elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
 	}
 
 	// spotless:on

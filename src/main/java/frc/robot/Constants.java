@@ -109,7 +109,7 @@ public final class Constants {
         public static final double kMaxAngularAccel = Math.PI;
 
         public static final double kLowerBound = 0.02;
-        public static final double kInnerDeadband = 0.12;
+        public static final double kInnerDeadband = 0.07;
         public static final double kOuterDeadband = 0.98;
 
         // Minimum allowable rotation command (in radians/s) assuming user input is
@@ -168,7 +168,7 @@ public final class Constants {
         // controller will be on a different port
         public static final int kManualControllerPort =
                 2; //  When making blah blah blah make the ports different!
-        public static final int kFuntionalControllerPort = 
+        public static final int kFunctionalControllerPort = 
                 5;
     }
 

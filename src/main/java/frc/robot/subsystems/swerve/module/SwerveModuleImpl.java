@@ -16,6 +16,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.swerve.module.encoderNonsense.EncoderNonsense;
 import frc.robot.subsystems.swerve.module.encoderNonsense.ReduxEncoder;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.swerve.module.encoderNonsense.ThriftyEncoder;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.SparkFactory;
 import org.littletonrobotics.junction.Logger;
+import frc.robot.utilities.shufflebored.*;
 
 /** Implements a swerve module for the Robot */
 public class SwerveModuleImpl implements SwerveModule {
@@ -62,7 +64,7 @@ public class SwerveModuleImpl implements SwerveModule {
     // Creates a PIDController for the control of the anglular position of the
     // swerve module
     private final PIDController m_turningPIDController =
-            new PIDController(
+            new ShuffledPIDController(
                     ModuleConstants.kTurnPID[0], ModuleConstants.kTurnPID[1], ModuleConstants.kTurnPID[2]);
 
     private double angularOffset;
@@ -154,6 +156,8 @@ public class SwerveModuleImpl implements SwerveModule {
 
         // Sets the moduleID to the value stored in the tuningVals array
         moduleID = tuningVals[3];
+
+        // Shuffleboard.getTab("pidswerve").add(moduleID + "", m_turningPIDController);
     }
 
     /**

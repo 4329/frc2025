@@ -58,9 +58,9 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
     // Creates Odometry object to store the pose of the robot
     protected final SwerveDriveOdometry m_odometry;
 
-    private SlewRateLimiter slewX = new SlewRateLimiter(6.5);
-    private SlewRateLimiter slewY = new SlewRateLimiter(6.5);
-    private SlewRateLimiter slewRot = new SlewRateLimiter(10.0);
+    private SlewRateLimiter slewX = new SlewRateLimiter(3); // 6.5
+    private SlewRateLimiter slewY = new SlewRateLimiter(3);
+    private SlewRateLimiter slewRot = new SlewRateLimiter(5); // 10
 
     /** Constructs a DrivetrainImpl and resets the Gyro and Keep Angle parameters */
     public DrivetrainImpl() {
@@ -119,8 +119,7 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
     @Override
     @SuppressWarnings("ParameterName")
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        rot =
-                performKeepAngle(
+        rot = performKeepAngle(
                         xSpeed, ySpeed,
                         rot); // Calls the keep angle function to update the keep angle or rotate
         // depending on driver input

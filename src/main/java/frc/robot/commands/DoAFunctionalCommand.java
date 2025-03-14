@@ -56,10 +56,10 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
 
                                 new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem),
 
-                                new UnInstantCommand("nothing", () -> {}),
-
+                                
                                 new IntakeAlgeeCommand(algeeWheelSubsystem),
                                 new OuttakeAlgeeCommand(algeeWheelSubsystem),
+                                new UnInstantCommand("nothing", () -> {}),
 
                                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L2),
                                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L3),

@@ -42,7 +42,6 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
         this.drivetrain = drivetrain;
 
         target = placeTarget(targetID, xOffset, centerDistance);
-        //
     }
 
     public Pose2d placeTarget(int targetID, double xOffset, CenterDistance centerDistance) {

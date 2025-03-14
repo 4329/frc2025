@@ -189,8 +189,8 @@ public final class Constants {
         // but spinning fast is not particularly useful or driver
         // friendly
 
-        public static PIDConstants translationPID = new PIDConstants(0, 0, 0);
-        public static PIDConstants rotationPID = new PIDConstants(0, 0, 0);
+        public static PIDConstants translationPID = new PIDConstants(0.75, 0, 0);
+        public static PIDConstants rotationPID = new PIDConstants(0.2, 0, 0);
         public static PathFollowingController ppHolonomicDriveController =
                 new PPHolonomicDriveController(
                         Constants.AutoConstants.translationPID, Constants.AutoConstants.rotationPID);

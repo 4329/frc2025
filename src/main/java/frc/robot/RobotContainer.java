@@ -274,6 +274,23 @@ public class RobotContainer {
 		driverController.povUp().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
 		driverController.povDown().onTrue(new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
+        driverController.povLeft().whileTrue(new Command() {
+            public void initialize() {
+                getAuto().initialize();
+            };
+
+            public void execute() {
+                getAuto().execute();
+            };
+
+            public void end(boolean interrupted) {
+                getAuto().end(interrupted);
+            };
+
+            public boolean isFinished() {
+                return getAuto().isFinished();
+            };
+        });
 
 		driverController.rightStick().onTrue(new UnInstantCommand(
 					"ResetOdometry",

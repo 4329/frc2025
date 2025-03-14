@@ -58,9 +58,9 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
     // Creates Odometry object to store the pose of the robot
     protected final SwerveDriveOdometry m_odometry;
 
-    private SlewRateLimiter slewX = new SlewRateLimiter(3); // 6.5
-    private SlewRateLimiter slewY = new SlewRateLimiter(3);
-    private SlewRateLimiter slewRot = new SlewRateLimiter(5); // 10
+    private SlewRateLimiter slewX = new SlewRateLimiter(5); // 6.5
+    private SlewRateLimiter slewY = new SlewRateLimiter(5);
+    private SlewRateLimiter slewRot = new SlewRateLimiter(7); // 10
 
     /** Constructs a DrivetrainImpl and resets the Gyro and Keep Angle parameters */
     public DrivetrainImpl() {

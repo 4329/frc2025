@@ -46,7 +46,7 @@ public class AlgeeIntake extends LoggedParallelCommandGroup {
 
 	@Override
 	public void execute() {
-		if (buttonRingController.getTagID() != 0)
+		if (buttonRingController.getLevel() != 0)
 			super.execute();
 	}
 

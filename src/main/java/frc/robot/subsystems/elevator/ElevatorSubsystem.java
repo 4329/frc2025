@@ -27,7 +27,7 @@ public interface ElevatorSubsystem extends Subsystem, LoggedSubsystem {
         ALGEE_LOW(30.26),
         ALGEE_HIGH(103.41),
 
-        NET(MAX - 10),
+        NET(MAX - 2),
 
         ZERO(0),
         PORCESSOR(

@@ -257,7 +257,7 @@ public class RobotContainer {
 
 		driverController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 		driverController.b().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
-		driverController.x().onTrue(new AlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, buttonRingController));
+		driverController.x().whileTrue(new AlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, buttonRingController));
 		driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
 		driverController.povUp().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
@@ -330,6 +330,7 @@ public class RobotContainer {
                 PathPlannerAuto pathCommand = new PathPlannerAuto(name);
                 Command autoCommand =
                         new SequentialCommandGroup(
+                                pathCommand,
                                 new InstantCommand(drivetrain::stop));
                 m_chooser.addOption(name, autoCommand);
 

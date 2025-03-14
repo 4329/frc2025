@@ -73,8 +73,8 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
         for (int i = 1; i < commands.length; i++) {
             commands[i] = new LoggedParallelCommandGroup(
                 "wait", 
-                commands[i].untilLog(controller::getAButtonPressed),
-                new WaitUntilCommand(controller::getAButtonReleased)
+                commands[i].untilLog(controller::getAButtonReleased),
+                new WaitUntilCommand(controller::getAButtonPressed)
             );
         }
 

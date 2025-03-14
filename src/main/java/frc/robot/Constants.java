@@ -168,8 +168,7 @@ public final class Constants {
         // controller will be on a different port
         public static final int kManualControllerPort =
                 2; //  When making blah blah blah make the ports different!
-        public static final int kFunctionalControllerPort = 
-                5;
+        public static final int kFunctionalControllerPort = 5;
     }
 
     /*
@@ -189,8 +188,8 @@ public final class Constants {
         // but spinning fast is not particularly useful or driver
         // friendly
 
-        public static PIDConstants translationPID = new PIDConstants(0.75, 0, 0);
-        public static PIDConstants rotationPID = new PIDConstants(0.2, 0, 0);
+        public static PIDConstants translationPID = new PIDConstants(0.25, 0, 0);
+        public static PIDConstants rotationPID = new PIDConstants(0.05, 0, 0);
         public static PathFollowingController ppHolonomicDriveController =
                 new PPHolonomicDriveController(
                         Constants.AutoConstants.translationPID, Constants.AutoConstants.rotationPID);

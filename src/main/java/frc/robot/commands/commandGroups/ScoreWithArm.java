@@ -15,7 +15,7 @@ import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 public class ScoreWithArm extends LoggedSequentialCommandGroup {
 
     ButtonRingController buttonRingController;
-        Drivetrain drivetrain;
+    Drivetrain drivetrain;
 
     public ScoreWithArm(
             AlgeePivotSubsystem algeePivotSubsystem,
@@ -40,7 +40,6 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
     public void execute() {
         if (buttonRingController.getTagID() != 0 && buttonRingController.getxOffset() != 0)
             super.execute();
-        else 
-            drivetrain.stop();
+        else drivetrain.stop();
     }
 }

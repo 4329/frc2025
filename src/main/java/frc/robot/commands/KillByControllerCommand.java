@@ -1,11 +1,10 @@
 package frc.robot.commands;
 
-import org.littletonrobotics.junction.LogTable;
-import org.littletonrobotics.junction.inputs.LoggableInputs;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utilities.loggedComands.LoggedCommandComposer;
+import org.littletonrobotics.junction.LogTable;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class KillByControllerCommand extends LoggedCommandComposer implements LoggableInputs {
 
@@ -44,7 +43,7 @@ public class KillByControllerCommand extends LoggedCommandComposer implements Lo
     @Override
     public void end(boolean interrupted) {
         child.end(interrupted);
-        childState = "end(" + interrupted+ ")";
+        childState = "end(" + interrupted + ")";
     }
 
     @Override

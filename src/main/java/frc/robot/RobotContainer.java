@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.DoAFunctionalCommand;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
@@ -29,6 +30,7 @@ import frc.robot.commands.autoCommands.AutoActuallyScoreCoralCommand;
 import frc.robot.commands.autoCommands.AutoAlgeeIntake;
 import frc.robot.commands.autoCommands.AutoPositionCoralCommand;
 import frc.robot.commands.autoCommands.AutoScoreCoralButCool;
+import frc.robot.commands.autoCommands.PorcessorCommand;
 import frc.robot.commands.commandGroups.AlgeeIntake;
 import frc.robot.commands.commandGroups.HPStationCommand;
 import frc.robot.commands.commandGroups.HappyResetCommand;
@@ -60,7 +62,6 @@ import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import frc.robot.commands.DoAFunctionalCommand;
 
 /* (including subsystems, commands, and button mappings) should be declared here
  */
@@ -89,7 +90,12 @@ public class RobotContainer {
 
     private final ButtonRingController buttonRingController;
 
-    GenericEntry navx = Shuffleboard.getTab("RobotData").add("navX", false).withPosition(7, 0).withSize(3, 2).getEntry();
+    GenericEntry navx =
+            Shuffleboard.getTab("RobotData")
+                    .add("navX", false)
+                    .withPosition(7, 0)
+                    .withSize(3, 2)
+                    .getEntry();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -139,11 +145,15 @@ public class RobotContainer {
         m_chooser = new SendableChooser<>();
         configureAutoChooser(drivetrain);
 
-        new UnInstantCommand("navX", () -> navx.setBoolean(m_robotDrive.getGyro().getRadians() != 0)).ignoringDisableLog(true).repeatedlyLog();
+        new UnInstantCommand("navX", () -> navx.setBoolean(m_robotDrive.getGyro().getRadians() != 0))
+                .ignoringDisableLog(true)
+                .repeatedlyLog();
     }
 
     private void configureNamedCommands() {
-        NamedCommands.registerCommand("startCommand", new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
+        NamedCommands.registerCommand(
+                "startCommand",
+                new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
         NamedCommands.registerCommand(
                 "elevatorL2",
                 new AutoPositionCoralCommand(
@@ -174,11 +184,33 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "intakeCoral",
                 new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
-        NamedCommands.registerCommand("grabCoral", new SetElevatorCommand(elevatorSubsystem,ElevatorPosition.ZERO).andThen(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
-        NamedCommands.registerCommand("intakeAlgeeHigh", new AutoAlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, ElevatorPosition.ALGEE_HIGH));
-        NamedCommands.registerCommand("intakeAlgeeLow", new AutoAlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, ElevatorPosition.ALGEE_LOW));
-        NamedCommands.registerCommand("elevatorBarge", new SetElevatorCommand(elevatorSubsystem,ElevatorPosition.NET));
-        NamedCommands.registerCommand("actuallyIntakeAlgee", new IntakeAlgeeCommand(algeeWheelSubsystem));
+        NamedCommands.registerCommand(
+                "grabCoral",
+                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO)
+                        .andThen(
+                                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
+        NamedCommands.registerCommand(
+                "intakeAlgeeHigh",
+                new AutoAlgeeIntake(
+                        m_robotDrive,
+                        elevatorSubsystem,
+                        algeeWheelSubsystem,
+                        algeePivotSubsystem,
+                        poseEstimationSubsystem,
+                        ElevatorPosition.ALGEE_HIGH));
+        NamedCommands.registerCommand(
+                "intakeAlgeeLow",
+                new AutoAlgeeIntake(
+                        m_robotDrive,
+                        elevatorSubsystem,
+                        algeeWheelSubsystem,
+                        algeePivotSubsystem,
+                        poseEstimationSubsystem,
+                        ElevatorPosition.ALGEE_LOW));
+        NamedCommands.registerCommand(
+                "elevatorBarge", new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
+        NamedCommands.registerCommand(
+                "actuallyIntakeAlgee", new IntakeAlgeeCommand(algeeWheelSubsystem));
         for (int i = 0; i < 6; i++) {
             addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);
             addCool(i, ElevatorPosition.L3, ElevatorPosition.L3Score);
@@ -279,23 +311,24 @@ public class RobotContainer {
 		driverController.povUp().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
 		driverController.povDown().onTrue(new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
-        driverController.povLeft().whileTrue(new Command() {
-            public void initialize() {
-                getAuto().initialize();
-            };
+		driverController.povLeft().onTrue(new PorcessorCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
+        // driverController.povLeft().whileTrue(new Command() {
+        //     public void initialize() {
+        //         getAuto().initialize();
+        //     };
 
-            public void execute() {
-                getAuto().execute();
-            };
+        //     public void execute() {
+        //         getAuto().execute();
+        //     };
 
-            public void end(boolean interrupted) {
-                getAuto().end(interrupted);
-            };
+        //     public void end(boolean interrupted) {
+        //         getAuto().end(interrupted);
+        //     };
 
-            public boolean isFinished() {
-                return getAuto().isFinished();
-            };
-        });
+        //     public boolean isFinished() {
+        //         return getAuto().isFinished();
+        //     };
+        // });
 
 		driverController.rightStick().onTrue(new UnInstantCommand(
 					"ResetOdometry",
@@ -362,9 +395,7 @@ public class RobotContainer {
                 String name = pathFile.getName().replace(".auto", "");
                 PathPlannerAuto pathCommand = new PathPlannerAuto(name);
                 Command autoCommand =
-                        new SequentialCommandGroup(
-                                pathCommand,
-                                new InstantCommand(drivetrain::stop));
+                        new SequentialCommandGroup(pathCommand, new InstantCommand(drivetrain::stop));
                 m_chooser.addOption(name, autoCommand);
 
                 autoName.put(autoCommand, pathCommand);

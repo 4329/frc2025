@@ -119,7 +119,8 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
     @Override
     @SuppressWarnings("ParameterName")
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        rot = performKeepAngle(
+        rot =
+                performKeepAngle(
                         xSpeed, ySpeed,
                         rot); // Calls the keep angle function to update the keep angle or rotate
         // depending on driver input

@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.Logger;
 
 /** Base pathfinding command */
@@ -203,7 +202,8 @@ public class BetterPathfindingCommand extends Command {
             RobotConfig robotConfig,
             Subsystem... requirements) {
         this(
-                0,0,
+                0,
+                0,
                 targetPose,
                 constraints,
                 goalEndVel.in(MetersPerSecond),
@@ -242,7 +242,8 @@ public class BetterPathfindingCommand extends Command {
             RobotConfig robotConfig,
             Subsystem... requirements) {
         this(
-                0,0,
+                0,
+                0,
                 targetPose,
                 constraints,
                 0.0,
@@ -382,15 +383,9 @@ public class BetterPathfindingCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        double dst =
-                poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
+        double dst = poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
         double rotation =
-                Math.abs(
-                                poseSupplier
-                                .get()
-                                .getRotation()
-                                .minus(targetPose.getRotation())
-                                .getRadians());
+                Math.abs(poseSupplier.get().getRotation().minus(targetPose.getRotation()).getRadians());
 
         Logger.recordOutput("dstErr", dst);
         Logger.recordOutput("rotationErr", rotation);

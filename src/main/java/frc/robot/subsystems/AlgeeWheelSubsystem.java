@@ -8,12 +8,17 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.model.AlgeeWheelLogAutoLogged;
+import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.SparkFactory;
 import java.util.Map;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class AlgeeWheelSubsystem extends SubsystemBase {
+public class AlgeeWheelSubsystem extends SubsystemBase implements LoggedSubsystem {
     SparkMax motor1;
+
+    AlgeeWheelLogAutoLogged algeeWheelLogAutoLogged = new AlgeeWheelLogAutoLogged();
 
     GenericEntry running =
             Shuffleboard.getTab("RobotData")
@@ -41,12 +46,20 @@ public class AlgeeWheelSubsystem extends SubsystemBase {
     }
 
     public boolean getAlgeed() {
-        return motor1.getOutputCurrent() > 30;
+        return motor1.getOutputCurrent() > 15;
     }
 
     @Override
     public void periodic() {
         running.setBoolean(motor1.get() != 0);
         LEDState.algeeWheelRunning = motor1.get() != 0;
+    }
+
+    @Override
+    public LoggableInputs log() {
+        algeeWheelLogAutoLogged.speed = motor1.getEncoder().getVelocity();
+        algeeWheelLogAutoLogged.algeed = getAlgeed();
+
+        return algeeWheelLogAutoLogged;
     }
 }

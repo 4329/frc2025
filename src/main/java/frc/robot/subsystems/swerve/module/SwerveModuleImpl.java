@@ -16,15 +16,14 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.swerve.module.encoderNonsense.EncoderNonsense;
 import frc.robot.subsystems.swerve.module.encoderNonsense.ReduxEncoder;
 import frc.robot.subsystems.swerve.module.encoderNonsense.ThriftyEncoder;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.SparkFactory;
-import org.littletonrobotics.junction.Logger;
 import frc.robot.utilities.shufflebored.*;
+import org.littletonrobotics.junction.Logger;
 
 /** Implements a swerve module for the Robot */
 public class SwerveModuleImpl implements SwerveModule {

@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.utilities.UnInstantCommand;
-
 import java.util.function.BooleanSupplier;
 
 public class LoggedCommandComposer extends Command {
@@ -59,17 +58,17 @@ public class LoggedCommandComposer extends Command {
         return untilLog(() -> !condition.getAsBoolean());
     }
 
-  public LoggedConditionalCommand unlessLog(BooleanSupplier condition) {
-    return new LoggedConditionalCommand(new UnInstantCommand("", () -> {}), this, condition);
-  }
+    public LoggedConditionalCommand unlessLog(BooleanSupplier condition) {
+        return new LoggedConditionalCommand(new UnInstantCommand("", () -> {}), this, condition);
+    }
 
-  public LoggedConditionalCommand onlyIfLog(BooleanSupplier condition) {
-    return unlessLog(() -> !condition.getAsBoolean());
-  }
+    public LoggedConditionalCommand onlyIfLog(BooleanSupplier condition) {
+        return unlessLog(() -> !condition.getAsBoolean());
+    }
 
-  public LoggedParallelCommandGroup alongWithLog(Command... parallel) {
-    LoggedParallelCommandGroup group = new LoggedParallelCommandGroup(this);
-    group.addCommands(parallel);
-    return group;
-  }
+    public LoggedParallelCommandGroup alongWithLog(Command... parallel) {
+        LoggedParallelCommandGroup group = new LoggedParallelCommandGroup(this);
+        group.addCommands(parallel);
+        return group;
+    }
 }

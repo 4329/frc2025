@@ -29,7 +29,6 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
         ZERO(0),
         OUT(19),
         OUTFORCORAL(27.5),
-        
         ;
 
         public double angle;

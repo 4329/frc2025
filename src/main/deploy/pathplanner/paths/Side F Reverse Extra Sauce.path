@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.89,
-        "y": 2.74
+        "x": 4.992714036067769,
+        "y": 2.8108561390925297
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.136873983273907,
-        "y": 2.3154643447140737
+        "x": 5.239588019341676,
+        "y": 2.386320483806603
       },
       "isLocked": false,
       "linkedName": "Side F Left Score"
     },
     {
       "anchor": {
-        "x": 5.168835616438356,
-        "y": 2.259482020547945
+        "x": 5.252956673150761,
+        "y": 2.3466404669453698
       },
       "prevControl": {
-        "x": 4.906191013680481,
-        "y": 2.7070912868876778
+        "x": 4.9903120703928865,
+        "y": 2.7942497332851026
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,21 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 0.8,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {

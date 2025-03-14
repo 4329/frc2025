@@ -252,6 +252,13 @@ public class RobotContainer {
             "ResetRotation",
             poseEstimationSubsystem::resetRotOffset));
 
+		driverController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
+					"ElevatorUp",
+					() -> elevatorSubsystem.runElevator(driverController.getRightTriggerAxis())).repeatedlyLog());
+		driverController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
+					"ElevatorDown",
+					() -> elevatorSubsystem.runElevator(-driverController.getLeftTriggerAxis())).repeatedlyLog());
+
 		driverController.rightBumper().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
 		driverController.leftBumper().whileTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
 

@@ -21,6 +21,10 @@ public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
         DifferentialArmPitch(double rotation) {
             this.rotation = rotation;
         }
+
+        public double getRotation() {
+            return rotation;
+        };
     }
 
     void setPitchTarget(DifferentialArmPitch pitchTarget);
@@ -30,8 +34,10 @@ public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
     void runPitch(double sign);
 
     double getPitch();
+    double getPitchSetpoint();
 
     boolean pitchAtSetpoint();
+
 
     public void voltageDrive(Voltage voltage);
 

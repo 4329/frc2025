@@ -5,6 +5,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -88,6 +89,8 @@ public class RobotContainer {
 
     private final ButtonRingController buttonRingController;
 
+    GenericEntry navx = Shuffleboard.getTab("RobotData").add("navX", false).withPosition(7, 0).withSize(3, 2).getEntry();
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      *
@@ -135,6 +138,8 @@ public class RobotContainer {
 
         m_chooser = new SendableChooser<>();
         configureAutoChooser(drivetrain);
+
+        new UnInstantCommand("navX", () -> navx.setBoolean(m_robotDrive.getGyro().getRadians() != 0)).ignoringDisableLog(true).repeatedlyLog();
     }
 
     private void configureNamedCommands() {
@@ -404,7 +409,9 @@ public class RobotContainer {
 
     public void autonomousPeriodic() {}
 
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        navx.setDouble(m_robotDrive.getGyro().getRadians());
+    }
 
     /**
      * @return Selected Auto

@@ -32,6 +32,12 @@ public class DifferentialArmPlayback extends SubsystemBase implements Differenti
     }
 
     @Override
+    public double getPitchSetpoint() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPitchSetpoint'");
+    }
+
+    @Override
     public boolean pitchAtSetpoint() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'pitchAtSetpoint'");

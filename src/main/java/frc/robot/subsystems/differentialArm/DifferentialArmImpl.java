@@ -85,6 +85,11 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     }
 
     @Override
+    public double getPitchSetpoint() {
+        return pitchPID.getGoal().position;
+    }
+
+    @Override
     public boolean pitchAtSetpoint() {
         return pitchPID.atGoal();
     }

@@ -8,14 +8,20 @@ import frc.robot.utilities.loggedComands.LoggedCommandComposer;
 public class OuttakeAlgeeCommand extends LoggedCommandComposer {
 
     private AlgeeWheelSubsystem algeeWheelSubsystem;
+    private double speed;
 
     public OuttakeAlgeeCommand(AlgeeWheelSubsystem algeeWheelSubsystem) {
+        this(algeeWheelSubsystem, 1);
+    }
+
+    public OuttakeAlgeeCommand(AlgeeWheelSubsystem algeeWheelSubsystem, double speed) {
         this.algeeWheelSubsystem = algeeWheelSubsystem;
+        this.speed = -speed;
     }
 
     @Override
     public void initialize() {
-        algeeWheelSubsystem.run(-1);
+        algeeWheelSubsystem.run(speed);
     }
 
     @Override

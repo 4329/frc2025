@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Side A Right Main Course"
+                  "pathName": "Side F Left Main Course"
                 }
               }
             ]
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Extra Sauce For Side A"
+            "pathName": "Side F Left Extra Sauce"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side A Right Reverse Extra Sauce"
+            "pathName": "Side F Reverse Extra Sauce"
           }
         }
       ]

@@ -16,6 +16,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedCommandComposer;
+import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
 import frc.robot.utilities.loggedComands.LoggedRepeatCommand;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 import frc.robot.utilities.loggedComands.LoggedWaitUntilCommand;
@@ -28,6 +29,8 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
             DifferentialArmSubsystem differentialArmSubsystem, AlgeePivotSubsystem algeePivotSubsystem,
             AlgeeWheelSubsystem algeeWheelSubsystem) {
         LoggedCommandComposer[] commands = new LoggedCommandComposer[] {
+                new LoggedWaitUntilCommand(controller::getAButtonReleased),
+
                 new LoggedRepeatCommand(new UnInstantCommand(
                         "forward",
                         () -> drivetrain.drive(0, speed, 0, false))),
@@ -67,8 +70,12 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
                 new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
         };
 
-        for (int i = 0; i < commands.length; i++) {
-            commands[i] = commands[i].onlyWhileLog(() -> !controller.getAButtonPressed()).alongWithLog(new LoggedWaitUntilCommand(controller::getAButtonPressed));
+        for (int i = 1; i < commands.length; i++) {
+            commands[i] = new LoggedParallelCommandGroup(
+                "wait", 
+                commands[i].untilLog(controller::getAButtonPressed),
+                new WaitUntilCommand(controller::getAButtonReleased)
+            );
         }
 
         addCommands(commands);

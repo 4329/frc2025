@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Side B Right Main Course"
+                  "pathName": "Side F Left Main Course"
                 }
               }
             ]
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side B Right Extra Sauce"
+            "pathName": "Side F Left Extra Sauce"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side B Right Reverse Extra Sauce"
+            "pathName": "Side F Reverse Extra Sauce"
           }
         },
         {
@@ -66,7 +66,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Side B DoorDash"
+                  "pathName": "Side F DoorDash"
                 }
               }
             ]
@@ -104,7 +104,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Side C Right Delivery"
+                  "pathName": "Side E Left Delivery"
                 }
               }
             ]
@@ -119,7 +119,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side C Right Extra Sauce"
+            "pathName": "Side E Left Extra Sauce"
           }
         },
         {
@@ -137,7 +137,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side C Right Reverse Extra Sauce"
+            "pathName": "Side E Left Reverse Extra Sauce"
           }
         },
         {

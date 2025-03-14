@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Side B Right Main Course"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "startCommand"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Side B Right Main Course"
+                }
+              }
+            ]
           }
         },
         {

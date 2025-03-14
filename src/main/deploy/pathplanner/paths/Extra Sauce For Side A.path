@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 6.113729508196721,
-        "y": 3.94
+        "y": 4.06
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.850969593434021,
-        "y": 3.9697870880412367
+        "y": 4.089787088041236
       },
       "isLocked": false,
       "linkedName": "Side A Right"
     },
     {
       "anchor": {
-        "x": 5.821,
-        "y": 3.94
+        "x": 5.81,
+        "y": 4.06
       },
       "prevControl": {
-        "x": 6.069157925839489,
-        "y": 3.909707363220706
+        "x": 6.058157925839489,
+        "y": 4.029707363220705
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Side A Right Score"
     }
   ],
   "rotationTargets": [],

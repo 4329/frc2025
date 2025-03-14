@@ -168,6 +168,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "intakeCoral",
                 new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
+        NamedCommands.registerCommand("grabCoral", new SetElevatorCommand(elevatorSubsystem,ElevatorPosition.ZERO).andThen(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
 
         for (int i = 0; i < 6; i++) {
             addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);

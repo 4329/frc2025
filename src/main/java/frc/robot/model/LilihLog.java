@@ -37,11 +37,10 @@ public class LilihLog implements LoggableInputs, Cloneable {
     public void toLog(LogTable table) {
         table.put("Limlihconnected", limlihConnected);
         for (int i = 0; i < NUM_TAGS; i++) {
-            LogTable sub = table.getSubtable("" + i);
+            LogTable sub = table.getSubtable("" + (i + 1));
             sub.put("tV", tags[i].tV);
             sub.put("tX", tags[i].tX);
             sub.put("tY", tags[i].tY);
-            Logger.recordOutput("adsf", new Pose2d());
             sub.put("relativePose", tags[i].relativePose);
         }
     }
@@ -50,7 +49,7 @@ public class LilihLog implements LoggableInputs, Cloneable {
     public void fromLog(LogTable table) {
         limlihConnected = table.get("Limlihconnected", limlihConnected);
         for (int i = 0; i < NUM_TAGS; i++) {
-            LogTable sub = table.getSubtable("" + i);
+            LogTable sub = table.getSubtable("" + (i + 1));
             tags[i] =
                     new Fiducial(
                             sub.get("tV").getBoolean(),

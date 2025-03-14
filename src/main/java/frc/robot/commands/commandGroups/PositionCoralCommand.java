@@ -20,6 +20,8 @@ public class PositionCoralCommand extends Command {
         this.elevatorSubsystem = elevatorSubsystem;
         this.differentialArmSubsystem = differentialArmSubsystem;
         this.buttonRingController = buttonRingController;
+
+        addRequirements(elevatorSubsystem);
     }
 
     @Override

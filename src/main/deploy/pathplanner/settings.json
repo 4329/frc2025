@@ -3,12 +3,13 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Side F",
+    "Barge",
     "Side A",
     "Side B",
     "Side C",
     "Side D",
-    "Side E"
+    "Side E",
+    "Side F"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

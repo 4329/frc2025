@@ -25,6 +25,7 @@ import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
 import frc.robot.commands.autoCommands.AutoActuallyScoreCoralCommand;
+import frc.robot.commands.autoCommands.AutoAlgeeIntake;
 import frc.robot.commands.autoCommands.AutoPositionCoralCommand;
 import frc.robot.commands.autoCommands.AutoScoreCoralButCool;
 import frc.robot.commands.commandGroups.AlgeeIntake;
@@ -169,7 +170,10 @@ public class RobotContainer {
                 "intakeCoral",
                 new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
         NamedCommands.registerCommand("grabCoral", new SetElevatorCommand(elevatorSubsystem,ElevatorPosition.ZERO).andThen(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
-
+        NamedCommands.registerCommand("intakeAlgeeHigh", new AutoAlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, ElevatorPosition.ALGEE_HIGH));
+        NamedCommands.registerCommand("intakeAlgeeLow", new AutoAlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, ElevatorPosition.ALGEE_LOW));
+        NamedCommands.registerCommand("elevatorBarge", new SetElevatorCommand(elevatorSubsystem,ElevatorPosition.NET));
+        NamedCommands.registerCommand("actuallyIntakeAlgee", new IntakeAlgeeCommand(algeeWheelSubsystem));
         for (int i = 0; i < 6; i++) {
             addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);
             addCool(i, ElevatorPosition.L3, ElevatorPosition.L3Score);

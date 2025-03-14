@@ -14,7 +14,6 @@ public class SetElevatorCommand extends LoggedCommandComposer {
         this.elevatorSubsystem = elevatorSubsystem;
         this.elevatorPosition = elevatorPosition;
 
-        addRequirements(elevatorSubsystem);
     }
 
     @Override

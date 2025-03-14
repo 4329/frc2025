@@ -22,63 +22,64 @@ import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 import frc.robot.utilities.loggedComands.LoggedWaitUntilCommand;
 
 public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
-    private final double speed = 1;
-    private final double rotSpeed = 1;
+        private final double speed = 1;
+        private final double rotSpeed = 2;
 
-    public DoAFunctionalCommand(Drivetrain drivetrain, XboxController controller, ElevatorSubsystem elevatorSubsystem,
-            DifferentialArmSubsystem differentialArmSubsystem, AlgeePivotSubsystem algeePivotSubsystem,
-            AlgeeWheelSubsystem algeeWheelSubsystem) {
-        LoggedCommandComposer[] commands = new LoggedCommandComposer[] {
-                new LoggedWaitUntilCommand(controller::getAButtonReleased),
+        public DoAFunctionalCommand(Drivetrain drivetrain, XboxController controller,
+                        ElevatorSubsystem elevatorSubsystem,
+                        DifferentialArmSubsystem differentialArmSubsystem, AlgeePivotSubsystem algeePivotSubsystem,
+                        AlgeeWheelSubsystem algeeWheelSubsystem) {
+                LoggedCommandComposer[] commands = new LoggedCommandComposer[] {
+                                new LoggedWaitUntilCommand(controller::getAButtonPressed),
 
-                new LoggedRepeatCommand(new UnInstantCommand(
-                        "forward",
-                        () -> drivetrain.drive(0, speed, 0, false))),
-                new LoggedRepeatCommand(new UnInstantCommand(
-                        "back",
-                        () -> drivetrain.drive(0, -speed, 0, false))),
-                new LoggedRepeatCommand(new UnInstantCommand(
-                        "left",
-                        () -> drivetrain.drive(-speed, 0, 0, false))),
-                new LoggedRepeatCommand(new UnInstantCommand(
-                        "right",
-                        () -> drivetrain.drive(speed, 0, 0, false))),
-                new LoggedRepeatCommand(new UnInstantCommand(
-                        "rotRight",
-                        () -> drivetrain.drive(0, 0, rotSpeed, false))),
-                new LoggedRepeatCommand(new UnInstantCommand(
-                        "rotLeft",
-                        () -> drivetrain.drive(0, 0, -rotSpeed, false))),
-                new LoggedRepeatCommand(new UnInstantCommand(
-                        "stop",
-                        () -> drivetrain.stop())),
+                                new LoggedRepeatCommand(new UnInstantCommand(
+                                                "forward",
+                                                () -> drivetrain.drive(speed, 0, 0, false))),
+                                new LoggedRepeatCommand(new UnInstantCommand(
+                                                "backward",
+                                                () -> drivetrain.drive(-speed, 0, 0, false))),
+                                new LoggedRepeatCommand(new UnInstantCommand(
+                                                "right",
+                                                () -> drivetrain.drive(0, speed, 0, false))),
+                                new LoggedRepeatCommand(new UnInstantCommand(
+                                                "left",
+                                                () -> drivetrain.drive(0, -speed, 0, false))),
+                                new LoggedRepeatCommand(new UnInstantCommand(
+                                                "rotRight",
+                                                () -> drivetrain.drive(0, 0, rotSpeed, false))),
+                                new LoggedRepeatCommand(new UnInstantCommand(
+                                                "rotLeft",
+                                                () -> drivetrain.drive(0, 0, -rotSpeed, false))),
+                                new LoggedRepeatCommand(new UnInstantCommand(
+                                                "stop",
+                                                () -> drivetrain.stop())),
 
-                new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem),
+                                new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem),
 
-                new IntakeAlgeeCommand(algeeWheelSubsystem),
-                new OuttakeAlgeeCommand(algeeWheelSubsystem),
+                                new UnInstantCommand("nothing", () -> {}),
 
-                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L2),
-                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L3),
-                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L4),
-                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET),
+                                new IntakeAlgeeCommand(algeeWheelSubsystem),
+                                new OuttakeAlgeeCommand(algeeWheelSubsystem),
 
-                new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
+                                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L2),
+                                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L3),
+                                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L4),
+                                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET),
 
-                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)),
+                                new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
 
-                new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
-        };
+                                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO)
+                                                .andThenLog(new SetElevatorCommand(elevatorSubsystem,
+                                                                ElevatorPosition.DIFFERENTIAL_ARM_OUT)),
 
-        for (int i = 1; i < commands.length; i++) {
-            commands[i] = new LoggedParallelCommandGroup(
-                "wait", 
-                commands[i].untilLog(controller::getAButtonReleased),
-                new WaitUntilCommand(controller::getAButtonPressed)
-            );
+                                new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
+                };
+
+                for (int i = 1; i < commands.length; i++) {
+                        commands[i] = new KillByControllerCommand(controller, commands[i]);
+                }
+
+                addCommands(commands);
+                addRequirements(drivetrain);
         }
-
-        addCommands(commands);
-        addRequirements(drivetrain);
-    }
 }

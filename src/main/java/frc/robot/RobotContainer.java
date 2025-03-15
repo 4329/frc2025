@@ -183,7 +183,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "intakeCoral",
-                new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
+                new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
         NamedCommands.registerCommand(
                 "grabCoral",
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO)
@@ -303,7 +303,7 @@ public class RobotContainer {
 		driverController.rightBumper().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
 		driverController.leftBumper().whileTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
 
-		driverController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
+		driverController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
 		driverController.b().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
 		driverController.x().whileTrue(new AlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, buttonRingController));
 		driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
@@ -347,7 +347,7 @@ public class RobotContainer {
 		manualController.leftBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
 		manualController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
 
-		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
+		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
 		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
 		manualController.b().whileTrue(new ToggleCommand(eleCool).untilLog(eleCool::isFinished));
 		manualController.x().whileTrue(new IntakeAlgeeCommand(algeeWheelSubsystem));
@@ -372,7 +372,8 @@ public class RobotContainer {
 					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)));
 
 
-        functionalController.a().onFalse(new DoAFunctionalCommand(m_robotDrive, functionalController.getHID(), elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
+        
+                functionalController.a().onFalse(new DoAFunctionalCommand(m_robotDrive, functionalController.getHID(), elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
 	}
 
 	// spotless:on

@@ -20,6 +20,6 @@ public class StartCommand extends LoggedSequentialCommandGroup {
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
                 new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY),
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ALGEE_CLAW_OUT),
-                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotSubsystem.AlgeePivotAngle.OUT));
+                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotSubsystem.AlgeePivotAngle.OUTFORCORAL));
     }
 }

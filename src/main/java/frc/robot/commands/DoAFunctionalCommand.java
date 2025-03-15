@@ -46,15 +46,23 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
                     new LoggedRepeatCommand(
                             new UnInstantCommand("rotLeft", () -> drivetrain.drive(0, 0, -rotSpeed, false))),
                     new LoggedRepeatCommand(new UnInstantCommand("stop", () -> drivetrain.stop())),
+
                     new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem),
+
                     new IntakeAlgeeCommand(algeeWheelSubsystem),
                     new OuttakeAlgeeCommand(algeeWheelSubsystem),
                     new UnInstantCommand("nothing", () -> {}),
+
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L2),
+                    new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L3),
+                    new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L4),
+                    new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET),
-                    new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
+
+                    new HPStationCommand(differentialArmSubsystem, elevatorSubsystem),
+
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO)
                             .andThenLog(
                                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)),

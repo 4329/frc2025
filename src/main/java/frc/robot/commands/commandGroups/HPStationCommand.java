@@ -12,8 +12,7 @@ public class HPStationCommand extends LoggedSequentialCommandGroup {
 
     public HPStationCommand(
             DifferentialArmSubsystem differentialArmSubsystem,
-            ElevatorSubsystem elevatorSubsystem,
-            AlgeePivotSubsystem algeePivotSubsystem) {
+            ElevatorSubsystem elevatorSubsystem) {
 
         addCommands(
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),

@@ -23,6 +23,7 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
     private final double speed = 1;
     private final double rotSpeed = 2;
 
+    // spotless:off
     public DoAFunctionalCommand(
             Drivetrain drivetrain,
             XboxController controller,
@@ -58,7 +59,6 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L3),
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L4),
-                    new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET),
 
                     new HPStationCommand(differentialArmSubsystem, elevatorSubsystem),
@@ -68,6 +68,8 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
                                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)),
                     new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem),
                 };
+
+        // spotless:on
 
         for (int i = 1; i < commands.length; i++) {
             commands[i] = new KillByControllerCommand(controller, commands[i]);

@@ -4,17 +4,14 @@
 //  */
 package frc.robot.subsystems.lilih;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.WebsocketListener;
+import java.net.URI;
+import java.net.http.HttpClient;
+import org.littletonrobotics.junction.Logger;
 
 public class LilihSocket {
 
@@ -37,10 +34,11 @@ public class LilihSocket {
         httpClient
                 .newWebSocketBuilder()
                 .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener)
-                .exceptionallyAsync(e -> {
-                    Logger.recordOutput("lilihException", e.getMessage());
-                    return null;
-                });
+                .exceptionallyAsync(
+                        e -> {
+                            Logger.recordOutput("lilihException", e.getMessage());
+                            return null;
+                        });
     }
 
     public boolean isConnected() {

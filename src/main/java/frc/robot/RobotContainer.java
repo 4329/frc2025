@@ -12,9 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -145,7 +143,7 @@ public class RobotContainer {
         m_chooser = new SendableChooser<>();
         configureAutoChooser(drivetrain);
 
-        new UnInstantCommand("navX", () -> navx.setBoolean(m_robotDrive.getGyro().getRadians() != 0))
+        new UnInstantCommand("navX", () -> navx.setBoolean(m_robotDrive.getRawGyro().getRadians() != 0))
                 .ignoringDisableLog(true)
                 .repeatedlyLog();
     }
@@ -182,8 +180,7 @@ public class RobotContainer {
                         elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L4));
 
         NamedCommands.registerCommand(
-                "intakeCoral",
-                new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
+                "intakeCoral", new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
         NamedCommands.registerCommand(
                 "grabCoral",
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO)
@@ -374,6 +371,14 @@ public class RobotContainer {
 
         
                 functionalController.a().onFalse(new DoAFunctionalCommand(m_robotDrive, functionalController.getHID(), elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
+
+                functionalController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
+					"ElevatorUp",
+					() -> elevatorSubsystem.runElevator(functionalController.getRightTriggerAxis())).repeatedlyLog());
+                                        
+		functionalController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
+					"ElevatorDown",
+					() -> elevatorSubsystem.runElevator(-functionalController.getLeftTriggerAxis())).repeatedlyLog());
 	}
 
 	// spotless:on
@@ -396,7 +401,8 @@ public class RobotContainer {
                 String name = pathFile.getName().replace(".auto", "");
                 PathPlannerAuto pathCommand = new PathPlannerAuto(name);
                 Command autoCommand =
-                        new SequentialCommandGroup(pathCommand, new InstantCommand(drivetrain::stop));
+                        new LoggedSequentialCommandGroup(
+                                "Auto", pathCommand, new UnInstantCommand("stop", drivetrain::stop));
                 m_chooser.addOption(name, autoCommand);
 
                 autoName.put(autoCommand, pathCommand);

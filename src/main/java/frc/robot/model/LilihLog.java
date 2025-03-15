@@ -1,9 +1,7 @@
 package frc.robot.model;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import org.littletonrobotics.junction.LogTable;
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LilihLog implements LoggableInputs, Cloneable {

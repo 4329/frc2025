@@ -1,10 +1,9 @@
 package frc.robot.commands.driveCommands;
 
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
+import frc.robot.utilities.CenterDistance;
 
 public class CenterOnAlgeeCommand extends CenterOnTargetCommand {
 
@@ -15,14 +14,16 @@ public class CenterOnAlgeeCommand extends CenterOnTargetCommand {
     public CenterOnAlgeeCommand(
             PoseEstimationSubsystem poseEstimationSubsystem,
             Drivetrain drivetrain,
-            ButtonRingController buttonRingController) {
+            ButtonRingController buttonRingController,
+            CenterDistance centerDistance) {
         super(0, poseEstimationSubsystem, drivetrain);
         this.buttonRingController = buttonRingController;
+        this.centerDistance = centerDistance;
     }
 
     @Override
     public void initialize() {
-        target = placeTarget(buttonRingController.getTagID(), clawOffset);
+        target = placeTarget(buttonRingController.getTagID(), clawOffset, centerDistance);
         super.initialize();
     }
 }

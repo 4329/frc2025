@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 /** Base pathfinding command */
 public class BetterPathfindingCommand extends Command {
@@ -50,6 +51,9 @@ public class BetterPathfindingCommand extends Command {
     private double timeOffset = 0;
 
     private boolean finish = false;
+
+    private double translationTolerance;
+    private double rotationTolerance;
 
     /**
      * Constructs a new base pathfinding command that will generate a path towards the given path.
@@ -135,6 +139,8 @@ public class BetterPathfindingCommand extends Command {
      * @param requirements the subsystems required by this command
      */
     public BetterPathfindingCommand(
+            double translationTolerance,
+            double rotationTolerance,
             Pose2d targetPose,
             PathConstraints constraints,
             double goalEndVel,
@@ -148,6 +154,8 @@ public class BetterPathfindingCommand extends Command {
 
         Pathfinding.ensureInitialized();
 
+        this.translationTolerance = translationTolerance;
+        this.rotationTolerance = rotationTolerance;
         this.targetPath = null;
         this.targetPose = targetPose;
         this.originalTargetPose =
@@ -194,6 +202,8 @@ public class BetterPathfindingCommand extends Command {
             RobotConfig robotConfig,
             Subsystem... requirements) {
         this(
+                0,
+                0,
                 targetPose,
                 constraints,
                 goalEndVel.in(MetersPerSecond),
@@ -232,6 +242,8 @@ public class BetterPathfindingCommand extends Command {
             RobotConfig robotConfig,
             Subsystem... requirements) {
         this(
+                0,
+                0,
                 targetPose,
                 constraints,
                 0.0,
@@ -371,7 +383,14 @@ public class BetterPathfindingCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        double dst = poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
+        double rotation =
+                Math.abs(poseSupplier.get().getRotation().minus(targetPose.getRotation()).getRadians());
+
+        Logger.recordOutput("dstErr", dst);
+        Logger.recordOutput("rotationErr", rotation);
+
+        return dst < translationTolerance && rotation < rotationTolerance;
     }
 
     @Override

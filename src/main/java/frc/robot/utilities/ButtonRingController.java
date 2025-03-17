@@ -1,9 +1,7 @@
 package frc.robot.utilities;
 
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import frc.robot.model.ButtonRingLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
@@ -16,10 +14,9 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
     private double xOffset;
     private int button;
     private int tagID;
+    private final double OFFSET_AMOUNT = 0.1651;
 
     ButtonRingLogAutoLogged buttonRingLogAutoLogged;
-
-    private final double OFFSET_AMOUNT = 0.1651;
 
     public ButtonRingController(int port) {
         super(port);

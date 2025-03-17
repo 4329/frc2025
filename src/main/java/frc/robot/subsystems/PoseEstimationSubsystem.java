@@ -21,6 +21,8 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubsystem {
 
+    public static final double OFFSET = 0.1651;
+
     PoseEstimationLogAutoLogged poseEstimationLogAutoLogged;
 
     private final Drivetrain drivetrain;
@@ -98,7 +100,9 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                     rotOffset != null
                             ? lilihSubsystem.getRobotPose_megaTag2()
                             : lilihSubsystem.getRobotPose();
-            if (poseEstimate.rawFiducials != null && poseEstimate.rawFiducials.length > 0 && poseEstimate.rawFiducials[0].ambiguity < .7) {
+            if (poseEstimate.rawFiducials != null
+                    && poseEstimate.rawFiducials.length > 0
+                    && poseEstimate.rawFiducials[0].ambiguity < .7) {
                 estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
                 if (rotOffset == null) {
                     offsetTimer.start();
@@ -111,6 +115,10 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     @Override
     public void periodic() {
         updateEstimation();
+    }
+
+    public void resetRotOffset() {
+        rotOffset = null;
     }
 
     @Override

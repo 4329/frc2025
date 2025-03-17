@@ -1,11 +1,10 @@
 package frc.robot.commands.driveCommands;
 
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
+import frc.robot.utilities.CenterDistance;
 
 public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     ButtonRingController buttonRingController;
@@ -14,17 +13,21 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     public CenterByButtonRingCommand(
             PoseEstimationSubsystem poseEstimationSubsystem,
             Drivetrain drivetrain,
-            ButtonRingController buttonRingController) {
+            ButtonRingController buttonRingController,
+            CenterDistance centerDistance) {
         super(1, poseEstimationSubsystem, drivetrain);
 
         this.buttonRingController = buttonRingController;
+        this.centerDistance = centerDistance;
     }
 
     @Override
     public void initialize() {
         target =
                 placeTarget(
-                        buttonRingController.getTagID(), buttonRingController.getxOffset() - clawOffset);
+                        buttonRingController.getTagID(),
+                        buttonRingController.getxOffset() - clawOffset,
+                        centerDistance);
         super.initialize();
 
         LEDState.centerRunning = true;
@@ -34,5 +37,15 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     public void end(boolean interrupted) {
         super.end(interrupted);
         LEDState.centerRunning = false;
+    }
+
+    @Override
+    public double getTranslationTolerance() {
+        return centerDistance.getTranslationTolerance();
+    }
+
+    @Override
+    public double getRotationTolerance() {
+        return centerDistance.getRotationTolerance();
     }
 }

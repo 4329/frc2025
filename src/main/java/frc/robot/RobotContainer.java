@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -10,32 +11,33 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.DoAFunctionalCommand;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
-import frc.robot.commands.commandGroups.AlgeeIntakeLameCommand;
-import frc.robot.commands.commandGroups.HappyResetCommand;
-import frc.robot.commands.commandGroups.PositionCoralCommand;
+import frc.robot.commands.autoCommands.AutoActuallyScoreCoralCommand;
+import frc.robot.commands.autoCommands.AutoAlgeeIntake;
+import frc.robot.commands.autoCommands.AutoPositionCoralCommand;
+import frc.robot.commands.autoCommands.AutoScoreCoralButCool;
+import frc.robot.commands.autoCommands.PorcessorCommand;
+import frc.robot.commands.commandGroups.AlgeeIntake;
 import frc.robot.commands.commandGroups.HPStationCommand;
+import frc.robot.commands.commandGroups.HappyResetCommand;
 import frc.robot.commands.commandGroups.ScoreCoralCommand;
 import frc.robot.commands.commandGroups.ScoreWithArm;
 import frc.robot.commands.commandGroups.StartCommand;
-import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
-import frc.robot.commands.driveCommands.CenterOnAlgeeCommand;
-import frc.robot.commands.driveCommands.CenterOnAlgeeCommand;
+import frc.robot.commands.differentialArmCommands.SetArmPitchCommand;
+import frc.robot.commands.elevatorCommands.CoolEvator;
+import frc.robot.commands.elevatorCommands.SetElevatorCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
@@ -43,6 +45,7 @@ import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
+import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.elevator.ElevatorFactory;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
@@ -54,12 +57,9 @@ import frc.robot.utilities.CommandLoginator;
 import frc.robot.utilities.ToggleCommand;
 import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import frc.robot.commands.elevatorCommands.CoolEvator;
-import frc.robot.commands.elevatorCommands.SetElevatorCommand;
 
 /* (including subsystems, commands, and button mappings) should be declared here
  */
@@ -84,8 +84,16 @@ public class RobotContainer {
     // The driver's controllers
     private final CommandXboxController driverController;
     private final CommandXboxController manualController;
+    private final CommandXboxController functionalController;
 
     private final ButtonRingController buttonRingController;
+
+    GenericEntry navx =
+            Shuffleboard.getTab("RobotData")
+                    .add("navX", false)
+                    .withPosition(7, 0)
+                    .withSize(3, 2)
+                    .getEntry();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -98,6 +106,7 @@ public class RobotContainer {
 
         driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
         manualController = new CommandXboxController(OIConstants.kManualControllerPort);
+        functionalController = new CommandXboxController(OIConstants.kFunctionalControllerPort);
         buttonRingController = new ButtonRingController(OIConstants.kOperatorControllerPort);
         Shuffleboard.getTab("RobotData")
                 .add("Octagon", buttonRingController)
@@ -118,7 +127,7 @@ public class RobotContainer {
         lightSubsystem = new LightSubsystem();
 
         new LoggingSubsystem(
-				drivetrain,
+                drivetrain,
                 poseEstimationSubsystem,
                 differentialArmSubsystem,
                 algeePivotSubsystem,
@@ -127,12 +136,114 @@ public class RobotContainer {
                 lightSubsystem);
 
         new CommandLoginator();
-
+        configureNamedCommands();
         configureButtonBindings();
         configureAutoBuilder();
 
         m_chooser = new SendableChooser<>();
         configureAutoChooser(drivetrain);
+
+        new UnInstantCommand("navX", () -> navx.setBoolean(m_robotDrive.getRawGyro().getRadians() != 0))
+                .ignoringDisableLog(true)
+                .repeatedlyLog();
+    }
+
+    private void configureNamedCommands() {
+        NamedCommands.registerCommand(
+                "startCommand",
+                new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
+        NamedCommands.registerCommand(
+                "elevatorL2",
+                new AutoPositionCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L2));
+        NamedCommands.registerCommand(
+                "elevatorScoreL2",
+                new AutoActuallyScoreCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L2));
+
+        NamedCommands.registerCommand(
+                "elevatorL3",
+                new AutoPositionCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L3));
+        NamedCommands.registerCommand(
+                "elevatorScoreL3",
+                new AutoActuallyScoreCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L3));
+
+        NamedCommands.registerCommand(
+                "elevatorL4",
+                new AutoPositionCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L4));
+        NamedCommands.registerCommand(
+                "elevatorScoreL4",
+                new AutoActuallyScoreCoralCommand(
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L4));
+
+        NamedCommands.registerCommand(
+                "intakeCoral", new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
+        NamedCommands.registerCommand(
+                "grabCoral",
+                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO)
+                        .andThen(
+                                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
+        NamedCommands.registerCommand(
+                "intakeAlgeeHigh",
+                new AutoAlgeeIntake(
+                        m_robotDrive,
+                        elevatorSubsystem,
+                        algeeWheelSubsystem,
+                        algeePivotSubsystem,
+                        poseEstimationSubsystem,
+                        ElevatorPosition.ALGEE_HIGH));
+        NamedCommands.registerCommand(
+                "intakeAlgeeLow",
+                new AutoAlgeeIntake(
+                        m_robotDrive,
+                        elevatorSubsystem,
+                        algeeWheelSubsystem,
+                        algeePivotSubsystem,
+                        poseEstimationSubsystem,
+                        ElevatorPosition.ALGEE_LOW));
+        NamedCommands.registerCommand(
+                "elevatorBarge", new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
+        NamedCommands.registerCommand(
+                "actuallyIntakeAlgee", new IntakeAlgeeCommand(algeeWheelSubsystem));
+        for (int i = 0; i < 6; i++) {
+            addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);
+            addCool(i, ElevatorPosition.L3, ElevatorPosition.L3Score);
+            addCool(i, ElevatorPosition.L4, ElevatorPosition.L4);
+        }
+
+        NamedCommands.registerCommand(
+                "lowerArm", new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY));
+    }
+
+    private void addCool(int num, ElevatorPosition position, ElevatorPosition scorePosition) {
+        final String letters = "CBAFED";
+        NamedCommands.registerCommand(
+                "Side" + letters.charAt(num) + "Right" + position,
+                new AutoScoreCoralButCool(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        position,
+                        scorePosition,
+                        differentialArmSubsystem,
+                        poseEstimationSubsystem,
+                        m_robotDrive,
+                        num,
+                        true));
+        NamedCommands.registerCommand(
+                "Side" + letters.charAt(num) + "Left" + position,
+                new AutoScoreCoralButCool(
+                        algeePivotSubsystem,
+                        elevatorSubsystem,
+                        position,
+                        scorePosition,
+                        differentialArmSubsystem,
+                        poseEstimationSubsystem,
+                        m_robotDrive,
+                        num,
+                        false));
     }
 
     private void configureAutoBuilder() {
@@ -170,23 +281,51 @@ public class RobotContainer {
     // spotless:off
 	private void configureButtonBindings() {
 
-		//driverController.start().onTrue(new UnInstantCommand(
-		//			"ToggleFieldOrient",
-		//			driveByController::toggleFieldOrient
-		//			));
+		driverController.start().onTrue(new UnInstantCommand(
+					"ToggleFieldOrient",
+					driveByController::toggleFieldOrient
+					));
 
-		driverController.start().whileTrue(new CenterOnAlgeeCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
-		driverController.back().whileTrue(new CenterByButtonRingCommand(poseEstimationSubsystem, m_robotDrive, buttonRingController));
-	
-		driverController.a().onTrue(new PositionCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
-		driverController.b().onTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
-		driverController.x().whileTrue(new AlgeeIntakeLameCommand(elevatorSubsystem, algeePivotSubsystem, algeeWheelSubsystem, buttonRingController));
-		driverController.y().onTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
+        driverController.back().onTrue(new UnInstantCommand(
+            "ResetRotation",
+            poseEstimationSubsystem::resetRotOffset));
 
-		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
-		driverController.povLeft().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
-		driverController.povUp().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
+		driverController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
+					"ElevatorUp",
+					() -> elevatorSubsystem.runElevator(driverController.getRightTriggerAxis())).repeatedlyLog());
+		driverController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
+					"ElevatorDown",
+					() -> elevatorSubsystem.runElevator(-driverController.getLeftTriggerAxis())).repeatedlyLog());
+
+		driverController.rightBumper().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
+		driverController.leftBumper().whileTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
+
+		driverController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
+		driverController.b().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
+		driverController.x().whileTrue(new AlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, buttonRingController));
+		driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
+
+		driverController.povUp().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
 		driverController.povDown().onTrue(new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
+		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
+		driverController.povLeft().onTrue(new PorcessorCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
+        // driverController.povLeft().whileTrue(new Command() {
+        //     public void initialize() {
+        //         getAuto().initialize();
+        //     };
+
+        //     public void execute() {
+        //         getAuto().execute();
+        //     };
+
+        //     public void end(boolean interrupted) {
+        //         getAuto().end(interrupted);
+        //     };
+
+        //     public boolean isFinished() {
+        //         return getAuto().isFinished();
+        //     };
+        // });
 
 		driverController.rightStick().onTrue(new UnInstantCommand(
 					"ResetOdometry",
@@ -205,11 +344,10 @@ public class RobotContainer {
 		manualController.leftBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
 		manualController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
 
-		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
-
+		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
 		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
 		manualController.b().whileTrue(new ToggleCommand(eleCool).untilLog(eleCool::isFinished));
-		manualController.x().onTrue(new IntakeAlgeeCommand(algeeWheelSubsystem));
+		manualController.x().whileTrue(new IntakeAlgeeCommand(algeeWheelSubsystem));
 		manualController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
 		manualController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(
@@ -229,6 +367,18 @@ public class RobotContainer {
 		manualController.rightStick().onTrue(new UnInstantCommand(
 					"Dif135",
 					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)));
+
+
+        
+                functionalController.a().onFalse(new DoAFunctionalCommand(m_robotDrive, functionalController.getHID(), elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
+
+                functionalController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
+					"ElevatorUp",
+					() -> elevatorSubsystem.runElevator(functionalController.getRightTriggerAxis())).repeatedlyLog());
+                                        
+		functionalController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
+					"ElevatorDown",
+					() -> elevatorSubsystem.runElevator(-functionalController.getLeftTriggerAxis())).repeatedlyLog());
 	}
 
 	// spotless:on
@@ -251,25 +401,30 @@ public class RobotContainer {
                 String name = pathFile.getName().replace(".auto", "");
                 PathPlannerAuto pathCommand = new PathPlannerAuto(name);
                 Command autoCommand =
-                        new SequentialCommandGroup(pathCommand, new InstantCommand(drivetrain::stop));
+                        new LoggedSequentialCommandGroup(
+                                "Auto", pathCommand, new UnInstantCommand("stop", drivetrain::stop));
                 m_chooser.addOption(name, autoCommand);
 
                 autoName.put(autoCommand, pathCommand);
             }
         }
 
-		SysIdRoutine routine = new SysIdRoutine(
-				new SysIdRoutine.Config(null, null, null, null),
-				new SysIdRoutine.Mechanism(differentialArmSubsystem::voltageDrive, differentialArmSubsystem::logMotors, differentialArmSubsystem));
+        SysIdRoutine routine =
+                new SysIdRoutine(
+                        new SysIdRoutine.Config(null, null, null, null),
+                        new SysIdRoutine.Mechanism(
+                                differentialArmSubsystem::voltageDrive,
+                                differentialArmSubsystem::logMotors,
+                                differentialArmSubsystem));
 
-		m_chooser.addOption(
-				"diffid",
-				new LoggedSequentialCommandGroup(
-					"diffid",
-					routine.quasistatic(Direction.kForward),
-					routine.quasistatic(Direction.kForward),
-					routine.dynamic(Direction.kForward),
-					routine.dynamic(Direction.kForward)));
+        m_chooser.addOption(
+                "diffid",
+                new LoggedSequentialCommandGroup(
+                        "diffid",
+                        routine.quasistatic(Direction.kForward),
+                        routine.quasistatic(Direction.kForward),
+                        routine.dynamic(Direction.kForward),
+                        routine.dynamic(Direction.kForward)));
 
         Shuffleboard.getTab("RobotData").add("SelectAuto", m_chooser).withSize(4, 2).withPosition(0, 0);
     }
@@ -287,11 +442,14 @@ public class RobotContainer {
     public void teleopInit() {
         // limDriveSetCommand.schedule();
         // autoZero.schedule();
+
     }
 
     public void autonomousPeriodic() {}
 
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        navx.setDouble(m_robotDrive.getGyro().getRadians());
+    }
 
     /**
      * @return Selected Auto

@@ -2,7 +2,15 @@
   "robotWidth": 0.9,
   "robotLength": 0.9,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Barge",
+    "Side A",
+    "Side B",
+    "Side C",
+    "Side D",
+    "Side E",
+    "Side F"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
@@ -18,15 +26,18 @@
   "driveMotorType": "NEO",
   "driveCurrentLimit": 35.0,
   "wheelCOF": 1.2,
-  "flModuleX": 0.273,
-  "flModuleY": 0.273,
-  "frModuleX": 0.273,
-  "frModuleY": -0.273,
-  "blModuleX": -0.273,
-  "blModuleY": 0.273,
-  "brModuleX": -0.273,
-  "brModuleY": -0.273,
+  "flModuleX": 0.308,
+  "flModuleY": 0.3145,
+  "frModuleX": 0.308,
+  "frModuleY": -0.3145,
+  "blModuleX": -0.308,
+  "blModuleY": 0.3145,
+  "brModuleX": -0.308,
+  "brModuleY": -0.3145,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Coral Claw\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.1016,\"y\":-0.246},\"end\":{\"x\":0.699,\"y\":-0.246},\"strokeWidth\":0.02}}",
+    "{\"name\":\"Algae Claw\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.1016,\"y\":0.23},\"end\":{\"x\":0.478,\"y\":0.23},\"strokeWidth\":0.02}}"
+  ]
 }

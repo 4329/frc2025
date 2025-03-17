@@ -3,6 +3,8 @@ package frc.robot.commands.algeeWheelCommands;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -28,7 +30,7 @@ public class IntakeAlgeeCommandTest {
 
     @BeforeEach
     public void init() {
-        intakeAlgeeCommand = new IntakeAlgeeCommand(algeeWheelSubsystem, 1, timer);
+        intakeAlgeeCommand = new IntakeAlgeeCommand(algeeWheelSubsystem, timer);
         LEDState.algeeWheelHolding = false;
     }
 
@@ -78,9 +80,10 @@ public class IntakeAlgeeCommandTest {
 
     @Test
     public void isFinished() {
-		when(timer.get()).thenReturn(1000.0);
+        when(timer.hasElapsed(anyDouble())).thenReturn(true);
         when(algeeWheelSubsystem.getAlgeed()).thenReturn(true);
         boolean result = intakeAlgeeCommand.isFinished();
+
         assertTrue(result);
         verify(algeeWheelSubsystem).getAlgeed();
     }

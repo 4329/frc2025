@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.model.DrivetrainLogAutoLogged;
-import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.swerve.module.SwerveModule;
 import frc.robot.subsystems.swerve.module.SwerveModuleFactory;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
@@ -59,9 +58,9 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
     // Creates Odometry object to store the pose of the robot
     protected final SwerveDriveOdometry m_odometry;
 
-    private SlewRateLimiter slewX = new SlewRateLimiter(6.5);
-    private SlewRateLimiter slewY = new SlewRateLimiter(6.5);
-    private SlewRateLimiter slewRot = new SlewRateLimiter(10.0);
+    private SlewRateLimiter slewX = new SlewRateLimiter(5); // 6.5
+    private SlewRateLimiter slewY = new SlewRateLimiter(5);
+    private SlewRateLimiter slewRot = new SlewRateLimiter(7); // 10
 
     /** Constructs a DrivetrainImpl and resets the Gyro and Keep Angle parameters */
     public DrivetrainImpl() {
@@ -405,4 +404,8 @@ public class DrivetrainImpl extends SubsystemBase implements Drivetrain {
         };
     }
 
+    @Override
+    public void resetKeepAngle() {
+        keepAngle = getGyro().getRadians();
+    }
 }

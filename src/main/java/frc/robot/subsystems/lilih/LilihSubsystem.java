@@ -2,7 +2,8 @@ package frc.robot.subsystems.lilih;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LilihLog;
 import frc.robot.utilities.LimelightHelpers;
@@ -16,10 +17,14 @@ public class LilihSubsystem extends SubsystemBase {
     private final String limelightHelpNetworkTableName;
 
     LimelightTarget_Fiducial[] limelightResults;
-
     LilihSocket lilihSocket;
 
-    private Timer timer;
+    GenericEntry connected =
+            Shuffleboard.getTab("RobotData")
+                    .add("Lilih Connected", false)
+                    .withPosition(7, 2)
+                    .withSize(3, 2)
+                    .getEntry();
 
     private LilihLog lilihLog;
 
@@ -30,9 +35,6 @@ public class LilihSubsystem extends SubsystemBase {
     }
 
     public LilihSubsystem(int ip, String limelightHelpNetworkTableName) {
-        timer = new Timer();
-        timer.start();
-
         lilihLog = new LilihLog();
         lilihSocket = new LilihSocket(ip);
         this.limelightHelpNetworkTableName = limelightHelpNetworkTableName;
@@ -140,6 +142,7 @@ public class LilihSubsystem extends SubsystemBase {
             }
         }
         lilihLog.limlihConnected = cameraConnected();
+        connected.setBoolean(cameraConnected());
 
         Logger.processInputs("Lilihsubsystem", lilihLog);
     }

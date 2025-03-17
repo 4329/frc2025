@@ -44,7 +44,7 @@ public class ShuffledTrapezoidController extends ProfiledPIDController {
                 });
         builder.addDoubleProperty("tol", this::getPositionTolerance, this::setTolerance);
         builder.addDoubleProperty("setpoint", () -> getGoal().position, this::setGoal);
-        builder.addDoubleProperty("output", () -> output, x -> output = x);
+        // builder.addDoubleProperty("output", () -> output, x -> output = x);
         builder.addDoubleProperty(
                 "speed",
                 () -> getConstraints().maxVelocity,

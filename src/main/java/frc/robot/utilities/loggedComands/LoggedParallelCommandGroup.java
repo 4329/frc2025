@@ -44,7 +44,7 @@ public class LoggedParallelCommandGroup extends LoggedCommandComposer implements
      *
      * @param commands Commands to add to the group.
      */
-    public final void addCommands(Command... commands) {
+    public void addCommands(Command... commands) {
         if (m_commands.containsValue(true)) {
             throw new IllegalStateException(
                     "Commands cannot be added to a composition while it's running");
@@ -67,7 +67,7 @@ public class LoggedParallelCommandGroup extends LoggedCommandComposer implements
     }
 
     @Override
-    public final void initialize() {
+    public void initialize() {
         for (Map.Entry<Command, Boolean> commandRunning : m_commands.entrySet()) {
             commandRunning.getKey().initialize();
             commandRunning.setValue(true);
@@ -76,7 +76,7 @@ public class LoggedParallelCommandGroup extends LoggedCommandComposer implements
     }
 
     @Override
-    public final void execute() {
+    public void execute() {
         for (Map.Entry<Command, Boolean> commandRunning : m_commands.entrySet()) {
             if (!commandRunning.getValue()) {
                 continue;
@@ -94,7 +94,7 @@ public class LoggedParallelCommandGroup extends LoggedCommandComposer implements
     }
 
     @Override
-    public final void end(boolean interrupted) {
+    public void end(boolean interrupted) {
         if (interrupted) {
             for (Map.Entry<Command, Boolean> commandRunning : m_commands.entrySet()) {
                 if (commandRunning.getValue()) {
@@ -106,7 +106,7 @@ public class LoggedParallelCommandGroup extends LoggedCommandComposer implements
     }
 
     @Override
-    public final boolean isFinished() {
+    public boolean isFinished() {
         return !m_commands.containsValue(true);
     }
 

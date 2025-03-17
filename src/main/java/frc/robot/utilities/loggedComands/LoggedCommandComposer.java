@@ -1,7 +1,9 @@
 package frc.robot.utilities.loggedComands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.utilities.UnInstantCommand;
 import java.util.function.BooleanSupplier;
 
 public class LoggedCommandComposer extends Command {
@@ -12,9 +14,9 @@ public class LoggedCommandComposer extends Command {
         return wrapper;
     }
 
-	public LoggedSequentialCommandGroup andThenLog(Command next) {
-		return new LoggedSequentialCommandGroup(this.getName() + "," + next.getName(), this, next);
-	}
+    public LoggedSequentialCommandGroup andThenLog(Command next) {
+        return new LoggedSequentialCommandGroup(this.getName() + "," + next.getName(), this, next);
+    }
 
     public LoggedParallelRaceGroup raceWithLog(String name, Command... parallel) {
         LoggedParallelRaceGroup group = new LoggedParallelRaceGroup(name, this);
@@ -24,6 +26,10 @@ public class LoggedCommandComposer extends Command {
 
     public LoggedParallelRaceGroup untilLog(BooleanSupplier condition) {
         return raceWithLog("Until(" + getName() + ")", new WaitUntilCommand(condition));
+    }
+
+    public LoggedParallelRaceGroup withTimeoutLog(double seconds) {
+        return raceWithLog("Timeout(" + getName() + ")", new WaitCommand(seconds));
     }
 
     public LoggedRepeatCommand repeatedlyLog() {
@@ -46,5 +52,23 @@ public class LoggedCommandComposer extends Command {
                 return !condition.getAsBoolean();
             }
         };
+    }
+
+    public LoggedParallelRaceGroup onlyWhileLog(BooleanSupplier condition) {
+        return untilLog(() -> !condition.getAsBoolean());
+    }
+
+    public LoggedConditionalCommand unlessLog(BooleanSupplier condition) {
+        return new LoggedConditionalCommand(new UnInstantCommand("", () -> {}), this, condition);
+    }
+
+    public LoggedConditionalCommand onlyIfLog(BooleanSupplier condition) {
+        return unlessLog(() -> !condition.getAsBoolean());
+    }
+
+    public LoggedParallelCommandGroup alongWithLog(Command... parallel) {
+        LoggedParallelCommandGroup group = new LoggedParallelCommandGroup(this);
+        group.addCommands(parallel);
+        return group;
     }
 }

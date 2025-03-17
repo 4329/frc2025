@@ -92,7 +92,7 @@ public final class Constants {
         // Center distance in meters between left and right wheels on robot
         public static final double kWheelBaseWidth = 0.629;
         // Center distance in meters between front and back wheels on robot
-		public static final double kWheelBaseLength = 0.616;
+        public static final double kWheelBaseLength = 0.616;
 
         // Because the swerve modules position does not change, define a constant
         // SwerveDriveKinematics for use throughout the code
@@ -109,7 +109,7 @@ public final class Constants {
         public static final double kMaxAngularAccel = Math.PI;
 
         public static final double kLowerBound = 0.02;
-        public static final double kInnerDeadband = 0.12;
+        public static final double kInnerDeadband = 0.07;
         public static final double kOuterDeadband = 0.98;
 
         // Minimum allowable rotation command (in radians/s) assuming user input is
@@ -168,27 +168,15 @@ public final class Constants {
         // controller will be on a different port
         public static final int kManualControllerPort =
                 2; //  When making blah blah blah make the ports different!
+        public static final int kFunctionalControllerPort = 5;
     }
 
     /*
      * Static method containing all Autonomous constants
      */
     public static final class AutoConstants {
-        public static final double kMaxAcceleration = 2.5;
-        public static final double kMaxSpeed =
-                3.25; // Maximum Sustainable Drivetrain Speed under Normal Conditions &
-        // Battery, Robot will not exceed this speed in closed loop control
-        public static final double kMaxAngularSpeed =
-                Math.PI; // Maximum Angular Speed desired. NOTE: Robot can exceed this
-        // but spinning fast is not particularly useful or driver
-        // friendly
-        public static final double kMaxAngularAccel =
-                Math.PI; // Maximum Angular Speed desired. NOTE: Robot can exceed this
-        // but spinning fast is not particularly useful or driver
-        // friendly
-
-        public static PIDConstants translationPID = new PIDConstants(3, 0, 0);
-        public static PIDConstants rotationPID = new PIDConstants(1.5, 0, 0);
+        public static PIDConstants translationPID = new PIDConstants(0.1, 0, 0);
+        public static PIDConstants rotationPID = new PIDConstants(0.01, 0, 0);
         public static PathFollowingController ppHolonomicDriveController =
                 new PPHolonomicDriveController(
                         Constants.AutoConstants.translationPID, Constants.AutoConstants.rotationPID);

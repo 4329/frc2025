@@ -11,6 +11,7 @@ import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.WebsocketListener;
 import java.net.URI;
 import java.net.http.HttpClient;
+import org.littletonrobotics.junction.Logger;
 
 public class LilihSocket {
 
@@ -32,7 +33,12 @@ public class LilihSocket {
         listener = new WebsocketListener();
         httpClient
                 .newWebSocketBuilder()
-                .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener);
+                .buildAsync(URI.create("ws://10.43.29." + ip + ":5806"), listener)
+                .exceptionallyAsync(
+                        e -> {
+                            Logger.recordOutput("lilihException", e.getMessage());
+                            return null;
+                        });
     }
 
     public boolean isConnected() {

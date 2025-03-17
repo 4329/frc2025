@@ -4,10 +4,6 @@
 
 package frc.robot.subsystems.swerve.module;
 
-import org.littletonrobotics.junction.Logger;
-
-// import com.ctre.phoenix.motorcontrol.NeutralMode;
-// import com.revrobotics.CANEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -26,6 +22,8 @@ import frc.robot.subsystems.swerve.module.encoderNonsense.ReduxEncoder;
 import frc.robot.subsystems.swerve.module.encoderNonsense.ThriftyEncoder;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.SparkFactory;
+import frc.robot.utilities.shufflebored.*;
+import org.littletonrobotics.junction.Logger;
 
 /** Implements a swerve module for the Robot */
 public class SwerveModuleImpl implements SwerveModule {
@@ -65,7 +63,7 @@ public class SwerveModuleImpl implements SwerveModule {
     // Creates a PIDController for the control of the anglular position of the
     // swerve module
     private final PIDController m_turningPIDController =
-            new PIDController(
+            new ShuffledPIDController(
                     ModuleConstants.kTurnPID[0], ModuleConstants.kTurnPID[1], ModuleConstants.kTurnPID[2]);
 
     private double angularOffset;
@@ -145,7 +143,7 @@ public class SwerveModuleImpl implements SwerveModule {
         // Limit the PID Controller's input range between -pi and pi and set the input
         // to be continuous so the PID will command the shortest path.
         m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-		m_turningPIDController.setTolerance(0);
+        m_turningPIDController.setTolerance(0);
 
         // Creates the SimpleMotorFeedForward for the swerve module using the static and
         // feedforward gains from the tuningVals array
@@ -157,6 +155,8 @@ public class SwerveModuleImpl implements SwerveModule {
 
         // Sets the moduleID to the value stored in the tuningVals array
         moduleID = tuningVals[3];
+
+        // Shuffleboard.getTab("pidswerve").add(moduleID + "", m_turningPIDController);
     }
 
     /**
@@ -186,7 +186,8 @@ public class SwerveModuleImpl implements SwerveModule {
         desiredState.optimize(new Rotation2d(getTurnEncoder()));
         // Calculate the drive output from the drive PID controller.
         final double driveOutput =
-                m_drivePIDController.calculate(m_driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
+                m_drivePIDController.calculate(
+                        m_driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
         // Calculates the desired feedForward motor % from the current desired velocity
         // and the static and feedforward gains
         final double driveFF = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
@@ -197,7 +198,7 @@ public class SwerveModuleImpl implements SwerveModule {
         // Calculate the turning motor output from the turning PID controller.
         final double turnOutput =
                 m_turningPIDController.calculate(getTurnEncoder(), desiredState.angle.getRadians());
-		Logger.recordOutput("" + moduleID, m_turningPIDController.getError());
+        Logger.recordOutput("" + moduleID, m_turningPIDController.getError());
         // Set the turning motor to this output value
         m_turningMotor.set(-turnOutput);
     }

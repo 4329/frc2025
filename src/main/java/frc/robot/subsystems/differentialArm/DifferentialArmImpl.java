@@ -8,7 +8,6 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -17,8 +16,8 @@ import frc.robot.Constants;
 import frc.robot.model.DifferentialArmLogAutoLogged;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
-import org.littletonrobotics.junction.inputs.LoggableInputs;
 import frc.robot.utilities.shufflebored.*;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class DifferentialArmImpl extends SubsystemBase implements DifferentialArmSubsystem {
     private final double PITCH_SPEED = .05;
@@ -51,7 +50,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         pitchPID =
                 new ShuffledTrapezoidController(0.2, 1, 0.0025, new TrapezoidProfile.Constraints(6, 8));
         pitchPID.setIZone(0.3);
-		pitchPID.setTolerance(0.1);
+        pitchPID.setTolerance(0.1);
         pitchPID.setGoal(0);
 
         Shuffleboard.getTab("Asdf").add("diff", pitchPID);
@@ -67,7 +66,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     @Override
     public void setPitchTarget(DifferentialArmPitch pitchTarget) {
-		setPitchTarget(pitchTarget.rotation);
+        setPitchTarget(pitchTarget.rotation);
     }
 
     @Override
@@ -86,6 +85,11 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     }
 
     @Override
+    public double getPitchSetpoint() {
+        return pitchPID.getGoal().position;
+    }
+
+    @Override
     public boolean pitchAtSetpoint() {
         return pitchPID.atGoal();
     }
@@ -95,20 +99,19 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         motor1.set(pitchPID.calculate(getPitch()));
     }
 
-	@Override
-	public void voltageDrive(Voltage voltage) {
-		motor1.setVoltage(voltage);
-	}
+    @Override
+    public void voltageDrive(Voltage voltage) {
+        motor1.setVoltage(voltage);
+    }
 
-	@Override
-	public void logMotors(SysIdRoutineLog log) {
-	}
+    @Override
+    public void logMotors(SysIdRoutineLog log) {}
 
     @Override
     public LoggableInputs log() {
         differentialArmLogAutoLogged.pitch = getPitch();
         differentialArmLogAutoLogged.pitchTarget = pitchPID.getGoal().position;
-		differentialArmLogAutoLogged.atSetpoint = pitchAtSetpoint();
+        differentialArmLogAutoLogged.atSetpoint = pitchAtSetpoint();
 
         return differentialArmLogAutoLogged;
     }

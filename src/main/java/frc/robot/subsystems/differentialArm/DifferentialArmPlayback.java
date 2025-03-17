@@ -32,6 +32,12 @@ public class DifferentialArmPlayback extends SubsystemBase implements Differenti
     }
 
     @Override
+    public double getPitchSetpoint() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPitchSetpoint'");
+    }
+
+    @Override
     public boolean pitchAtSetpoint() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'pitchAtSetpoint'");
@@ -43,15 +49,15 @@ public class DifferentialArmPlayback extends SubsystemBase implements Differenti
         throw new UnsupportedOperationException("Unimplemented method 'runPitch'");
     }
 
-	@Override
-	public void voltageDrive(Voltage voltage) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'voltageDrive'");
-	}
+    @Override
+    public void voltageDrive(Voltage voltage) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'voltageDrive'");
+    }
 
-	@Override
-	public void logMotors(SysIdRoutineLog log) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'logMotors'");
-	}
+    @Override
+    public void logMotors(SysIdRoutineLog log) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'logMotors'");
+    }
 }

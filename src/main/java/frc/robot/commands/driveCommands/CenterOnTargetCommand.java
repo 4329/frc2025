@@ -4,46 +4,43 @@ import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
-import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.BetterPathfindingCommand;
+import frc.robot.utilities.CenterDistance;
+import frc.robot.utilities.loggedComands.LoggedCommandComposer;
 import org.littletonrobotics.junction.Logger;
 
-public class CenterOnTargetCommand extends Command {
-    PoseEstimationSubsystem poseEstimationSubsystem;
+public class CenterOnTargetCommand extends LoggedCommandComposer {
+    protected PoseEstimationSubsystem poseEstimationSubsystem;
     Drivetrain drivetrain;
     Command pathFind;
     protected Pose2d target;
-
+    protected CenterDistance centerDistance;
     private final PathConstraints constraints =
             new PathConstraints(2, 1.0, Math.PI / 4, Math.PI / 16); // The constraints for this path.
 
-    double zDist = DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER;
-
     public CenterOnTargetCommand(
             int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {
-        this(targetID, poseEstimationSubsystem, drivetrain, 0);
+        this(targetID, poseEstimationSubsystem, drivetrain, 0, CenterDistance.INITIAL);
     }
 
     public CenterOnTargetCommand(
             int targetID,
             PoseEstimationSubsystem poseEstimationSubsystem,
             Drivetrain drivetrain,
-            double xOffset) {
+            double xOffset,
+            CenterDistance centerDistance) {
         this.poseEstimationSubsystem = poseEstimationSubsystem;
         this.drivetrain = drivetrain;
 
-        target = placeTarget(targetID, xOffset);
+        target = placeTarget(targetID, xOffset, centerDistance);
     }
 
-    Pose2d placeTarget(int targetID, double xOffset) {
+    public Pose2d placeTarget(int targetID, double xOffset, CenterDistance centerDistance) {
         Pose3d tmp = poseEstimationSubsystem.getTagPose(targetID);
         if (tmp == null) return null;
 
@@ -52,10 +49,10 @@ public class CenterOnTargetCommand extends Command {
         target =
                 new Pose2d(
                         target.getX()
-                                + target.getRotation().getCos() * zDist
+                                + target.getRotation().getCos() * centerDistance.getzDist()
                                 + Math.cos(target.getRotation().getRadians() + Math.PI / 2) * xOffset,
                         target.getY()
-                                + target.getRotation().getSin() * zDist
+                                + target.getRotation().getSin() * centerDistance.getzDist()
                                 + Math.sin(target.getRotation().getRadians() + Math.PI / 2) * xOffset,
                         new Rotation2d(target.getRotation().getRadians() + Math.PI));
         Logger.recordOutput("posy", target);
@@ -69,6 +66,8 @@ public class CenterOnTargetCommand extends Command {
 
         pathFind =
                 new BetterPathfindingCommand(
+                        getTranslationTolerance(),
+                        getRotationTolerance(),
                         target,
                         constraints,
                         0,
@@ -85,35 +84,23 @@ public class CenterOnTargetCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        if (target == null) return true;
-
-        Logger.recordOutput(
-                "off",
-                poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation()));
-        Logger.recordOutput(
-                "off2",
-                Math.abs(
-                        poseEstimationSubsystem
-                                .getPose()
-                                .getRotation()
-                                .minus(target.getRotation())
-                                .getRadians()));
-
-        return poseEstimationSubsystem.getPose().getTranslation().getDistance(target.getTranslation())
-                        < 0.002
-                && Math.abs(
-                                poseEstimationSubsystem
-                                        .getPose()
-                                        .getRotation()
-                                        .minus(target.getRotation())
-                                        .getRadians())
-                        < 0.01;
+        return pathFind.isFinished();
     }
 
     @Override
     public void end(boolean interrupted) {
         if (pathFind != null) pathFind.cancel();
 
+        drivetrain.resetKeepAngle();
         LEDState.centerRunning = false;
+        drivetrain.stop();
+    }
+
+    public double getTranslationTolerance() {
+        return 0.002;
+    }
+
+    public double getRotationTolerance() {
+        return 0.01;
     }
 }

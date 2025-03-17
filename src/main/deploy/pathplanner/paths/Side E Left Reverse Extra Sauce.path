@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.57,
+        "y": 3.03
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.293730226471073,
+        "y": 2.457802075126869
+      },
+      "isLocked": false,
+      "linkedName": "Side E Left Score"
+    },
+    {
+      "anchor": {
+        "x": 3.3542664853581208,
+        "y": 2.6184839259045747
+      },
+      "prevControl": {
+        "x": 3.620767262111179,
+        "y": 3.1244949218341334
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Side E Left"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": "Side E",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "useDefaultConstraints": true
+}

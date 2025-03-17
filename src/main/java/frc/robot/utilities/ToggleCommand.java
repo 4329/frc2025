@@ -9,8 +9,8 @@ public class ToggleCommand extends LoggedCommandComposer {
     private Command child;
 
     public ToggleCommand(Command child) {
-		//child being canceled when disable ends is not a good
-		//is there a better solution for this WIP
+        // child being canceled when disable ends is not a good
+        // is there a better solution for this WIP
         this.child = child.ignoringDisable(true);
         setName("Toggle(" + child.getName() + ")");
     }

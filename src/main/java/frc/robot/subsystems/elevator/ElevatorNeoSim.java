@@ -5,13 +5,16 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import frc.robot.model.ElevatorLogAutoLogged;
 
-public class ElevatorSim extends ElevatorImpl {
+public class ElevatorNeoSim extends ElevatorNeo {
 
     private SparkMaxSim motorSim;
     private edu.wpi.first.wpilibj.simulation.ElevatorSim elevatorSim;
 
-    public ElevatorSim() {
+	private double volts;
+
+    public ElevatorNeoSim() {
 
         DCMotor gearbox = DCMotor.getNEO(2);
         motorSim = new SparkMaxSim(motor1, gearbox);
@@ -21,22 +24,30 @@ public class ElevatorSim extends ElevatorImpl {
                         16,
                         Units.lbsToKilograms(25),
                         Units.inchesToMeters(1.788 / 2),
-                        MIN,
-                        MAX,
+                        ElevatorSubsystem.MIN - ELEVATOR_START,
+                        ElevatorSubsystem.MAX - ELEVATOR_START,
                         true,
-                        ELEVATOR_START,
+                        0,
                         0.01,
                         0.0);
     }
 
     @Override
     public void simulationPeriodic() {
-        elevatorSim.setInput(motorSim.getAppliedOutput() * RoboRioSim.getVInVoltage());
+        elevatorSim.setInput(volts * RoboRioSim.getVInVoltage());
         elevatorSim.update(0.02);
-
-        motorSim.iterate(elevatorSim.getVelocityMetersPerSecond(), RoboRioSim.getVInVoltage(), 0.02);
 
         RoboRioSim.setVInVoltage(
                 BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSim.getCurrentDrawAmps()));
     }
+
+	@Override
+	public void set(double speed) {
+		volts = speed * 12;
+	}
+
+	@Override
+	public void updateInputs(ElevatorLogAutoLogged inputs) {
+		inputs.position = elevatorSim.getPositionMeters();
+	}
 }

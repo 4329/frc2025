@@ -46,7 +46,6 @@ import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
-import frc.robot.subsystems.elevator.ElevatorFactory;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.light.LightSubsystem;
@@ -123,7 +122,6 @@ public class RobotContainer {
         algeeWheelSubsystem = new AlgeeWheelSubsystem();
         // intakePivotSubsystem = new IntakePivotSubsystem();
         // intakeWheelSubsystem = new IntakeWheelSubsystem();
-        elevatorSubsystem = ElevatorFactory.createElevatorSubsystem();
         lightSubsystem = new LightSubsystem();
 
         new LoggingSubsystem(
@@ -131,9 +129,10 @@ public class RobotContainer {
                 poseEstimationSubsystem,
                 differentialArmSubsystem,
                 algeePivotSubsystem,
-                elevatorSubsystem,
                 buttonRingController,
                 lightSubsystem);
+
+		elevatorSubsystem = new ElevatorSubsystem();
 
         new CommandLoginator();
         configureNamedCommands();

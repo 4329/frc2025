@@ -31,7 +31,7 @@ public class ElevatorNeo extends SubsystemBase implements ElevatorIO {
                                 new SoftLimitConfig()
                                         .forwardSoftLimit(ElevatorSubsystem.MAX)
                                         .forwardSoftLimitEnabled(true)
-                                        .reverseSoftLimit(ElevatorSubsystem.MAX)
+                                        .reverseSoftLimit(ElevatorSubsystem.MIN)
                                         .reverseSoftLimitEnabled(true));
 
         motor1.configure(configgled, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

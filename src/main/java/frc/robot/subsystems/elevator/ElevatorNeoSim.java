@@ -12,7 +12,7 @@ public class ElevatorNeoSim extends ElevatorNeo {
     private SparkMaxSim motorSim;
     private edu.wpi.first.wpilibj.simulation.ElevatorSim elevatorSim;
 
-	private double volts;
+    private double volts;
 
     public ElevatorNeoSim() {
 
@@ -41,13 +41,13 @@ public class ElevatorNeoSim extends ElevatorNeo {
                 BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSim.getCurrentDrawAmps()));
     }
 
-	@Override
-	public void set(double speed) {
-		volts = speed * 12;
-	}
+    @Override
+    public void set(double speed) {
+        volts = speed * 12;
+    }
 
-	@Override
-	public void updateInputs(ElevatorLogAutoLogged inputs) {
-		inputs.position = elevatorSim.getPositionMeters();
-	}
+    @Override
+    public void updateInputs(ElevatorLogAutoLogged inputs) {
+        inputs.position = elevatorSim.getPositionMeters();
+    }
 }

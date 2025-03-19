@@ -1,7 +1,5 @@
 package frc.robot.subsystems.elevator;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -9,6 +7,7 @@ import frc.robot.Constants;
 import frc.robot.model.ElevatorLogAutoLogged;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.MathUtils;
+import org.littletonrobotics.junction.Logger;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -45,48 +44,50 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
     }
 
-	ElevatorLogAutoLogged inputs = new ElevatorLogAutoLogged();
-	ElevatorIO io;
+    ElevatorLogAutoLogged inputs = new ElevatorLogAutoLogged();
+    ElevatorIO io;
 
     private double ELEVATOR_SPEED = 2;
 
     ProfiledPIDController elevatorPID;
 
-	public ElevatorSubsystem() {
-		io = switch (Constants.robotMode) {
-			case REAL -> HoorayConfig.gimmeConfig().getIsElevatorNeo() ? new ElevatorNeo() : new ElevatorFalcon();
-            case SIM -> new ElevatorNeoSim();
-            default -> new ElevatorIO() {};
-        };
+    public ElevatorSubsystem() {
+        io =
+                switch (Constants.robotMode) {
+                    case REAL -> HoorayConfig.gimmeConfig().getIsElevatorNeo()
+                            ? new ElevatorNeo()
+                            : new ElevatorFalcon();
+                    case SIM -> new ElevatorNeoSim();
+                    default -> new ElevatorIO() {};
+                };
 
-		elevatorPID = new ProfiledPIDController(0.09, 0, 0, new TrapezoidProfile.Constraints(160, 240));
-		elevatorPID.setTolerance(1);
-	}
+        elevatorPID = new ProfiledPIDController(0.09, 0, 0, new TrapezoidProfile.Constraints(160, 240));
+        elevatorPID.setTolerance(1);
+    }
 
+    public void setSetpoint(ElevatorPosition setpoint) {
+        elevatorPID.setGoal(setpoint.pos);
+    }
 
-	public void setSetpoint(ElevatorPosition setpoint) {
-		elevatorPID.setGoal(setpoint.pos);
-	}
+    private void setSetpoint(double setpoint) {
+        elevatorPID.setGoal(MathUtils.clamp(MIN, MAX, setpoint));
+    }
 
-	private void setSetpoint(double setpoint) {
-		elevatorPID.setGoal(MathUtils.clamp(MIN, MAX, setpoint));
-	}
+    public void runElevator(double dir) {
+        setSetpoint(elevatorPID.getGoal().position + ELEVATOR_SPEED * dir);
+    }
 
-	public void runElevator(double dir) {
-		setSetpoint(elevatorPID.getGoal().position + ELEVATOR_SPEED * dir);
-	}
+    public boolean atSetpoint() {
+        return elevatorPID.atGoal();
+    }
 
-	public boolean atSetpoint() {
-		return elevatorPID.atGoal();
-	}
-
-	@Override
-	public void periodic() {
-		io.updateInputs(inputs);
-		inputs.setpoint = elevatorPID.getGoal().position;
-		inputs.atSetpoint = atSetpoint();
-		Logger.processInputs("ElevatorSubsystem", inputs);
+    @Override
+    public void periodic() {
+        io.updateInputs(inputs);
+        inputs.setpoint = elevatorPID.getGoal().position;
+        inputs.atSetpoint = atSetpoint();
+        Logger.processInputs("ElevatorSubsystem", inputs);
 
         io.set(MathUtils.clamp(-1, 1, elevatorPID.calculate(inputs.position)));
-	}
+    }
 }

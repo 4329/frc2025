@@ -15,7 +15,7 @@ public class CoolEvator extends Command {
 
     public CoolEvator(ElevatorSubsystem elevatorSubsystem) {
         this.elevatorSubsystem = elevatorSubsystem;
-		addRequirements(elevatorSubsystem);
+        addRequirements(elevatorSubsystem);
     }
 
     @Override

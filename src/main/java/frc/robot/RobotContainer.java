@@ -132,7 +132,7 @@ public class RobotContainer {
                 buttonRingController,
                 lightSubsystem);
 
-		elevatorSubsystem = new ElevatorSubsystem();
+        elevatorSubsystem = new ElevatorSubsystem();
 
         new CommandLoginator();
         configureNamedCommands();

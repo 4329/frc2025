@@ -7,7 +7,6 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.ElevatorLogAutoLogged;
@@ -44,13 +43,13 @@ public class ElevatorNeo extends SubsystemBase implements ElevatorIO {
         motor1Encoder = motor1.getEncoder();
     }
 
-	@Override
-	public void set(double speed) {
-		motor1.set(speed);
-	}
+    @Override
+    public void set(double speed) {
+        motor1.set(speed);
+    }
 
-	@Override
-	public void updateInputs(ElevatorLogAutoLogged inputs) {
-		inputs.position = motor1Encoder.getPosition();
-	}
+    @Override
+    public void updateInputs(ElevatorLogAutoLogged inputs) {
+        inputs.position = motor1Encoder.getPosition();
+    }
 }

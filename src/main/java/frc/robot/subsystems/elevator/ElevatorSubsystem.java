@@ -54,7 +54,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 	public ElevatorSubsystem() {
 		io = switch (Constants.robotMode) {
-			case REAL -> HoorayConfig.gimmeConfig().isElevatorNeo() ? new ElevatorNeo() : new ElevatorFalcon();
+			case REAL -> HoorayConfig.gimmeConfig().getIsElevatorNeo() ? new ElevatorNeo() : new ElevatorFalcon();
             case SIM -> new ElevatorNeoSim();
             default -> new ElevatorIO() {};
         };

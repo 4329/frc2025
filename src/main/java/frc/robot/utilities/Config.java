@@ -67,7 +67,7 @@ public class Config {
 
 	private boolean isElevatorNeo = false;
 
-    public boolean isElevatorNeo() {
+    public boolean getIsElevatorNeo() {
 		return isElevatorNeo;
 	}
 

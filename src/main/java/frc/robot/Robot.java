@@ -27,6 +27,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
+import com.ctre.phoenix6.SignalLogger;
+
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
@@ -76,6 +78,7 @@ public class Robot extends LoggedRobot {
             // logging
             Constants.robotMode = Mode.REAL;
 
+			SignalLogger.setPath(logFolder.getAbsolutePath());
         } else if (isSimulation()) {
             Logger.addDataReceiver(new NT4Publisher());
             Constants.robotMode = Mode.SIM;
@@ -95,6 +98,7 @@ public class Robot extends LoggedRobot {
         // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in
         // the "Understanding Data Flow" page
 
+		SignalLogger.start();
         Logger.recordMetadata("mode", Constants.robotMode.toString());
 
         Logger.recordMetadata("encoderType", HoorayConfig.gimmeConfig().getEncoderType().toString());

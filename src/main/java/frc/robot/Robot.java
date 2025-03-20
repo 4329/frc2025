@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -26,8 +27,6 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
-
-import com.ctre.phoenix6.SignalLogger;
 
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
@@ -78,7 +77,7 @@ public class Robot extends LoggedRobot {
             // logging
             Constants.robotMode = Mode.REAL;
 
-			SignalLogger.setPath(logFolder.getAbsolutePath());
+            SignalLogger.setPath(logFolder.getAbsolutePath());
         } else if (isSimulation()) {
             Logger.addDataReceiver(new NT4Publisher());
             Constants.robotMode = Mode.SIM;
@@ -98,7 +97,7 @@ public class Robot extends LoggedRobot {
         // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in
         // the "Understanding Data Flow" page
 
-		SignalLogger.start();
+        SignalLogger.start();
         Logger.recordMetadata("mode", Constants.robotMode.toString());
 
         Logger.recordMetadata("encoderType", HoorayConfig.gimmeConfig().getEncoderType().toString());

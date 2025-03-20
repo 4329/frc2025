@@ -22,5 +22,6 @@
 
     "kPTheta": 1.25,
 
-    "encoderType": "REDUX"
+    "encoderType": "REDUX",
+	"isElevatorNeo": false
 }

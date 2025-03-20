@@ -2,17 +2,20 @@ package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.ElevatorLogAutoLogged;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.MathUtils;
+import frc.robot.utilities.shufflebored.ShuffledTrapezoidController;
+
 import org.littletonrobotics.junction.Logger;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-    static final double MIN = -25;
-    static final double MAX = 264;
+    static final double MIN = -7.2;
+    static final double MAX = 98.5;
 
     public enum ElevatorPosition {
         L2(57.4),
@@ -27,14 +30,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         ALGEE_LOW(30.26),
         ALGEE_HIGH(103.41),
 
-        NET(263),
+        NET(97),
 
         ZERO(0),
         PORCESSOR(
                 -23), // WIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIPWIP
 
-        DIFFERENTIAL_ARM_OUT(19.7),
-        ALGEE_CLAW_OUT(-14.4),
+        DIFFERENTIAL_ARM_OUT(7.8),
+        ALGEE_CLAW_OUT(-4.18),
         ;
 
         double pos;
@@ -61,12 +64,13 @@ public class ElevatorSubsystem extends SubsystemBase {
                     default -> new ElevatorIO() {};
                 };
 
-        elevatorPID = new ProfiledPIDController(0.09, 0, 0, new TrapezoidProfile.Constraints(160, 240));
+        elevatorPID = new ShuffledTrapezoidController(0.09, 0, 0, new TrapezoidProfile.Constraints(160, 240));
+		Shuffleboard.getTab("Asdf").add("asdf", elevatorPID);
         elevatorPID.setTolerance(1);
     }
 
     public void setSetpoint(ElevatorPosition setpoint) {
-        elevatorPID.setGoal(setpoint.pos);
+		setSetpoint(setpoint.pos);
     }
 
     private void setSetpoint(double setpoint) {

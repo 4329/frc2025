@@ -1,6 +1,9 @@
 package frc.robot.commands.driveCommands;
 
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.pathfinding.LocalADStar;
+import com.pathplanner.lib.pathfinding.Pathfinding;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,7 +24,7 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
     protected Pose2d target;
     protected CenterDistance centerDistance;
     private final PathConstraints constraints =
-            new PathConstraints(2, 1.0, Math.PI / 4, Math.PI / 16); // The constraints for this path.
+            new PathConstraints(2, 1.0, Math.PI / 4, Math.PI / 16);
 
     public CenterOnTargetCommand(
             int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {
@@ -63,6 +66,8 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
     @Override
     public void initialize() {
         if (target == null) return;
+
+		Pathfinding.setPathfinder(new LocalADStar());
 
         pathFind =
                 new BetterPathfindingCommand(

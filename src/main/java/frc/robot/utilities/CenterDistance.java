@@ -3,7 +3,7 @@ package frc.robot.utilities;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 
 public enum CenterDistance {
-    INITIAL(DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER * 2, 0.1, 0.04),
+    INITIAL(DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER + 0.3, 0.1, 0.1),
     SCORING(DifferentialArmSubsystem.ARM_LENGTH_CORAL_CENTER, 0.05, 0.03);
 
     private double zDist;

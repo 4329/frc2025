@@ -23,15 +23,13 @@ public class StartCommand extends LoggedSequentialCommandGroup {
 		addCommands(
 				new LoggedParallelCommandGroup(
 					"EleAndArm",
-					new LoggedWaitCommand(1.0 / 3).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)).withName("Wait then set elevator"),
-					new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY)
+					new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
+					new LoggedWaitCommand(2.0 / 3).andThenLog(new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY))
 					),
 
-				new LoggedParallelCommandGroup(
-					"EleAndAlgee",
-					new LoggedWaitCommand(1.0 / 3).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ALGEE_CLAW_OUT)),
+					new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ALGEE_CLAW_OUT),
 					new SetAlgeePivotCommand(
-						algeePivotSubsystem, AlgeePivotSubsystem.AlgeePivotAngle.OUTFORCORAL))
+						algeePivotSubsystem, AlgeePivotSubsystem.AlgeePivotAngle.OUTFORCORAL)
 				);
     }
 }

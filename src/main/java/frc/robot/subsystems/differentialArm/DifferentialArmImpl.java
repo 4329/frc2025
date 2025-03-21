@@ -60,7 +60,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     private SparkBaseConfig configureMotor() {
         SparkBaseConfig config1 = new SparkMaxConfig().smartCurrentLimit(30);
-        config1.encoder.positionConversionFactor(Math.PI / 4);
+        config1.encoder.positionConversionFactor(Math.PI / 4); //2.6738 //0.5871792953848455381853541775749
         return config1;
     }
 

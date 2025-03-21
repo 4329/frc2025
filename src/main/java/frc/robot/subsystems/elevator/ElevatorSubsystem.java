@@ -18,13 +18,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     static final double MAX = 98.5;
 
     public enum ElevatorPosition {
-        L2(57.4),
-        L2Score(10),
+        L2(20.95),
+        L2Score(6.32),
 
-        L3(125.46),
-        L3Score(57.81),
+        L3(47.86),
+        L3Score(20.9),
 
-        L4(196),
+        L4(73.697),
         L4AGAIN(L4.pos),
 
         ALGEE_LOW(30.26),

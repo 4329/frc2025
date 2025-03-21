@@ -25,11 +25,11 @@ public class LoggedCommandComposer extends Command {
     }
 
     public LoggedParallelRaceGroup untilLog(BooleanSupplier condition) {
-        return raceWithLog("Until(" + getName() + ")", new WaitUntilCommand(condition));
+        return raceWithLog("Until(" + getName() + ")", new LoggedWaitUntilCommand(condition));
     }
 
     public LoggedParallelRaceGroup withTimeoutLog(double seconds) {
-        return raceWithLog("Timeout(" + getName() + ")", new WaitCommand(seconds));
+        return raceWithLog("Timeout(" + getName() + ")", new LoggedWaitCommand(seconds));
     }
 
     public LoggedRepeatCommand repeatedlyLog() {

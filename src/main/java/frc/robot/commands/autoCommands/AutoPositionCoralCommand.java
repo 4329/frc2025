@@ -25,7 +25,7 @@ public class AutoPositionCoralCommand extends Command {
     public void execute() {
         differentialArmSubsystem.setPitchTarget(
                 ElevatorPosition.L4.equals(elevatorPosition)
-                        ? DifferentialArmPitch.ONETHIRTYFIVE
+                        ? DifferentialArmPitch.ONE_THIRTY_FIVE
                         : DifferentialArmPitch.NINETY);
 
         elevatorSubsystem.setSetpoint(elevatorPosition);

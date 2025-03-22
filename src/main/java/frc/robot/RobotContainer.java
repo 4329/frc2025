@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -299,7 +300,7 @@ public class RobotContainer {
 					() -> elevatorSubsystem.runElevator(-driverController.getLeftTriggerAxis())).repeatedlyLog());
 
 		driverController.rightBumper().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
-		driverController.leftBumper().whileTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
+		driverController.leftBumper().whileTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController, algeePivotSubsystem));
 
 		driverController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
 		driverController.b().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
@@ -310,27 +311,11 @@ public class RobotContainer {
 		driverController.povDown().onTrue(new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
 		driverController.povLeft().onTrue(new PorcessorCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
-        // driverController.povLeft().whileTrue(new Command() {
-        //     public void initialize() {
-        //         getAuto().initialize();
-        //     };
-
-        //     public void execute() {
-        //         getAuto().execute();
-        //     };
-
-        //     public void end(boolean interrupted) {
-        //         getAuto().end(interrupted);
-        //     };
-
-        //     public boolean isFinished() {
-        //         return getAuto().isFinished();
-        //     };
-        // });
 
 		driverController.rightStick().onTrue(new UnInstantCommand(
 					"ResetOdometry",
 					() -> m_robotDrive.resetOdometry(new Pose2d())));
+
 
 		manualController.start().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
 		manualController.back().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
@@ -348,7 +333,7 @@ public class RobotContainer {
 		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
 		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
 		manualController.b().whileTrue(new ToggleCommand(eleCool).untilLog(eleCool::isFinished));
-		manualController.x().whileTrue(new UnInstantCommand("Intake", () -> algeeWheelSubsystem.run(-1)));
+		manualController.x().whileTrue(new IntakeAlgeeCommand(algeeWheelSubsystem));
 		manualController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
 		manualController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(
@@ -367,7 +352,7 @@ public class RobotContainer {
 
 		manualController.rightStick().onTrue(new UnInstantCommand(
 					"Dif135",
-					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)));
+					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONE_THIRTY_FIVE)));
 
 
         
@@ -377,7 +362,7 @@ public class RobotContainer {
 					"ElevatorUp",
 					() -> elevatorSubsystem.runElevator(functionalController.getRightTriggerAxis())).repeatedlyLog());
                                         
-		functionalController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
+				functionalController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
 					"ElevatorDown",
 					() -> elevatorSubsystem.runElevator(-functionalController.getLeftTriggerAxis())).repeatedlyLog());
 	}

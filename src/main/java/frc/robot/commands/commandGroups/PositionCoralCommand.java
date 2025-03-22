@@ -27,9 +27,12 @@ public class PositionCoralCommand extends Command {
     @Override
     public void execute() {
         differentialArmSubsystem.setPitchTarget(
-                buttonRingController.getLevel() == 4
-                        ? DifferentialArmPitch.ONETHIRTYFIVE
-                        : DifferentialArmPitch.NINETY);
+                switch (buttonRingController.getLevel()) {
+                    case 2 -> DifferentialArmPitch.NINETY_PLUS;
+                    case 3 -> DifferentialArmPitch.NINETY;
+                    case 4 -> DifferentialArmPitch.ONE_THIRTY_FIVE;
+                    default -> DifferentialArmPitch.NINETY;
+                });
 
         elevatorSubsystem.setSetpoint(
                 switch (buttonRingController.getLevel()) {

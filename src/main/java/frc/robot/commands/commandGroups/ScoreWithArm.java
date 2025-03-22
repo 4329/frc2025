@@ -46,7 +46,7 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
                         ),
                 new CenterByButtonRingCommand(
                         poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING),
-                new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
+                new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController, algeePivotSubsystem));
     }
 
     @Override

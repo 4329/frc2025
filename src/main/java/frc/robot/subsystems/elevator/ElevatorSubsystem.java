@@ -18,7 +18,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public enum ElevatorPosition {
         L2(20.95),
-        L2Score(6.32),
+        L2Score(-3.4),
 
         L3(47.86),
         L3Score(20.9),

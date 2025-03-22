@@ -69,7 +69,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     }
 
     public void run(double speed) {
-        setSetpoint(pidController.getGoal().position + speed * ALGEE_PIVOT_SPEED);
+        setSetpoint(getSetpoint() + speed * ALGEE_PIVOT_SPEED);
     }
 
     public void setSetpoint(AlgeePivotAngle angle) {
@@ -80,6 +80,10 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
         return pidController.atGoal();
     }
 
+	public double getSetpoint() {
+		return pidController.getGoal().position;
+	}
+
     @Override
     public void periodic() {
         motor.set(pidController.calculate(motor.getEncoder().getPosition()));
@@ -87,7 +91,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
 
     @Override
     public LoggableInputs log() {
-        algeePivotLogAutoLogged.setpoint = pidController.getGoal().position;
+        algeePivotLogAutoLogged.setpoint = getSetpoint();
         algeePivotLogAutoLogged.actual = motor.getEncoder().getPosition();
         algeePivotLogAutoLogged.atSetpoint = atSetpoint();
 

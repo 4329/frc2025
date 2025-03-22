@@ -87,9 +87,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "elevatorScoreL4"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "elevatorScoreL4"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.16
+                }
+              }
+            ]
           }
         },
         {
@@ -101,15 +114,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "wait",
                       "data": {
-                        "pathName": "Side E Left Reverse Extra Sauce"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "stop"
+                        "waitTime": 0.05
                       }
                     },
                     {
@@ -128,22 +135,9 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.25
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intakeCoral"
-                      }
-                    }
-                  ]
+                  "name": "intakeCoral"
                 }
               }
             ]
@@ -152,7 +146,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.15
           }
         },
         {
@@ -167,6 +161,18 @@
                       "type": "path",
                       "data": {
                         "pathName": "Side E Right Delivery"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Side E Right Extra Sauce"
                       }
                     },
                     {
@@ -193,43 +199,11 @@
                       "data": {
                         "name": "grabCoral"
                       }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "elevatorL4"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.8
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Side E Right Extra Sauce"
-                      }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "stop"
+                        "name": "elevatorL4"
                       }
                     }
                   ]
@@ -245,9 +219,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "elevatorScoreL4"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "elevatorScoreL4"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.16
+                }
+              }
+            ]
           }
         },
         {
@@ -255,9 +242,84 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Side E Right Reverse Extra Sauce"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.05
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Side E DoorDash"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeCoral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Side E Left Delivery"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Side E Left Extra Sauce"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -267,16 +329,85 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.4
+                        "waitTime": 0.25
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "intakeCoral"
+                        "name": "grabCoral"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "elevatorL4"
                       }
                     }
                   ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "elevatorScoreL4"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.225
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.05
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Side E DoorDash"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeCoral"
                 }
               }
             ]

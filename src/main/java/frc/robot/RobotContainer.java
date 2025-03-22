@@ -155,7 +155,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "elevatorL2",
                 new AutoPositionCoralCommand(
-                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L2));
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L2,algeePivotSubsystem));
         NamedCommands.registerCommand(
                 "elevatorScoreL2",
                 new AutoActuallyScoreCoralCommand(
@@ -164,7 +164,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "elevatorL3",
                 new AutoPositionCoralCommand(
-                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L3));
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L3, algeePivotSubsystem));
         NamedCommands.registerCommand(
                 "elevatorScoreL3",
                 new AutoActuallyScoreCoralCommand(
@@ -173,7 +173,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "elevatorL4",
                 new AutoPositionCoralCommand(
-                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L4));
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L4, algeePivotSubsystem));
         NamedCommands.registerCommand(
                 "elevatorScoreL4",
                 new AutoActuallyScoreCoralCommand(

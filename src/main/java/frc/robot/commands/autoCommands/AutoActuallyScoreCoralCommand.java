@@ -1,5 +1,6 @@
 package frc.robot.commands.autoCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
@@ -11,6 +12,7 @@ public class AutoActuallyScoreCoralCommand extends Command {
     ElevatorSubsystem elevatorSubsystem;
     DifferentialArmSubsystem differentialArmSubsystem;
     ElevatorPosition elevatorPosition;
+    Timer timer;
 
     public AutoActuallyScoreCoralCommand(
             ElevatorSubsystem elevatorSubsystem,
@@ -32,5 +34,6 @@ public class AutoActuallyScoreCoralCommand extends Command {
     @Override
     public boolean isFinished() {
         return elevatorSubsystem.atSetpoint() && differentialArmSubsystem.pitchAtSetpoint();
+        
     }
 }

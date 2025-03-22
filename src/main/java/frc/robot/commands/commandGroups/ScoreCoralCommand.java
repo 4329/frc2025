@@ -26,7 +26,10 @@ public class ScoreCoralCommand extends Command {
 
     @Override
     public void initialize() {
-		differentialArmSubsystem.setPitchTarget(buttonRingController.getLevel() == 4 ? DifferentialArmPitch.NINETY : DifferentialArmPitch.SCORE_LOW);
+        differentialArmSubsystem.setPitchTarget(
+                buttonRingController.getLevel() == 4
+                        ? DifferentialArmPitch.NINETY
+                        : DifferentialArmPitch.SCORE_LOW);
 
         elevatorSubsystem.setSetpoint(
                 switch (buttonRingController.getLevel()) {

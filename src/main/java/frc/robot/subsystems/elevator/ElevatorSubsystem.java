@@ -9,7 +9,6 @@ import frc.robot.model.ElevatorLogAutoLogged;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.shufflebored.ShuffledTrapezoidController;
-
 import org.littletonrobotics.junction.Logger;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -64,13 +63,14 @@ public class ElevatorSubsystem extends SubsystemBase {
                     default -> new ElevatorIO() {};
                 };
 
-        elevatorPID = new ShuffledTrapezoidController(0.09, 0, 0, new TrapezoidProfile.Constraints(160, 240));
-		Shuffleboard.getTab("Asdf").add("asdf", elevatorPID);
+        elevatorPID =
+                new ShuffledTrapezoidController(0.09, 0, 0, new TrapezoidProfile.Constraints(160, 240));
+        Shuffleboard.getTab("Asdf").add("asdf", elevatorPID);
         elevatorPID.setTolerance(1);
     }
 
     public void setSetpoint(ElevatorPosition setpoint) {
-		setSetpoint(setpoint.pos);
+        setSetpoint(setpoint.pos);
     }
 
     private void setSetpoint(double setpoint) {

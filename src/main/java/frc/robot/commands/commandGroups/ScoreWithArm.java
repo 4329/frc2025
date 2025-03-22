@@ -11,7 +11,6 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CenterDistance;
-import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
@@ -31,17 +30,20 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
         this.buttonRingController = buttonRingController;
         this.drivetrain = drivetrain;
 
-		Command positionCoral = new PositionCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController);
+        Command positionCoral =
+                new PositionCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController);
 
         addCommands(
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUTFORCORAL),
-				new LoggedParallelCommandGroup(
-					"EleAndPos",
-					positionCoral,
-					new CenterByButtonRingCommand(
-							poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.INITIAL)//.untilLog(positionCoral::isFinished)
-				),
-
+                new LoggedParallelCommandGroup(
+                        "EleAndPos",
+                        positionCoral,
+                        new CenterByButtonRingCommand(
+                                poseEstimationSubsystem,
+                                drivetrain,
+                                buttonRingController,
+                                CenterDistance.INITIAL) // .untilLog(positionCoral::isFinished)
+                        ),
                 new CenterByButtonRingCommand(
                         poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING),
                 new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));

@@ -17,7 +17,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
     private int button;
     private int tagID;
     private double OFFSET_AMOUNT = 0.1651;
-	GenericEntry bsdf = Shuffleboard.getTab("Asdf").add("dst", OFFSET_AMOUNT).getEntry();
+    GenericEntry bsdf = Shuffleboard.getTab("Asdf").add("dst", OFFSET_AMOUNT).getEntry();
 
     ButtonRingLogAutoLogged buttonRingLogAutoLogged;
 
@@ -48,7 +48,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                                             () -> {
                                                 button = why;
 
-												OFFSET_AMOUNT = bsdf.getDouble(0); // WIP
+                                                OFFSET_AMOUNT = bsdf.getDouble(0); // WIP
 
                                                 xOffset = OFFSET_AMOUNT * (why % 2 == 0 ? 1 : -1);
                                                 tagID = AprilTagUtil.getReef((why % 12) / 2);

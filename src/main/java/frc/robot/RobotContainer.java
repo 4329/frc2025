@@ -215,6 +215,8 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "lowerArm", new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY));
+
+        NamedCommands.registerCommand("stop", new UnInstantCommand("stop", () -> m_robotDrive.stop()));
     }
 
     private void addCool(int num, ElevatorPosition position, ElevatorPosition scorePosition) {

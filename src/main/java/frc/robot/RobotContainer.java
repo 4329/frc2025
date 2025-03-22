@@ -4,16 +4,27 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.pathfinding.Pathfinder;
+import com.pathplanner.lib.pathfinding.Pathfinding;
+import com.revrobotics.ColorSensorV3;
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -42,6 +53,7 @@ import frc.robot.commands.elevatorCommands.SetElevatorCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
+import frc.robot.subsystems.DistanceSensorSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
@@ -54,12 +66,15 @@ import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CommandLoginator;
+import frc.robot.utilities.LocalADStarAK;
 import frc.robot.utilities.ToggleCommand;
 import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.littletonrobotics.junction.Logger;
 
 /* (including subsystems, commands, and button mappings) should be declared here
  */
@@ -74,6 +89,7 @@ public class RobotContainer {
     private final AlgeeWheelSubsystem algeeWheelSubsystem;
     private final ElevatorSubsystem elevatorSubsystem;
     private final LightSubsystem lightSubsystem;
+    private final DistanceSensorSubsystem distanceSensorSubsystem;
     // private final IntakeWheelSubsystem intakeWheelSubsystem;
     // private final IntakePivotSubsystem intakePivotSubsystem;
 
@@ -124,6 +140,7 @@ public class RobotContainer {
         // intakePivotSubsystem = new IntakePivotSubsystem();
         // intakeWheelSubsystem = new IntakeWheelSubsystem();
         lightSubsystem = new LightSubsystem();
+		distanceSensorSubsystem = new DistanceSensorSubsystem();
 
         new LoggingSubsystem(
                 drivetrain,
@@ -131,7 +148,8 @@ public class RobotContainer {
                 differentialArmSubsystem,
                 algeePivotSubsystem,
                 buttonRingController,
-                lightSubsystem);
+                lightSubsystem,
+				distanceSensorSubsystem);
 
         elevatorSubsystem = new ElevatorSubsystem();
 
@@ -142,10 +160,6 @@ public class RobotContainer {
 
         m_chooser = new SendableChooser<>();
         configureAutoChooser(drivetrain);
-
-        new UnInstantCommand("navX", () -> navx.setBoolean(m_robotDrive.getRawGyro().getRadians() != 0))
-                .ignoringDisableLog(true)
-                .repeatedlyLog();
     }
 
     private void configureNamedCommands() {
@@ -181,6 +195,9 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "intakeCoral", new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
+		NamedCommands.registerCommand(
+				"waitUntilCoral", new WaitUntilCommand(distanceSensorSubsystem::getCoraled));
+
         NamedCommands.registerCommand(
                 "grabCoral",
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO)
@@ -272,6 +289,8 @@ public class RobotContainer {
                     throw new RuntimeException();
                 },
                 m_robotDrive);
+
+		Pathfinding.setPathfinder(new LocalADStarAK());
     }
 
     /**
@@ -327,8 +346,8 @@ public class RobotContainer {
 					"ElevatorDown",
 					() -> elevatorSubsystem.runElevator(-manualController.getLeftTriggerAxis())).repeatedlyLog());
 
-		manualController.leftBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
-		manualController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
+		manualController.leftBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
+		manualController.rightBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
 
 		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
 		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
@@ -426,15 +445,12 @@ public class RobotContainer {
     }
 
     public void teleopInit() {
-        // limDriveSetCommand.schedule();
-        // autoZero.schedule();
-
     }
 
     public void autonomousPeriodic() {}
 
     public void teleopPeriodic() {
-        navx.setDouble(m_robotDrive.getGyro().getRadians());
+        navx.setBoolean(m_robotDrive.getGyro().getRadians() != 0);
     }
 
     /**
@@ -455,9 +471,5 @@ public class RobotContainer {
     }
 
     public void robotPeriodic() {
-        if (lilihSubsystem.getTargetVisible(7)) {
-            org.littletonrobotics.junction.Logger.recordOutput(
-                    "relPose", lilihSubsystem.getTargetPoseInRobotSpace(7));
-        }
     }
 }

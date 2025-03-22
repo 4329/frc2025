@@ -23,12 +23,12 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     private final double ALGEE_PIVOT_SPEED = 0.3;
 
     private final double MIN = 0;
-    private final double MAX = 27.9;
+    private final double MAX = 16.74;
 
     public enum AlgeePivotAngle {
         ZERO(0),
-        OUT(19),
-        OUTFORCORAL(27.5),
+        OUT(11),
+        OUTFORCORAL(16.5),
         ;
 
         public double angle;
@@ -41,7 +41,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     private SparkMax motor;
 
     private ProfiledPIDController pidController;
-    private TrapezoidProfile.Constraints profile = new TrapezoidProfile.Constraints(85, 145);
+    private TrapezoidProfile.Constraints profile = new TrapezoidProfile.Constraints(300, 500);
 
     private final AlgeePivotLogAutoLogged algeePivotLogAutoLogged;
 
@@ -57,7 +57,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
                                         .reverseSoftLimitEnabled(true));
         motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-        pidController = new ShuffledTrapezoidController(.1, 0, 0, profile);
+        pidController = new ShuffledTrapezoidController(.1, 0, 0.003, profile);
         pidController.setTolerance(0.5);
         Shuffleboard.getTab("Asdf").add("apivot", pidController);
 
@@ -74,8 +74,8 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
 
     public void setSetpoint(AlgeePivotAngle angle) {
         setSetpoint(angle.angle);
-    }
 
+    }
     public boolean atSetpoint() {
         return pidController.atGoal();
     }

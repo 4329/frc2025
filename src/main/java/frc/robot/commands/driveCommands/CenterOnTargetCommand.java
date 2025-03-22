@@ -66,8 +66,6 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
     public void initialize() {
         if (target == null) return;
 
-        Pathfinding.setPathfinder(new LocalADStar());
-
         pathFind =
                 new BetterPathfindingCommand(
                         getTranslationTolerance(),

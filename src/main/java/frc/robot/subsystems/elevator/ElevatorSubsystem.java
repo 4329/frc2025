@@ -26,8 +26,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         L4(73.697),
         L4AGAIN(L4.pos),
 
-        ALGEE_LOW(30.26),
-        ALGEE_HIGH(103.41),
+        ALGEE_LOW(9.949),
+        ALGEE_HIGH(34.343),
 
         NET(97),
 

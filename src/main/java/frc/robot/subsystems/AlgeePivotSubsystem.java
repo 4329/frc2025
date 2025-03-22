@@ -65,7 +65,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
     }
 
     private void setSetpoint(double setpoint) {
-        if (!LEDState.algeeWheelHolding) pidController.setGoal(MathUtils.clamp(MIN, MAX, setpoint));
+        pidController.setGoal(MathUtils.clamp(MIN, MAX, setpoint));
     }
 
     public void run(double speed) {

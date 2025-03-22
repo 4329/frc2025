@@ -348,7 +348,7 @@ public class RobotContainer {
 		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
 		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
 		manualController.b().whileTrue(new ToggleCommand(eleCool).untilLog(eleCool::isFinished));
-		manualController.x().whileTrue(new IntakeAlgeeCommand(algeeWheelSubsystem));
+		manualController.x().whileTrue(new UnInstantCommand("Intake", () -> algeeWheelSubsystem.run(-1)));
 		manualController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
 		manualController.povUp().whileTrue(new RepeatCommand(new UnInstantCommand(

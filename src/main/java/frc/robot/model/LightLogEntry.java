@@ -18,7 +18,6 @@ public class LightLogEntry implements LoggableInputs, Cloneable {
         table.put("State/centerRunning", LEDState.centerRunning);
 
         table.put("State/algeeWheelRunning", LEDState.algeeWheelRunning);
-        table.put("State/algeeWheelHolding", LEDState.algeeWheelHolding);
 
         table.put("State/coralClawHolding", LEDState.coralClawHolding);
 
@@ -39,7 +38,6 @@ public class LightLogEntry implements LoggableInputs, Cloneable {
         LEDState.centerRunning = table.get("State/centerRunning", false);
 
         LEDState.algeeWheelRunning = table.get("State/algeeWheelRunning", false);
-        LEDState.algeeWheelHolding = table.get("State/algeeWheelHolding", false);
 
         LEDState.coralClawHolding = table.get("State/coralClawHolding", false);
 

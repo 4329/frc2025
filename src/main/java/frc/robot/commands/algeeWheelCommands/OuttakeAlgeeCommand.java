@@ -25,7 +25,6 @@ public class OuttakeAlgeeCommand extends LoggedCommandComposer {
 
     @Override
     public void end(boolean interrupted) {
-        LEDState.algeeWheelHolding = false;
         algeeWheelSubsystem.stop();
     }
 

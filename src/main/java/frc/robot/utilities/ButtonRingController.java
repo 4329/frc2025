@@ -1,5 +1,6 @@
 package frc.robot.utilities;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -16,7 +17,7 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
     private double xOffset;
     private int button;
     private int tagID;
-    private double OFFSET_AMOUNT = 0.1651;
+    private double OFFSET_AMOUNT = Units.inchesToMeters(13) / 2;
     GenericEntry bsdf = Shuffleboard.getTab("Asdf").add("dst", OFFSET_AMOUNT).getEntry();
 
     ButtonRingLogAutoLogged buttonRingLogAutoLogged;

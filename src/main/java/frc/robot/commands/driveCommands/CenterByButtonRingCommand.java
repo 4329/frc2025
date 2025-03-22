@@ -8,7 +8,7 @@ import frc.robot.utilities.CenterDistance;
 
 public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     ButtonRingController buttonRingController;
-    private final double clawOffset = 0.132;
+    private final double clawOffset = 0.134;
 
     public CenterByButtonRingCommand(
             PoseEstimationSubsystem poseEstimationSubsystem,

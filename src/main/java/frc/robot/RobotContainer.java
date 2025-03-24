@@ -225,7 +225,10 @@ public class RobotContainer {
                 "elevatorBarge", new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
         NamedCommands.registerCommand(
                 "actuallyIntakeAlgee", new IntakeAlgeeCommand(algeeWheelSubsystem));
-        for (int i = 0; i < 6; i++) {
+        NamedCommands.registerCommand("algeeStop", new UnInstantCommand("stop", () -> algeeWheelSubsystem.stop()));
+        NamedCommands.registerCommand("shootAlgee", new OuttakeAlgeeCommand(algeeWheelSubsystem));
+
+                for (int i = 0; i < 6; i++) {
             addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);
             addCool(i, ElevatorPosition.L3, ElevatorPosition.L3Score);
             addCool(i, ElevatorPosition.L4, ElevatorPosition.L4);

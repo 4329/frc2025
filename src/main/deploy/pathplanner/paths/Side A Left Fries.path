@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.137965273516295,
+        "y": 3.716540018937208
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.128291527842351,
+        "y": 4.041828466335616
+      },
+      "isLocked": false,
+      "linkedName": "Side A Left"
+    },
+    {
+      "anchor": {
+        "x": 5.7954891585149495,
+        "y": 4.217287394065275
+      },
+      "prevControl": {
+        "x": 6.343967002654319,
+        "y": 4.244432700249888
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Side A Algee"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Side A",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

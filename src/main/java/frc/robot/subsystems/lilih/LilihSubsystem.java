@@ -26,6 +26,8 @@ public class LilihSubsystem extends SubsystemBase {
                     .withSize(3, 2)
                     .getEntry();
 
+	GenericEntry seeTag = Shuffleboard.getTab("RobotData").add("Seeing tag", false).withPosition(10, 2).withSize(2, 2).getEntry();
+
     private LilihLog lilihLog;
 
     public LilihSubsystem(LilihSocket lilihSocket) {
@@ -49,6 +51,7 @@ public class LilihSubsystem extends SubsystemBase {
         if (limelightResults == null) {
             return false;
         }
+
         for (LimelightTarget_Fiducial LIMGHT : limelightResults) {
             if (LIMGHT.fiducialID == id) {
                 return true;
@@ -120,25 +123,21 @@ public class LilihSubsystem extends SubsystemBase {
     }
 
     public boolean seeingAnything() {
-        if (limelightResults != null && limelightResults.length > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return limelightResults != null && limelightResults.length > 0;
     }
 
     private void updateInputs() {
         for (int i = 0; i < LilihLog.NUM_TAGS; i++) {
-            lilihLog.tags[i].tV = getTargetVisible(i);
+            lilihLog.tags[i].tV = getTargetVisible(i + 1);
             if (lilihLog.tags[i].tV) {
-                LimelightTarget_Fiducial fiducial = getFiducial(i);
+                LimelightTarget_Fiducial fiducial = getFiducial(i + 1);
                 lilihLog.tags[i].tX = fiducial.tx;
                 lilihLog.tags[i].tY = fiducial.ty;
-                lilihLog.tags[i].relativePose = fiducial.getCameraPose_TargetSpace();
+                lilihLog.tags[i].tA = fiducial.ta;
             } else {
                 lilihLog.tags[i].tX = 0;
                 lilihLog.tags[i].tY = 0;
-                lilihLog.tags[i].relativePose = new Pose3d();
+                lilihLog.tags[i].tA = 0;
             }
         }
         lilihLog.limlihConnected = cameraConnected();
@@ -165,6 +164,7 @@ public class LilihSubsystem extends SubsystemBase {
     public void periodic() {
         if (cameraConnected()) {
             limelightResults = lilihSocket.getResults().targets_Fiducials;
+			connected.setBoolean(limelightResults.length > 0);
         }
 
         updateInputs();

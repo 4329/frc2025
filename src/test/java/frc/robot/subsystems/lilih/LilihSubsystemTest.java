@@ -10,10 +10,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class LilihSubsystemTest {
     LilihSubsystem lilihSubsystem;
 
-    @BeforeEach
-    public void init() {
-        lilihSubsystem = new LilihSubsystem(0, "");
-    }
+    //@BeforeEach
+    //public void init() {
+    //    lilihSubsystem = new LilihSubsystem(0, "");
+    //}
 
     // @Test
     public void nulls() {

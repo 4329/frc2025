@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 
 public class DistanceSensorSubsystem extends SubsystemBase implements LoggedSubsystem {
-	private static final double CORAL_AMOUNT = 800;
+	private static final double CORAL_AMOUNT = 500;
 
 	@AutoLog
 	public static class DistanceSensorLog {

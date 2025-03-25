@@ -453,7 +453,6 @@ public class RobotContainer {
     public void autonomousPeriodic() {}
 
     public void teleopPeriodic() {
-        navx.setBoolean(m_robotDrive.getGyro().getRadians() != 0);
     }
 
     /**
@@ -474,5 +473,6 @@ public class RobotContainer {
     }
 
     public void robotPeriodic() {
+        navx.setBoolean(m_robotDrive.getGyro().getRadians() != 0);
     }
 }

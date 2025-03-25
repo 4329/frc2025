@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.402561475409836,
-        "y": 7.027920081967213
+        "x": 1.6502533783746716,
+        "y": 7.038935810803399
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.886,
-        "y": 5.858
+        "x": 3.133691902964836,
+        "y": 5.869015728836185
       },
       "isLocked": false,
       "linkedName": "HPStationTop"

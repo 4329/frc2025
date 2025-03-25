@@ -10,13 +10,13 @@ public class LilihLog implements LoggableInputs, Cloneable {
         public boolean tV;
         public double tX;
         public double tY;
-        public Pose3d relativePose;
+		public double tA;
 
-        public Fiducial(boolean tV, double tX, double tY, Pose3d relativePose) {
+        public Fiducial(boolean tV, double tX, double tY, double tA) {
             this.tV = tV;
             this.tX = tX;
             this.tY = tY;
-            this.relativePose = relativePose;
+			this.tA = tA;
         }
     }
 
@@ -27,7 +27,7 @@ public class LilihLog implements LoggableInputs, Cloneable {
     public LilihLog() {
         tags = new Fiducial[NUM_TAGS];
         for (int i = 0; i < tags.length; i++) {
-            tags[i] = new Fiducial(false, 0, 0, new Pose3d());
+            tags[i] = new Fiducial(false, 0, 0, 0);
         }
     }
 
@@ -39,7 +39,7 @@ public class LilihLog implements LoggableInputs, Cloneable {
             sub.put("tV", tags[i].tV);
             sub.put("tX", tags[i].tX);
             sub.put("tY", tags[i].tY);
-            sub.put("relativePose", tags[i].relativePose);
+            sub.put("tA", tags[i].tA);
         }
     }
 
@@ -53,7 +53,7 @@ public class LilihLog implements LoggableInputs, Cloneable {
                             sub.get("tV").getBoolean(),
                             sub.get("tX").getDouble(),
                             sub.get("tY").getDouble(),
-                            sub.get("relativePose", new Pose3d()));
+                            sub.get("tA").getDouble());
         }
     }
 

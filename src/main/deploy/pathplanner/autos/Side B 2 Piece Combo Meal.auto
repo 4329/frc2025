@@ -122,7 +122,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Side B DoorDash"
+                        "pathName": "Side B DoorDash TWO PEACE"
                       }
                     },
                     {
@@ -156,7 +156,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.25
+                  "waitTime": 3.5
                 }
               }
             ]
@@ -286,6 +286,30 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
           }
         },
         {

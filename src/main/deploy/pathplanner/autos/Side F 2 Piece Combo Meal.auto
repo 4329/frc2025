@@ -173,7 +173,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Side E Left Delivery"
+                        "pathName": "Side E Right Delivery"
                       }
                     },
                     {
@@ -185,7 +185,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Side E Left Extra Sauce"
+                        "pathName": "Side E Right Extra Sauce"
                       }
                     },
                     {

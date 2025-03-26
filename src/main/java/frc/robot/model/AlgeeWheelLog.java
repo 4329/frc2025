@@ -4,5 +4,5 @@ import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
 public class AlgeeWheelLog {
-    public double speed;
+    public double control;
 }

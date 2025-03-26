@@ -142,6 +142,7 @@ public class LilihSubsystem extends SubsystemBase {
         }
         lilihLog.limlihConnected = cameraConnected();
         connected.setBoolean(cameraConnected());
+		seeTag.setBoolean(seeingAnything());
 
         Logger.processInputs("Lilihsubsystem", lilihLog);
     }
@@ -164,7 +165,6 @@ public class LilihSubsystem extends SubsystemBase {
     public void periodic() {
         if (cameraConnected()) {
             limelightResults = lilihSocket.getResults().targets_Fiducials;
-			connected.setBoolean(limelightResults.length > 0);
         }
 
         updateInputs();

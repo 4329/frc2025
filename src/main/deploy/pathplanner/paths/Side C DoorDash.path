@@ -44,7 +44,18 @@
       }
     }
   ],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 3.95,
+        "y": 5.0
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.03314917127071824,
+      "maxWaypointRelativePos": 0.75,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [
     {
       "name": "intakeCoral",

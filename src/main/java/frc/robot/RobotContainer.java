@@ -149,6 +149,7 @@ public class RobotContainer {
                 algeePivotSubsystem,
                 buttonRingController,
                 lightSubsystem,
+				algeeWheelSubsystem,
 				distanceSensorSubsystem);
 
         elevatorSubsystem = new ElevatorSubsystem();
@@ -223,10 +224,11 @@ public class RobotContainer {
                         ElevatorPosition.ALGEE_LOW));
         NamedCommands.registerCommand(
                 "elevatorBarge", new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
+
         NamedCommands.registerCommand(
-                "actuallyIntakeAlgee", new IntakeAlgeeCommand(algeeWheelSubsystem));
+                "actuallyIntakeAlgee", new UnInstantCommand("intakeStartAlgee", () -> algeeWheelSubsystem.run(1)));
         NamedCommands.registerCommand("algeeStop", new UnInstantCommand("stop", () -> algeeWheelSubsystem.stop()));
-        NamedCommands.registerCommand("shootAlgee", new OuttakeAlgeeCommand(algeeWheelSubsystem));
+        NamedCommands.registerCommand("shootAlgee", new UnInstantCommand("outtakeAlgee", () -> algeeWheelSubsystem.run(-1)));
 
                 for (int i = 0; i < 6; i++) {
             addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);

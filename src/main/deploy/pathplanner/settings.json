@@ -37,7 +37,7 @@
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
   "robotFeatures": [
-    "{\"name\":\"Coral Claw\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.1016,\"y\":-0.132},\"end\":{\"x\":0.699,\"y\":-0.132},\"strokeWidth\":0.02}}",
+    "{\"name\":\"Coral Claw\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.102,\"y\":-0.1},\"end\":{\"x\":0.699,\"y\":-0.1},\"strokeWidth\":0.02}}",
     "{\"name\":\"Algae Claw\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.1016,\"y\":0.23},\"end\":{\"x\":0.478,\"y\":0.23},\"strokeWidth\":0.02}}"
   ]
 }

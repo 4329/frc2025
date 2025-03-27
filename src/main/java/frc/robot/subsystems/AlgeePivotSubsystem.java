@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.AlgeePivotLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
-import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.SparkFactory;
 import frc.robot.utilities.shufflebored.ShuffledTrapezoidController;
@@ -74,15 +73,15 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
 
     public void setSetpoint(AlgeePivotAngle angle) {
         setSetpoint(angle.angle);
-
     }
+
     public boolean atSetpoint() {
         return pidController.atGoal();
     }
 
-	public double getSetpoint() {
-		return pidController.getGoal().position;
-	}
+    public double getSetpoint() {
+        return pidController.getGoal().position;
+    }
 
     @Override
     public void periodic() {

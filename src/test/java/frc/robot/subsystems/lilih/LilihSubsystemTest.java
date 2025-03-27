@@ -2,7 +2,6 @@ package frc.robot.subsystems.lilih;
 
 import static org.junit.Assert.fail;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -10,10 +9,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class LilihSubsystemTest {
     LilihSubsystem lilihSubsystem;
 
-    //@BeforeEach
-    //public void init() {
+    // @BeforeEach
+    // public void init() {
     //    lilihSubsystem = new LilihSubsystem(0, "");
-    //}
+    // }
 
     // @Test
     public void nulls() {

@@ -1,6 +1,5 @@
 package frc.robot.model;
 
-import edu.wpi.first.math.geometry.Pose3d;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -10,13 +9,13 @@ public class LilihLog implements LoggableInputs, Cloneable {
         public boolean tV;
         public double tX;
         public double tY;
-		public double tA;
+        public double tA;
 
         public Fiducial(boolean tV, double tX, double tY, double tA) {
             this.tV = tV;
             this.tX = tX;
             this.tY = tY;
-			this.tA = tA;
+            this.tA = tA;
         }
     }
 

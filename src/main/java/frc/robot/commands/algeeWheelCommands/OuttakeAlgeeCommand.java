@@ -1,7 +1,6 @@
 package frc.robot.commands.algeeWheelCommands;
 
 import frc.robot.subsystems.AlgeeWheelSubsystem;
-import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.loggedComands.LoggedCommandComposer;
 
 public class OuttakeAlgeeCommand extends LoggedCommandComposer {

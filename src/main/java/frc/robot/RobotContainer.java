@@ -4,26 +4,16 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.pathfinding.Pathfinder;
 import com.pathplanner.lib.pathfinding.Pathfinding;
-import com.revrobotics.ColorSensorV3;
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.PWM;
-import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -32,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DoAFunctionalCommand;
 import frc.robot.commands.DriveByController;
-import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
@@ -73,8 +62,6 @@ import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.littletonrobotics.junction.Logger;
 
 /* (including subsystems, commands, and button mappings) should be declared here
  */
@@ -140,7 +127,7 @@ public class RobotContainer {
         // intakePivotSubsystem = new IntakePivotSubsystem();
         // intakeWheelSubsystem = new IntakeWheelSubsystem();
         lightSubsystem = new LightSubsystem();
-		distanceSensorSubsystem = new DistanceSensorSubsystem();
+        distanceSensorSubsystem = new DistanceSensorSubsystem();
 
         new LoggingSubsystem(
                 drivetrain,
@@ -149,8 +136,8 @@ public class RobotContainer {
                 algeePivotSubsystem,
                 buttonRingController,
                 lightSubsystem,
-				algeeWheelSubsystem,
-				distanceSensorSubsystem);
+                algeeWheelSubsystem,
+                distanceSensorSubsystem);
 
         elevatorSubsystem = new ElevatorSubsystem();
 
@@ -170,7 +157,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "elevatorL2",
                 new AutoPositionCoralCommand(
-                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L2,algeePivotSubsystem));
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L2, algeePivotSubsystem));
         NamedCommands.registerCommand(
                 "elevatorScoreL2",
                 new AutoActuallyScoreCoralCommand(
@@ -196,8 +183,8 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "intakeCoral", new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
-		NamedCommands.registerCommand(
-				"waitUntilCoral", new WaitUntilCommand(distanceSensorSubsystem::getCoraled));
+        NamedCommands.registerCommand(
+                "waitUntilCoral", new WaitUntilCommand(distanceSensorSubsystem::getCoraled));
 
         NamedCommands.registerCommand(
                 "grabCoral",
@@ -226,11 +213,14 @@ public class RobotContainer {
                 "elevatorBarge", new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
 
         NamedCommands.registerCommand(
-                "actuallyIntakeAlgee", new UnInstantCommand("intakeStartAlgee", () -> algeeWheelSubsystem.run(1)));
-        NamedCommands.registerCommand("algeeStop", new UnInstantCommand("stop", () -> algeeWheelSubsystem.stop()));
-        NamedCommands.registerCommand("shootAlgee", new UnInstantCommand("outtakeAlgee", () -> algeeWheelSubsystem.run(-1)));
+                "actuallyIntakeAlgee",
+                new UnInstantCommand("intakeStartAlgee", () -> algeeWheelSubsystem.run(1)));
+        NamedCommands.registerCommand(
+                "algeeStop", new UnInstantCommand("stop", () -> algeeWheelSubsystem.stop()));
+        NamedCommands.registerCommand(
+                "shootAlgee", new UnInstantCommand("outtakeAlgee", () -> algeeWheelSubsystem.run(-1)));
 
-                for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++) {
             addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);
             addCool(i, ElevatorPosition.L3, ElevatorPosition.L3Score);
             addCool(i, ElevatorPosition.L4, ElevatorPosition.L4);
@@ -295,7 +285,7 @@ public class RobotContainer {
                 },
                 m_robotDrive);
 
-		Pathfinding.setPathfinder(new LocalADStarAK());
+        Pathfinding.setPathfinder(new LocalADStarAK());
     }
 
     /**
@@ -449,13 +439,11 @@ public class RobotContainer {
         // limDriveSetCommand.schedule();
     }
 
-    public void teleopInit() {
-    }
+    public void teleopInit() {}
 
     public void autonomousPeriodic() {}
 
-    public void teleopPeriodic() {
-    }
+    public void teleopPeriodic() {}
 
     /**
      * @return Selected Auto

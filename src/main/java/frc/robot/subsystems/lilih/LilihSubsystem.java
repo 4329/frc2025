@@ -26,7 +26,12 @@ public class LilihSubsystem extends SubsystemBase {
                     .withSize(3, 2)
                     .getEntry();
 
-	GenericEntry seeTag = Shuffleboard.getTab("RobotData").add("Seeing tag", false).withPosition(10, 2).withSize(2, 2).getEntry();
+    GenericEntry seeTag =
+            Shuffleboard.getTab("RobotData")
+                    .add("Seeing tag", false)
+                    .withPosition(10, 2)
+                    .withSize(2, 2)
+                    .getEntry();
 
     private LilihLog lilihLog;
 
@@ -142,7 +147,7 @@ public class LilihSubsystem extends SubsystemBase {
         }
         lilihLog.limlihConnected = cameraConnected();
         connected.setBoolean(cameraConnected());
-		seeTag.setBoolean(seeingAnything());
+        seeTag.setBoolean(seeingAnything());
 
         Logger.processInputs("Lilihsubsystem", lilihLog);
     }

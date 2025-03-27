@@ -63,14 +63,21 @@ public class DriveByController extends Command {
                 -inputTransform(m_controller.getRightX()) * DriveConstants.kMaxAngularSpeed,
                 fieldOrient);
 
-		m_controller.setRumble(RumbleType.kBothRumble, MathUtils.clamp(0,1,Math.sqrt(Math.pow(m_controller.getLeftY(),2)+Math.pow(m_controller.getLeftX(),2))) * 0.3);
+        m_controller.setRumble(
+                RumbleType.kBothRumble,
+                MathUtils.clamp(
+                                0,
+                                1,
+                                Math.sqrt(
+                                        Math.pow(m_controller.getLeftY(), 2) + Math.pow(m_controller.getLeftX(), 2)))
+                        * 0.3);
 
         if (logStuff) Logger.recordOutput("Field Oriented", fieldOrient);
     }
 
-	public void end(boolean interrpted){
-		m_controller.setRumble(RumbleType.kBothRumble, 0);
-	}
+    public void end(boolean interrpted) {
+        m_controller.setRumble(RumbleType.kBothRumble, 0);
+    }
 
     /**
      * when this fucntion of the command is called the current fieldOrient boolean is flipped. This is

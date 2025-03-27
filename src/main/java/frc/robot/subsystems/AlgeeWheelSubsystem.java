@@ -13,9 +13,6 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.SparkFactory;
 import java.util.Map;
-
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class AlgeeWheelSubsystem extends SubsystemBase implements LoggedSubsystem {

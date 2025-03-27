@@ -34,6 +34,5 @@ public class AutoActuallyScoreCoralCommand extends Command {
     @Override
     public boolean isFinished() {
         return elevatorSubsystem.atSetpoint() && differentialArmSubsystem.pitchAtSetpoint();
-        
     }
 }

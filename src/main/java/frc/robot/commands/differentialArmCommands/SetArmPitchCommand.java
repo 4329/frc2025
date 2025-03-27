@@ -1,6 +1,5 @@
 package frc.robot.commands.differentialArmCommands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.utilities.loggedComands.LoggedCommandComposer;

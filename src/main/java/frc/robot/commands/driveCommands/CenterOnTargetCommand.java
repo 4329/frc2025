@@ -21,7 +21,7 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
     protected Pose2d target;
     protected CenterDistance centerDistance;
     private final PathConstraints constraints =
-            new PathConstraints(2, 1.0, Math.PI / 4, Math.PI / 16); // The constraints for this path.
+            new PathConstraints(2, 1.0, Math.PI / 4, Math.PI / 16);
 
     public CenterOnTargetCommand(
             int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {

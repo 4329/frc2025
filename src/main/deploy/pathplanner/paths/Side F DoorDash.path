@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.336677326198319,
-        "y": 2.3733158246190724
+        "x": 5.04074019364465,
+        "y": 2.4884368468818368
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.280187952138817,
-        "y": 1.8996923902332181
+        "x": 2.272804054054055,
+        "y": 1.9695945945945947
       },
       "isLocked": false,
       "linkedName": "Side F Left"
     },
     {
       "anchor": {
-        "x": 1.3785860655737705,
-        "y": 1.0100922131147536
+        "x": 1.6403716216216213,
+        "y": 0.9517736486486479
       },
       "prevControl": {
-        "x": 2.098697687402108,
-        "y": 1.3406685288008595
+        "x": 2.3604832434499605,
+        "y": 1.282349964334754
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,10 +30,21 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 3.9,
+        "y": 3.1
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.08644859813084088,
+      "maxWaypointRelativePos": 0.75,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

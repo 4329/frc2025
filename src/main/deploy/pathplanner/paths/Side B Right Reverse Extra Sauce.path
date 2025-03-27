@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.166100716566397,
-        "y": 5.063580594961283
+        "x": 5.117587297672369,
+        "y": 5.23438025939833
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.4514955769343905,
-        "y": 5.557559102102146
+        "x": 5.402982158040363,
+        "y": 5.728358766539193
       },
       "isLocked": false,
       "linkedName": "Side B Right Score"
     },
     {
       "anchor": {
-        "x": 5.4266076784463095,
-        "y": 5.499086037317163
+        "x": 5.284943181815232,
+        "y": 5.456635551950017
       },
       "prevControl": {
-        "x": 5.156172094488371,
-        "y": 5.0258461699056465
+        "x": 5.0145075978572935,
+        "y": 4.9833956845385
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

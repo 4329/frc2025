@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.336677326198319,
-        "y": 2.3733158246190724
+        "x": 5.04074019364465,
+        "y": 2.4884368468818368
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.115400216181258,
-        "y": 2.7689324758616967
+        "x": 4.913762776954211,
+        "y": 2.7057210670750558
       },
       "isLocked": false,
       "linkedName": "Side F Left"
     },
     {
       "anchor": {
-        "x": 5.045462782703787,
-        "y": 2.9003917566672
+        "x": 4.957232224124281,
+        "y": 2.6945537935270365
       },
       "prevControl": {
-        "x": 5.323266592257891,
-        "y": 2.4135480264403566
+        "x": 5.081261492168075,
+        "y": 2.4774898843469964
       },
       "nextControl": null,
       "isLocked": false,
@@ -36,7 +36,7 @@
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 0.8,
-        "maxAcceleration": 3.0,
+        "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -64,5 +64,5 @@
     "velocity": 0,
     "rotation": 119.99999999999999
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

@@ -1,0 +1,68 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.113729508196721,
+        "y": 4.083
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.865402346488547,
+        "y": 4.111872491370893
+      },
+      "isLocked": false,
+      "linkedName": "Side A Right"
+    },
+    {
+      "anchor": {
+        "x": 5.861930634309219,
+        "y": 4.0833737894431525
+      },
+      "prevControl": {
+        "x": 6.108772128695013,
+        "y": 4.043759692843736
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Side A Right Score"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Side A",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

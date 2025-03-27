@@ -14,7 +14,10 @@ public interface DifferentialArmSubsystem extends Subsystem, LoggedSubsystem {
     public enum DifferentialArmPitch {
         STORAGE(0),
         NINETY(2.1),
-        ONETHIRTYFIVE(2.95); // 3.3714
+        NINETY_PLUS(2.15),
+        ONE_THIRTY_FIVE(2.95),
+        SCORE_LOW(1.9),
+        FOURTYFIVE(1.15);
 
         double rotation;
 

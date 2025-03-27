@@ -76,7 +76,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                         drivetrain.getRawGyro(),
                         drivetrain.getModulePositions(),
                         initialPose);
-        rotOffset = initialPose.getRotation().minus(drivetrain.getRawGyro());
+        // rotOffset = initialPose.getRotation().minus(drivetrain.getRawGyro());
     }
 
     public Pose2d getPose() {

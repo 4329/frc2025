@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.7954891585149495,
+        "y": 4.217287394065275
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.390499999999999,
+        "y": 4.210249999999999
+      },
+      "isLocked": false,
+      "linkedName": "Side A Algee"
+    },
+    {
+      "anchor": {
+        "x": 7.339090909090909,
+        "y": 5.4260085227272725
+      },
+      "prevControl": {
+        "x": 6.006634213095944,
+        "y": 5.279102098723621
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "BargeScore"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Barge",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

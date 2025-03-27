@@ -9,7 +9,6 @@ public class LEDState {
     public static boolean centerRunning;
 
     public static boolean algeeWheelRunning;
-    public static boolean algeeWheelHolding;
 
     public static boolean coralClawHolding;
 

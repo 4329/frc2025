@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -20,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DoAFunctionalCommand;
 import frc.robot.commands.DriveByController;
-import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
@@ -41,12 +42,12 @@ import frc.robot.commands.elevatorCommands.SetElevatorCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
+import frc.robot.subsystems.DistanceSensorSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
-import frc.robot.subsystems.elevator.ElevatorFactory;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.light.LightSubsystem;
@@ -54,6 +55,7 @@ import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CommandLoginator;
+import frc.robot.utilities.LocalADStarAK;
 import frc.robot.utilities.ToggleCommand;
 import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
@@ -74,6 +76,7 @@ public class RobotContainer {
     private final AlgeeWheelSubsystem algeeWheelSubsystem;
     private final ElevatorSubsystem elevatorSubsystem;
     private final LightSubsystem lightSubsystem;
+    private final DistanceSensorSubsystem distanceSensorSubsystem;
     // private final IntakeWheelSubsystem intakeWheelSubsystem;
     // private final IntakePivotSubsystem intakePivotSubsystem;
 
@@ -123,17 +126,20 @@ public class RobotContainer {
         algeeWheelSubsystem = new AlgeeWheelSubsystem();
         // intakePivotSubsystem = new IntakePivotSubsystem();
         // intakeWheelSubsystem = new IntakeWheelSubsystem();
-        elevatorSubsystem = ElevatorFactory.createElevatorSubsystem();
         lightSubsystem = new LightSubsystem();
+        distanceSensorSubsystem = new DistanceSensorSubsystem();
 
         new LoggingSubsystem(
                 drivetrain,
                 poseEstimationSubsystem,
                 differentialArmSubsystem,
                 algeePivotSubsystem,
-                elevatorSubsystem,
                 buttonRingController,
-                lightSubsystem);
+                lightSubsystem,
+                algeeWheelSubsystem,
+                distanceSensorSubsystem);
+
+        elevatorSubsystem = new ElevatorSubsystem();
 
         new CommandLoginator();
         configureNamedCommands();
@@ -142,10 +148,6 @@ public class RobotContainer {
 
         m_chooser = new SendableChooser<>();
         configureAutoChooser(drivetrain);
-
-        new UnInstantCommand("navX", () -> navx.setBoolean(m_robotDrive.getRawGyro().getRadians() != 0))
-                .ignoringDisableLog(true)
-                .repeatedlyLog();
     }
 
     private void configureNamedCommands() {
@@ -155,7 +157,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "elevatorL2",
                 new AutoPositionCoralCommand(
-                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L2));
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L2, algeePivotSubsystem));
         NamedCommands.registerCommand(
                 "elevatorScoreL2",
                 new AutoActuallyScoreCoralCommand(
@@ -164,7 +166,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "elevatorL3",
                 new AutoPositionCoralCommand(
-                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L3));
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L3, algeePivotSubsystem));
         NamedCommands.registerCommand(
                 "elevatorScoreL3",
                 new AutoActuallyScoreCoralCommand(
@@ -173,7 +175,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "elevatorL4",
                 new AutoPositionCoralCommand(
-                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L4));
+                        elevatorSubsystem, differentialArmSubsystem, ElevatorPosition.L4, algeePivotSubsystem));
         NamedCommands.registerCommand(
                 "elevatorScoreL4",
                 new AutoActuallyScoreCoralCommand(
@@ -181,6 +183,9 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "intakeCoral", new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
+        NamedCommands.registerCommand(
+                "waitUntilCoral", new WaitUntilCommand(distanceSensorSubsystem::getCoraled));
+
         NamedCommands.registerCommand(
                 "grabCoral",
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO)
@@ -206,8 +211,15 @@ public class RobotContainer {
                         ElevatorPosition.ALGEE_LOW));
         NamedCommands.registerCommand(
                 "elevatorBarge", new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
+
         NamedCommands.registerCommand(
-                "actuallyIntakeAlgee", new IntakeAlgeeCommand(algeeWheelSubsystem));
+                "actuallyIntakeAlgee",
+                new UnInstantCommand("intakeStartAlgee", () -> algeeWheelSubsystem.run(1)));
+        NamedCommands.registerCommand(
+                "algeeStop", new UnInstantCommand("stop", () -> algeeWheelSubsystem.stop()));
+        NamedCommands.registerCommand(
+                "shootAlgee", new UnInstantCommand("outtakeAlgee", () -> algeeWheelSubsystem.run(-1)));
+
         for (int i = 0; i < 6; i++) {
             addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);
             addCool(i, ElevatorPosition.L3, ElevatorPosition.L3Score);
@@ -216,6 +228,8 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "lowerArm", new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY));
+
+        NamedCommands.registerCommand("stop", new UnInstantCommand("stop", () -> m_robotDrive.stop()));
     }
 
     private void addCool(int num, ElevatorPosition position, ElevatorPosition scorePosition) {
@@ -270,6 +284,8 @@ public class RobotContainer {
                     throw new RuntimeException();
                 },
                 m_robotDrive);
+
+        Pathfinding.setPathfinder(new LocalADStarAK());
     }
 
     /**
@@ -298,7 +314,7 @@ public class RobotContainer {
 					() -> elevatorSubsystem.runElevator(-driverController.getLeftTriggerAxis())).repeatedlyLog());
 
 		driverController.rightBumper().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
-		driverController.leftBumper().whileTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController));
+		driverController.leftBumper().whileTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController, algeePivotSubsystem));
 
 		driverController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
 		driverController.b().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
@@ -309,27 +325,11 @@ public class RobotContainer {
 		driverController.povDown().onTrue(new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
 		driverController.povLeft().onTrue(new PorcessorCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
-        // driverController.povLeft().whileTrue(new Command() {
-        //     public void initialize() {
-        //         getAuto().initialize();
-        //     };
-
-        //     public void execute() {
-        //         getAuto().execute();
-        //     };
-
-        //     public void end(boolean interrupted) {
-        //         getAuto().end(interrupted);
-        //     };
-
-        //     public boolean isFinished() {
-        //         return getAuto().isFinished();
-        //     };
-        // });
 
 		driverController.rightStick().onTrue(new UnInstantCommand(
 					"ResetOdometry",
 					() -> m_robotDrive.resetOdometry(new Pose2d())));
+
 
 		manualController.start().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
 		manualController.back().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
@@ -341,8 +341,8 @@ public class RobotContainer {
 					"ElevatorDown",
 					() -> elevatorSubsystem.runElevator(-manualController.getLeftTriggerAxis())).repeatedlyLog());
 
-		manualController.leftBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
-		manualController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
+		manualController.leftBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
+		manualController.rightBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
 
 		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
 		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);
@@ -366,7 +366,7 @@ public class RobotContainer {
 
 		manualController.rightStick().onTrue(new UnInstantCommand(
 					"Dif135",
-					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONETHIRTYFIVE)));
+					() -> differentialArmSubsystem.setPitchTarget(DifferentialArmSubsystem.DifferentialArmPitch.ONE_THIRTY_FIVE)));
 
 
         
@@ -376,7 +376,7 @@ public class RobotContainer {
 					"ElevatorUp",
 					() -> elevatorSubsystem.runElevator(functionalController.getRightTriggerAxis())).repeatedlyLog());
                                         
-		functionalController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
+				functionalController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
 					"ElevatorDown",
 					() -> elevatorSubsystem.runElevator(-functionalController.getLeftTriggerAxis())).repeatedlyLog());
 	}
@@ -439,17 +439,11 @@ public class RobotContainer {
         // limDriveSetCommand.schedule();
     }
 
-    public void teleopInit() {
-        // limDriveSetCommand.schedule();
-        // autoZero.schedule();
-
-    }
+    public void teleopInit() {}
 
     public void autonomousPeriodic() {}
 
-    public void teleopPeriodic() {
-        navx.setDouble(m_robotDrive.getGyro().getRadians());
-    }
+    public void teleopPeriodic() {}
 
     /**
      * @return Selected Auto
@@ -469,9 +463,6 @@ public class RobotContainer {
     }
 
     public void robotPeriodic() {
-        if (lilihSubsystem.getTargetVisible(7)) {
-            org.littletonrobotics.junction.Logger.recordOutput(
-                    "relPose", lilihSubsystem.getTargetPoseInRobotSpace(7));
-        }
+        navx.setBoolean(m_robotDrive.getGyro().getRadians() != 0);
     }
 }

@@ -42,7 +42,14 @@ public class AlgeeIntake extends LoggedParallelCommandGroup {
     }
 
     @Override
-    public boolean isFinished() {
-        return super.isFinished() || buttonRingController.getLevel() == 0;
+    public void execute() {
+        if (buttonRingController.getLevel() != 0) super.execute();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        // ugh
+        algeeWheelSubsystem.stop();
+        super.end(interrupted);
     }
 }

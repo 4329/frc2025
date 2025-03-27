@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3785860655737705,
-        "y": 1.0100922131147536
+        "x": 1.6403716216216213,
+        "y": 0.9517736486486479
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.148304892115424,
-        "y": 1.5741162264812427
+        "x": 2.4100904481632752,
+        "y": 1.515797662015137
       },
       "isLocked": false,
       "linkedName": "HPStationBottom"
     },
     {
       "anchor": {
-        "x": 3.6082991803278692,
-        "y": 2.6404200819672123
+        "x": 3.706801733182873,
+        "y": 2.5539191008015165
       },
       "prevControl": {
-        "x": 2.786623566955182,
-        "y": 2.0379696091592487
+        "x": 2.885126119810186,
+        "y": 1.951468627993553
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

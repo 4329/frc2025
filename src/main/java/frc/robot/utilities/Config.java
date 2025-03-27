@@ -65,6 +65,16 @@ public class Config {
 
     private boolean hasDrivetrain = true;
 
+    private boolean isElevatorNeo = false;
+
+    public boolean getIsElevatorNeo() {
+        return isElevatorNeo;
+    }
+
+    public void setElevatorNeo(boolean isElevatorNeo) {
+        this.isElevatorNeo = isElevatorNeo;
+    }
+
     public boolean getHasDrivetrain() {
         return hasDrivetrain;
     }

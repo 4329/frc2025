@@ -45,10 +45,6 @@ public class AlgeeWheelSubsystem extends SubsystemBase implements LoggedSubsyste
         motor1.set(0);
     }
 
-    public boolean getAlgeed() {
-        return motor1.getOutputCurrent() > 15;
-    }
-
     @Override
     public void periodic() {
         running.setBoolean(motor1.get() != 0);
@@ -57,8 +53,7 @@ public class AlgeeWheelSubsystem extends SubsystemBase implements LoggedSubsyste
 
     @Override
     public LoggableInputs log() {
-        algeeWheelLogAutoLogged.speed = motor1.getEncoder().getVelocity();
-        algeeWheelLogAutoLogged.algeed = getAlgeed();
+        algeeWheelLogAutoLogged.control = motor1.get();
 
         return algeeWheelLogAutoLogged;
     }

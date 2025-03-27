@@ -1,7 +1,6 @@
 package frc.robot.commands.algeeWheelCommands;
 
 import frc.robot.subsystems.AlgeeWheelSubsystem;
-import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.loggedComands.LoggedCommandComposer;
 
 public class OuttakeAlgeeCommand extends LoggedCommandComposer {
@@ -25,7 +24,6 @@ public class OuttakeAlgeeCommand extends LoggedCommandComposer {
 
     @Override
     public void end(boolean interrupted) {
-        LEDState.algeeWheelHolding = false;
         algeeWheelSubsystem.stop();
     }
 

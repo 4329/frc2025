@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.57,
-        "y": 3.03
+        "x": 3.571031039209279,
+        "y": 3.028624667651937
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.293730226471073,
-        "y": 2.457802075126869
+        "x": 3.294761265680352,
+        "y": 2.4564267427788065
       },
       "isLocked": false,
       "linkedName": "Side E Left Score"
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

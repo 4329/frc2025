@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.75375,
-        "y": 5.468
+        "x": 3.808711638344858,
+        "y": 5.48942264958956
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8496808168385837,
-        "y": 6.075824019579342
+        "x": 2.9046424551834416,
+        "y": 6.097246669168902
       },
       "isLocked": false,
       "linkedName": "Side C Right"
     },
     {
       "anchor": {
-        "x": 1.402561475409836,
-        "y": 7.027920081967213
+        "x": 1.6502533783746716,
+        "y": 7.038935810803399
       },
       "prevControl": {
-        "x": 1.623029248344139,
-        "y": 6.8611626022862975
+        "x": 1.8707211513089748,
+        "y": 6.872178331122483
       },
       "nextControl": null,
       "isLocked": false,
@@ -44,7 +44,18 @@
       }
     }
   ],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 3.95,
+        "y": 5.0
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.03314917127071824,
+      "maxWaypointRelativePos": 0.75,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [
     {
       "name": "intakeCoral",
@@ -54,7 +65,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

@@ -51,6 +51,7 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
                     new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem),
 
                     new IntakeAlgeeCommand(algeeWheelSubsystem),
+                    new UnInstantCommand("AlgeeWheelStop", algeeWheelSubsystem::stop),
                     new OuttakeAlgeeCommand(algeeWheelSubsystem),
                     new UnInstantCommand("nothing", () -> {}),
 
@@ -59,6 +60,7 @@ public class DoAFunctionalCommand extends LoggedSequentialCommandGroup {
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L3),
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.L4),
+                    new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
                     new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET),
 
                     new HPStationCommand(differentialArmSubsystem, elevatorSubsystem),

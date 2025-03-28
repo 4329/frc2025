@@ -9,7 +9,7 @@ public class OuttakeAlgeeCommand extends LoggedCommandComposer {
     private double speed;
 
     public OuttakeAlgeeCommand(AlgeeWheelSubsystem algeeWheelSubsystem) {
-        this(algeeWheelSubsystem, 1);
+        this(algeeWheelSubsystem, 0.5);
     }
 
     public OuttakeAlgeeCommand(AlgeeWheelSubsystem algeeWheelSubsystem, double speed) {

@@ -25,14 +25,13 @@ public class PorcessorCommand extends LoggedSequentialCommandGroup {
                 new LoggedSequentialCommandGroup(
                                 "DoArm",
                                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
-                                new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.STORAGE))
+                                new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY))
                         .onlyIfLog(
                                 () ->
                                         differentialArmSubsystem.getPitchSetpoint()
-                                                        != DifferentialArmPitch.STORAGE.getRotation()
+                                                        != DifferentialArmPitch.NINETY.getRotation()
                                                 && differentialArmSubsystem.pitchAtSetpoint()),
-                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO),
-                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUTFORCORAL),
-                new OuttakeAlgeeCommand(algeeWheelSubsystem, 0.2));
+                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.PORCESSOR),
+                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUTFORCORAL));
     }
 }

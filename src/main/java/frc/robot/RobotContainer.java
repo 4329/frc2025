@@ -331,6 +331,8 @@ public class RobotContainer {
 					"ResetOdometry",
 					() -> m_robotDrive.resetOdometry(new Pose2d())));
 
+                buttonRingController.axisLessThan(0, -0.9).whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem, 0.5));
+
 
 		manualController.start().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
 		manualController.back().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));

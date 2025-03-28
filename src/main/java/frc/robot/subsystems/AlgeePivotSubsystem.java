@@ -26,6 +26,7 @@ public class AlgeePivotSubsystem extends SubsystemBase implements LoggedSubsyste
 
     public enum AlgeePivotAngle {
         ZERO(0),
+        NET(15.5),
         OUT(19),
         OUTFORCORAL(27.5),
         ;

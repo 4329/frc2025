@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8,
-        "y": 5.15
+        "x": 3.7822258673350495,
+        "y": 5.170200239148486
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.770843673036849,
-        "y": 5.4759438485246825
+        "x": 3.7530695403718988,
+        "y": 5.496144087673168
       },
       "isLocked": false,
       "linkedName": "Side C Right Score"

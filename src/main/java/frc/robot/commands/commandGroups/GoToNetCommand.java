@@ -7,13 +7,15 @@ import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
+import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
-public class GoToNetCommand extends LoggedParallelCommandGroup {
+public class GoToNetCommand extends LoggedSequentialCommandGroup {
 
     public GoToNetCommand(
             AlgeePivotSubsystem algeePivotSubsystem, ElevatorSubsystem elevatorSubsystem) {
         addCommands(
-                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT),
-                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
+                new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET),
+                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.NET)
+        );
     }
 }

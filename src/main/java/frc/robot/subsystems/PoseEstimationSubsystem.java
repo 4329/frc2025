@@ -76,8 +76,12 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                         drivetrain.getRawGyro(),
                         drivetrain.getModulePositions(),
                         initialPose);
-        // rotOffset = initialPose.getRotation().minus(drivetrain.getRawGyro());
     }
+
+    private void setRotOffset(Pose2d initialPose) {
+        setInitialPose(initialPose);
+        rotOffset = initialPose.getRotation().minus(drivetrain.getRawGyro());
+    } 
 
     public Pose2d getPose() {
         return estimator.getEstimatedPosition();
@@ -102,11 +106,12 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                             : lilihSubsystem.getRobotPose();
             if (poseEstimate.rawFiducials != null
                     && poseEstimate.rawFiducials.length > 0
-                    && poseEstimate.rawFiducials[0].ambiguity < .7) {
+                    && poseEstimate.rawFiducials[0].ambiguity < .7
+                    && poseEstimate.rawFiducials[0].ta > 0.003) {
                 estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
                 if (rotOffset == null) {
                     offsetTimer.start();
-                    if (offsetTimer.get() > 0.5) setInitialPose(poseEstimate.pose);
+                    if (offsetTimer.get() > 0.5) setRotOffset(poseEstimate.pose);
                 }
             }
         }

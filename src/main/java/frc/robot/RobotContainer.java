@@ -301,11 +301,11 @@ public class RobotContainer {
 		driverController.start().onTrue(new UnInstantCommand(
 					"ToggleFieldOrient",
 					driveByController::toggleFieldOrient
-					));
+                ));
 
-        driverController.back().onTrue(new UnInstantCommand(
-            "ResetRotation",
-            poseEstimationSubsystem::resetRotOffset));
+                driverController.back().onTrue(new UnInstantCommand(
+                        "ResetRotation",
+                        poseEstimationSubsystem::resetRotOffset));
 
 		driverController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
 					"ElevatorUp",

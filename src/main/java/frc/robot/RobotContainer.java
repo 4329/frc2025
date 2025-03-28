@@ -138,8 +138,7 @@ public class RobotContainer {
                 algeePivotSubsystem,
                 buttonRingController,
                 lightSubsystem,
-                algeeWheelSubsystem,
-                distanceSensorSubsystem);
+                algeeWheelSubsystem);
 
         elevatorSubsystem = new ElevatorSubsystem();
 

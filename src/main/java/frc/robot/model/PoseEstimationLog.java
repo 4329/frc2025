@@ -2,6 +2,9 @@ package frc.robot.model;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+
+import java.util.List;
+
 import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog
@@ -12,4 +15,6 @@ public class PoseEstimationLog {
     public Pose2d limOnly;
     public Pose2d driveOnly;
     public Pose2d pathPlannerPosy;
+    public Pose2d pathPlannerTarget;
+    public Pose2d[] pathPlannerPoses;
 }

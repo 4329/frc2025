@@ -322,7 +322,7 @@ public class RobotContainer {
 		driverController.x().whileTrue(new AlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, buttonRingController));
 		driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
-		driverController.povUp().onTrue(new GoToNetCommand(algeePivotSubsystem, elevatorSubsystem));
+		driverController.povUp().onTrue(new GoToNetCommand(algeePivotSubsystem, elevatorSubsystem, differentialArmSubsystem));
 		driverController.povDown().onTrue(new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
 		driverController.povLeft().onTrue(new PorcessorCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));

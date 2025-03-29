@@ -1,10 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.MathUtils;
@@ -62,14 +64,12 @@ public class DriveByController extends Command {
                 -inputTransform(m_controller.getRightX()) * DriveConstants.kMaxAngularSpeed,
                 fieldOrient);
 
-        m_controller.setRumble(
-                RumbleType.kBothRumble,
-                MathUtils.clamp(
-                                0,
-                                1,
-                                Math.sqrt(
-                                        Math.pow(m_controller.getLeftY(), 2) + Math.pow(m_controller.getLeftX(), 2)))
-                        * 0.3);
+        // m_controller.setRumble(
+        //         RumbleType.kBothRumble,
+        //         MathUtils.clamp(
+        //                         0,
+        //                         1,
+        //                         Math.sin(DriverStation.getMatchTime()) * m_robotDrive.getVelocity() / Constants.DriveConstants.kMaxSpeedMetersPerSecond));
 
         if (logStuff) Logger.recordOutput("Field Oriented", fieldOrient);
     }

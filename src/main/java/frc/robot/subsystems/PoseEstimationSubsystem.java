@@ -17,10 +17,8 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -89,7 +87,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     private void setRotOffset(Pose2d initialPose) {
         setInitialPose(initialPose);
         rotOffset = initialPose.getRotation().minus(drivetrain.getRawGyro());
-    } 
+    }
 
     public Pose2d getPose() {
         return estimator.getEstimatedPosition();

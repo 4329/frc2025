@@ -1,7 +1,6 @@
 package frc.robot.commands.autoCommands;
 
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
-import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
 import frc.robot.commands.differentialArmCommands.SetArmPitchCommand;
 import frc.robot.commands.elevatorCommands.SetElevatorCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;

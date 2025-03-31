@@ -1,19 +1,6 @@
 package frc.robot.commands.driveCommands;
 
-import static org.mockito.Mockito.when;
-
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.lilih.LilihSubsystem;
-import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
-import frc.robot.utilities.CenterDistance;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,11 +27,13 @@ public class CenterOnTargetCommandTest {
     //         System.out.println(
     //                 i
     //                         + ": "
-    //                         + centerOnTargetCommand.placeTarget(i, 0.1651 - clawOffset, CenterDistance.SCORING));
+    //                         + centerOnTargetCommand.placeTarget(i, 0.1651 - clawOffset,
+    // CenterDistance.SCORING));
     //         System.out.println(
     //                 i
     //                         + ": "
-    //                         + centerOnTargetCommand.placeTarget(i, -0.1651 - clawOffset, CenterDistance.SCORING));
+    //                         + centerOnTargetCommand.placeTarget(i, -0.1651 - clawOffset,
+    // CenterDistance.SCORING));
     //     }
     // }
 }

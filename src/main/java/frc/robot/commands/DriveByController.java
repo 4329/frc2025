@@ -1,12 +1,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.MathUtils;
@@ -40,7 +38,8 @@ public class DriveByController extends Command {
         m_robotDrive = drive;
         m_controller = controller;
 
-        // Because this will be used as a default command, add the subsystem which will use this as the default
+        // Because this will be used as a default command, add the subsystem which will use this as the
+        // default
         addRequirements(m_robotDrive);
         logStuff = true;
     }
@@ -49,7 +48,8 @@ public class DriveByController extends Command {
         m_robotDrive = drive;
         m_controller = controller;
 
-        // Because this will be used as a default command, add the subsystem which will use this as the default
+        // Because this will be used as a default command, add the subsystem which will use this as the
+        // default
         addRequirements(m_robotDrive);
         this.logStuff = logStuff;
     }
@@ -69,7 +69,8 @@ public class DriveByController extends Command {
         //         MathUtils.clamp(
         //                         0,
         //                         1,
-        //                         Math.sin(DriverStation.getMatchTime()) * m_robotDrive.getVelocity() / Constants.DriveConstants.kMaxSpeedMetersPerSecond));
+        //                         Math.sin(DriverStation.getMatchTime()) * m_robotDrive.getVelocity() /
+        // Constants.DriveConstants.kMaxSpeedMetersPerSecond));
 
         if (logStuff) Logger.recordOutput("Field Oriented", fieldOrient);
     }

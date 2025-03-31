@@ -2,9 +2,6 @@ package frc.robot.model;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-
-import java.util.List;
-
 import org.littletonrobotics.junction.AutoLog;
 
 @AutoLog

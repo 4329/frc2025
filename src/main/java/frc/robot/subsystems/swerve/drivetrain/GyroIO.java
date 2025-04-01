@@ -7,8 +7,8 @@ public interface GyroIO {
 
     @AutoLog
     public static class GyroIOLog {
-        public Rotation2d gyro;
-        public Rotation2d offset;
+        public Rotation2d gyro = Rotation2d.kZero;
+        public Rotation2d offset = Rotation2d.kZero;
     }
 
     public default void resetOffset(Rotation2d offset) {}

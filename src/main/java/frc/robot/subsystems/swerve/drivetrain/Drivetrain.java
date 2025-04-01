@@ -53,7 +53,7 @@ public class Drivetrain extends SubsystemBase implements LoggedSubsystem {
     // Creates a swerveModule object for the front left swerve module feeding in
     // parameters from the constants file
     // Creates an ahrs gyro (NavX) on the MXP port of the RoboRIO
-    private Gyro gyro = new Gyro();
+    private Gyro gyro;
 
     // Creates Odometry object to store the pose of the robot
     protected final SwerveDriveOdometry m_odometry;
@@ -69,6 +69,7 @@ public class Drivetrain extends SubsystemBase implements LoggedSubsystem {
         m_keepAnglePID.enableContinuousInput(-Math.PI, Math.PI);
 
 
+        gyro = new Gyro();
         gyro.resetOffset(Rotation2d.kPi);
 
         m_frontLeft =

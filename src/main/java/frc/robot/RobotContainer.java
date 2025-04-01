@@ -70,7 +70,7 @@ import java.util.Map;
 public class RobotContainer {
 
     // The robot's subsystems
-    private final Drivetrain m_robotDrive;
+    private final Drivetrain drivetrain;
     private final PoseEstimationSubsystem poseEstimationSubsystem;
     private final LilihSubsystem lilihSubsystem;
     private final DifferentialArmSubsystem differentialArmSubsystem;
@@ -107,7 +107,7 @@ public class RobotContainer {
      * @param lightSubsystem
      */
     public RobotContainer(Drivetrain drivetrain) {
-        m_robotDrive = drivetrain;
+        this.drivetrain = drivetrain;
 
         driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
         manualController = new CommandXboxController(OIConstants.kManualControllerPort);
@@ -119,7 +119,7 @@ public class RobotContainer {
                 .withSize(3, 2);
 
         driveByController = new DriveByController(drivetrain, driverController);
-        m_robotDrive.setDefaultCommand(driveByController);
+        drivetrain.setDefaultCommand(driveByController);
 
         lilihSubsystem = new LilihSubsystem(11, "limelight-lilih");
         poseEstimationSubsystem = new PoseEstimationSubsystem(drivetrain, lilihSubsystem);
@@ -195,7 +195,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "intakeAlgeeHigh",
                 new AutoAlgeeIntake(
-                        m_robotDrive,
+                        drivetrain,
                         elevatorSubsystem,
                         algeeWheelSubsystem,
                         algeePivotSubsystem,
@@ -204,7 +204,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "intakeAlgeeLow",
                 new AutoAlgeeIntake(
-                        m_robotDrive,
+                        drivetrain,
                         elevatorSubsystem,
                         algeeWheelSubsystem,
                         algeePivotSubsystem,
@@ -230,7 +230,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "lowerArm", new SetArmPitchCommand(differentialArmSubsystem, DifferentialArmPitch.NINETY));
 
-        NamedCommands.registerCommand("stop", new UnInstantCommand("stop", () -> m_robotDrive.stop()));
+        NamedCommands.registerCommand("stop", new UnInstantCommand("stop", () -> drivetrain.stop()));
     }
 
     private void addCool(int num, ElevatorPosition position, ElevatorPosition scorePosition) {
@@ -244,7 +244,7 @@ public class RobotContainer {
                         scorePosition,
                         differentialArmSubsystem,
                         poseEstimationSubsystem,
-                        m_robotDrive,
+                        drivetrain,
                         num,
                         true));
         NamedCommands.registerCommand(
@@ -256,7 +256,7 @@ public class RobotContainer {
                         scorePosition,
                         differentialArmSubsystem,
                         poseEstimationSubsystem,
-                        m_robotDrive,
+                        drivetrain,
                         num,
                         false));
     }
@@ -271,9 +271,9 @@ public class RobotContainer {
         AutoBuilder.configure(
                 poseEstimationSubsystem::getPose,
                 poseEstimationSubsystem::setInitialPose,
-                m_robotDrive::getChassisSpeed,
+                drivetrain::getChassisSpeed,
                 (speeds, feedForwards) -> {
-                    m_robotDrive.setModuleStates(speeds);
+                    drivetrain.setModuleStates(speeds);
                 },
                 Constants.AutoConstants.ppHolonomicDriveController,
                 Constants.AutoConstants.config,
@@ -284,7 +284,7 @@ public class RobotContainer {
                     }
                     throw new RuntimeException();
                 },
-                m_robotDrive);
+                drivetrain);
 
         Pathfinding.setPathfinder(new LocalADStarAK());
     }
@@ -314,12 +314,12 @@ public class RobotContainer {
 					"ElevatorDown",
 					() -> elevatorSubsystem.runElevator(-driverController.getLeftTriggerAxis())).repeatedlyLog());
 
-		driverController.rightBumper().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, m_robotDrive));
+		driverController.rightBumper().whileTrue(new ScoreWithArm(algeePivotSubsystem, elevatorSubsystem, buttonRingController, differentialArmSubsystem, poseEstimationSubsystem, drivetrain));
 		driverController.leftBumper().whileTrue(new ScoreCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController, algeePivotSubsystem));
 
 		driverController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
 		driverController.b().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ZERO).andThenLog(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
-		driverController.x().whileTrue(new AlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, buttonRingController));
+		driverController.x().whileTrue(new AlgeeIntake(drivetrain, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, buttonRingController));
 		driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
 		driverController.povUp().onTrue(new GoToNetCommand(algeePivotSubsystem, elevatorSubsystem, differentialArmSubsystem));
@@ -329,7 +329,7 @@ public class RobotContainer {
 
 		driverController.rightStick().onTrue(new UnInstantCommand(
 					"ResetOdometry",
-					() -> m_robotDrive.resetOdometry(new Pose2d())));
+					() -> drivetrain.resetOdometry(new Pose2d())));
 
                 buttonRingController.axisLessThan(0, -0.9).whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem, 0.5));
 
@@ -373,7 +373,7 @@ public class RobotContainer {
 
 
         
-                functionalController.a().onFalse(new DoAFunctionalCommand(m_robotDrive, functionalController.getHID(), elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
+                functionalController.a().onFalse(new DoAFunctionalCommand(drivetrain, functionalController.getHID(), elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
 
                 functionalController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
 					"ElevatorUp",
@@ -466,6 +466,6 @@ public class RobotContainer {
     }
 
     public void robotPeriodic() {
-        navx.setBoolean(m_robotDrive.getGyro().getRadians() != 0);
+        navx.setBoolean(drivetrain.getGyro().getRadians() != 0);
     }
 }

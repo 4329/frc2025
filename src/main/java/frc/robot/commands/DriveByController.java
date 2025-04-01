@@ -13,7 +13,7 @@ import org.littletonrobotics.junction.Logger;
 
 /** Implements a DriveByController command which extends the Command class */
 public class DriveByController extends Command {
-    private final Drivetrain m_robotDrive;
+    private final Drivetrain drivetrain;
     private final CommandXboxController m_controller;
     private boolean fieldOrient = false;
     private GenericEntry fieldOrientStatus =
@@ -35,22 +35,22 @@ public class DriveByController extends Command {
      * @param controller is the user input controller object for controlling the drivetrain
      */
     public DriveByController(Drivetrain drive, CommandXboxController controller) {
-        m_robotDrive = drive;
+        drivetrain = drive;
         m_controller = controller;
 
         // Because this will be used as a default command, add the subsystem which will use this as the
         // default
-        addRequirements(m_robotDrive);
+        addRequirements(drivetrain);
         logStuff = true;
     }
 
     public DriveByController(Drivetrain drive, CommandXboxController controller, boolean logStuff) {
-        m_robotDrive = drive;
+        drivetrain = drive;
         m_controller = controller;
 
         // Because this will be used as a default command, add the subsystem which will use this as the
         // default
-        addRequirements(m_robotDrive);
+        addRequirements(drivetrain);
         this.logStuff = logStuff;
     }
 
@@ -58,7 +58,7 @@ public class DriveByController extends Command {
     @Override
     public void execute() {
         // :3
-        m_robotDrive.drive(
+        drivetrain.drive(
                 -inputTransform(m_controller.getLeftY()) * DriveConstants.kMaxSpeedMetersPerSecond,
                 -inputTransform(m_controller.getLeftX()) * DriveConstants.kMaxSpeedMetersPerSecond,
                 -inputTransform(m_controller.getRightX()) * DriveConstants.kMaxAngularSpeed,

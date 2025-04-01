@@ -17,6 +17,8 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
+import java.util.ArrayList;
+import java.util.List;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -34,6 +36,8 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
     private Field2d field = new Field2d();
     private Pose2d pathPlannerPose = new Pose2d();
+    private Pose2d pathPlannerTarget = new Pose2d();
+    private List<Pose2d> pathPlannerposes = new ArrayList<>();
 
     private AprilTagFieldLayout aprilTagFieldLayout;
 
@@ -60,11 +64,13 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         PathPlannerLogging.setLogTargetPoseCallback(
                 (pose) -> {
                     field.getObject("target pose").setPose(pose);
+                    pathPlannerTarget = pose != null ? pose : new Pose2d();
                 });
 
         PathPlannerLogging.setLogActivePathCallback(
                 (poses) -> {
                     field.getObject("path").setPoses(poses);
+                    pathPlannerposes = poses != null ? poses : new ArrayList<>();
                 });
         Shuffleboard.getTab("field").add("field", field);
     }
@@ -76,7 +82,11 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                         drivetrain.getRawGyro(),
                         drivetrain.getModulePositions(),
                         initialPose);
-        // rotOffset = initialPose.getRotation().minus(drivetrain.getRawGyro());
+    }
+
+    private void setRotOffset(Pose2d initialPose) {
+        setInitialPose(initialPose);
+        rotOffset = initialPose.getRotation().minus(drivetrain.getRawGyro());
     }
 
     public Pose2d getPose() {
@@ -102,11 +112,12 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                             : lilihSubsystem.getRobotPose();
             if (poseEstimate.rawFiducials != null
                     && poseEstimate.rawFiducials.length > 0
-                    && poseEstimate.rawFiducials[0].ambiguity < .7) {
+                    && poseEstimate.rawFiducials[0].ambiguity < .7
+                    && poseEstimate.rawFiducials[0].ta > 0.003) {
                 estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
                 if (rotOffset == null) {
                     offsetTimer.start();
-                    if (offsetTimer.get() > 0.5) setInitialPose(poseEstimate.pose);
+                    if (offsetTimer.get() > 0.5) setRotOffset(poseEstimate.pose);
                 }
             }
         }
@@ -129,7 +140,10 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         if (lilihSubsystem.seeingAnything())
             poseEstimationLogAutoLogged.limOnly = lilihSubsystem.getRobotPose().pose;
         poseEstimationLogAutoLogged.driveOnly = drivetrain.getPose();
+
         poseEstimationLogAutoLogged.pathPlannerPosy = pathPlannerPose;
+        poseEstimationLogAutoLogged.pathPlannerTarget = pathPlannerTarget;
+        poseEstimationLogAutoLogged.pathPlannerPoses = pathPlannerposes.toArray(new Pose2d[] {});
         return poseEstimationLogAutoLogged;
     }
 }

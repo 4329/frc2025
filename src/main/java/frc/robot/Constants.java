@@ -148,8 +148,8 @@ public final class Constants {
 
         // NOTE: You shoulds ALWAYS define a reasonable current limit when using
         // brushless motors due to the extremely high stall current available
-        public static final int kDriveCurrentLimit = 30;
-        public static final int kTurnCurrentLimit = 25;
+        public static final int kDriveCurrentLimit = 60;
+        public static final int kTurnCurrentLimit = 60;
 
         public static final double[] kTurnPID = {
             0.65, 0, 0

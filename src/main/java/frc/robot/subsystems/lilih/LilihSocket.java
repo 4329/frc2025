@@ -18,6 +18,7 @@ public class LilihSocket {
     private WebsocketListener listener;
     private ObjectMapper objectMapper;
     private int ip;
+    private boolean failed;
 
     public LilihSocket(int ip) {
         this.ip = ip;
@@ -29,6 +30,7 @@ public class LilihSocket {
     }
 
     private void createSocket() {
+        failed = false;
         HttpClient httpClient = HttpClient.newHttpClient();
         listener = new WebsocketListener();
         httpClient
@@ -37,6 +39,7 @@ public class LilihSocket {
                 .exceptionallyAsync(
                         e -> {
                             Logger.recordOutput("lilihException", e.getMessage());
+                            failed = true;
                             return null;
                         });
     }
@@ -46,7 +49,10 @@ public class LilihSocket {
     }
 
     public LimelightHelpers.LimelightResults getResults() {
-        if (!isConnected()) {
+        if (failed) {
+            createSocket();
+            return new LimelightHelpers.LimelightResults();
+        } else if (!isConnected()) {
             return new LimelightHelpers.LimelightResults();
         }
 

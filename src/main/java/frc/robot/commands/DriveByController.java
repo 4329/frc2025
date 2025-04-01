@@ -35,21 +35,22 @@ public class DriveByController extends Command {
      * @param controller is the user input controller object for controlling the drivetrain
      */
     public DriveByController(Drivetrain drive, CommandXboxController controller) {
-        m_robotDrive = drive; // Set the private member to the input drivetrain
-        m_controller = controller; // Set the private member to the input controller
-        addRequirements(
-                m_robotDrive); // Because this will be used as a default command, add the subsystem which
-        // will use this as the default
+        m_robotDrive = drive;
+        m_controller = controller;
+
+        // Because this will be used as a default command, add the subsystem which will use this as the
+        // default
+        addRequirements(m_robotDrive);
         logStuff = true;
     }
 
     public DriveByController(Drivetrain drive, CommandXboxController controller, boolean logStuff) {
-        m_robotDrive = drive; // Set the private member to the input drivetrain
-        m_controller = controller; // Set the private member to the input controller
-        addRequirements(
-                m_robotDrive); // Because this will be used as a default command, add the subsystem which
-        // will
-        // use this as the default
+        m_robotDrive = drive;
+        m_controller = controller;
+
+        // Because this will be used as a default command, add the subsystem which will use this as the
+        // default
+        addRequirements(m_robotDrive);
         this.logStuff = logStuff;
     }
 
@@ -63,14 +64,13 @@ public class DriveByController extends Command {
                 -inputTransform(m_controller.getRightX()) * DriveConstants.kMaxAngularSpeed,
                 fieldOrient);
 
-        m_controller.setRumble(
-                RumbleType.kBothRumble,
-                MathUtils.clamp(
-                                0,
-                                1,
-                                Math.sqrt(
-                                        Math.pow(m_controller.getLeftY(), 2) + Math.pow(m_controller.getLeftX(), 2)))
-                        * 0.3);
+        // m_controller.setRumble(
+        //         RumbleType.kBothRumble,
+        //         MathUtils.clamp(
+        //                         0,
+        //                         1,
+        //                         Math.sin(DriverStation.getMatchTime()) * m_robotDrive.getVelocity() /
+        // Constants.DriveConstants.kMaxSpeedMetersPerSecond));
 
         if (logStuff) Logger.recordOutput("Field Oriented", fieldOrient);
     }

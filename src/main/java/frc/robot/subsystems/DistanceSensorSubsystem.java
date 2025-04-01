@@ -3,11 +3,10 @@ package frc.robot.subsystems;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.inputs.LoggableInputs;
+import org.littletonrobotics.junction.Logger;
 
-public class DistanceSensorSubsystem extends SubsystemBase implements LoggedSubsystem {
+public class DistanceSensorSubsystem extends SubsystemBase {
     private static final double CORAL_AMOUNT = 175;
 
     @AutoLog
@@ -15,16 +14,13 @@ public class DistanceSensorSubsystem extends SubsystemBase implements LoggedSubs
         double distance;
     }
 
-    ColorSensorV3 distanceSensor = new ColorSensorV3(Port.kOnboard);
+    ColorSensorV3 distanceSensor = new ColorSensorV3(Port.kMXP);
     DistanceSensorLogAutoLogged distanceSensorLogAutoLogged = new DistanceSensorLogAutoLogged();
 
     public boolean getCoraled() {
-        return distanceSensor.getProximity() >= CORAL_AMOUNT;
-    }
-
-    @Override
-    public LoggableInputs log() {
         distanceSensorLogAutoLogged.distance = distanceSensor.getProximity();
-        return distanceSensorLogAutoLogged;
+        Logger.processInputs("DistanceSensorSubsystem", distanceSensorLogAutoLogged);
+
+        return distanceSensorLogAutoLogged.distance >= CORAL_AMOUNT;
     }
 }

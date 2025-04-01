@@ -7,8 +7,9 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 public class LoggingSubsystem extends SubsystemBase {
 
     private LoggedSubsystem[] subsystems;
-    private boolean isEven;
     private int timer;
+
+    private final int oftenness = 2;
 
     public LoggingSubsystem(LoggedSubsystem... subsystems) {
         this.subsystems = subsystems;
@@ -17,13 +18,11 @@ public class LoggingSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         timer++;
+        timer %= oftenness;
 
-        if (timer % 3 == 0) {
-            for (int i = isEven ? 0 : 1; i < subsystems.length; i += 2) {
-                String name = subsystems[i].getNameLog();
-                Logger.processInputs(name, subsystems[i].log());
-            }
-            isEven = !isEven;
+        for (int i = timer; i < subsystems.length; i += oftenness) {
+            String name = subsystems[i].getNameLog();
+            Logger.processInputs(name, subsystems[i].log());
         }
     }
 

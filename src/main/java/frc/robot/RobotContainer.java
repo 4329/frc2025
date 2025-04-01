@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DoAFunctionalCommand;
 import frc.robot.commands.DriveByController;
+import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
@@ -31,6 +32,7 @@ import frc.robot.commands.autoCommands.AutoPositionCoralCommand;
 import frc.robot.commands.autoCommands.AutoScoreCoralButCool;
 import frc.robot.commands.autoCommands.PorcessorCommand;
 import frc.robot.commands.commandGroups.AlgeeIntake;
+import frc.robot.commands.commandGroups.GoToNetCommand;
 import frc.robot.commands.commandGroups.HPStationCommand;
 import frc.robot.commands.commandGroups.HappyResetCommand;
 import frc.robot.commands.commandGroups.ScoreCoralCommand;
@@ -136,8 +138,7 @@ public class RobotContainer {
                 algeePivotSubsystem,
                 buttonRingController,
                 lightSubsystem,
-                algeeWheelSubsystem,
-                distanceSensorSubsystem);
+                algeeWheelSubsystem);
 
         elevatorSubsystem = new ElevatorSubsystem();
 
@@ -300,11 +301,11 @@ public class RobotContainer {
 		driverController.start().onTrue(new UnInstantCommand(
 					"ToggleFieldOrient",
 					driveByController::toggleFieldOrient
-					));
+                ));
 
-        driverController.back().onTrue(new UnInstantCommand(
-            "ResetRotation",
-            poseEstimationSubsystem::resetRotOffset));
+                driverController.back().onTrue(new UnInstantCommand(
+                        "ResetRotation",
+                        poseEstimationSubsystem::resetRotOffset));
 
 		driverController.rightTrigger(0.01).whileTrue(new UnInstantCommand(
 					"ElevatorUp",
@@ -321,7 +322,7 @@ public class RobotContainer {
 		driverController.x().whileTrue(new AlgeeIntake(m_robotDrive, elevatorSubsystem, algeeWheelSubsystem, algeePivotSubsystem, poseEstimationSubsystem, buttonRingController));
 		driverController.y().whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem));
 
-		driverController.povUp().onTrue(new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
+		driverController.povUp().onTrue(new GoToNetCommand(algeePivotSubsystem, elevatorSubsystem, differentialArmSubsystem));
 		driverController.povDown().onTrue(new HappyResetCommand(differentialArmSubsystem, elevatorSubsystem, algeePivotSubsystem));
 		driverController.povRight().onTrue(new StartCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem));
 		driverController.povLeft().onTrue(new PorcessorCommand(elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
@@ -329,6 +330,8 @@ public class RobotContainer {
 		driverController.rightStick().onTrue(new UnInstantCommand(
 					"ResetOdometry",
 					() -> m_robotDrive.resetOdometry(new Pose2d())));
+
+                buttonRingController.axisLessThan(0, -0.9).whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem, 0.5));
 
 
 		manualController.start().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
@@ -341,8 +344,8 @@ public class RobotContainer {
 					"ElevatorDown",
 					() -> elevatorSubsystem.runElevator(-manualController.getLeftTriggerAxis())).repeatedlyLog());
 
-		manualController.leftBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
-		manualController.rightBumper().whileTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT));
+		manualController.leftBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, -1));
+		manualController.rightBumper().whileTrue(new RunAlgeePivotCommand(algeePivotSubsystem, 1));
 
 		manualController.a().onTrue(new HPStationCommand(differentialArmSubsystem, elevatorSubsystem));
 		CoolEvator eleCool = new CoolEvator(elevatorSubsystem);

@@ -1,7 +1,6 @@
 package frc.robot.commands.autoCommands;
 
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
-import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
 import frc.robot.commands.differentialArmCommands.SetArmPitchCommand;
 import frc.robot.commands.elevatorCommands.SetElevatorCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
@@ -32,7 +31,6 @@ public class PorcessorCommand extends LoggedSequentialCommandGroup {
                                                         != DifferentialArmPitch.NINETY.getRotation()
                                                 && differentialArmSubsystem.pitchAtSetpoint()),
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.PORCESSOR),
-                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUTFORCORAL),
-                new OuttakeAlgeeCommand(algeeWheelSubsystem, 0.2));
+                new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUTFORCORAL));
     }
 }

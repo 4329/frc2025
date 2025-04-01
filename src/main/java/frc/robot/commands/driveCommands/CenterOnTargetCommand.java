@@ -38,6 +38,7 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
         this.drivetrain = drivetrain;
 
         target = placeTarget(targetID, xOffset, centerDistance);
+        addRequirements(drivetrain);
     }
 
     public Pose2d placeTarget(int targetID, double xOffset, CenterDistance centerDistance) {
@@ -77,9 +78,14 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
                         Constants.AutoConstants.ppHolonomicDriveController,
                         Constants.AutoConstants.config,
                         drivetrain);
-        pathFind.schedule();
+        pathFind.initialize();
 
         LEDState.centerRunning = true;
+    }
+
+    @Override
+    public void execute() {
+        pathFind.execute();
     }
 
     @Override

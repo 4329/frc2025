@@ -1,13 +1,10 @@
 package frc.robot.subsystems.swerve.drivetrain;
 
-import org.littletonrobotics.junction.Logger;
-
-import com.studica.frc.AHRS;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utilities.HoorayConfig;
+import org.littletonrobotics.junction.Logger;
 
 public class Gyro extends SubsystemBase implements GyroIO {
 
@@ -15,16 +12,17 @@ public class Gyro extends SubsystemBase implements GyroIO {
     GyroIOLogAutoLogged input;
 
     public Gyro() {
-        io = switch (Constants.robotMode) {
-            case REPLAY -> {
-                yield new GyroIO() {};
-            }
+        io =
+                switch (Constants.robotMode) {
+                    case REPLAY -> {
+                        yield new GyroIO() {};
+                    }
 
-            case REAL -> {
-                yield HoorayConfig.gimmeConfig().getUsesNavx() ? new GyroIONavX() : new GyroIOPigeon();
-            }
-            default -> new GyroIONavX();
-        };
+                    case REAL -> {
+                        yield HoorayConfig.gimmeConfig().getUsesNavx() ? new GyroIONavX() : new GyroIOPigeon();
+                    }
+                    default -> new GyroIONavX();
+                };
 
         input = new GyroIOLogAutoLogged();
     }

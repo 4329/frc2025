@@ -16,12 +16,10 @@ public class SwerveModulePlayback implements SwerveModule {
     }
 
     @Override
-    public void setDesiredState(SwerveModuleState desiredState) {
-    }
+    public void setDesiredState(SwerveModuleState desiredState) {}
 
     @Override
-    public void stop() {
-    }
+    public void stop() {}
 
     @Override
     public double getTurnEncoder() {
@@ -29,12 +27,10 @@ public class SwerveModulePlayback implements SwerveModule {
     }
 
     @Override
-    public void brakeModeModule() {
-    }
+    public void brakeModeModule() {}
 
     @Override
-    public void coastModeModule() {
-    }
+    public void coastModeModule() {}
 
     @Override
     public SwerveModulePosition getPosition() {

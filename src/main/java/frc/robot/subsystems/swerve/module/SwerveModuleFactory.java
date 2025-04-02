@@ -10,12 +10,18 @@ public class SwerveModuleFactory {
             int turningEncoderChannel,
             double angularOffset,
             double[] tuningVals) {
-        return HoorayConfig.gimmeConfig().getHasDrivetrain() ? switch (Constants.robotMode) { 
-            case REAL -> new SwerveModuleImpl(
-                    driveMotorChannel, turningMotorChannel, turningEncoderChannel, angularOffset, tuningVals);
-            case SIM -> new SwerveModuleSim(
-                    driveMotorChannel, turningMotorChannel, turningEncoderChannel, tuningVals);
-            default -> new SwerveModulePlayback();
-        } : new SwerveModulePlayback();
+        return HoorayConfig.gimmeConfig().getHasDrivetrain()
+                ? switch (Constants.robotMode) {
+                    case REAL -> new SwerveModuleImpl(
+                            driveMotorChannel,
+                            turningMotorChannel,
+                            turningEncoderChannel,
+                            angularOffset,
+                            tuningVals);
+                    case SIM -> new SwerveModuleSim(
+                            driveMotorChannel, turningMotorChannel, turningEncoderChannel, tuningVals);
+                    default -> new SwerveModulePlayback();
+                }
+                : new SwerveModulePlayback();
     }
 }

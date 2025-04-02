@@ -1,10 +1,7 @@
 package frc.robot.subsystems.swerve.drivetrain;
 
-import java.io.ObjectOutputStream.PutField;
-
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.SparkIDs;
 
@@ -14,8 +11,10 @@ public class GyroIOPigeon implements GyroIO {
     private Rotation2d offset;
 
     public GyroIOPigeon() {
-        pigeon.getConfigurator()
-                .apply(new MountPoseConfigs().withMountPosePitch(0).withMountPoseRoll(0).withMountPoseYaw(0));
+        pigeon
+                .getConfigurator()
+                .apply(
+                        new MountPoseConfigs().withMountPosePitch(0).withMountPoseRoll(0).withMountPoseYaw(0));
     }
 
     private Rotation2d getSelf() {
@@ -33,5 +32,4 @@ public class GyroIOPigeon implements GyroIO {
         inputs.gyro = getSelf();
         inputs.offset = offset;
     }
-
 }

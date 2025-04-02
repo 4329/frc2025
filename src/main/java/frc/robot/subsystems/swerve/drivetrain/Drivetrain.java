@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.swerve.drivetrain;
 
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -68,7 +66,6 @@ public class Drivetrain extends SubsystemBase implements LoggedSubsystem {
         keepAngleTimer.start();
         m_keepAnglePID.enableContinuousInput(-Math.PI, Math.PI);
 
-
         gyro = new Gyro();
         gyro.resetOffset(Rotation2d.kPi);
 
@@ -105,8 +102,7 @@ public class Drivetrain extends SubsystemBase implements LoggedSubsystem {
                         DriveConstants.kBackRightTuningVals);
 
         m_odometry =
-                new SwerveDriveOdometry(
-                        DriveConstants.kDriveKinematics, gyro.get(), getModulePositions());
+                new SwerveDriveOdometry(DriveConstants.kDriveKinematics, gyro.get(), getModulePositions());
     }
 
     /**
@@ -161,8 +157,6 @@ public class Drivetrain extends SubsystemBase implements LoggedSubsystem {
         return log;
     }
 
-    
-
     /**
      * Sets the swerve ModuleStates.
      *
@@ -196,8 +190,6 @@ public class Drivetrain extends SubsystemBase implements LoggedSubsystem {
 
         m_odometry.update(getGyro(), getModulePositions());
     }
-
-    
 
     /**
      * Function to retrieve latest robot gyro angle.
@@ -233,9 +225,6 @@ public class Drivetrain extends SubsystemBase implements LoggedSubsystem {
         keepAngle = getGyro().getRadians();
         m_odometry.resetPosition(gyro.get(), getModulePositions(), pose);
     }
-
- 
-    
 
     /**
      * Converts the 4 swerve module states into a chassisSpeed by making use of the swerve drive

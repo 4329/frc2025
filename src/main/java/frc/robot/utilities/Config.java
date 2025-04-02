@@ -45,6 +45,8 @@ public class Config {
     private double backLeftOffset = -0.039;
     private double backRightOffset = 1.03;
 
+    private boolean usesNavx = true;
+
     private boolean extraShuffleBoardToggle = true;
 
     private int rollDirection = 1;
@@ -81,6 +83,14 @@ public class Config {
 
     public void setHasDrivetrain(boolean a) {
         hasDrivetrain = a;
+    }
+
+    public boolean getUsesNavx() {
+        return usesNavx;
+    }
+
+    public void setUsesNavx(boolean usesNavx) {
+        this.usesNavx = usesNavx;
     }
 
     public boolean getUsesPhotonVision() {

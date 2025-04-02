@@ -110,8 +110,10 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                     rotOffset != null
                             ? lilihSubsystem.getRobotPose_megaTag2()
                             : lilihSubsystem.getRobotPose();
-            if (poseEstimate.rawFiducials != null
+            if (poseEstimate != null
+                    && poseEstimate.rawFiducials != null
                     && poseEstimate.rawFiducials.length > 0
+                    && poseEstimate.rawFiducials[0] != null
                     && poseEstimate.rawFiducials[0].ambiguity < .7
                     && poseEstimate.rawFiducials[0].ta > 0.003) {
                 estimator.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);

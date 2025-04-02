@@ -7,6 +7,7 @@ import com.studica.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.utilities.HoorayConfig;
 
 public class Gyro extends SubsystemBase implements GyroIO {
 
@@ -17,6 +18,10 @@ public class Gyro extends SubsystemBase implements GyroIO {
         io = switch (Constants.robotMode) {
             case REPLAY -> {
                 yield new GyroIO() {};
+            }
+
+            case REAL -> {
+                yield HoorayConfig.gimmeConfig().getUsesNavx() ? new GyroIONavX() : new GyroIOPigeon();
             }
             default -> new GyroIONavX();
         };

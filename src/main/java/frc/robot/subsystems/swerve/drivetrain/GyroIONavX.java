@@ -15,7 +15,7 @@ public class GyroIONavX implements GyroIO {
         }
 
         private Rotation2d getSelf() {
-            return new Rotation2d((ahrs.getRotation2d().getRadians() % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI);
+            return ahrs.getRotation2d().rotateBy(Rotation2d.kZero);
         }
         
         @Override

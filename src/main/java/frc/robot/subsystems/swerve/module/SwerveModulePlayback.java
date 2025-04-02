@@ -7,49 +7,37 @@ public class SwerveModulePlayback implements SwerveModule {
 
     @Override
     public SwerveModuleState getState() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getState'");
+        return new SwerveModuleState();
     }
 
     @Override
     public SwerveModuleState getStateNoOffset() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getStateNoOffset'");
+        return new SwerveModuleState();
     }
 
     @Override
     public void setDesiredState(SwerveModuleState desiredState) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setDesiredState'");
     }
 
     @Override
     public void stop() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stop'");
     }
 
     @Override
     public double getTurnEncoder() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTurnEncoder'");
+        return 0.0;
     }
 
     @Override
     public void brakeModeModule() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'brakeModeModule'");
     }
 
     @Override
     public void coastModeModule() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'coastModeModule'");
     }
 
     @Override
     public SwerveModulePosition getPosition() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
+        return new SwerveModulePosition();
     }
 }

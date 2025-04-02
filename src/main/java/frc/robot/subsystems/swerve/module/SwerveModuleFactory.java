@@ -1,6 +1,7 @@
 package frc.robot.subsystems.swerve.module;
 
 import frc.robot.Constants;
+import frc.robot.utilities.HoorayConfig;
 
 public class SwerveModuleFactory {
     public static SwerveModule makeSwerve(
@@ -9,12 +10,12 @@ public class SwerveModuleFactory {
             int turningEncoderChannel,
             double angularOffset,
             double[] tuningVals) {
-        return switch (Constants.robotMode) {
+        return HoorayConfig.gimmeConfig().getHasDrivetrain() ? switch (Constants.robotMode) { 
             case REAL -> new SwerveModuleImpl(
                     driveMotorChannel, turningMotorChannel, turningEncoderChannel, angularOffset, tuningVals);
             case SIM -> new SwerveModuleSim(
                     driveMotorChannel, turningMotorChannel, turningEncoderChannel, tuningVals);
             default -> new SwerveModulePlayback();
-        };
+        } : new SwerveModulePlayback();
     }
 }

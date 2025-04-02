@@ -28,5 +28,6 @@
     "shooterkV": 0.12816,
 
 	"hasDrivetrain": false,
-	"isElevatorNeo": false
+	"isElevatorNeo": false,
+    "usesNavx": false
 }

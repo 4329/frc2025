@@ -31,6 +31,7 @@ import frc.robot.commands.autoCommands.AutoAlgeeIntake;
 import frc.robot.commands.autoCommands.AutoPositionCoralCommand;
 import frc.robot.commands.autoCommands.AutoScoreCoralButCool;
 import frc.robot.commands.autoCommands.PorcessorCommand;
+import frc.robot.commands.climberCommands.ClimberPivotCommand;
 import frc.robot.commands.commandGroups.AlgeeIntake;
 import frc.robot.commands.commandGroups.GoToNetCommand;
 import frc.robot.commands.commandGroups.HPStationCommand;
@@ -47,6 +48,8 @@ import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.DistanceSensorSubsystem;
 import frc.robot.subsystems.LoggingSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
+import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.ClimberSubsystem.ClimberPosition;
 import frc.robot.subsystems.differentialArm.DifferentialArmFactory;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
@@ -79,6 +82,7 @@ public class RobotContainer {
     private final ElevatorSubsystem elevatorSubsystem;
     private final LightSubsystem lightSubsystem;
     private final DistanceSensorSubsystem distanceSensorSubsystem;
+    private final ClimberSubsystem climberSubsystem;
     // private final IntakeWheelSubsystem intakeWheelSubsystem;
     // private final IntakePivotSubsystem intakePivotSubsystem;
 
@@ -130,6 +134,7 @@ public class RobotContainer {
         // intakeWheelSubsystem = new IntakeWheelSubsystem();
         lightSubsystem = new LightSubsystem();
         distanceSensorSubsystem = new DistanceSensorSubsystem();
+        climberSubsystem = new ClimberSubsystem();
 
         new LoggingSubsystem(
                 drivetrain,
@@ -138,7 +143,8 @@ public class RobotContainer {
                 algeePivotSubsystem,
                 buttonRingController,
                 lightSubsystem,
-                algeeWheelSubsystem);
+                algeeWheelSubsystem,
+                climberSubsystem);
 
         elevatorSubsystem = new ElevatorSubsystem();
 

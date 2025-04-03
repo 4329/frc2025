@@ -8,6 +8,7 @@ import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.ClimberLogAutoLogged;
@@ -31,6 +32,7 @@ public class ClimberSubsystem extends SubsystemBase implements LoggedSubsystem {
         ZERO(0), // WIP
         CLIMBED(-10); // WIP
         private double pos;
+
         ClimberPosition(double climberPosition) {
             this.pos = climberPosition;
         }
@@ -61,7 +63,8 @@ public class ClimberSubsystem extends SubsystemBase implements LoggedSubsystem {
                                         .reverseSoftLimitEnabled(true));
         motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
 
-        pidController = new ShuffledPIDController(1, 0, 0); // WIP
+        pidController = new ShuffledPIDController(0.18, 0, 0.0005); // WIP
+        Shuffleboard.getTab("Asdf").add("climber", pidController);
 
         climberLogAutoLogged = new ClimberLogAutoLogged();
     }
@@ -91,6 +94,7 @@ public class ClimberSubsystem extends SubsystemBase implements LoggedSubsystem {
     @Override
     public LoggableInputs log() {
         climberLogAutoLogged.position = encoder.getPosition();
+        climberLogAutoLogged.setpoint = pidController.getSetpoint();
         return climberLogAutoLogged;
     }
 }

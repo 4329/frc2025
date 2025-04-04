@@ -53,20 +53,20 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         encoder1 = motor1.getEncoder();
 
         pitchPID =
-                new ShuffledTrapezoidController(0.2, 1, 0.0025, new TrapezoidProfile.Constraints(6, 8));
-        pitchPID.setIZone(0.3);
+                new ShuffledTrapezoidController(0.45, 0.1, 0.001, new TrapezoidProfile.Constraints(18, 18));
+        pitchPID.setIZone(0.5);
         pitchPID.setTolerance(0.1);
         pitchPID.setGoal(0);
 
         Shuffleboard.getTab("Asdf").add("diff", pitchPID);
-        feedforward = new ArmFeedforward(0, 0.1, 0);
+        feedforward = new ArmFeedforward(0, 0.025, 0);
 
         differentialArmLogAutoLogged = new DifferentialArmLogAutoLogged();
     }
 
     private SparkBaseConfig configureMotor() {
         SparkBaseConfig config1 = new SparkMaxConfig().smartCurrentLimit(40);
-        config1.encoder.positionConversionFactor((11.0 / 72.0) * (18.0 / 28.0) * (Math.PI * 2.0));
+        config1.encoder.positionConversionFactor((11.0 / 72.0) * (18.0 / 28.0) * (Math.PI * 2.0)); // (11 / 112)
         return config1;
     }
 

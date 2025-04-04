@@ -6,7 +6,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -37,6 +36,9 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     ProfiledPIDController pitchPID;
     ArmFeedforward feedforward;
 
+    private double pidCalc;
+    private double ffCalc;
+
     public DifferentialArmImpl() {
         motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.differential1);
         motor1.configure(
@@ -64,7 +66,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     private SparkBaseConfig configureMotor() {
         SparkBaseConfig config1 = new SparkMaxConfig().smartCurrentLimit(40);
-        config1.encoder.positionConversionFactor((11.0/72.0)*(18.0/28.0)*(Math.PI*2.0));
+        config1.encoder.positionConversionFactor((11.0 / 72.0) * (18.0 / 28.0) * (Math.PI * 2.0));
         return config1;
     }
 
@@ -100,7 +102,9 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     @Override
     public void periodic() {
-        motor1.set(feedforward.calculate(getPitch(), encoder1.getVelocity())+pitchPID.calculate(getPitch()));
+        pidCalc = pitchPID.calculate(getPitch());
+        ffCalc = feedforward.calculate(getPitch(), encoder1.getVelocity());
+        motor1.set(pidCalc + ffCalc);
     }
 
     @Override
@@ -116,6 +120,9 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         differentialArmLogAutoLogged.pitch = getPitch();
         differentialArmLogAutoLogged.pitchTarget = pitchPID.getGoal().position;
         differentialArmLogAutoLogged.atSetpoint = pitchAtSetpoint();
+
+        differentialArmLogAutoLogged.pidCalc = pidCalc;
+        differentialArmLogAutoLogged.ffCalc = ffCalc;
 
         return differentialArmLogAutoLogged;
     }

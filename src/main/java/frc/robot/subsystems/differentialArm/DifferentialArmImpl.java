@@ -6,6 +6,8 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Voltage;
@@ -33,6 +35,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     RelativeEncoder encoder1;
 
     ProfiledPIDController pitchPID;
+    ArmFeedforward feedforward;
 
     public DifferentialArmImpl() {
         motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.differential1);
@@ -54,13 +57,14 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         pitchPID.setGoal(0);
 
         Shuffleboard.getTab("Asdf").add("diff", pitchPID);
+        feedforward = new ArmFeedforward(0, 0.1, 0);
 
         differentialArmLogAutoLogged = new DifferentialArmLogAutoLogged();
     }
 
     private SparkBaseConfig configureMotor() {
-        SparkBaseConfig config1 = new SparkMaxConfig().smartCurrentLimit(30);
-        config1.encoder.positionConversionFactor(Math.PI / 4);
+        SparkBaseConfig config1 = new SparkMaxConfig().smartCurrentLimit(40);
+        config1.encoder.positionConversionFactor((11.0/72.0)*(18.0/28.0)*(Math.PI*2.0));
         return config1;
     }
 
@@ -96,7 +100,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     @Override
     public void periodic() {
-        motor1.set(pitchPID.calculate(getPitch()));
+        motor1.set(feedforward.calculate(getPitch(), encoder1.getVelocity())+pitchPID.calculate(getPitch()));
     }
 
     @Override

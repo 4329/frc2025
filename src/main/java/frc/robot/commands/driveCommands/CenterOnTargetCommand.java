@@ -28,6 +28,19 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
         this(targetID, poseEstimationSubsystem, drivetrain, 0, CenterDistance.INITIAL);
     }
 
+    class AckCommand extends Command {
+        public AckCommand(Drivetrain drivetrain) {
+            addRequirements(drivetrain);
+        }
+
+        @Override
+        public boolean isFinished() {
+            return false;
+        }
+    }
+
+    AckCommand ackCommand;
+
     public CenterOnTargetCommand(
             int targetID,
             PoseEstimationSubsystem poseEstimationSubsystem,
@@ -38,7 +51,8 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
         this.drivetrain = drivetrain;
 
         target = placeTarget(targetID, xOffset, centerDistance);
-        addRequirements(drivetrain);
+        ackCommand = new AckCommand(drivetrain);
+        ackCommand.schedule();
     }
 
     public Pose2d placeTarget(int targetID, double xOffset, CenterDistance centerDistance) {
@@ -90,6 +104,7 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
 
     @Override
     public boolean isFinished() {
+        ackCommand.cancel();
         return pathFind.isFinished();
     }
 

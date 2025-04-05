@@ -23,5 +23,6 @@
     "kPTheta": 1.25,
 
     "encoderType": "REDUX",
-	"isElevatorNeo": false
+	"isElevatorNeo": false,
+    "usesNavx": true
 }

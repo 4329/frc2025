@@ -265,6 +265,8 @@ public class RobotContainer {
                         false));
     }
 
+    LocalADStarAK pathy;
+
     private void configureAutoBuilder() {
         try {
             Constants.AutoConstants.config = RobotConfig.fromGUISettings();
@@ -290,7 +292,8 @@ public class RobotContainer {
                 },
                 drivetrain);
 
-        Pathfinding.setPathfinder(new LocalADStarAK());
+        pathy = new LocalADStarAK();
+        Pathfinding.setPathfinder(pathy);
     }
 
     /**
@@ -335,7 +338,7 @@ public class RobotContainer {
 					"ResetOdometry",
 					() -> drivetrain.resetOdometry(new Pose2d())));
 
-                buttonRingController.axisLessThan(0, -0.9).whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem, 0.5));
+		buttonRingController.axisLessThan(0, -0.9).whileTrue(new OuttakeAlgeeCommand(algeeWheelSubsystem, 0.2));
 
 
 		manualController.start().onTrue(new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.ZERO));
@@ -470,6 +473,7 @@ public class RobotContainer {
     }
 
     public void robotPeriodic() {
+        pathy.log();
         navx.setBoolean(drivetrain.getGyro().getRadians() != 0);
     }
 }

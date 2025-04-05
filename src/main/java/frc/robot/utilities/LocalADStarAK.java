@@ -4,7 +4,6 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPoint;
-import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinder;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -98,10 +97,17 @@ public class LocalADStarAK implements Pathfinder {
         }
     }
 
+    public void log() {
+        io.ack();
+        Logger.processInputs("LocalADStarAK", io);
+    }
+
     private static class ADStarIO implements LoggableInputs {
-        public LocalADStar adStar = new LocalADStar();
+        public BetterLocalADStar adStar = new BetterLocalADStar();
         public boolean isNewPathAvailable = false;
         public List<PathPoint> currentPathPoints = Collections.emptyList();
+        public Translation2d start;
+        public Translation2d goal;
 
         @Override
         public void toLog(LogTable table) {
@@ -116,6 +122,8 @@ public class LocalADStarAK implements Pathfinder {
             }
 
             table.put("CurrentPathPoints", pointsLogged);
+            table.put("start", start);
+            table.put("goal", goal);
         }
 
         @Override
@@ -145,6 +153,11 @@ public class LocalADStarAK implements Pathfinder {
             } else {
                 currentPathPoints = Collections.emptyList();
             }
+        }
+
+        public void ack() {
+            start = adStar.getStart();
+            goal = adStar.getGoal();
         }
     }
 }

@@ -1,5 +1,7 @@
 package frc.robot.commands.driveCommands;
 
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
@@ -8,7 +10,9 @@ import frc.robot.utilities.CenterDistance;
 
 public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     ButtonRingController buttonRingController;
-    private final double clawffset = 0.1;
+    static GenericEntry adf = Shuffleboard.getTab("adsjoijdsa").add("xnoivewoiewoi", 0.14).getEntry();
+
+    // private final double clawffset = 0.14;
 
     public CenterByButtonRingCommand(
             PoseEstimationSubsystem poseEstimationSubsystem,
@@ -26,7 +30,7 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
         target =
                 placeTarget(
                         buttonRingController.getTagID(),
-                        buttonRingController.getxOffset() - clawffset,
+                        buttonRingController.getxOffset() - adf.getDouble(0),
                         centerDistance);
         super.initialize();
 

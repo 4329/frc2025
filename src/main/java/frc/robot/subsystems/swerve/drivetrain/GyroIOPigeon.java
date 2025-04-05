@@ -23,7 +23,6 @@ public class GyroIOPigeon implements GyroIO {
 
     @Override
     public void resetOffset(Rotation2d offset) {
-        // this.offset = getSelf().unaryMinus().plus(offset);
         this.offset = getSelf().plus(offset);
     }
 

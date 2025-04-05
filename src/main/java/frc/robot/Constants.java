@@ -108,8 +108,8 @@ public final class Constants {
         public static final double kMaxAngularSpeed = Math.PI;
         public static final double kMaxAngularAccel = Math.PI;
 
-        public static final double kLowerBound = 0.02;
-        public static final double kInnerDeadband = 0.07;
+        //public static final double kLowerBound = 0.02;
+        public static final double kInnerDeadband = 0.1;
         public static final double kOuterDeadband = 0.98;
 
         // Minimum allowable rotation command (in radians/s) assuming user input is

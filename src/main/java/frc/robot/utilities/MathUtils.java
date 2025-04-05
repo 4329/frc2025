@@ -49,19 +49,20 @@ public class MathUtils {
      * @return the resulting input after applying the deadband
      */
     public static double applyDeadband(double input) {
-		if (Math.abs(input) > DriveConstants.kOuterDeadband) return 1;
-		else if (Math.abs(input) < DriveConstants.kInnerDeadband) return 0;
-		else return input;
-        //double tmput;
-        //if (Math.abs(input) < DriveConstants.kInnerDeadband - DriveConstants.kLowerBound) tmput = 0;
-        //else if (Math.abs(input) > DriveConstants.kOuterDeadband) tmput = 1;
-        //else
+        if (Math.abs(input) > DriveConstants.kOuterDeadband) return 1;
+        else if (Math.abs(input) < DriveConstants.kInnerDeadband) return 0;
+        else return input;
+        // double tmput;
+        // if (Math.abs(input) < DriveConstants.kInnerDeadband - DriveConstants.kLowerBound) tmput = 0;
+        // else if (Math.abs(input) > DriveConstants.kOuterDeadband) tmput = 1;
+        // else
         //    tmput =
         //            Math.abs(
         //                    (input + DriveConstants.kInnerDeadband)
-        //                            * (DriveConstants.kOuterDeadband - DriveConstants.kInnerDeadband));
+        //                            * (DriveConstants.kOuterDeadband -
+        // DriveConstants.kInnerDeadband));
         //
-        //return Math.signum(input) * tmput;
+        // return Math.signum(input) * tmput;
     }
 
     /**

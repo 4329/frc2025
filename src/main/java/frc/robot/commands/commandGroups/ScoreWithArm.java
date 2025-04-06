@@ -2,6 +2,7 @@ package frc.robot.commands.commandGroups;
 
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.driveCommands.CenterByButtonRingCommand;
+import frc.robot.commands.driveCommands.CenterOnTargetCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.PoseEstimationSubsystem;
@@ -10,12 +11,14 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CenterDistance;
+import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
 public class ScoreWithArm extends LoggedSequentialCommandGroup {
 
     ButtonRingController buttonRingController;
     Drivetrain drivetrain;
+    CenterOnTargetCommand center;
 
     public ScoreWithArm(
             AlgeePivotSubsystem algeePivotSubsystem,
@@ -27,8 +30,12 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
 
         this.buttonRingController = buttonRingController;
         this.drivetrain = drivetrain;
+        this.center =
+                new CenterByButtonRingCommand(
+                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING);
 
         addCommands(
+                new UnInstantCommand("calcInitial", center::calcInitial),
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUTFORCORAL),
                 new PositionCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController),
                 // new CenterByButtonRingCommand(
@@ -37,8 +44,7 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
                 //        buttonRingController,
                 //        CenterDistance.INITIAL) // .untilLog(positionCoral::isFinished)
                 // ),
-                new CenterByButtonRingCommand(
-                        poseEstimationSubsystem, drivetrain, buttonRingController, CenterDistance.SCORING),
+                center,
                 new ScoreCoralCommand(
                         elevatorSubsystem,
                         differentialArmSubsystem,

@@ -27,11 +27,6 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
 
     @Override
     public void initialize() {
-        target =
-                placeTarget(
-                        buttonRingController.getTagID(),
-                        buttonRingController.getxOffset() - adf.getDouble(0),
-                        centerDistance);
         super.initialize();
 
         LEDState.centerRunning = true;
@@ -51,5 +46,15 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     @Override
     public double getRotationTolerance() {
         return centerDistance.getRotationTolerance();
+    }
+
+    @Override
+    public void calcInitial() {
+        target =
+                placeTarget(
+                        buttonRingController.getTagID(),
+                        buttonRingController.getxOffset() - adf.getDouble(0),
+                        centerDistance);
+        super.calcInitial();
     }
 }

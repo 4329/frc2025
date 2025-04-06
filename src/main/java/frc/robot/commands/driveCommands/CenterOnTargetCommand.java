@@ -1,6 +1,7 @@
 package frc.robot.commands.driveCommands;
 
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -115,6 +116,11 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
         drivetrain.resetKeepAngle();
         LEDState.centerRunning = false;
         drivetrain.stop();
+    }
+
+    public void calcInitial() {
+        Pathfinding.setStartPosition(poseEstimationSubsystem.getPose().getTranslation());
+        Pathfinding.setGoalPosition(target.getTranslation());
     }
 
     public double getTranslationTolerance() {

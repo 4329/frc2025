@@ -10,8 +10,11 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LightLogEntry;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
+import frc.robot.subsystems.light.ledAnimations.BeamsPattern;
 import frc.robot.subsystems.light.ledAnimations.CoutPattern;
 import frc.robot.subsystems.light.ledAnimations.GrowPattern;
+import frc.robot.subsystems.light.ledAnimations.PolicePattern;
+
 import java.util.ArrayList;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -64,10 +67,11 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         idle.nextNodes().add(new LEDAnimationEdge(targetVisible, () -> LEDState.targetVisible));
         targetVisible.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.targetVisible));
 
-        return idle;
+        return new LEDAnimationNode(new PolicePattern(), new ArrayList<>(), "beams");
     }
 
     private void resolveGraph() {
+
         currentAnimation
                 .nextNodes()
                 .forEach(

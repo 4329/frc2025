@@ -25,9 +25,14 @@ public class PolicePattern implements LEDPattern {
         int time = count++;
         System.out.println(time);
         for (int i = 0;  i < numPanes; i++) {
-            int add = i * paneLength + time;
+            double index = (i + (double)time / paneLength) % numPanes;
+            int add = (int)(index * paneLength);
             for (int j = 0; j + add < reader.getLength() && j < numPolice; j++) {
-                writer.setRGB(j + add, 0, 0, 0);
+                if ((i & 1) == 0) {
+                    writer.setRGB(j + add, 255, 0, 0);
+                } else {
+                    writer.setRGB(j + add, 0, 0, 255);
+                }
             }
         }
     }

@@ -55,7 +55,7 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
                                         buttonRingController::getTagID,
                                         poseEstimationSubsystem,
                                         drivetrain,
-                                        () -> 0.0,
+                                        () -> 0.156,
                                         CenterDistance.SCORING)
                                 .onlyIfLog(condition)));
     }

@@ -38,12 +38,6 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
                 new UnInstantCommand("calcInitial", center::calcInitial),
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUTFORCORAL),
                 new PositionCoralCommand(elevatorSubsystem, differentialArmSubsystem, buttonRingController),
-                // new CenterByButtonRingCommand(
-                //        poseEstimationSubsystem,
-                //        drivetrain,
-                //        buttonRingController,
-                //        CenterDistance.INITIAL) // .untilLog(positionCoral::isFinished)
-                // ),
                 center,
                 new ScoreCoralCommand(
                         elevatorSubsystem,

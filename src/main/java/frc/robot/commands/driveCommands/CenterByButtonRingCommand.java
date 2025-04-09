@@ -9,8 +9,7 @@ import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CenterDistance;
 
 public class CenterByButtonRingCommand extends CenterOnTargetCommand {
-    ButtonRingController buttonRingController;
-    static GenericEntry adf = Shuffleboard.getTab("adsjoijdsa").add("xnoivewoiewoi", 0.14).getEntry();
+    static GenericEntry adf = Shuffleboard.getTab("adsjoijdsa").add("xnoivewoiewoi", 0.17).getEntry();
 
     // private final double clawffset = 0.14;
 
@@ -19,10 +18,12 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
             Drivetrain drivetrain,
             ButtonRingController buttonRingController,
             CenterDistance centerDistance) {
-        super(1, poseEstimationSubsystem, drivetrain);
-
-        this.buttonRingController = buttonRingController;
-        this.centerDistance = centerDistance;
+        super(
+                buttonRingController::getTagID,
+                poseEstimationSubsystem,
+                drivetrain,
+                () -> buttonRingController.getxOffset() - adf.getDouble(0),
+                centerDistance);
     }
 
     @Override
@@ -46,15 +47,5 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     @Override
     public double getRotationTolerance() {
         return centerDistance.getRotationTolerance();
-    }
-
-    @Override
-    public void calcInitial() {
-        target =
-                placeTarget(
-                        buttonRingController.getTagID(),
-                        buttonRingController.getxOffset() - adf.getDouble(0),
-                        centerDistance);
-        super.calcInitial();
     }
 }

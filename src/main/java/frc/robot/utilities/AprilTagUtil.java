@@ -11,4 +11,8 @@ public class AprilTagUtil {
         if (Alliance.Red.equals(DriverStation.getAlliance().orElse(null))) return redTags[num];
         else return blueTags[num];
     }
+
+    public static int getPorcessor() {
+        return Alliance.Red.equals(DriverStation.getAlliance().orElse(null)) ? 3 : 16;
+    }
 }

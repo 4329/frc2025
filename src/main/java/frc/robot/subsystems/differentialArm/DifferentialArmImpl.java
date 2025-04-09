@@ -53,9 +53,9 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         encoder1 = motor1.getEncoder();
 
         pitchPID =
-                new ShuffledTrapezoidController(0.1, 0.1, 0.001, new TrapezoidProfile.Constraints(25, 18));
+                new ShuffledTrapezoidController(0.15, 0.1, 0.01, new TrapezoidProfile.Constraints(25, 18));
         pitchPID.setIZone(0.5);
-        pitchPID.setTolerance(0.05);
+        pitchPID.setTolerance(0.15);
         pitchPID.setGoal(0);
 
         Shuffleboard.getTab("Asdf").add("diff", pitchPID);

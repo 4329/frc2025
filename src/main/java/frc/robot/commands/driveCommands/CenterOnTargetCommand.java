@@ -66,7 +66,7 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
 
         this.targetIDSupplier = targetIDSupplier;
         this.xOffsetSupplier = xOffsetSupplier;
-		this.centerDistance = centerDistance;
+        this.centerDistance = centerDistance;
     }
 
     public Pose2d placeTarget(int targetID, double xOffset, CenterDistance centerDistance) {
@@ -91,7 +91,7 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
 
     @Override
     public void initialize() {
-		target = placeTarget(targetIDSupplier.get(), xOffsetSupplier.get(), centerDistance);
+        target = placeTarget(targetIDSupplier.get(), xOffsetSupplier.get(), centerDistance);
         if (target == null) return;
 
         ackCommand = new AckCommand(drivetrain);
@@ -117,7 +117,7 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
 
     @Override
     public void execute() {
-		if (target == null) return;
+        if (target == null) return;
         pathFind.execute();
     }
 

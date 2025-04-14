@@ -220,7 +220,10 @@ public class RobotContainer {
                 "algeeStop", new UnInstantCommand("stop", () -> algeeWheelSubsystem.stop()));
         NamedCommands.registerCommand(
                 "shootAlgee", new UnInstantCommand("outtakeAlgee", () -> algeeWheelSubsystem.run(-1)));
-        NamedCommands.registerCommand("algeeArmBargeArmBarge", new UnInstantCommand("AlgeeArmBargeArmBarge", () -> algeePivotSubsystem.setSetpoint(AlgeePivotAngle.NET)));
+        NamedCommands.registerCommand(
+                "algeeArmBargeArmBarge",
+                new UnInstantCommand(
+                        "AlgeeArmBargeArmBarge", () -> algeePivotSubsystem.setSetpoint(AlgeePivotAngle.NET)));
 
         for (int i = 0; i < 6; i++) {
             addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);

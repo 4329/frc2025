@@ -124,21 +124,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "actuallyIntakeAlgee"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
           }
         },
         {
@@ -151,6 +145,12 @@
           "type": "named",
           "data": {
             "name": "stop"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -174,7 +174,19 @@
         {
           "type": "named",
           "data": {
+            "name": "algeeArmBargeArmBarge"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "elevatorBarge"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -186,7 +198,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.5
           }
         },
         {

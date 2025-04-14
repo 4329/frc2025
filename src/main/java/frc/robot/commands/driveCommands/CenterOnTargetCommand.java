@@ -1,6 +1,7 @@
 package frc.robot.commands.driveCommands;
 
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,6 +13,7 @@ import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.BetterPathfindingCommand;
 import frc.robot.utilities.CenterDistance;
 import frc.robot.utilities.loggedComands.LoggedCommandComposer;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class CenterOnTargetCommand extends LoggedCommandComposer {
@@ -23,10 +25,26 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
     private final PathConstraints constraints =
             new PathConstraints(2, 1.0, Math.PI / 4, Math.PI / 16);
 
+    Supplier<Integer> targetIDSupplier;
+    Supplier<Double> xOffsetSupplier;
+
     public CenterOnTargetCommand(
             int targetID, PoseEstimationSubsystem poseEstimationSubsystem, Drivetrain drivetrain) {
         this(targetID, poseEstimationSubsystem, drivetrain, 0, CenterDistance.INITIAL);
     }
+
+    class AckCommand extends Command {
+        public AckCommand(Drivetrain drivetrain) {
+            addRequirements(drivetrain);
+        }
+
+        @Override
+        public boolean isFinished() {
+            return false;
+        }
+    }
+
+    AckCommand ackCommand;
 
     public CenterOnTargetCommand(
             int targetID,
@@ -34,11 +52,21 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
             Drivetrain drivetrain,
             double xOffset,
             CenterDistance centerDistance) {
+        this(() -> targetID, poseEstimationSubsystem, drivetrain, () -> xOffset, centerDistance);
+    }
+
+    public CenterOnTargetCommand(
+            Supplier<Integer> targetIDSupplier,
+            PoseEstimationSubsystem poseEstimationSubsystem,
+            Drivetrain drivetrain,
+            Supplier<Double> xOffsetSupplier,
+            CenterDistance centerDistance) {
         this.poseEstimationSubsystem = poseEstimationSubsystem;
         this.drivetrain = drivetrain;
 
-        target = placeTarget(targetID, xOffset, centerDistance);
-        addRequirements(drivetrain);
+        this.targetIDSupplier = targetIDSupplier;
+        this.xOffsetSupplier = xOffsetSupplier;
+        this.centerDistance = centerDistance;
     }
 
     public Pose2d placeTarget(int targetID, double xOffset, CenterDistance centerDistance) {
@@ -65,10 +93,13 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
     public void initialize() {
         if (target == null) return;
 
+        ackCommand = new AckCommand(drivetrain);
+        ackCommand.schedule();
+
         pathFind =
                 new BetterPathfindingCommand(
-                        getTranslationTolerance(),
-                        getRotationTolerance(),
+                        centerDistance.getTranslationTolerance(),
+                        centerDistance.getRotationTolerance(),
                         target,
                         constraints,
                         0,
@@ -85,28 +116,29 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
 
     @Override
     public void execute() {
+        if (target == null) return;
         pathFind.execute();
     }
 
     @Override
     public boolean isFinished() {
-        return pathFind.isFinished();
+        return pathFind.isFinished() || target == null;
     }
 
     @Override
     public void end(boolean interrupted) {
         if (pathFind != null) pathFind.cancel();
 
+        ackCommand.cancel();
         drivetrain.resetKeepAngle();
         LEDState.centerRunning = false;
         drivetrain.stop();
     }
 
-    public double getTranslationTolerance() {
-        return 0.002;
-    }
+    public void calcInitial() {
+        target = placeTarget(targetIDSupplier.get(), xOffsetSupplier.get(), centerDistance);
 
-    public double getRotationTolerance() {
-        return 0.01;
+        Pathfinding.setStartPosition(poseEstimationSubsystem.getPose().getTranslation());
+        Pathfinding.setGoalPosition(target.getTranslation());
     }
 }

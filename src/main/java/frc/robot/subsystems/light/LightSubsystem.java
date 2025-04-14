@@ -25,7 +25,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
 
     public LightSubsystem() {
         addressableLED = new AddressableLED(0);
-        addressableLEDBuffer = new AddressableLEDBuffer(60);
+        addressableLEDBuffer = new AddressableLEDBuffer(128);
 
         addressableLED.setLength(addressableLEDBuffer.getLength());
         addressableLED.setData(addressableLEDBuffer);

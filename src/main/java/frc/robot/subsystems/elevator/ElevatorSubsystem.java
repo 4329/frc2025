@@ -17,7 +17,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     static final double MAX = 98.5;
 
     public enum ElevatorPosition {
-        L2(20.95),
+        L2(18.1941),
         L2Score(-3.4),
 
         L3(47.86),

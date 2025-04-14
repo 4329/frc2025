@@ -273,9 +273,7 @@ public class BetterPathfindingCommand extends Command {
                 goalEndState = new GoalEndState(goalEndState.velocityMPS(), targetPose.getRotation());
             }
         }
-
         Pathfinding.setStartPosition(currentPose.getTranslation());
-        Pathfinding.setGoalPosition(targetPose.getTranslation());
     }
 
     @Override
@@ -286,15 +284,16 @@ public class BetterPathfindingCommand extends Command {
         PathPlannerLogging.logCurrentPose(currentPose);
         PPLibTelemetry.setCurrentPose(currentPose);
 
-        // Skip new paths if we are close to the end
-        boolean skipUpdates =
-                currentTrajectory != null
-                        && currentPose
-                                        .getTranslation()
-                                        .getDistance(currentTrajectory.getEndState().pose.getTranslation())
-                                < 2.0;
-
-        if (!skipUpdates && Pathfinding.isNewPathAvailable()) {
+        //// Skip new paths if we are close to the end
+        // boolean skipUpdates =
+        //        currentTrajectory != null
+        //                && currentPose
+        //                                .getTranslation()
+        //
+        // .getDistance(currentTrajectory.getEndState().pose.getTranslation())
+        //                        < 2.0;
+        //
+        if (Pathfinding.isNewPathAvailable()) {
             currentPath = Pathfinding.getCurrentPath(constraints, goalEndState);
 
             if (currentPath != null) {

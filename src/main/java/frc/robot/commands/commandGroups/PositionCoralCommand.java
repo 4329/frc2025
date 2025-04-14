@@ -29,7 +29,7 @@ public class PositionCoralCommand extends Command {
         differentialArmSubsystem.setPitchTarget(
                 switch (buttonRingController.getLevel()) {
                     case 2 -> DifferentialArmPitch.NINETY_PLUS;
-                    case 3 -> DifferentialArmPitch.NINETY;
+                    case 3 -> DifferentialArmPitch.NINETY_PLUS_2;
                     case 4 -> DifferentialArmPitch.ONE_THIRTY_FIVE;
                     default -> DifferentialArmPitch.NINETY;
                 });

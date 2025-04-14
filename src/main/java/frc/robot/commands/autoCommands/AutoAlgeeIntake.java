@@ -4,25 +4,19 @@ import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
-import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
-import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
-import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
 public class AutoAlgeeIntake extends LoggedSequentialCommandGroup {
 
-    private ButtonRingController buttonRingController;
     AlgeeWheelSubsystem algeeWheelSubsystem;
 
     public AutoAlgeeIntake(
-            Drivetrain drivetrain,
             ElevatorSubsystem elevatorSubsystem,
             AlgeeWheelSubsystem algeeWheelSubsystem,
             AlgeePivotSubsystem algeePivotSubsystem,
-            PoseEstimationSubsystem poseEstimationSubsystem,
             ElevatorPosition elevatorPosition) {
 
         this.algeeWheelSubsystem = algeeWheelSubsystem;

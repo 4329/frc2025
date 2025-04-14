@@ -1,5 +1,7 @@
 package frc.robot.commands.driveCommands;
 
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
@@ -7,27 +9,27 @@ import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CenterDistance;
 
 public class CenterByButtonRingCommand extends CenterOnTargetCommand {
-    ButtonRingController buttonRingController;
-    private final double clawffset = 0.1;
+    static GenericEntry adf = Shuffleboard.getTab("adsjoijdsa").add("xnoivewoiewoi", 0.17).getEntry();
+    private ButtonRingController buttonRingController;
+
+    // private final double clawffset = 0.14;
 
     public CenterByButtonRingCommand(
             PoseEstimationSubsystem poseEstimationSubsystem,
             Drivetrain drivetrain,
             ButtonRingController buttonRingController,
             CenterDistance centerDistance) {
-        super(1, poseEstimationSubsystem, drivetrain);
-
+        super(
+                buttonRingController::getTagID,
+                poseEstimationSubsystem,
+                drivetrain,
+                () -> buttonRingController.getxOffset() - adf.getDouble(0),
+                centerDistance);
         this.buttonRingController = buttonRingController;
-        this.centerDistance = centerDistance;
     }
 
     @Override
     public void initialize() {
-        target =
-                placeTarget(
-                        buttonRingController.getTagID(),
-                        buttonRingController.getxOffset() - clawffset,
-                        centerDistance);
         super.initialize();
 
         LEDState.centerRunning = true;
@@ -40,12 +42,10 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     }
 
     @Override
-    public double getTranslationTolerance() {
-        return centerDistance.getTranslationTolerance();
-    }
-
-    @Override
-    public double getRotationTolerance() {
-        return centerDistance.getRotationTolerance();
+    public void calcInitial() {
+        if (buttonRingController.getLevel() == 4 && CenterDistance.SCORING.equals(centerDistance)) {
+            centerDistance = CenterDistance.SCORING_SMALL;
+        }
+        super.calcInitial();
     }
 }

@@ -14,15 +14,12 @@ import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
 public class AutoAlgeeIntake extends LoggedSequentialCommandGroup {
 
-    private ButtonRingController buttonRingController;
     AlgeeWheelSubsystem algeeWheelSubsystem;
 
     public AutoAlgeeIntake(
-            Drivetrain drivetrain,
             ElevatorSubsystem elevatorSubsystem,
             AlgeeWheelSubsystem algeeWheelSubsystem,
             AlgeePivotSubsystem algeePivotSubsystem,
-            PoseEstimationSubsystem poseEstimationSubsystem,
             ElevatorPosition elevatorPosition) {
 
         this.algeeWheelSubsystem = algeeWheelSubsystem;

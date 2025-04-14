@@ -273,9 +273,7 @@ public class BetterPathfindingCommand extends Command {
                 goalEndState = new GoalEndState(goalEndState.velocityMPS(), targetPose.getRotation());
             }
         }
-
         Pathfinding.setStartPosition(currentPose.getTranslation());
-        Pathfinding.setGoalPosition(targetPose.getTranslation());
     }
 
     @Override

@@ -16,6 +16,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.AprilTagUtil;
 import frc.robot.utilities.CenterDistance;
+import frc.robot.utilities.UnInstantCommand;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 
 public class PorcessorCommand extends LoggedSequentialCommandGroup {
@@ -28,7 +29,15 @@ public class PorcessorCommand extends LoggedSequentialCommandGroup {
             PoseEstimationSubsystem poseEstimationSubsystem,
             Drivetrain drivetrain) {
 
+        CenterOnTargetCommand center =
+                new CenterOnTargetCommand(
+                        AprilTagUtil::getPorcessor,
+                        poseEstimationSubsystem,
+                        drivetrain,
+                        () -> 0.25,
+                        CenterDistance.PORCESSOR);
         addCommands(
+                new UnInstantCommand("calcInitial", center::calcInitial),
                 new LoggedSequentialCommandGroup(
                                 "DoArm",
                                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT),
@@ -40,12 +49,7 @@ public class PorcessorCommand extends LoggedSequentialCommandGroup {
                                                 && differentialArmSubsystem.pitchAtSetpoint()),
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.PORCESSOR),
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUTFORCORAL),
-                new CenterOnTargetCommand(
-                        AprilTagUtil::getPorcessor,
-                        poseEstimationSubsystem,
-                        drivetrain,
-                        () -> 0.0,
-                        CenterDistance.PORCESSOR),
+                center,
                 new OuttakeAlgeeCommand(algeeWheelSubsystem, 0.2));
     }
 }

@@ -199,20 +199,16 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "intakeAlgeeHigh",
                 new AutoAlgeeIntake(
-                        drivetrain,
                         elevatorSubsystem,
                         algeeWheelSubsystem,
                         algeePivotSubsystem,
-                        poseEstimationSubsystem,
                         ElevatorPosition.ALGEE_HIGH));
         NamedCommands.registerCommand(
                 "intakeAlgeeLow",
                 new AutoAlgeeIntake(
-                        drivetrain,
                         elevatorSubsystem,
                         algeeWheelSubsystem,
                         algeePivotSubsystem,
-                        poseEstimationSubsystem,
                         ElevatorPosition.ALGEE_LOW));
         NamedCommands.registerCommand(
                 "elevatorBarge", new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
@@ -224,6 +220,7 @@ public class RobotContainer {
                 "algeeStop", new UnInstantCommand("stop", () -> algeeWheelSubsystem.stop()));
         NamedCommands.registerCommand(
                 "shootAlgee", new UnInstantCommand("outtakeAlgee", () -> algeeWheelSubsystem.run(-1)));
+        NamedCommands.registerCommand("algeeArmBargeArmBarge", new UnInstantCommand("AlgeeArmBargeArmBarge", () -> algeePivotSubsystem.setSetpoint(AlgeePivotAngle.NET)));
 
         for (int i = 0; i < 6; i++) {
             addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);

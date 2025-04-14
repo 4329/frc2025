@@ -34,8 +34,16 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
 
         BooleanSupplier condition =
                 () -> buttonRingController.getLevel() != 0 && buttonRingController.getTagID() != 0;
+        CenterOnTargetCommand center =
+                new CenterOnTargetCommand(
+                        buttonRingController::getTagID,
+                        poseEstimationSubsystem,
+                        drivetrain,
+                        () -> 0.156,
+                        CenterDistance.SCORING);
 
         addCommands(
+                new UnInstantCommand("calcInitial", center::calcInitial),
                 new LoggedParallelCommandGroup(
                                 "PositionEverything",
                                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT),
@@ -51,13 +59,7 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
                 new LoggedParallelCommandGroup(
                         "CenterIntake",
                         new IntakeAlgeeCommand(algeeWheelSubsystem),
-                        new CenterOnTargetCommand(
-                                        buttonRingController::getTagID,
-                                        poseEstimationSubsystem,
-                                        drivetrain,
-                                        () -> 0.156,
-                                        CenterDistance.SCORING)
-                                .onlyIfLog(condition)));
+                        center.onlyIfLog(condition)));
     }
 
     @Override

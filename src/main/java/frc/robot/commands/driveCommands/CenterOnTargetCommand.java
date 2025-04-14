@@ -91,7 +91,6 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
 
     @Override
     public void initialize() {
-        target = placeTarget(targetIDSupplier.get(), xOffsetSupplier.get(), centerDistance);
         if (target == null) return;
 
         ackCommand = new AckCommand(drivetrain);
@@ -99,8 +98,8 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
 
         pathFind =
                 new BetterPathfindingCommand(
-                        getTranslationTolerance(),
-                        getRotationTolerance(),
+                        centerDistance.getTranslationTolerance(),
+                        centerDistance.getRotationTolerance(),
                         target,
                         constraints,
                         0,
@@ -141,13 +140,5 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
 
         Pathfinding.setStartPosition(poseEstimationSubsystem.getPose().getTranslation());
         Pathfinding.setGoalPosition(target.getTranslation());
-    }
-
-    public double getTranslationTolerance() {
-        return 0.002;
-    }
-
-    public double getRotationTolerance() {
-        return 0.01;
     }
 }

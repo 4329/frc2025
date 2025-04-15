@@ -12,6 +12,7 @@ public class LEDAnimationEdgeTimed implements LEDAnimationEdge {
     public LEDAnimationEdgeTimed(LEDAnimationNode node, double timeSeconds) {
         timer = new Timer();
         time = timeSeconds;
+        this.node = node;
     }
 
     @Override
@@ -21,7 +22,7 @@ public class LEDAnimationEdgeTimed implements LEDAnimationEdge {
 
     @Override
     public LEDAnimationNode node() {
-        return node();
+        return node;
     }
 
     @Override

@@ -21,6 +21,7 @@ public class LEDAnimationSubgraph implements LEDAnimationNode {
 
         this.current = children;
         this.children = children;
+        current.nextNodes().forEach(x -> x.enter());
     }
 
     public LEDPattern animation() {
@@ -65,6 +66,7 @@ public class LEDAnimationSubgraph implements LEDAnimationNode {
                         if (x.transfer().get()) {
                             current.exit();
                             current = x.node();
+                            x.node().nextNodes().forEach(y -> y.enter());
                         }
                     });
 

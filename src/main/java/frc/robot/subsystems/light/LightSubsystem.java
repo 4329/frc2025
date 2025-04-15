@@ -5,7 +5,9 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LightLogEntry;
@@ -13,13 +15,15 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.light.ledAnimations.CoutPattern;
 import frc.robot.subsystems.light.ledAnimations.GrowPattern;
 import java.util.ArrayList;
+import java.util.function.BooleanSupplier;
+
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
     AddressableLED addressableLED;
     AddressableLEDBuffer addressableLEDBuffer;
 
-    private LEDAnimationNode currentAnimation;
+    private LEDAnimationSubgraph graph;
 
     private LightLogEntry lightLogEntry;
 
@@ -35,49 +39,39 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         teal.applyTo(addressableLEDBuffer);
         addressableLED.setData(addressableLEDBuffer);
 
-        currentAnimation = createGraph();
+        graph = new LEDAnimationSubgraph(createGraph(), new ArrayList<>(), "head");
 
         lightLogEntry = new LightLogEntry();
     }
 
+    private void backForth(LEDAnimationNode a, LEDAnimationNode b, BooleanSupplier condition) {
+        a.nextNodes().add(new LEDAnimationEdge(b, () -> condition.getAsBoolean()));
+        b.nextNodes().add(new LEDAnimationEdge(a, () -> !condition.getAsBoolean()));
+    }
+
     private LEDAnimationNode createGraph() {
-        LEDAnimationNode idle =
-                new LEDAnimationNode(
-                        (reader, writer) -> {
-                            LEDPattern.rainbow(255, 255)
-                                    .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meter.of(1.0 / 120.0))
-                                    .applyTo(reader, writer);
-                            writer.setLED((int) (Math.random() * reader.getLength()), Color.kWhite);
-                        },
-                        new ArrayList<>(),
-                        "idle");
+        LEDAnimationNodeSimple start = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kAqua), new ArrayList<>(), "start") ;
+        LEDAnimationNodeSimple goingOut = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kCoral), new ArrayList<>(), "goingOut");
+        LEDAnimationNodeSimple autoMovement = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kYellow), new ArrayList<>(), "autoMovement");
+        LEDAnimationNodeSimple autoHping = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kBeige), new ArrayList<>(), "autoHping");
+        LEDAnimationNodeSimple rising = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kFuchsia), new ArrayList<>(), "rising");
+        LEDAnimationNodeSimple autoAnticipation = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kOrangeRed), new ArrayList<>(), "autoAnticipation");
+        LEDAnimationNodeSimple autoConglaturations = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kPink), new ArrayList<>(), "autoConglaturations");
+        LEDAnimationSubgraph beginning = new LEDAnimationSubgraph(start, new ArrayList<>(), "beginning");
 
-        LEDAnimationNode centering =
-                new LEDAnimationNode(new CoutPattern(), new ArrayList<>(), "centering");
+        start.add(goingOut, DriverStation::isEnabled);
+        goingOut.add(autoMovement, () -> LEDState.out);
+        autoMovement.add(rising, () -> LEDState.elevatorGoingUp);
+        rising.add(autoAnticipation, () -> LEDState.elevatorAtSetpoint);
+        autoConglaturations.nextNodes().add(new LEDAnimationEdgeTimed(autoMovement, 1));
+        backForth(autoMovement, autoHping, () -> LEDState.byHpStation);
 
-        LEDAnimationNode targetVisible =
-                new LEDAnimationNode(new GrowPattern(), new ArrayList<>(), "targetVisible");
-
-        idle.nextNodes().add(new LEDAnimationEdge(centering, () -> LEDState.centerRunning));
-        centering.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.centerRunning));
-
-        idle.nextNodes().add(new LEDAnimationEdge(targetVisible, () -> LEDState.targetVisible));
-        targetVisible.nextNodes().add(new LEDAnimationEdge(idle, () -> !LEDState.targetVisible));
-
-        return idle;
+        return beginning;
     }
 
     private void resolveGraph() {
-        currentAnimation
-                .nextNodes()
-                .forEach(
-                        x -> {
-                            if (x.transfer().get()) {
-                                currentAnimation = x.node();
-                            }
-                        });
-
-        currentAnimation.head().applyTo(addressableLEDBuffer);
+        graph.check();
+        graph.current.animation().applyTo(addressableLEDBuffer);
         addressableLED.setData(addressableLEDBuffer);
     }
 
@@ -88,7 +82,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
 
     @Override
     public LoggableInputs log() {
-        lightLogEntry.name = currentAnimation.name();
+        lightLogEntry.name = graph.log();
         return lightLogEntry;
     }
 }

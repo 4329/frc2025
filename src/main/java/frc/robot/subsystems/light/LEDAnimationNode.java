@@ -1,21 +1,21 @@
 package frc.robot.subsystems.light;
 
-import edu.wpi.first.wpilibj.LEDPattern;
 import java.util.List;
+import java.util.function.Supplier;
 
-public record LEDAnimationNode(LEDPattern head, List<LEDAnimationEdge> nextNodes, String name) {
-    @Override
-    public boolean equals(Object other) {
-        if (other == null || !(other instanceof LEDAnimationNode)) return false;
+import org.littletonrobotics.junction.LogTable;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-        LEDAnimationNode otro = (LEDAnimationNode) other;
-        return otro.head.equals(this.head)
-                && otro.nextNodes.equals(this.nextNodes)
-                && otro.name.equals(this.name);
+import edu.wpi.first.wpilibj.LEDPattern;
+
+public interface LEDAnimationNode {
+    public LEDPattern animation();
+    public List<LEDAnimationEdge> nextNodes();
+    public String name();
+    public default void enter() {
+        nextNodes().forEach(x -> x.enter());
     }
-
-    @Override
-    public int hashCode() {
-        return head.hashCode() + name.hashCode();
-    }
+    public void exit();
+    public String log();
+    public void add(LEDAnimationNode node, Supplier<Boolean> transfer);
 }

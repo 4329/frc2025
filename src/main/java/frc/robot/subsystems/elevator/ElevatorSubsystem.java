@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.ElevatorLogAutoLogged;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.shufflebored.ShuffledTrapezoidController;
@@ -87,11 +88,17 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        updateInputs();
+        io.set(MathUtils.clamp(-1, 1, elevatorPID.calculate(inputs.position)));
+
+        LEDState.elevatorAtSetpoint = atSetpoint();
+        LEDState.elevatorSetpointBarge = elevatorPID.getGoal().position == ElevatorPosition.NET.pos;
+    }
+
+    void updateInputs() {
         io.updateInputs(inputs);
         inputs.setpoint = elevatorPID.getGoal().position;
         inputs.atSetpoint = atSetpoint();
         Logger.processInputs("ElevatorSubsystem", inputs);
-
-        io.set(MathUtils.clamp(-1, 1, elevatorPID.calculate(inputs.position)));
     }
 }

@@ -7,6 +7,7 @@ import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.ButtonRingController;
 
 public class ScoreCoralCommand extends Command {
@@ -31,6 +32,7 @@ public class ScoreCoralCommand extends Command {
 
     @Override
     public void initialize() {
+        LEDState.scoreCoral = true;
         differentialArmSubsystem.setPitchTarget(
                 buttonRingController.getLevel() == 4
                         ? DifferentialArmPitch.NINETY

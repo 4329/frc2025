@@ -13,6 +13,7 @@ import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.AprilTagUtil;
 import frc.robot.utilities.CenterDistance;
@@ -51,5 +52,17 @@ public class PorcessorCommand extends LoggedSequentialCommandGroup {
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUTFORCORAL),
                 center,
                 new OuttakeAlgeeCommand(algeeWheelSubsystem, 0.2));
+    }
+
+    @Override
+    public void initialize() {
+        LEDState.porcessor = true;
+        super.initialize();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        LEDState.porcessor = false;
+        super.end(interrupted);
     }
 }

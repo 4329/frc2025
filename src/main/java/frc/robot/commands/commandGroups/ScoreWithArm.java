@@ -8,6 +8,7 @@ import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CenterDistance;
@@ -47,9 +48,22 @@ public class ScoreWithArm extends LoggedSequentialCommandGroup {
     }
 
     @Override
+    public void initialize() {
+        LEDState.scoreCoral = false;
+        LEDState.scoreWithArm = true;
+        super.initialize();
+    }
+
+    @Override
     public void execute() {
         if (buttonRingController.getTagID() != 0 && buttonRingController.getxOffset() != 0)
             super.execute();
         else drivetrain.stop();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        LEDState.scoreWithArm = false;
+        super.end(interrupted);
     }
 }

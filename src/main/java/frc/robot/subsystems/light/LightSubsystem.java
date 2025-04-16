@@ -123,10 +123,14 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         porcessorScoring.add(conglaturations, () -> !LEDState.porcessor);
 
         LEDAnimationNodeSimple bargeRising = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kCrimson), new ArrayList<>(), "bargeRising");
-        LEDAnimationNodeSimple bargeAlgeeWheelSpinning = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kGold), new ArrayList<>(), "bargeAlgeeWheelSpinning");
+        LEDAnimationNodeSimple bargeFlash = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kGold), new ArrayList<>(), "bargeFlash");
+        LEDAnimationNodeSimple bargeAnticipation = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kFuchsia), new ArrayList<>(), "bargeAnticipation");
         LEDAnimationSubgraph bargeScoring = new LEDAnimationSubgraph(bargeRising, new ArrayList<>(), "bargeScoring");
-        barging.add(bargeScoring, () -> LEDState.barge);
-        bargeScoring.add(conglaturations, () -> !LEDState.barge);
+        barging.add(bargeScoring, () -> LEDState.elevatorSetpointBarge);
+
+        bargeRising.add(bargeFlash, () -> LEDState.elevatorAtSetpoint);
+        bargeFlash.nextNodes().add(new LEDAnimationEdgeTimed(bargeAnticipation, 0.25));
+        bargeScoring.add(conglaturations, () -> LEDState.algeeWheelRunning);
 
         LEDAnimationNodeSimple algeeRising = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kDenim), new ArrayList<>(), "algeeRising");
         LEDAnimationNodeSimple algeeSpinning = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kDenim), new ArrayList<>(), "algeeSpinning");

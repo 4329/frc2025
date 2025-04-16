@@ -110,8 +110,7 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
                         Constants.AutoConstants.config,
                         drivetrain);
         pathFind.initialize();
-
-        LEDState.centerRunning = true;
+        LEDState.centered = false;
     }
 
     @Override
@@ -131,8 +130,9 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
 
         ackCommand.cancel();
         drivetrain.resetKeepAngle();
-        LEDState.centerRunning = false;
         drivetrain.stop();
+
+        if (pathFind.isFinished()) LEDState.centered = true;
     }
 
     public void calcInitial() {

@@ -10,6 +10,10 @@ import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.shufflebored.ShuffledTrapezoidController;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.littletonrobotics.junction.Logger;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -93,6 +97,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         LEDState.elevatorAtSetpoint = atSetpoint();
         LEDState.elevatorSetpointBarge = elevatorPID.getGoal().position == ElevatorPosition.NET.pos;
+        LEDState.elevatorSetpointHigh = Arrays.asList(ElevatorPosition.L2.pos, ElevatorPosition.L3.pos, ElevatorPosition.L4.pos, ElevatorPosition.NET.pos).contains(elevatorPID.getGoal().position);
     }
 
     void updateInputs() {

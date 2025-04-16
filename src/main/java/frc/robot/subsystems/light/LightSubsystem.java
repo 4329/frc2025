@@ -17,6 +17,7 @@ import frc.robot.subsystems.light.ledAnimations.BeamsPattern;
 import frc.robot.subsystems.light.ledAnimations.CoutPattern;
 import frc.robot.subsystems.light.ledAnimations.GrowPattern;
 import frc.robot.subsystems.light.ledAnimations.PolicePattern;
+import frc.robot.subsystems.light.ledAnimations.RisingPattern;
 
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
@@ -24,6 +25,8 @@ import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
+    public static int SIDE_LENGTH = 45;
+
     AddressableLED addressableLED;
     AddressableLEDBuffer addressableLEDBuffer;
 
@@ -54,11 +57,11 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
     }
 
     private LEDAnimationNode createGraph() {
-        LEDAnimationNodeSimple start = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kAqua), new ArrayList<>(), "start") ;
-        LEDAnimationNodeSimple goingOut = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kCoral), new ArrayList<>(), "goingOut");
+        LEDAnimationNodeSimple start = new LEDAnimationNodeSimple(LEDPattern.rainbow(255, 255).scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meter.of(1 / 60.0)), new ArrayList<>(), "start") ;
+        LEDAnimationNodeSimple goingOut = new LEDAnimationNodeSimple(new BeamsPattern(Color.kOrange, Color.kBlack), new ArrayList<>(), "goingOut");
         LEDAnimationNodeSimple autoMovement = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kYellow), new ArrayList<>(), "autoMovement");
         LEDAnimationNodeSimple autoHping = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kBeige), new ArrayList<>(), "autoHping");
-        LEDAnimationNodeSimple rising = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kFuchsia), new ArrayList<>(), "rising");
+        LEDAnimationNodeSimple rising = new LEDAnimationNodeSimple(new RisingPattern(), new ArrayList<>(), "rising");
         LEDAnimationNodeSimple autoAnticipation = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kOrangeRed), new ArrayList<>(), "autoAnticipation");
         LEDAnimationNodeSimple autoConglaturations = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kPink), new ArrayList<>(), "autoConglaturations");
         LEDAnimationSubgraph beginning = new LEDAnimationSubgraph(start, new ArrayList<>(), "beginning");
@@ -66,7 +69,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         start.add(goingOut, DriverStation::isEnabled);
         goingOut.add(autoMovement, () -> LEDState.out);
 
-        autoMovement.add(rising, () -> LEDState.elevatorGoingUp);
+        autoMovement.add(rising, () -> !LEDState.elevatorAtSetpoint);
         rising.add(autoAnticipation, () -> LEDState.elevatorAtSetpoint);
         autoConglaturations.nextNodes().add(new LEDAnimationEdgeTimed(autoMovement, 1));
         backForth(autoMovement, autoHping, () -> LEDState.byHpStation);
@@ -140,7 +143,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         algeeRising.add(algeeSpinning, () -> LEDState.algeeWheelRunning);
         algeeRising.add(conglaturations, () -> !LEDState.algeeIntaking);
 
-        return beginning;
+        return new LEDAnimationNodeSimple(new RisingPattern(), new ArrayList<>(), "test");
     }
 
     private void resolveGraph() {

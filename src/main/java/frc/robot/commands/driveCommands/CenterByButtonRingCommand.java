@@ -31,14 +31,11 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     @Override
     public void initialize() {
         super.initialize();
-
-        LEDState.centerRunning = true;
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        LEDState.centerRunning = false;
     }
 
     @Override

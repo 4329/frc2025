@@ -7,6 +7,9 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -14,11 +17,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.model.PoseEstimationLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
+import frc.robot.utilities.AABB;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -125,9 +132,21 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         }
     }
 
+    final AABB barge = new AABB(8.75, 4, 1.15, 4);
+    final AABB porcessor = new AABB(6.18, 0, 0.75, 0.75);
+    final AABB hpStation1 = new AABB(0.675, 0.475, 0.975, 0.825);
+    final AABB hpStation2 = new AABB(0.675, 7.775, 0.975, 0.825);
+    final Translation2d reef = new Translation2d(4.48, 4.03);
+
     @Override
     public void periodic() {
         updateEstimation();
+
+        AABB robot = new AABB(getPose().getX(), getPose().getY(), Units.inchesToMeters(120.0 / 4), Units.inchesToMeters(120.0 / 4));
+        LEDState.byBarge = robot.intersectingAABB(barge);
+        LEDState.byHpStation = robot.intersectingAABB(hpStation1) || robot.intersectingAABB(hpStation2);
+        LEDState.byPorcessor = robot.intersectingAABB(porcessor);
+        LEDState.byReef = getPose().getTranslation().getDistance(reef) < 1.22;
     }
 
     public void resetRotOffset() {

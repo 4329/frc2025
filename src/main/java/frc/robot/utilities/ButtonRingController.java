@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import frc.robot.model.ButtonRingLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
-import frc.robot.subsystems.light.LEDState;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ButtonRingController extends CommandGenericHID implements LoggedSubsystem, Sendable {
@@ -33,8 +32,6 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                             else if (getRawAxis(1) == 1) level = 3;
                             else if (getRawAxis(1) == -1) level = 4;
                             else level = 0;
-
-                            LEDState.reefLevel = level;
                         })
                 .repeatedlyLog()
                 .ignoringDisableLog(true)
@@ -53,8 +50,6 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
 
                                                 xOffset = OFFSET_AMOUNT * (why % 2 == 0 ? 1 : -1);
                                                 tagID = AprilTagUtil.getReef((why % 12) / 2);
-
-                                                LEDState.reefButton = why;
                                             })
                                     .ignoringDisableLog(true));
             button(i)

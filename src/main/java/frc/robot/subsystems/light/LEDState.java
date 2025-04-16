@@ -16,7 +16,6 @@ public class LEDState {
 
     public static boolean scoreWithArm;
     public static boolean porcessor;
-    public static boolean elevatorSetpointBarge;
-    public static boolean elevatorSetpointHigh;
+    public static double elevatorSetpoint;
     public static boolean algeeIntaking;
 }

@@ -41,7 +41,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         ALGEE_CLAW_OUT(-4.18),
         ;
 
-        double pos;
+        public double pos;
 
         ElevatorPosition(double pos) {
             this.pos = pos;
@@ -93,14 +93,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         io.set(MathUtils.clamp(-1, 1, elevatorPID.calculate(inputs.position)));
 
         LEDState.elevatorAtSetpoint = atSetpoint();
-        LEDState.elevatorSetpointBarge = elevatorPID.getGoal().position == ElevatorPosition.NET.pos;
-        LEDState.elevatorSetpointHigh =
-                Arrays.asList(
-                                ElevatorPosition.L2.pos,
-                                ElevatorPosition.L3.pos,
-                                ElevatorPosition.L4.pos,
-                                ElevatorPosition.NET.pos)
-                        .contains(elevatorPID.getGoal().position);
+        LEDState.elevatorSetpoint = elevatorPID.getGoal().position;
     }
 
     void updateInputs() {

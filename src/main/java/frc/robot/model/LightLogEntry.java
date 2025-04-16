@@ -25,7 +25,7 @@ public class LightLogEntry implements LoggableInputs, Cloneable {
 
         table.put("scoreWithArm", LEDState.scoreWithArm);
         table.put("porcessor", LEDState.porcessor);
-        table.put("elevatorSetpointBarge", LEDState.elevatorSetpointBarge);
+        table.put("elevatorSetpoint", LEDState.elevatorSetpoint);
         table.put("algeeIntaking", LEDState.algeeIntaking);
         table.put("name", name);
     }
@@ -48,7 +48,7 @@ public class LightLogEntry implements LoggableInputs, Cloneable {
 
         LEDState.scoreWithArm = table.get("scoreWithArm", false);
         LEDState.porcessor = table.get("porcessor", false);
-        LEDState.elevatorSetpointBarge = table.get("elevatorSetpointBarge", false);
+        LEDState.elevatorSetpoint= table.get("elevatorSetpoint", 0);
         LEDState.algeeIntaking = table.get("algeeIntaking", false);
 
         name = table.get("name", name);

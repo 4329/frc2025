@@ -138,7 +138,9 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
     public void calcInitial() {
         target = placeTarget(targetIDSupplier.get(), xOffsetSupplier.get(), centerDistance);
 
-        Pathfinding.setStartPosition(poseEstimationSubsystem.getPose().getTranslation());
-        Pathfinding.setGoalPosition(target.getTranslation());
+        if (target != null) {
+            Pathfinding.setStartPosition(poseEstimationSubsystem.getPose().getTranslation());
+            Pathfinding.setGoalPosition(target.getTranslation());
+        }
     }
 }

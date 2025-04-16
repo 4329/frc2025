@@ -2,6 +2,7 @@ package frc.robot.subsystems.light;
 
 public class LEDState {
     public static boolean out;
+    public static boolean teleoped;
 
     public static boolean byHpStation;
     public static boolean byReef;
@@ -16,5 +17,6 @@ public class LEDState {
     public static boolean scoreWithArm;
     public static boolean porcessor;
     public static boolean elevatorSetpointBarge;
+    public static boolean elevatorSetpointHigh;
     public static boolean algeeIntaking;
 }

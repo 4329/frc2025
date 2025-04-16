@@ -48,6 +48,9 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
     private AprilTagFieldLayout aprilTagFieldLayout;
 
+    GenericEntry x = Shuffleboard.getTab("adsf").add("x", 0).getEntry();
+    GenericEntry y = Shuffleboard.getTab("adsf").add("y", 0).getEntry();
+
     public PoseEstimationSubsystem(Drivetrain drivetrain, LilihSubsystem lilihSubsystem) {
         this.lilihSubsystem = lilihSubsystem;
         this.drivetrain = drivetrain;
@@ -141,12 +144,14 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     @Override
     public void periodic() {
         updateEstimation();
-
-        AABB robot = new AABB(getPose().getX(), getPose().getY(), Units.inchesToMeters(120.0 / 4), Units.inchesToMeters(120.0 / 4));
+        Pose2d pose = new Pose2d(x.getDouble(0), y.getDouble(0), new Rotation2d());
+        AABB robot = new AABB(pose.getX(), pose.getY(), Units.inchesToMeters(120.0 / 4), Units.inchesToMeters(120.0 / 4));
         LEDState.byBarge = robot.intersectingAABB(barge);
         LEDState.byHpStation = robot.intersectingAABB(hpStation1) || robot.intersectingAABB(hpStation2);
         LEDState.byPorcessor = robot.intersectingAABB(porcessor);
-        LEDState.byReef = getPose().getTranslation().getDistance(reef) < 1.22;
+        LEDState.byReef = pose.getTranslation().getDistance(reef) < 1.55;
+
+        Logger.recordOutput("ha", new Pose2d(x.getDouble(0), y.getDouble(0), new Rotation2d()));
     }
 
     public void resetRotOffset() {

@@ -1,7 +1,5 @@
 package frc.robot.subsystems.light.ledAnimations;
 
-import java.util.TimeZone;
-
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.LEDReader;
 import edu.wpi.first.wpilibj.LEDWriter;
@@ -16,18 +14,20 @@ public class PolicePattern implements LEDPattern {
     public void applyTo(LEDReader reader, LEDWriter writer) {
 
         int paneLength = policeDst + numPolice;
-        int numPanes = reader.getLength()/paneLength + 1;
+        int numPanes = reader.getLength() / paneLength + 1;
 
         for (int i = 0; i < reader.getLength(); i++) {
             writer.setRGB(i, 255, 255, 255);
         }
 
-        int time = count++;
-        System.out.println(time);
+        double time = Timer.getFPGATimestamp() * 2;
         for (int i = 0;  i < numPanes; i++) {
-            double index = (i + (double)time / paneLength) % numPanes;
-            int add = (int)(index * paneLength);
-            for (int j = 0; j + add < reader.getLength() && j < numPolice; j++) {
+            double index = (i + time) % (numPanes);
+            int add = (int)(index * paneLength) - paneLength;
+
+            for (int j = 0; j < numPolice; j++) {
+                if (j + add < 0 || j + add >= reader.getLength()) continue;
+
                 if ((i & 1) == 0) {
                     writer.setRGB(j + add, 255, 0, 0);
                 } else {

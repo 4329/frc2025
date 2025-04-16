@@ -11,6 +11,7 @@ public class LightLogEntry implements LoggableInputs, Cloneable {
     @Override
     public void toLog(LogTable table) {
         table.put("out", LEDState.out);
+        table.put("teleoped", LEDState.teleoped);
 
         table.put("byHpStation", LEDState.byHpStation);
         table.put("byReef", LEDState.byReef);
@@ -33,6 +34,7 @@ public class LightLogEntry implements LoggableInputs, Cloneable {
     public void fromLog(LogTable table) {
 
         LEDState.out = table.get("out", false);
+        LEDState.teleoped = table.get("teleoped", false);
 
         LEDState.byHpStation = table.get("byHpStation", false);
         LEDState.byReef = table.get("byReef", false);

@@ -9,6 +9,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -38,6 +39,8 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
 
     private double pidCalc;
     private double ffCalc;
+
+    GenericEntry a = Shuffleboard.getTab("Asdf").add("kg", 0).getEntry();
 
     public DifferentialArmImpl() {
         motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.differential1);
@@ -105,6 +108,8 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         pidCalc = pitchPID.calculate(getPitch());
         ffCalc = feedforward.calculate(getPitch() - Math.PI / 2.0, encoder1.getVelocity());
         motor1.set(pidCalc + ffCalc);
+
+        feedforward = new ArmFeedforward(0, a.getDouble(0), 0);
     }
 
     @Override

@@ -47,9 +47,6 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
     private AprilTagFieldLayout aprilTagFieldLayout;
 
-    GenericEntry x = Shuffleboard.getTab("adsf").add("x", 0).getEntry();
-    GenericEntry y = Shuffleboard.getTab("adsf").add("y", 0).getEntry();
-
     public PoseEstimationSubsystem(Drivetrain drivetrain, LilihSubsystem lilihSubsystem) {
         this.lilihSubsystem = lilihSubsystem;
         this.drivetrain = drivetrain;
@@ -136,26 +133,24 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
     final AABB barge = new AABB(8.75, 4, 1.15, 4);
     final AABB porcessor = new AABB(6.18, 0, 0.75, 0.75);
-    final AABB hpStation1 = new AABB(0.675, 0.475, 0.975, 0.825);
-    final AABB hpStation2 = new AABB(0.675, 7.775, 0.975, 0.825);
+    final AABB hpStation1 = new AABB(0.55, 0.55, 0.975, 0.825);
+    final AABB hpStation2 = new AABB(0.55, 7.5, 0.975, 0.825);
     final Translation2d reef = new Translation2d(4.48, 4.03);
 
     @Override
     public void periodic() {
         updateEstimation();
-        Pose2d pose = new Pose2d(x.getDouble(0), y.getDouble(0), new Rotation2d());
+        Pose2d pose = getPose();
         AABB robot =
                 new AABB(
                         pose.getX(),
                         pose.getY(),
-                        Units.inchesToMeters(120.0 / 4),
-                        Units.inchesToMeters(120.0 / 4));
+                        Units.inchesToMeters(29) / 2,
+                        Units.inchesToMeters(30) / 2);
         LEDState.byBarge = robot.intersectingAABB(barge);
-        LEDState.byHpStation = robot.intersectingAABB(hpStation1) || robot.intersectingAABB(hpStation2);
+        LEDState.byHpStation = hpStation1.intersectingAABB(robot) || hpStation2.intersectingAABB(robot);
         LEDState.byPorcessor = robot.intersectingAABB(porcessor);
         LEDState.byReef = pose.getTranslation().getDistance(reef) < 1.55;
-
-        Logger.recordOutput("ha", new Pose2d(x.getDouble(0), y.getDouble(0), new Rotation2d()));
     }
 
     public void resetRotOffset() {

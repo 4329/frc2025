@@ -12,7 +12,7 @@ public class FallPattern implements LEDPattern {
         final int halfLength = reader.getLength() / 2;
         for (int i = 0; i < halfLength; i++) {
             final int index =
-                    (int) ((i - Timer.getFPGATimestamp() * 5) % (halfLength) + halfLength) % halfLength;
+                    (int) ((i - Timer.getFPGATimestamp() * 10) % (halfLength) + halfLength) % halfLength;
             if (i < 25) {
                 writer.setRGB(index, 0, 0, 0);
                 writer.setRGB((reader.getLength() - 1) - index, 0, 0, 0);

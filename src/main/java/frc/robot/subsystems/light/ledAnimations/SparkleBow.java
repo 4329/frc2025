@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.util.Color;
 
 public class SparkleBow implements LEDPattern {
 
-    final int NUM_FLASHIES = 2;
+    final int NUM_FLASHIES = 1;
 
     @Override
     public void applyTo(LEDReader reader, LEDWriter writer) {

@@ -14,6 +14,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.model.DrivetrainLogAutoLogged;
@@ -147,6 +149,13 @@ public class Drivetrain extends SubsystemBase implements LoggedSubsystem {
     public void periodic() {
         // Update swerve drive odometry periodically so robot pose can be tracked
         updateOdometry();
+    }
+
+    Field2d field = new Field2d();
+    @Override
+    public void simulationPeriodic() {
+        field.setRobotPose(getPose());
+        SmartDashboard.putData(field);
     }
 
     @Override

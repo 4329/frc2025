@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -23,6 +24,7 @@ import frc.robot.utilities.AABB;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 import java.util.ArrayList;
 import java.util.List;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -142,7 +144,12 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
     public void periodic() {
         updateEstimation();
         Pose2d pose = new Pose2d(x.getDouble(0), y.getDouble(0), new Rotation2d());
-        AABB robot = new AABB(pose.getX(), pose.getY(), Units.inchesToMeters(120.0 / 4), Units.inchesToMeters(120.0 / 4));
+        AABB robot =
+                new AABB(
+                        pose.getX(),
+                        pose.getY(),
+                        Units.inchesToMeters(120.0 / 4),
+                        Units.inchesToMeters(120.0 / 4));
         LEDState.byBarge = robot.intersectingAABB(barge);
         LEDState.byHpStation = robot.intersectingAABB(hpStation1) || robot.intersectingAABB(hpStation2);
         LEDState.byPorcessor = robot.intersectingAABB(porcessor);

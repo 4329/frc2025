@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.LEDPattern.GradientType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.model.LightLogEntry;
@@ -16,8 +17,6 @@ import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
 import frc.robot.subsystems.light.ledAnimations.BeamsPattern;
 import frc.robot.subsystems.light.ledAnimations.CoutPattern;
 import frc.robot.subsystems.light.ledAnimations.FallPattern;
-import frc.robot.subsystems.light.ledAnimations.GrowPattern;
-import frc.robot.subsystems.light.ledAnimations.PolicePattern;
 import frc.robot.subsystems.light.ledAnimations.RisingPattern;
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
@@ -56,14 +55,30 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
     }
 
     private LEDAnimationNode createGraph() {
-        LEDAnimationNodeSimple start = new LEDAnimationNodeSimple(LEDPattern.rainbow(255, 255).scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meter.of(1 / 60.0)), new ArrayList<>(), "start") ;
-        LEDAnimationNodeSimple goingOut = new LEDAnimationNodeSimple(new BeamsPattern(Color.kOrange, Color.kBlack), new ArrayList<>(), "goingOut");
-        LEDAnimationNodeSimple autoMovement = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kYellow), new ArrayList<>(), "autoMovement");
-        LEDAnimationNodeSimple autoHping = new LEDAnimationNodeSimple(new FallPattern(), new ArrayList<>(), "autoHping");
-        LEDAnimationNodeSimple rising = new LEDAnimationNodeSimple(new RisingPattern(), new ArrayList<>(), "rising");
-        LEDAnimationNodeSimple autoAnticipation = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kOrangeRed), new ArrayList<>(), "autoAnticipation");
-        LEDAnimationNodeSimple autoConglaturations = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kPink), new ArrayList<>(), "autoConglaturations");
-        LEDAnimationSubgraph beginning = new LEDAnimationSubgraph(start, new ArrayList<>(), "beginning");
+        LEDAnimationNodeSimple start =
+                new LEDAnimationNodeSimple(
+                        LEDPattern.rainbow(255, 255)
+                                .scrollAtAbsoluteSpeed(MetersPerSecond.of(1), Meter.of(1 / 60.0)),
+                        new ArrayList<>(),
+                        "start");
+        LEDAnimationNodeSimple goingOut =
+                new LEDAnimationNodeSimple(
+                        new BeamsPattern(Color.kOrange, Color.kBlack), new ArrayList<>(), "goingOut");
+        LEDAnimationNodeSimple autoMovement =
+                new LEDAnimationNodeSimple(
+                        LEDPattern.solid(Color.kYellow), new ArrayList<>(), "autoMovement");
+        LEDAnimationNodeSimple autoHping =
+                new LEDAnimationNodeSimple(new FallPattern(), new ArrayList<>(), "autoHping");
+        LEDAnimationNodeSimple rising =
+                new LEDAnimationNodeSimple(new RisingPattern(), new ArrayList<>(), "rising");
+        LEDAnimationNodeSimple autoAnticipation =
+                new LEDAnimationNodeSimple(
+                        LEDPattern.solid(Color.kOrangeRed), new ArrayList<>(), "autoAnticipation");
+        LEDAnimationNodeSimple autoConglaturations =
+                new LEDAnimationNodeSimple(
+                        LEDPattern.solid(Color.kPink), new ArrayList<>(), "autoConglaturations");
+        LEDAnimationSubgraph beginning =
+                new LEDAnimationSubgraph(start, new ArrayList<>(), "beginning");
 
         start.add(goingOut, DriverStation::isEnabled);
         goingOut.add(autoMovement, () -> LEDState.out);
@@ -73,20 +88,36 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         autoConglaturations.nextNodes().add(new LEDAnimationEdgeTimed(autoMovement, 1));
         backForth(autoMovement, autoHping, () -> LEDState.byHpStation);
 
-        LEDAnimationNodeSimple basicMovement = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kGainsboro), new ArrayList<>(), "basicMovement");
-        LEDAnimationNodeSimple reefing = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kFirebrick), new ArrayList<>(), "reefing");
-        LEDAnimationNodeSimple hping = new LEDAnimationNodeSimple(new FallPattern(), new ArrayList<>(), "hping");
-        LEDAnimationNodeSimple processoring = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kCadetBlue), new ArrayList<>(), "processoring");
-        LEDAnimationNodeSimple barging = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kOrchid), new ArrayList<>(), "barging");
-        LEDAnimationNodeSimple parking = new LEDAnimationNodeSimple(new CoutPattern(), new ArrayList<>(), "parking");
-        LEDAnimationSubgraph movement = new LEDAnimationSubgraph(basicMovement, new ArrayList<>(), "movement");
+        LEDAnimationNodeSimple basicMovement =
+                new LEDAnimationNodeSimple(
+                        LEDPattern.solid(Color.kGainsboro), new ArrayList<>(), "basicMovement");
+        LEDAnimationNodeSimple reefing =
+                new LEDAnimationNodeSimple(
+                        LEDPattern.solid(Color.kFirebrick), new ArrayList<>(), "reefing");
+        LEDAnimationNodeSimple hping =
+                new LEDAnimationNodeSimple(new FallPattern(), new ArrayList<>(), "hping");
+        LEDAnimationNodeSimple processoring =
+                new LEDAnimationNodeSimple(
+                        LEDPattern.solid(Color.kCadetBlue), new ArrayList<>(), "processoring");
+        LEDAnimationNodeSimple barging =
+                new LEDAnimationNodeSimple(LEDPattern.solid(Color.kOrchid), new ArrayList<>(), "barging");
+        LEDAnimationNodeSimple parking =
+                new LEDAnimationNodeSimple(new CoutPattern(), new ArrayList<>(), "parking");
+        LEDAnimationSubgraph movement =
+                new LEDAnimationSubgraph(basicMovement, new ArrayList<>(), "movement");
         beginning.add(movement, () -> DriverStation.isTeleopEnabled());
 
         backForth(basicMovement, reefing, () -> LEDState.byReef);
         backForth(basicMovement, hping, () -> LEDState.byHpStation);
         backForth(basicMovement, processoring, () -> LEDState.byPorcessor);
-        backForth(basicMovement, parking, () -> LEDState.byBarge && (DriverStation.getMatchTime() <= 15 || !LEDState.teleoped));
-        backForth(basicMovement, barging, () -> LEDState.byBarge && (DriverStation.getMatchTime() > 15 && LEDState.teleoped));
+        backForth(
+                basicMovement,
+                parking,
+                () -> LEDState.byBarge && (DriverStation.getMatchTime() <= 15 || !LEDState.teleoped));
+        backForth(
+                basicMovement,
+                barging,
+                () -> LEDState.byBarge && (DriverStation.getMatchTime() > 15 && LEDState.teleoped));
 
         LEDAnimationNodeSimple conglaturations =
                 new LEDAnimationNodeSimple(
@@ -139,7 +170,11 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
                 new LEDAnimationSubgraph(porcessorCentering, new ArrayList<>(), "porcessorScoring");
         movement.add(porcessorScoring, () -> LEDState.porcessor);
 
-        LEDAnimationNodeSimple danger = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kRed).blink(Seconds.of(0.1), Seconds.of(0.1)), new ArrayList<>(), "danger");
+        LEDAnimationNodeSimple danger =
+                new LEDAnimationNodeSimple(
+                        LEDPattern.solid(Color.kRed).blink(Seconds.of(0.1), Seconds.of(0.1)),
+                        new ArrayList<>(),
+                        "danger");
         movement.add(danger, () -> !LEDState.out && LEDState.elevatorSetpointHigh);
         danger.nextNodes().add(new LEDAnimationEdgeTimed(movement, 1));
 
@@ -147,10 +182,16 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         lowering.add(porcessorAlgeeSpinning, () -> LEDState.elevatorAtSetpoint);
         porcessorScoring.add(conglaturations, () -> !LEDState.porcessor);
 
-        LEDAnimationNodeSimple bargeRising = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kCrimson), new ArrayList<>(), "bargeRising");
-        LEDAnimationNodeSimple bargeFlash = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kGold), new ArrayList<>(), "bargeFlash");
-        LEDAnimationNodeSimple bargeAnticipation = new LEDAnimationNodeSimple(LEDPattern.solid(Color.kFuchsia), new ArrayList<>(), "bargeAnticipation");
-        LEDAnimationSubgraph bargeScoring = new LEDAnimationSubgraph(bargeRising, new ArrayList<>(), "bargeScoring");
+        LEDAnimationNodeSimple bargeRising =
+                new LEDAnimationNodeSimple(
+                        LEDPattern.solid(Color.kCrimson), new ArrayList<>(), "bargeRising");
+        LEDAnimationNodeSimple bargeFlash =
+                new LEDAnimationNodeSimple(LEDPattern.solid(Color.kGold), new ArrayList<>(), "bargeFlash");
+        LEDAnimationNodeSimple bargeAnticipation =
+                new LEDAnimationNodeSimple(
+                        LEDPattern.solid(Color.kFuchsia), new ArrayList<>(), "bargeAnticipation");
+        LEDAnimationSubgraph bargeScoring =
+                new LEDAnimationSubgraph(bargeRising, new ArrayList<>(), "bargeScoring");
         movement.add(bargeScoring, () -> LEDState.elevatorSetpointBarge);
 
         bargeRising.add(bargeFlash, () -> LEDState.elevatorAtSetpoint);

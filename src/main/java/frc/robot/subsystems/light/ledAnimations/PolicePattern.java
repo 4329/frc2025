@@ -3,6 +3,7 @@ package frc.robot.subsystems.light.ledAnimations;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.LEDReader;
 import edu.wpi.first.wpilibj.LEDWriter;
+import edu.wpi.first.wpilibj.Timer;
 
 public class PolicePattern implements LEDPattern {
     int policeDst = 4;
@@ -20,9 +21,9 @@ public class PolicePattern implements LEDPattern {
         }
 
         double time = Timer.getFPGATimestamp() * 2;
-        for (int i = 0;  i < numPanes; i++) {
+        for (int i = 0; i < numPanes; i++) {
             double index = (i + time) % (numPanes);
-            int add = (int)(index * paneLength) - paneLength;
+            int add = (int) (index * paneLength) - paneLength;
 
             for (int j = 0; j < numPolice; j++) {
                 if (j + add < 0 || j + add >= reader.getLength()) continue;

@@ -1,12 +1,8 @@
 package frc.robot.subsystems.light;
 
+import edu.wpi.first.wpilibj.LEDPattern;
 import java.util.List;
 import java.util.function.*;
-
-import org.littletonrobotics.junction.LogTable;
-import org.littletonrobotics.junction.inputs.LoggableInputs;
-
-import edu.wpi.first.wpilibj.LEDPattern;
 
 public class LEDAnimationSubgraph implements LEDAnimationNode {
 
@@ -15,7 +11,8 @@ public class LEDAnimationSubgraph implements LEDAnimationNode {
     String name;
     LEDAnimationNode children;
 
-    public LEDAnimationSubgraph(LEDAnimationNode children, List<LEDAnimationEdge> nextNodes, String name) {
+    public LEDAnimationSubgraph(
+            LEDAnimationNode children, List<LEDAnimationEdge> nextNodes, String name) {
         this.name = name;
         this.nextNodes = nextNodes;
 
@@ -58,18 +55,17 @@ public class LEDAnimationSubgraph implements LEDAnimationNode {
     }
 
     public void check() {
-        if (current instanceof LEDAnimationSubgraph) ((LEDAnimationSubgraph)current).check();
+        if (current instanceof LEDAnimationSubgraph) ((LEDAnimationSubgraph) current).check();
         current
-            .nextNodes()
-            .forEach(
-                    x -> {
-                        if (x.transfer().get()) {
-                            current.exit();
-                            current = x.node();
-                            x.node().nextNodes().forEach(y -> y.enter());
-                        }
-                    });
-
+                .nextNodes()
+                .forEach(
+                        x -> {
+                            if (x.transfer().get()) {
+                                current.exit();
+                                current = x.node();
+                                x.node().nextNodes().forEach(y -> y.enter());
+                            }
+                        });
     }
 
     public boolean over() {

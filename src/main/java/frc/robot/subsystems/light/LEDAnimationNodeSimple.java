@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj.LEDPattern;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.littletonrobotics.junction.LogTable;
-
-public record LEDAnimationNodeSimple(LEDPattern animation, List<LEDAnimationEdge> nextNodes, String name) implements LEDAnimationNode {
+public record LEDAnimationNodeSimple(
+        LEDPattern animation, List<LEDAnimationEdge> nextNodes, String name)
+        implements LEDAnimationNode {
     @Override
     public boolean equals(Object other) {
         if (other == null || !(other instanceof LEDAnimationNodeSimple)) return false;
@@ -23,7 +23,7 @@ public record LEDAnimationNodeSimple(LEDPattern animation, List<LEDAnimationEdge
     }
 
     @Override
-    public void exit() { }
+    public void exit() {}
 
     @Override
     public String log() {

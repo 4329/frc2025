@@ -4,6 +4,7 @@
   "holonomicMode": true,
   "pathFolders": [
     "Barge",
+    "Porcessor",
     "Side A",
     "Side B",
     "Side C",

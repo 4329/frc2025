@@ -1,8 +1,7 @@
 package frc.robot.subsystems.light;
 
-import java.util.function.*;
-
 import edu.wpi.first.wpilibj.Timer;
+import java.util.function.*;
 
 public class LEDAnimationEdgeTimed implements LEDAnimationEdge {
     LEDAnimationNode node;

@@ -26,6 +26,7 @@ import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
+import frc.robot.commands.autoCommands.ActuallyAutoPorcessor;
 import frc.robot.commands.autoCommands.AutoActuallyScoreCoralCommand;
 import frc.robot.commands.autoCommands.AutoAlgeeIntake;
 import frc.robot.commands.autoCommands.AutoPositionCoralCommand;
@@ -221,9 +222,15 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "shootAlgee", new UnInstantCommand("outtakeAlgee", () -> algeeWheelSubsystem.run(-1)));
         NamedCommands.registerCommand(
+                "slightlyAlgee", new UnInstantCommand("outtakeAlgee", () -> algeeWheelSubsystem.run(-0.2)));
+        NamedCommands.registerCommand(
                 "algeeArmBargeArmBarge",
                 new UnInstantCommand(
                         "AlgeeArmBargeArmBarge", () -> algeePivotSubsystem.setSetpoint(AlgeePivotAngle.NET)));
+        NamedCommands.registerCommand(
+                "porcessor",
+                new ActuallyAutoPorcessor(
+                        elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
 
         for (int i = 0; i < 6; i++) {
             addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);

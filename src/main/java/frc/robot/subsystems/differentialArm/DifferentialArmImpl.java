@@ -36,7 +36,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     RelativeEncoder encoder1;
 
     ProfiledPIDController pitchPID;
-    ArmFeedforward feedforward;
+    // ArmFeedforward feedforward;
 
     private double pidCalc;
     private double ffCalc;
@@ -57,13 +57,13 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         encoder1 = motor1.getEncoder();
 
         pitchPID =
-                new ShuffledTrapezoidController(0.15, 0.1, 0.01, new TrapezoidProfile.Constraints(25, 18));
-        pitchPID.setIZone(0.5);
-        pitchPID.setTolerance(0.15);
+                new ShuffledTrapezoidController(0.2, 1, 0.0025, new TrapezoidProfile.Constraints(25, 18));
+        pitchPID.setIZone(0.3);
+        pitchPID.setTolerance(0.1);
         pitchPID.setGoal(0);
 
         Shuffleboard.getTab("Asdf").add("diff", pitchPID);
-        feedforward = new ArmFeedforward(0, 0.04, 0);
+        // feedforward = new ArmFeedforward(0, 0.04, 0);
 
         differentialArmLogAutoLogged = new DifferentialArmLogAutoLogged();
     }
@@ -108,12 +108,12 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     @Override
     public void periodic() {
         pidCalc = pitchPID.calculate(getPitch());
-        if (!pitchAtSetpoint()) timer.restart();
-        if (timer.hasElapsed(0.5)) pitchPID.reset(getPitchSetpoint());
-        ffCalc = feedforward.calculate(getPitch() - Math.PI / 2.0, encoder1.getVelocity());
-        motor1.set(pidCalc + ffCalc);
+        // if (!pitchAtSetpoint()) timer.restart();
+        // if (timer.hasElapsed(0.5)) pitchPID.reset(getPitchSetpoint());
+        // ffCalc = feedforward.calculate(getPitch() - Math.PI / 2.0, encoder1.getVelocity());
+        motor1.set(pidCalc);
 
-        feedforward = new ArmFeedforward(0, a.getDouble(0), 0);
+        // feedforward = new ArmFeedforward(0, a.getDouble(0), 0);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         differentialArmLogAutoLogged.atSetpoint = pitchAtSetpoint();
 
         differentialArmLogAutoLogged.pidCalc = pidCalc;
-        differentialArmLogAutoLogged.ffCalc = ffCalc;
+        // differentialArmLogAutoLogged.ffCalc = ffCalc;
 
         return differentialArmLogAutoLogged;
     }

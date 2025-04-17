@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.284943181815232,
-        "y": 5.456635551950017
+        "x": 4.95092213114754,
+        "y": 5.277715163934426
       },
       "prevControl": {
-        "x": 5.454951261683493,
-        "y": 5.273340017963214
+        "x": 5.063655821917808,
+        "y": 5.715389554794521
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Side B Right"
+      "linkedName": "Side B Algee"
     }
   ],
   "rotationTargets": [],

@@ -320,6 +320,24 @@
           "data": {
             "name": "intakeCoral"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "silly leave"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
         }
       ]
     }

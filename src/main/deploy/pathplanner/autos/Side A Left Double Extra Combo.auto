@@ -124,12 +124,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "actuallyIntakeAlgee"
@@ -150,7 +144,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -198,7 +192,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -208,21 +202,35 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "intakeAlgeeHigh"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Side B Reverse Barge"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stop"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAlgeeHigh"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Side B Reverse Barge"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -246,7 +254,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {

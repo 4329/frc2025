@@ -202,14 +202,12 @@ public class RobotContainer {
                 "intakeAlgeeHigh",
                 new AutoAlgeeIntake(
                         elevatorSubsystem,
-                        algeeWheelSubsystem,
                         algeePivotSubsystem,
                         ElevatorPosition.ALGEE_HIGH));
         NamedCommands.registerCommand(
                 "intakeAlgeeLow",
                 new AutoAlgeeIntake(
                         elevatorSubsystem,
-                        algeeWheelSubsystem,
                         algeePivotSubsystem,
                         ElevatorPosition.ALGEE_LOW));
         NamedCommands.registerCommand(

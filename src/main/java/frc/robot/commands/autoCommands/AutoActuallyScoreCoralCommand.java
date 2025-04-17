@@ -6,6 +6,7 @@ import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.subsystems.light.LEDState;
 
 public class AutoActuallyScoreCoralCommand extends Command {
 
@@ -25,6 +26,7 @@ public class AutoActuallyScoreCoralCommand extends Command {
 
     @Override
     public void initialize() {
+        LEDState.scoreCoral = true;
         elevatorSubsystem.setSetpoint(elevatorPosition);
         if (ElevatorPosition.L4.equals(elevatorPosition)) {
             differentialArmSubsystem.setPitchTarget(DifferentialArmPitch.NINETY);

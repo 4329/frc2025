@@ -10,7 +10,7 @@ public class AABBTest {
     @Test
     public void simple() {
         AABB a = new AABB(0, 0, 0.5, 0.5);
-        AABB b = new AABB(0.9, 0, 0.5, 0.4);
+        AABB b = new AABB(0.9, 0, 0.5, 0.5);
         assertTrue(a.intersectingAABB(b));
         assertTrue(b.intersectingAABB(a));
 
@@ -41,6 +41,5 @@ public class AABBTest {
 
         AABB d = new AABB(0, 7.6, 0.5, 0.5);
         assertFalse(a.intersectingAABB(d));
-
     }
 }

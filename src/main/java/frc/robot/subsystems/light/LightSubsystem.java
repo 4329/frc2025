@@ -83,8 +83,12 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         start.add(goingOut, DriverStation::isEnabled);
         goingOut.add(autoMovement, () -> LEDState.out);
 
-        autoMovement.add(rising, () -> !LEDState.elevatorAtSetpoint);
+        autoMovement.add(rising, () -> {
+                LEDState.scoreCoral = false;
+                return !LEDState.elevatorAtSetpoint;
+        });
         rising.add(autoAnticipation, () -> LEDState.elevatorAtSetpoint);
+        autoAnticipation.add(autoConglaturations, () -> LEDState.scoreCoral);
         autoConglaturations.nextNodes().add(new LEDAnimationEdgeTimed(autoMovement, 1));
         backForth(autoMovement, autoHping, () -> LEDState.byHpStation);
 
@@ -144,7 +148,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
 
         LEDAnimationNodeSimple coralCentering =
                 new LEDAnimationNodeSimple(
-                        LEDPattern.solid(Color.kOrchid), new ArrayList<>(), "coralCentering");
+                        LEDPattern.solid(Color.kDarkTurquoise), new ArrayList<>(), "coralCentering");
         LEDAnimationNodeSimple flash =
                 new LEDAnimationNodeSimple(LEDPattern.solid(Color.kAzure), new ArrayList<>(), "flash");
         LEDAnimationNodeSimple coralRising =
@@ -158,7 +162,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         movement.add(scoring, () -> LEDState.scoreWithArm);
 
         coralCentering.add(flash, () -> LEDState.centered);
-        flash.nextNodes().add(new LEDAnimationEdgeTimed(coralRising, .25));
+        flash.nextNodes().add(new LEDAnimationEdgeTimed(coralRising, .1));
         coralRising.add(anticipation, () -> LEDState.elevatorAtSetpoint);
         scoring.add(conglaturations, () -> LEDState.scoreCoral);
         scoring.add(sad, () -> !LEDState.scoreWithArm && !LEDState.scoreCoral);
@@ -200,7 +204,8 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         movement.add(bargeScoring, () -> LEDState.elevatorSetpoint == ElevatorPosition.NET.pos);
 
         bargeRising.add(bargeFlash, () -> LEDState.elevatorAtSetpoint);
-        bargeFlash.nextNodes().add(new LEDAnimationEdgeTimed(bargeAnticipation, 0.25));
+        bargeFlash.nextNodes().add(new LEDAnimationEdgeTimed(bargeAnticipation, 0.1));
+        bargeScoring.add(sad, () -> LEDState.elevatorSetpoint != ElevatorPosition.NET.pos);
         bargeScoring.add(conglaturations, () -> LEDState.algeeWheelRunning);
 
         LEDAnimationNodeSimple algeeRising =
@@ -208,7 +213,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
                         LEDPattern.solid(Color.kDenim), new ArrayList<>(), "algeeRising");
         LEDAnimationNodeSimple algeeSpinning =
                 new LEDAnimationNodeSimple(
-                        LEDPattern.solid(Color.kDenim), new ArrayList<>(), "algeeSpinning");
+                        LEDPattern.solid(Color.kDarkSalmon), new ArrayList<>(), "algeeSpinning");
         LEDAnimationSubgraph algeeIntaking =
                 new LEDAnimationSubgraph(algeeRising, new ArrayList<>(), "algeeIntaking");
         movement.add(algeeIntaking, () -> LEDState.algeeIntaking);

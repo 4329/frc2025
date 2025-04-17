@@ -10,7 +10,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -131,16 +133,22 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         }
     }
 
+    private Pose2d getAlliancedPose() {
+        Pose2d pose = getPose();
+        if (Alliance.Red.equals(DriverStation.getAlliance().orElse(null))) pose = new Pose2d(8.7 - (pose.getX() - 8.7), 8 - pose.getY(), pose.getRotation().minus(Rotation2d.kPi));
+        return pose;
+    }
+
     final AABB barge = new AABB(8.75, 4, 1.15, 4);
     final AABB porcessor = new AABB(6.18, 0, 0.75, 0.75);
     final AABB hpStation1 = new AABB(0.55, 0.55, 0.975, 0.825);
-    final AABB hpStation2 = new AABB(0.55, 7.5, 0.975, 0.825);
+    final AABB hpStation2 = new AABB(0.55, 7.45, 0.975, 0.825);
     final Translation2d reef = new Translation2d(4.48, 4.03);
 
     @Override
     public void periodic() {
         updateEstimation();
-        Pose2d pose = getPose();
+        Pose2d pose = getAlliancedPose();
         AABB robot =
                 new AABB(
                         pose.getX(),

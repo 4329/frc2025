@@ -12,9 +12,9 @@ public class SparkleBow implements LEDPattern {
 
     @Override
     public void applyTo(LEDReader reader, LEDWriter writer) {
-        int time = (int)(Timer.getFPGATimestamp() * 10);
+        int time = (int)(Timer.getFPGATimestamp() * 20);
         for (int i = 0; i < reader.getLength(); i++) {
-            writer.setHSV(i, i  * 3 + time, 255, 255);
+            writer.setHSV(i, i  * 4 + time, 255, 255);
         }
         for (int i = 0; i < NUM_FLASHIES; i++) {
             int index = (int)(Math.random() * reader.getLength());

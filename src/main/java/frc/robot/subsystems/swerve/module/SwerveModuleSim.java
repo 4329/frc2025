@@ -131,7 +131,7 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
 
     @Override
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(m_driveSim.getAngularPositionRotations() * Constants.ModuleConstants.kPositionFactor, new Rotation2d(getTurnEncoder()));
+        return new SwerveModulePosition(m_driveSim.getAngularPositionRotations() * Constants.ModuleConstants.kPositionFactor * 3, new Rotation2d(getTurnEncoder()));
     }
 
     @Override

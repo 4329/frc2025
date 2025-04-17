@@ -146,13 +146,13 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
                 new LEDAnimationNodeSimple(
                         LEDPattern.solid(Color.kOrchid), new ArrayList<>(), "coralCentering");
         LEDAnimationNodeSimple flash =
-                new LEDAnimationNodeSimple(LEDPattern.solid(Color.kOrchid), new ArrayList<>(), "flash");
+                new LEDAnimationNodeSimple(LEDPattern.solid(Color.kAzure), new ArrayList<>(), "flash");
         LEDAnimationNodeSimple coralRising =
                 new LEDAnimationNodeSimple(
-                        LEDPattern.solid(Color.kOrchid), new ArrayList<>(), "coralRising");
+                        LEDPattern.solid(Color.kDarkKhaki), new ArrayList<>(), "coralRising");
         LEDAnimationNodeSimple anticipation =
                 new LEDAnimationNodeSimple(
-                        LEDPattern.solid(Color.kOrchid), new ArrayList<>(), "anticipation");
+                        LEDPattern.solid(Color.kTomato), new ArrayList<>(), "anticipation");
         LEDAnimationSubgraph scoring =
                 new LEDAnimationSubgraph(coralCentering, new ArrayList<>(), "scoring");
         movement.add(scoring, () -> LEDState.scoreWithArm);

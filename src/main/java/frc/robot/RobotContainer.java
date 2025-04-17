@@ -54,6 +54,7 @@ import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.light.LightSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
@@ -311,7 +312,6 @@ public class RobotContainer {
      */
     // spotless:off
     private void configureButtonBindings() {
-
         driverController.start().onTrue(new UnInstantCommand(
                     "ToggleFieldOrient",
                     driveByController::toggleFieldOrient
@@ -396,6 +396,12 @@ public class RobotContainer {
         functionalController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
             "ElevatorDown",
             () -> elevatorSubsystem.runElevator(-functionalController.getLeftTriggerAxis())).repeatedlyLog());
+
+        CommandXboxController ledController = new CommandXboxController(3);
+        ledController.a().onTrue(new UnInstantCommand("a", () -> LEDState.byHpStation = !LEDState.byHpStation));
+        ledController.b().onTrue(new UnInstantCommand("a", () -> LEDState.byBarge = !LEDState.byBarge));
+        ledController.x().onTrue(new UnInstantCommand("a", () -> LEDState.byPorcessor = !LEDState.byPorcessor));
+        ledController.y().onTrue(new UnInstantCommand("a", () -> LEDState.byReef = !LEDState.byReef));
     }
 
     // spotless:on

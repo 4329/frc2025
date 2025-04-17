@@ -155,10 +155,10 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
                         pose.getY(),
                         Units.inchesToMeters(29) / 2,
                         Units.inchesToMeters(30) / 2);
-        LEDState.byBarge = robot.intersectingAABB(barge);
-        LEDState.byHpStation = hpStation1.intersectingAABB(robot) || hpStation2.intersectingAABB(robot);
-        LEDState.byPorcessor = robot.intersectingAABB(porcessor);
-        LEDState.byReef = pose.getTranslation().getDistance(reef) < 1.55;
+        // LEDState.byBarge = robot.intersectingAABB(barge);
+        // LEDState.byHpStation = hpStation1.intersectingAABB(robot) || hpStation2.intersectingAABB(robot);
+        // LEDState.byPorcessor = robot.intersectingAABB(porcessor);
+        // LEDState.byReef = pose.getTranslation().getDistance(reef) < 1.55;
     }
 
     public void resetRotOffset() {

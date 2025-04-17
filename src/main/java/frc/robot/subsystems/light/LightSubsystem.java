@@ -18,6 +18,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.subsystems.light.ledAnimations.BeamsPattern;
 import frc.robot.subsystems.light.ledAnimations.CoutPattern;
 import frc.robot.subsystems.light.ledAnimations.FallPattern;
+import frc.robot.subsystems.light.ledAnimations.Movement;
 import frc.robot.subsystems.light.ledAnimations.RisingPattern;
 import frc.robot.subsystems.light.ledAnimations.SparkleBow;
 
@@ -60,7 +61,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
 
     private LEDAnimationNode createGraph() {
         LEDAnimationNodeSimple start =
-                new LEDAnimationNodeSimple(new SparkleBow(), new ArrayList<>(), "start");
+                new LEDAnimationNodeSimple(new SparkleBow(30), new ArrayList<>(), "start");
         LEDAnimationNodeSimple goingOut =
                 new LEDAnimationNodeSimple(
                         new BeamsPattern(Color.kOrange, Color.kBlack), new ArrayList<>(), "goingOut");
@@ -94,22 +95,22 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
 
         LEDAnimationNodeSimple basicMovement =
                 new LEDAnimationNodeSimple(
-                        LEDPattern.solid(Color.kGainsboro), new ArrayList<>(), "basicMovement");
+                        new Movement(Color.kGainsboro), new ArrayList<>(), "basicMovement");
         LEDAnimationNodeSimple reefing =
                 new LEDAnimationNodeSimple(
-                        LEDPattern.solid(Color.kFirebrick), new ArrayList<>(), "reefing");
+                        new Movement(Color.kFirebrick), new ArrayList<>(), "reefing");
 
         LEDAnimationNodeSimple hsading =
-                new LEDAnimationNodeSimple(LEDPattern.solid(Color.kSteelBlue), new ArrayList<>(), "hsading");
+                new LEDAnimationNodeSimple(new Movement(Color.kDodgerBlue), new ArrayList<>(), "hsading");
         LEDAnimationNodeSimple eleLow = new LEDAnimationNodeSimple(new FallPattern(), new ArrayList<>(), "eleLow");
         hsading.add(eleLow, () -> LEDState.elevatorAtSetpoint && LEDState.elevatorSetpoint == ElevatorPosition.DIFFERENTIAL_ARM_OUT.pos);
         LEDAnimationSubgraph hping = new LEDAnimationSubgraph(hsading, new ArrayList<>(), "hping");
 
         LEDAnimationNodeSimple processoring =
                 new LEDAnimationNodeSimple(
-                        LEDPattern.solid(Color.kCadetBlue), new ArrayList<>(), "processoring");
+                        new Movement(Color.kOliveDrab), new ArrayList<>(), "processoring");
         LEDAnimationNodeSimple barging =
-                new LEDAnimationNodeSimple(LEDPattern.solid(Color.kOrchid), new ArrayList<>(), "barging");
+                new LEDAnimationNodeSimple(new Movement(Color.kSienna), new ArrayList<>(), "barging");
         LEDAnimationNodeSimple parking =
                 new LEDAnimationNodeSimple(new CoutPattern(), new ArrayList<>(), "parking");
         LEDAnimationSubgraph movement =

@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -103,9 +104,12 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         return pitchPID.atGoal();
     }
 
+    Timer timer = new Timer();
     @Override
     public void periodic() {
         pidCalc = pitchPID.calculate(getPitch());
+        if (!pitchAtSetpoint()) timer.restart();
+        if (timer.hasElapsed(0.5)) pitchPID.reset(getPitchSetpoint());
         ffCalc = feedforward.calculate(getPitch() - Math.PI / 2.0, encoder1.getVelocity());
         motor1.set(pidCalc + ffCalc);
 

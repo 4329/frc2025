@@ -22,7 +22,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         L2(18.1941),
         L2Score(-3.4),
 
-        L3(47.86),
+        L3(31.67),
         L3Score(20.9),
 
         L4(73.697),

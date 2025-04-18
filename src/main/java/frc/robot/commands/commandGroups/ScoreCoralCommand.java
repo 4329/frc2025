@@ -34,9 +34,9 @@ public class ScoreCoralCommand extends Command {
     public void initialize() {
         LEDState.scoreCoral = true;
         differentialArmSubsystem.setPitchTarget(
-                buttonRingController.getLevel() == 4
-                        ? DifferentialArmPitch.NINETY
-                        : DifferentialArmPitch.SCORE_LOW);
+                buttonRingController.getLevel() == 2
+                        ? DifferentialArmPitch.SCORE_LOW
+                        : DifferentialArmPitch.NINETY);
 
         elevatorSubsystem.setSetpoint(
                 switch (buttonRingController.getLevel()) {

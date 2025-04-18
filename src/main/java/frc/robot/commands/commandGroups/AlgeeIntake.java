@@ -65,6 +65,7 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
 
     @Override
     public void initialize() {
+        System.out.println("HI MATTHEW AHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAH");
         LEDState.algeeIntaking = true;
         super.initialize();
     }

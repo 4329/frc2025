@@ -67,9 +67,14 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
                         new BeamsPattern(Color.kOrange, Color.kBlack), new ArrayList<>(), "goingOut");
         LEDAnimationNodeSimple autoMovement =
                 new LEDAnimationNodeSimple(
-                        LEDPattern.solid(Color.kYellow), new ArrayList<>(), "autoMovement");
-        LEDAnimationNodeSimple autoHping =
-                new LEDAnimationNodeSimple(new FallPattern(), new ArrayList<>(), "autoHping");
+                        new Movement(Color.kLightYellow), new ArrayList<>(), "autoMovement");
+
+        LEDAnimationNodeSimple autoHsading =
+                new LEDAnimationNodeSimple(new Movement(Color.kDodgerBlue), new ArrayList<>(), "hsading");
+        LEDAnimationNodeSimple autoEleLow = new LEDAnimationNodeSimple(new FallPattern(), new ArrayList<>(), "eleLow");
+        backForth(autoHsading, autoEleLow, () -> LEDState.elevatorAtSetpoint && LEDState.elevatorSetpoint == ElevatorPosition.DIFFERENTIAL_ARM_OUT.pos);
+        LEDAnimationSubgraph autoHping = new LEDAnimationSubgraph(autoHsading, new ArrayList<>(), "hping");
+
         LEDAnimationNodeSimple rising =
                 new LEDAnimationNodeSimple(new RisingPattern(1), new ArrayList<>(), "rising");
         LEDAnimationNodeSimple autoAnticipation =
@@ -103,7 +108,7 @@ public class LightSubsystem extends SubsystemBase implements LoggedSubsystem {
         LEDAnimationNodeSimple hsading =
                 new LEDAnimationNodeSimple(new Movement(Color.kDodgerBlue), new ArrayList<>(), "hsading");
         LEDAnimationNodeSimple eleLow = new LEDAnimationNodeSimple(new FallPattern(), new ArrayList<>(), "eleLow");
-        hsading.add(eleLow, () -> LEDState.elevatorAtSetpoint && LEDState.elevatorSetpoint == ElevatorPosition.DIFFERENTIAL_ARM_OUT.pos);
+        backForth(hsading, eleLow, () -> LEDState.elevatorAtSetpoint && LEDState.elevatorSetpoint == ElevatorPosition.DIFFERENTIAL_ARM_OUT.pos);
         LEDAnimationSubgraph hping = new LEDAnimationSubgraph(hsading, new ArrayList<>(), "hping");
 
         LEDAnimationNodeSimple processoring =

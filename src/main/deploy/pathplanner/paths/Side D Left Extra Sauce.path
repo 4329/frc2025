@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.339090909090909,
-        "y": 5.4260085227272725
+        "x": 2.893739476359467,
+        "y": 4.285327247283103
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.128771210970855,
-        "y": 5.290858145063392
+        "x": 3.3028160399228277,
+        "y": 4.28207504180864
       },
       "isLocked": false,
-      "linkedName": "BargeScore"
+      "linkedName": "Side D Left"
     },
     {
       "anchor": {
-        "x": 5.284943181815232,
-        "y": 5.456635551950017
+        "x": 3.16087829349869,
+        "y": 4.288772711928836
       },
       "prevControl": {
-        "x": 5.454951261683493,
-        "y": 5.273340017963214
+        "x": 2.5713709301097687,
+        "y": 4.26357009524696
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Side B Right"
+      "linkedName": "Side D Left Score"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.5,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Barge",
+  "folder": "Side D",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

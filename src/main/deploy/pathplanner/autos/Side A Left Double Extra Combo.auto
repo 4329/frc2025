@@ -106,41 +106,33 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Side A Left Reverse Extra Sauce"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "stop"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeAlgeeLow"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "actuallyIntakeAlgee"
-                }
-              }
-            ]
+            "pathName": "Side A Left Reverse Extra Sauce"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeAlgeeLow"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "actuallyIntakeAlgee"
           }
         },
         {
@@ -158,62 +150,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "algeeStop"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Side A Barge"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stop"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "algeeArmBargeArmBarge"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "elevatorBarge"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootAlgee"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
+            "waitTime": 0.5
           }
         },
         {
@@ -233,7 +170,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Side B Reverse Barge"
+                        "pathName": "Side A Barge"
                       }
                     },
                     {
@@ -252,25 +189,111 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "intakeAlgeeHigh"
+                        "name": "algeeArmBargeArmBarge"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "actuallyIntakeAlgee"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.25
+                        "name": "elevatorBarge"
                       }
                     }
                   ]
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootAlgee"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "algeeStop"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAlgeeHigh"
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Side B Reverse Barge"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "actuallyIntakeAlgee"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side B Algee Grab"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -289,68 +312,6 @@
           "type": "named",
           "data": {
             "name": "stop"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "algeeArmBargeArmBarge"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "elevatorBarge"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootAlgee"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "algeeStop"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeCoral"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "silly leave"
-                }
-              }
-            ]
           }
         },
         {

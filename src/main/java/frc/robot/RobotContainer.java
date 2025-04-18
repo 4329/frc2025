@@ -394,12 +394,6 @@ public class RobotContainer {
         functionalController.leftTrigger(0.01).whileTrue(new UnInstantCommand(
             "ElevatorDown",
             () -> elevatorSubsystem.runElevator(-functionalController.getLeftTriggerAxis())).repeatedlyLog());
-
-        CommandXboxController ledController = new CommandXboxController(3);
-        ledController.a().onTrue(new UnInstantCommand("a", () -> LEDState.byHpStation = !LEDState.byHpStation));
-        ledController.b().onTrue(new UnInstantCommand("a", () -> LEDState.byBarge = !LEDState.byBarge));
-        ledController.x().onTrue(new UnInstantCommand("a", () -> LEDState.byPorcessor = !LEDState.byPorcessor));
-        ledController.y().onTrue(new UnInstantCommand("a", () -> LEDState.byReef = !LEDState.byReef));
     }
 
     // spotless:on

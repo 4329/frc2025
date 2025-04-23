@@ -1,14 +1,13 @@
 package frc.robot.subsystems.light.ledAnimations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.LEDReader;
 import edu.wpi.first.wpilibj.LEDWriter;
 import edu.wpi.first.wpilibj.util.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Movement implements LEDPattern {
 
@@ -60,8 +59,8 @@ public class Movement implements LEDPattern {
 
             if (!p.hit) {
                 points.get(i).color = Color.lerpRGB(c, p.point, MULTIPLIER_TWO);
-                if (Math.abs(c.blue * c.green * c.red - p.color.blue * p.color.green * p.color.red) < 0.00001)
-                    points.get(i).hit = true;
+                if (Math.abs(c.blue * c.green * c.red - p.color.blue * p.color.green * p.color.red)
+                        < 0.00001) points.get(i).hit = true;
             } else {
                 if (c.blue + c.green + c.red < 0.05) {
                     writer.setLED(p.index, Color.kBlack);

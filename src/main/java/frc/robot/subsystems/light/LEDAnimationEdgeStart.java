@@ -2,7 +2,8 @@ package frc.robot.subsystems.light;
 
 import java.util.function.Supplier;
 
-public record LEDAnimationEdgeStart(LEDAnimationNode node, Supplier<Boolean> transfer) implements LEDAnimationEdge {
+public record LEDAnimationEdgeStart(LEDAnimationNode node, Supplier<Boolean> transfer)
+        implements LEDAnimationEdge {
 
     @Override
     public boolean equals(Object other) {

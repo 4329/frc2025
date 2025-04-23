@@ -1,13 +1,5 @@
 package frc.robot.subsystems.swerve.module;
 
-import com.revrobotics.sim.SparkMaxSim;
-import com.revrobotics.sim.SparkRelativeEncoderSim;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,10 +12,8 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.utilities.MathUtils;
-import frc.robot.utilities.SparkFactory;
 
 public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
     private double m_driveCommand;
@@ -49,12 +39,17 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
 
         DCMotor driveGearbox = DCMotor.getNEO(1);
         m_driveSim =
-                new DCMotorSim(LinearSystemId.createDCMotorSystem(driveGearbox, 0.025, Constants.ModuleConstants.kTranslationGearRatio), driveGearbox);
+                new DCMotorSim(
+                        LinearSystemId.createDCMotorSystem(
+                                driveGearbox, 0.025, Constants.ModuleConstants.kTranslationGearRatio),
+                        driveGearbox);
 
         DCMotor turningGearbox = DCMotor.getNEO(1);
         m_turningSim =
                 new DCMotorSim(
-                        LinearSystemId.createDCMotorSystem(turningGearbox, .004, Constants.ModuleConstants.kTurningGearRatio), turningGearbox);
+                        LinearSystemId.createDCMotorSystem(
+                                turningGearbox, .004, Constants.ModuleConstants.kTurningGearRatio),
+                        turningGearbox);
 
         // Creates the SimpleMotorFeedForward for the swerve module using the static and
         // feedforward gains from the tuningVals array
@@ -122,16 +117,16 @@ public class SwerveModuleSim extends SubsystemBase implements SwerveModule {
     }
 
     @Override
-    public void brakeModeModule() {
-    }
+    public void brakeModeModule() {}
 
     @Override
-    public void coastModeModule() {
-    }
+    public void coastModeModule() {}
 
     @Override
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(m_driveSim.getAngularPositionRotations() * Constants.ModuleConstants.kPositionFactor * 3, new Rotation2d(getTurnEncoder()));
+        return new SwerveModulePosition(
+                m_driveSim.getAngularPositionRotations() * Constants.ModuleConstants.kPositionFactor * 3,
+                new Rotation2d(getTurnEncoder()));
     }
 
     @Override

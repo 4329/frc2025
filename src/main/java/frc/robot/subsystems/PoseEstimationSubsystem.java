@@ -9,10 +9,9 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,7 +25,6 @@ import frc.robot.utilities.AABB;
 import frc.robot.utilities.LimelightHelpers.PoseEstimate;
 import java.util.ArrayList;
 import java.util.List;
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubsystem {
@@ -135,7 +133,10 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
 
     private Pose2d getAlliancedPose() {
         Pose2d pose = getPose();
-        if (Alliance.Red.equals(DriverStation.getAlliance().orElse(null))) pose = new Pose2d(8.7 - (pose.getX() - 8.7), 8 - pose.getY(), pose.getRotation().minus(Rotation2d.kPi));
+        if (Alliance.Red.equals(DriverStation.getAlliance().orElse(null)))
+            pose =
+                    new Pose2d(
+                            8.7 - (pose.getX() - 8.7), 8 - pose.getY(), pose.getRotation().minus(Rotation2d.kPi));
         return pose;
     }
 
@@ -151,10 +152,7 @@ public class PoseEstimationSubsystem extends SubsystemBase implements LoggedSubs
         Pose2d pose = getAlliancedPose();
         AABB robot =
                 new AABB(
-                        pose.getX(),
-                        pose.getY(),
-                        Units.inchesToMeters(29) / 2,
-                        Units.inchesToMeters(30) / 2);
+                        pose.getX(), pose.getY(), Units.inchesToMeters(29) / 2, Units.inchesToMeters(30) / 2);
         LEDState.byBarge = robot.intersectingAABB(barge);
         LEDState.byHpStation = hpStation1.intersectingAABB(robot) || hpStation2.intersectingAABB(robot);
         LEDState.byPorcessor = robot.intersectingAABB(porcessor);

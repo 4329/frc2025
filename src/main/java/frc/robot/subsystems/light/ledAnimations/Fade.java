@@ -16,8 +16,6 @@ public class Fade implements LEDPattern {
 
     @Override
     public void applyTo(LEDReader reader, LEDWriter writer) {
-        for (int i = 0; i < reader.getLength(); i++) {
-        }
+        for (int i = 0; i < reader.getLength(); i++) {}
     }
-    
 }

@@ -152,6 +152,7 @@ public class Drivetrain extends SubsystemBase implements LoggedSubsystem {
     }
 
     Field2d field = new Field2d();
+
     @Override
     public void simulationPeriodic() {
         field.setRobotPose(getPose());

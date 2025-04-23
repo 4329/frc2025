@@ -3,7 +3,6 @@ package frc.robot.commands.autoCommands;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.subsystems.AlgeePivotSubsystem;
 import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
-import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.utilities.UnInstantCommand;
@@ -19,7 +18,6 @@ public class AutoAlgeeIntake extends LoggedSequentialCommandGroup {
         addCommands(
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotAngle.OUT),
                 new UnInstantCommand(
-                        "intake algee",
-                        () -> elevatorSubsystem.setSetpoint(elevatorPosition)));
+                        "intake algee", () -> elevatorSubsystem.setSetpoint(elevatorPosition)));
     }
 }

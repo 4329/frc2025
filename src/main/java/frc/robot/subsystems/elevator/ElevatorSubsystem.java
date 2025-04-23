@@ -10,7 +10,6 @@ import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.HoorayConfig;
 import frc.robot.utilities.MathUtils;
 import frc.robot.utilities.shufflebored.ShuffledTrapezoidController;
-import java.util.Arrays;
 import org.littletonrobotics.junction.Logger;
 
 public class ElevatorSubsystem extends SubsystemBase {

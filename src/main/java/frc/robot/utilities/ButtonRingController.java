@@ -37,25 +37,30 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                 .ignoringDisableLog(true)
                 .schedule();
 
-        new UnInstantCommand("TryButtons", () -> {
-            boolean no = false;
-            for (int i = 1; i <= 12; i++) {
-                if (!button(i).getAsBoolean()) continue;
-                no = true;
-                button = i;
+        new UnInstantCommand(
+                        "TryButtons",
+                        () -> {
+                            boolean no = false;
+                            for (int i = 1; i <= 12; i++) {
+                                if (!button(i).getAsBoolean()) continue;
+                                no = true;
+                                button = i;
 
-                OFFSET_AMOUNT = bsdf.getDouble(0); // WIP
+                                OFFSET_AMOUNT = bsdf.getDouble(0); // WIP
 
-                xOffset = OFFSET_AMOUNT * (i % 2 == 0 ? 1 : -1);
-                tagID = AprilTagUtil.getReef((i % 12) / 2);
-            }
+                                xOffset = OFFSET_AMOUNT * (i % 2 == 0 ? 1 : -1);
+                                tagID = AprilTagUtil.getReef((i % 12) / 2);
+                            }
 
-            if (!no) {
-                button = 0;
-                xOffset = 0;
-                tagID = 0;
-            }
-        }).repeatedlyLog().ignoringDisableLog(true).schedule();
+                            if (!no) {
+                                button = 0;
+                                xOffset = 0;
+                                tagID = 0;
+                            }
+                        })
+                .repeatedlyLog()
+                .ignoringDisableLog(true)
+                .schedule();
 
         buttonRingLogAutoLogged = new ButtonRingLogAutoLogged();
     }

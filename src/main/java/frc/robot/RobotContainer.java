@@ -54,7 +54,6 @@ import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
-import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.light.LightSubsystem;
 import frc.robot.subsystems.lilih.LilihSubsystem;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
@@ -200,16 +199,10 @@ public class RobotContainer {
                                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
         NamedCommands.registerCommand(
                 "intakeAlgeeHigh",
-                new AutoAlgeeIntake(
-                        elevatorSubsystem,
-                        algeePivotSubsystem,
-                        ElevatorPosition.ALGEE_HIGH));
+                new AutoAlgeeIntake(elevatorSubsystem, algeePivotSubsystem, ElevatorPosition.ALGEE_HIGH));
         NamedCommands.registerCommand(
                 "intakeAlgeeLow",
-                new AutoAlgeeIntake(
-                        elevatorSubsystem,
-                        algeePivotSubsystem,
-                        ElevatorPosition.ALGEE_LOW));
+                new AutoAlgeeIntake(elevatorSubsystem, algeePivotSubsystem, ElevatorPosition.ALGEE_LOW));
         NamedCommands.registerCommand(
                 "elevatorBarge", new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
 

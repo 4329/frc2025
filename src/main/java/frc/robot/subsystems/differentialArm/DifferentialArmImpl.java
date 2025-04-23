@@ -6,7 +6,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.GenericEntry;
@@ -105,6 +104,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     }
 
     Timer timer = new Timer();
+
     @Override
     public void periodic() {
         pidCalc = pitchPID.calculate(getPitch());

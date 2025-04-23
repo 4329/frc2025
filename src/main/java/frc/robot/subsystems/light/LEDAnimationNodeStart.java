@@ -1,11 +1,12 @@
 package frc.robot.subsystems.light;
 
+import edu.wpi.first.wpilibj.LEDPattern;
 import java.util.List;
 import java.util.function.Supplier;
 
-import edu.wpi.first.wpilibj.LEDPattern;
-
-public record LEDAnimationNodeStart(LEDPattern animation, List<LEDAnimationEdge> nextNodes, String name) implements LEDAnimationNode {
+public record LEDAnimationNodeStart(
+        LEDPattern animation, List<LEDAnimationEdge> nextNodes, String name)
+        implements LEDAnimationNode {
 
     @Override
     public boolean equals(Object other) {

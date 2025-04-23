@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.jupiter.api.Test;
 
 public class AABBTest {
-   
+
     @Test
     public void simple() {
         AABB a = new AABB(0, 0, 0.5, 0.5);

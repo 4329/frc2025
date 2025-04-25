@@ -8,6 +8,7 @@ import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem;
 import frc.robot.subsystems.differentialArm.DifferentialArmSubsystem.DifferentialArmPitch;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.utilities.loggedComands.LoggedParallelCommandGroup;
 import frc.robot.utilities.loggedComands.LoggedSequentialCommandGroup;
 import frc.robot.utilities.loggedComands.LoggedWaitCommand;
@@ -44,5 +45,11 @@ public class StartCommand extends LoggedSequentialCommandGroup {
                                         })),
                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.ALGEE_CLAW_OUT),
                 new SetAlgeePivotCommand(algeePivotSubsystem, AlgeePivotSubsystem.AlgeePivotAngle.OUT));
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        LEDState.out = true;
     }
 }

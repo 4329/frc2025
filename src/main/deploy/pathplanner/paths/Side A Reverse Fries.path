@@ -8,32 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.390499999999999,
-        "y": 4.210249999999999
+        "x": 6.107059879036796,
+        "y": 4.1251524048115655
       },
       "isLocked": false,
       "linkedName": "Side A Algee"
     },
     {
       "anchor": {
-        "x": 7.521865638378158,
-        "y": 5.429509481641746
+        "x": 6.137965273516295,
+        "y": 3.752
       },
       "prevControl": {
-        "x": 6.189408942383193,
-        "y": 5.282603057638095
+        "x": 6.177107796078508,
+        "y": 3.505083287468291
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BargeScore"
+      "linkedName": "Side A Left"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.7695390781563126,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Barge",
+  "folder": "Side A",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

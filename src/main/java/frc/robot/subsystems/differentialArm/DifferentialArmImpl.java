@@ -6,10 +6,11 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,10 +35,12 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
     RelativeEncoder encoder1;
 
     ProfiledPIDController pitchPID;
-    ArmFeedforward feedforward;
+    // ArmFeedforward feedforward;
 
     private double pidCalc;
     private double ffCalc;
+
+    GenericEntry a = Shuffleboard.getTab("Asdf").add("kg", 0).getEntry();
 
     public DifferentialArmImpl() {
         motor1 = SparkFactory.createSparkMax(Constants.SparkIDs.differential1);
@@ -53,13 +56,13 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         encoder1 = motor1.getEncoder();
 
         pitchPID =
-                new ShuffledTrapezoidController(0.15, 0.1, 0.01, new TrapezoidProfile.Constraints(25, 18));
-        pitchPID.setIZone(0.5);
-        pitchPID.setTolerance(0.15);
+                new ShuffledTrapezoidController(0.2, 1, 0.0025, new TrapezoidProfile.Constraints(25, 18));
+        pitchPID.setIZone(0.3);
+        pitchPID.setTolerance(0.1);
         pitchPID.setGoal(0);
 
         Shuffleboard.getTab("Asdf").add("diff", pitchPID);
-        feedforward = new ArmFeedforward(0, 0.04, 0);
+        // feedforward = new ArmFeedforward(0, 0.04, 0);
 
         differentialArmLogAutoLogged = new DifferentialArmLogAutoLogged();
     }
@@ -100,11 +103,17 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         return pitchPID.atGoal();
     }
 
+    Timer timer = new Timer();
+
     @Override
     public void periodic() {
         pidCalc = pitchPID.calculate(getPitch());
-        ffCalc = feedforward.calculate(getPitch() - Math.PI / 2.0, encoder1.getVelocity());
-        motor1.set(pidCalc + ffCalc);
+        // if (!pitchAtSetpoint()) timer.restart();
+        // if (timer.hasElapsed(0.5)) pitchPID.reset(getPitchSetpoint());
+        // ffCalc = feedforward.calculate(getPitch() - Math.PI / 2.0, encoder1.getVelocity());
+        motor1.set(pidCalc);
+
+        // feedforward = new ArmFeedforward(0, a.getDouble(0), 0);
     }
 
     @Override
@@ -122,7 +131,7 @@ public class DifferentialArmImpl extends SubsystemBase implements DifferentialAr
         differentialArmLogAutoLogged.atSetpoint = pitchAtSetpoint();
 
         differentialArmLogAutoLogged.pidCalc = pidCalc;
-        differentialArmLogAutoLogged.ffCalc = ffCalc;
+        // differentialArmLogAutoLogged.ffCalc = ffCalc;
 
         return differentialArmLogAutoLogged;
     }

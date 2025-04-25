@@ -8,6 +8,7 @@ import frc.robot.subsystems.AlgeePivotSubsystem.AlgeePivotAngle;
 import frc.robot.subsystems.AlgeeWheelSubsystem;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CenterDistance;
@@ -63,7 +64,15 @@ public class AlgeeIntake extends LoggedSequentialCommandGroup {
     }
 
     @Override
+    public void initialize() {
+        System.out.println("HI MATTHEW AHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAH");
+        LEDState.algeeIntaking = true;
+        super.initialize();
+    }
+
+    @Override
     public void end(boolean interrupted) {
+        LEDState.algeeIntaking = false;
         super.end(interrupted);
     }
 }

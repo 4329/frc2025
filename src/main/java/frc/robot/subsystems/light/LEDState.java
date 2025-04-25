@@ -1,18 +1,21 @@
 package frc.robot.subsystems.light;
 
 public class LEDState {
-    public static boolean on;
+    public static boolean out;
+    public static boolean teleoped;
 
-    public static int reefButton;
-    public static int reefLevel;
-
-    public static boolean centerRunning;
+    public static boolean byHpStation;
+    public static boolean byReef;
+    public static boolean byPorcessor;
+    public static boolean byBarge;
 
     public static boolean algeeWheelRunning;
+    public static boolean elevatorAtSetpoint;
+    public static boolean centered;
+    public static boolean scoreCoral;
 
-    public static boolean coralClawHolding;
-
-    public static boolean climbing;
-
-    public static boolean targetVisible;
+    public static boolean scoreWithArm;
+    public static boolean porcessor;
+    public static double elevatorSetpoint;
+    public static boolean algeeIntaking;
 }

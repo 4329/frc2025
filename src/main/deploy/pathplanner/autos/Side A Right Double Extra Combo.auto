@@ -21,7 +21,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Side A Left Main Course"
+                        "pathName": "Side A Right Main Course"
                       }
                     },
                     {
@@ -65,7 +65,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Side A Left Extra Sauce"
+                        "pathName": "Side A Right Extra Sauce"
                       }
                     },
                     {
@@ -108,7 +108,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side A Left Reverse Extra Sauce"
+            "pathName": "Side A Right Reverse Extra Sauce"
           }
         },
         {
@@ -138,7 +138,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side A Left Fries"
+            "pathName": "Side A Right Fries"
           }
         },
         {
@@ -160,27 +160,60 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Side A Barge"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Side A Barge"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "algeeArmBargeArmBarge"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "elevatorBarge"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "stop"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "algeeArmBargeArmBarge"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "elevatorBarge"
           }
         },
         {
@@ -208,15 +241,77 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAlgeeHigh"
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Side B Reverse Barge"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "intakeCoral"
+            "name": "stop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "actuallyIntakeAlgee"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "silly leave"
+            "pathName": "Side B Algee Grab"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "algeeStop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Side B Reverse Algee Grab"
           }
         },
         {

@@ -26,6 +26,7 @@ import frc.robot.commands.algeePivotCommands.RunAlgeePivotCommand;
 import frc.robot.commands.algeePivotCommands.SetAlgeePivotCommand;
 import frc.robot.commands.algeeWheelCommands.IntakeAlgeeCommand;
 import frc.robot.commands.algeeWheelCommands.OuttakeAlgeeCommand;
+import frc.robot.commands.autoCommands.ActuallyAutoPorcessor;
 import frc.robot.commands.autoCommands.AutoActuallyScoreCoralCommand;
 import frc.robot.commands.autoCommands.AutoAlgeeIntake;
 import frc.robot.commands.autoCommands.AutoPositionCoralCommand;
@@ -198,18 +199,10 @@ public class RobotContainer {
                                 new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.DIFFERENTIAL_ARM_OUT)));
         NamedCommands.registerCommand(
                 "intakeAlgeeHigh",
-                new AutoAlgeeIntake(
-                        elevatorSubsystem,
-                        algeeWheelSubsystem,
-                        algeePivotSubsystem,
-                        ElevatorPosition.ALGEE_HIGH));
+                new AutoAlgeeIntake(elevatorSubsystem, algeePivotSubsystem, ElevatorPosition.ALGEE_HIGH));
         NamedCommands.registerCommand(
                 "intakeAlgeeLow",
-                new AutoAlgeeIntake(
-                        elevatorSubsystem,
-                        algeeWheelSubsystem,
-                        algeePivotSubsystem,
-                        ElevatorPosition.ALGEE_LOW));
+                new AutoAlgeeIntake(elevatorSubsystem, algeePivotSubsystem, ElevatorPosition.ALGEE_LOW));
         NamedCommands.registerCommand(
                 "elevatorBarge", new SetElevatorCommand(elevatorSubsystem, ElevatorPosition.NET));
 
@@ -221,9 +214,15 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "shootAlgee", new UnInstantCommand("outtakeAlgee", () -> algeeWheelSubsystem.run(-1)));
         NamedCommands.registerCommand(
+                "slightlyAlgee", new UnInstantCommand("outtakeAlgee", () -> algeeWheelSubsystem.run(-0.2)));
+        NamedCommands.registerCommand(
                 "algeeArmBargeArmBarge",
                 new UnInstantCommand(
                         "AlgeeArmBargeArmBarge", () -> algeePivotSubsystem.setSetpoint(AlgeePivotAngle.NET)));
+        NamedCommands.registerCommand(
+                "porcessor",
+                new ActuallyAutoPorcessor(
+                        elevatorSubsystem, differentialArmSubsystem, algeePivotSubsystem, algeeWheelSubsystem));
 
         for (int i = 0; i < 6; i++) {
             addCool(i, ElevatorPosition.L2, ElevatorPosition.L2Score);
@@ -304,7 +303,6 @@ public class RobotContainer {
      */
     // spotless:off
     private void configureButtonBindings() {
-
         driverController.start().onTrue(new UnInstantCommand(
                     "ToggleFieldOrient",
                     driveByController::toggleFieldOrient

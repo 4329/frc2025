@@ -126,7 +126,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 2.0
           }
         },
         {
@@ -162,7 +162,32 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Side A Barge"
+            "pathName": "Side A Reverse Fries"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Side A Left Porcessor"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "porcessor"
+                }
+              }
+            ]
           }
         },
         {
@@ -174,67 +199,19 @@
         {
           "type": "named",
           "data": {
-            "name": "algeeArmBargeArmBarge"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "elevatorBarge"
+            "name": "slightlyAlgee"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootAlgee"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "algeeStop"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeCoral"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "silly leave"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stop"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stop"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stop"
           }
         }
       ]

@@ -10,40 +10,46 @@ public class LightLogEntry implements LoggableInputs, Cloneable {
 
     @Override
     public void toLog(LogTable table) {
-        table.put("State/on", LEDState.on);
+        table.put("out", LEDState.out);
+        table.put("teleoped", LEDState.teleoped);
 
-        table.put("State/reefButton", LEDState.reefButton);
-        table.put("State/reefLevel", LEDState.reefLevel);
+        table.put("byHpStation", LEDState.byHpStation);
+        table.put("byReef", LEDState.byReef);
+        table.put("byPorcessor", LEDState.byPorcessor);
+        table.put("byBarge", LEDState.byBarge);
 
-        table.put("State/centerRunning", LEDState.centerRunning);
+        table.put("algeeWheelRunning", LEDState.algeeWheelRunning);
+        table.put("elevatorAtSetpoint", LEDState.elevatorAtSetpoint);
+        table.put("centered", LEDState.centered);
+        table.put("scoreCoral", LEDState.scoreCoral);
 
-        table.put("State/algeeWheelRunning", LEDState.algeeWheelRunning);
-
-        table.put("State/coralClawHolding", LEDState.coralClawHolding);
-
-        table.put("State/climbing", LEDState.climbing);
-
-        table.put("State/targetVisible", LEDState.targetVisible);
-
+        table.put("scoreWithArm", LEDState.scoreWithArm);
+        table.put("porcessor", LEDState.porcessor);
+        table.put("elevatorSetpoint", LEDState.elevatorSetpoint);
+        table.put("algeeIntaking", LEDState.algeeIntaking);
         table.put("name", name);
     }
 
     @Override
     public void fromLog(LogTable table) {
-        LEDState.on = table.get("State/on", false);
 
-        LEDState.reefButton = table.get("State/reefButton", 0);
-        LEDState.reefLevel = table.get("State/reefLevel", 0);
+        LEDState.out = table.get("out", false);
+        LEDState.teleoped = table.get("teleoped", false);
 
-        LEDState.centerRunning = table.get("State/centerRunning", false);
+        LEDState.byHpStation = table.get("byHpStation", false);
+        LEDState.byReef = table.get("byReef", false);
+        LEDState.byPorcessor = table.get("byPorcessor", false);
+        LEDState.byBarge = table.get("byBarge", false);
 
-        LEDState.algeeWheelRunning = table.get("State/algeeWheelRunning", false);
+        LEDState.algeeWheelRunning = table.get("algeeWheelRunning", false);
+        LEDState.elevatorAtSetpoint = table.get("elevatorAtSetpoint", false);
+        LEDState.centered = table.get("centered", false);
+        LEDState.scoreCoral = table.get("scoreCoral", false);
 
-        LEDState.coralClawHolding = table.get("State/coralClawHolding", false);
-
-        LEDState.climbing = table.get("State/climbing", false);
-
-        LEDState.targetVisible = table.get("State/targetVisible", false);
+        LEDState.scoreWithArm = table.get("scoreWithArm", false);
+        LEDState.porcessor = table.get("porcessor", false);
+        LEDState.elevatorSetpoint = table.get("elevatorSetpoint", 0);
+        LEDState.algeeIntaking = table.get("algeeIntaking", false);
 
         name = table.get("name", name);
     }

@@ -110,8 +110,7 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
                         Constants.AutoConstants.config,
                         drivetrain);
         pathFind.initialize();
-
-        LEDState.centerRunning = true;
+        LEDState.centered = false;
     }
 
     @Override
@@ -131,14 +130,17 @@ public class CenterOnTargetCommand extends LoggedCommandComposer {
 
         ackCommand.cancel();
         drivetrain.resetKeepAngle();
-        LEDState.centerRunning = false;
         drivetrain.stop();
+
+        if (pathFind.isFinished()) LEDState.centered = true;
     }
 
     public void calcInitial() {
         target = placeTarget(targetIDSupplier.get(), xOffsetSupplier.get(), centerDistance);
 
-        Pathfinding.setStartPosition(poseEstimationSubsystem.getPose().getTranslation());
-        Pathfinding.setGoalPosition(target.getTranslation());
+        if (target != null) {
+            Pathfinding.setStartPosition(poseEstimationSubsystem.getPose().getTranslation());
+            Pathfinding.setGoalPosition(target.getTranslation());
+        }
     }
 }

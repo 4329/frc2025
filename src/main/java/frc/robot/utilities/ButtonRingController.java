@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import frc.robot.model.ButtonRingLogAutoLogged;
 import frc.robot.subsystems.LoggingSubsystem.LoggedSubsystem;
-import frc.robot.subsystems.light.LEDState;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ButtonRingController extends CommandGenericHID implements LoggedSubsystem, Sendable {
@@ -33,43 +32,35 @@ public class ButtonRingController extends CommandGenericHID implements LoggedSub
                             else if (getRawAxis(1) == 1) level = 3;
                             else if (getRawAxis(1) == -1) level = 4;
                             else level = 0;
-
-                            LEDState.reefLevel = level;
                         })
                 .repeatedlyLog()
                 .ignoringDisableLog(true)
                 .schedule();
 
-        for (int i = 1; i <= 12; i++) {
-            final int why = i;
-            button(i)
-                    .onTrue(
-                            new UnInstantCommand(
-                                            "SetButtonRingButtonDown",
-                                            () -> {
-                                                button = why;
+        new UnInstantCommand(
+                        "TryButtons",
+                        () -> {
+                            boolean no = false;
+                            for (int i = 1; i <= 12; i++) {
+                                if (!button(i).getAsBoolean()) continue;
+                                no = true;
+                                button = i;
 
-                                                OFFSET_AMOUNT = bsdf.getDouble(0); // WIP
+                                OFFSET_AMOUNT = bsdf.getDouble(0); // WIP
 
-                                                xOffset = OFFSET_AMOUNT * (why % 2 == 0 ? 1 : -1);
-                                                tagID = AprilTagUtil.getReef((why % 12) / 2);
+                                xOffset = OFFSET_AMOUNT * (i % 2 == 0 ? 1 : -1);
+                                tagID = AprilTagUtil.getReef((i % 12) / 2);
+                            }
 
-                                                LEDState.reefButton = why;
-                                            })
-                                    .ignoringDisableLog(true));
-            button(i)
-                    .onFalse(
-                            new UnInstantCommand(
-                                            "SetButtonRingButtonDown",
-                                            () -> {
-                                                if (button == why) {
-                                                    button = -1;
-                                                    xOffset = 0;
-                                                    tagID = 0;
-                                                }
-                                            })
-                                    .ignoringDisableLog(true));
-        }
+                            if (!no) {
+                                button = 0;
+                                xOffset = 0;
+                                tagID = 0;
+                            }
+                        })
+                .repeatedlyLog()
+                .ignoringDisableLog(true)
+                .schedule();
 
         buttonRingLogAutoLogged = new ButtonRingLogAutoLogged();
     }

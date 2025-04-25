@@ -3,7 +3,6 @@ package frc.robot.commands.driveCommands;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.light.LEDState;
 import frc.robot.subsystems.swerve.drivetrain.Drivetrain;
 import frc.robot.utilities.ButtonRingController;
 import frc.robot.utilities.CenterDistance;
@@ -31,14 +30,11 @@ public class CenterByButtonRingCommand extends CenterOnTargetCommand {
     @Override
     public void initialize() {
         super.initialize();
-
-        LEDState.centerRunning = true;
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        LEDState.centerRunning = false;
     }
 
     @Override

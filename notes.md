@@ -67,12 +67,18 @@ This software suite looks pretty awesome. With the new team, this could be a gre
 
 ### What to Reuse
 
-I think the move will be to reuse our unique core software pieces, and then use YASS, YAMS, and YALL for the rest. Since we have almost an entirely new software team, I think this approach is the best fit.
+I think the move will be to reuse our unique core software pieces, and then use YAGSL, YAMS, and YALL for the rest. Since we have almost an entirely new software team, I think this approach is the best fit.
 
-- Logger
-- Certain constants
-- Config
-- Certain utility functions
+- [ ] Logger
+- [ ] Certain constants
+- [ ] Config
+- [ ] Certain utility functions
+
+### Message to Joey and Cameron
+
+After reviewing the 2025 codebase and YASS, I think the best approach for 2026 is to reuse our unique core software pieces (logger, config, certain utility functions) and then use YAGSL, YAMS, and YALL for the rest. Since we have almost an entirely new software team, I think this approach will be the easiest.
+
+If you have no objections, I'd like to assist by generating a new project using WPILib and integrating our software into it. This way you will have a clean codebase to build on for the future. I don't plan on writing any new code for the robot (and I hope to never need to ), but I can remove a lot of the deprecated code from 2025 for this new 2026 codebase.
 
 ## TODO
 

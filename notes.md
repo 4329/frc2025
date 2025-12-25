@@ -11,7 +11,7 @@ Need to review code to refresh myself with FRC command and subsystem framework. 
 ### `Robot.java`
 
 - Contains main entrypoint for code. Methods such as `robotInit()` and `teleopInit()`. Also calls same name methods in `RobotContainer.java`
-- `Logger` is initialized and configured here. This is new to me.
+- `Logger` is initialized and configured here. This is new to me. Lots of littletonrobotics imports
 - `robotPeriodic()` runs the command scheduler.
 - `autonomousInit()` selects a singular autonomous command to run.
 

@@ -69,10 +69,11 @@ This software suite looks pretty awesome. With the new team, this could be a gre
 
 I think the move will be to reuse our unique core software pieces, and then use YAGSL, YAMS, and YALL for the rest. Since we have almost an entirely new software team, I think this approach is the best fit.
 
-- [ ] Logger
 - [ ] Certain constants
 - [ ] Config
+- [ ] Logger
 - [ ] Certain utility functions
+- [ ] Add Prettier for code formatting
 
 ### Message to Joey and Cameron
 

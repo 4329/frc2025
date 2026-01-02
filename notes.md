@@ -69,11 +69,15 @@ This software suite looks pretty awesome. With the new team, this could be a gre
 
 I think the move will be to reuse our unique core software pieces, and then use YAGSL, YAMS, and YALL for the rest. Since we have almost an entirely new software team, I think this approach is the best fit.
 
-- [ ] Certain constants
-- [ ] Config
+- [x] Certain constants
+- [x] Config
 - [ ] Logger
+  - [x] Switching to just basic AdvantageKit logging. Removing CommandLoginator, LoggedCommandCompooser, and CommandLogEntry which implement custom logging functionality for granular lifecycle logging of commands.
+  - [x] Create a robotPeriodic within RobotContainer.java (called from Robot.java) which logs all Xbox controller inputs. e.g. `Logger.recordOutput("Controller/Driver/LeftY", driverController.getLeftY())`
+  - [ ] Create examples for logging subsystem data.
 - [ ] Certain utility functions
 - [ ] Add Prettier for code formatting
+- [ ] Add comments to explain everything thoroughly
 
 ### Message to Joey and Cameron
 
@@ -87,3 +91,5 @@ If you have no objections, I'd like to assist by generating a new project using 
 - [ ] Review and understand logger
 - [ ] Review and understand config system
 - [x] Understand simulations
+- [x] Is the CommandLoginator necessary? Logs when commands initialize, execute, and end. Useful for debugging scheduler issues I guess.
+- [ ] Use AdvantageScoper
